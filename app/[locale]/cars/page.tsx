@@ -2,6 +2,8 @@
 
 import { VehicleFilters } from "@/components/vehicle/vehicle-filters";
 import { VehicleFiltersSkeleton } from "@/components/vehicle/vehicle-filters-skeleton";
+import { VehicleTypeNavigation } from "@/components/vehicle/vehicle-type-navigation";
+import { ContactCtaBanner } from "@/components/contact-cta-banner";
 import { PageLayout } from "@/components/layout/page-layout";
 import { VehicleSearchForm } from "@/components/vehicle/vehicle-search-form";
 import { VehicleSearchFormSkeleton } from "@/components/vehicle/vehicle-search-form-skeleton";
@@ -10,12 +12,25 @@ import { useVehicleSearch } from "@/hooks/useVehicleSearch";
 import { useVehicleList } from "@/hooks/useVehicleList";
 import Head from "next/head";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 
 export default function CarsPage() {
   // Use custom hooks for state management
   const { searchState, updateSearchField } = useVehicleSearch();
   const { allVehicles, displayedVehicles, isLoading, error, setDisplayedVehicles } = useVehicleList(searchState.isHydrated);
+  const [selectedVehicleType, setSelectedVehicleType] = useState<string | null>(null);
   const t = useTranslations();
+
+  // Filter vehicles by type when selectedVehicleType changes
+  useEffect(() => {
+    if (!allVehicles) return;
+    
+    let filteredVehicles = allVehicles;
+    if (selectedVehicleType) {
+      filteredVehicles = allVehicles.filter(vehicle => vehicle.type === selectedVehicleType);
+    }
+    setDisplayedVehicles(filteredVehicles);
+  }, [selectedVehicleType, allVehicles, setDisplayedVehicles]);
 
   // Generate schema markup for vehicle listings
   const generateVehicleListSchema = () => {
@@ -131,6 +146,16 @@ export default function CarsPage() {
               onFilterChange={setDisplayedVehicles} 
             />
           )}
+
+          {/* Vehicle Type Navigation */}
+          {searchState.isHydrated && !isLoading && allVehicles && (
+            <div className="mb-8 w-full">
+              <VehicleTypeNavigation 
+                selectedType={selectedVehicleType}
+                onTypeChange={setSelectedVehicleType}
+              />
+            </div>
+          )}
           
           {/* Vehicle List Display - already has internal skeleton handling */}
           <VehicleListDisplay
@@ -140,6 +165,15 @@ export default function CarsPage() {
             error={error}
             searchState={searchState}
           />
+
+          {/* Contact CTA Banner */}
+          {searchState.isHydrated && !isLoading && (
+            <div className="flex justify-center mt-20">
+              <div className="max-w-4xl w-full">
+                <ContactCtaBanner />
+              </div>
+            </div>
+          )}
         </div>
       </PageLayout>
     </>

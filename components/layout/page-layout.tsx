@@ -12,14 +12,14 @@ interface PageLayoutProps {
 export function PageLayout({ children, className = "" }: PageLayoutProps) {
   return (
     <div className="relative flex flex-col min-h-screen">
-  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={220} height={80} className="object-contain" />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} className="object-contain" />} />
       
       <main className={`flex-grow ${className}`}>
         {children}
       </main>
       
       <Footer 
-        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={220} height={80} className="object-contain" />} 
+        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} className="object-contain" />} 
         brandName=""
       />
     </div>

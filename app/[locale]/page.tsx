@@ -134,18 +134,18 @@ export default function Home() {
           {/* Hero Content */}
           <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
             <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
                 {t('hero.headline').split('Zetta Cars')[0]}
-                <span className="text-secondary">Zetta Cars</span>
+                <span className="text-primary">Zetta Cars</span>
                 {t('hero.headline').split('Zetta Cars')[1]}
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
                 {t('hero.subheadline')}
               </p>
               <Button 
                 size="lg"
                 asChild
-                className="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
+                className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
               >
                 <Link href="/cars">
                   {t('hero.cta')}
@@ -212,11 +212,11 @@ export default function Home() {
               {/* Right Side - Content */}
               <div className="flex items-center justify-center p-8 md:p-12 lg:p-16">
                 <div className="max-w-lg">
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                     {t('luxuryTransfer.headline')}
                   </h2>
                   
-                  <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
+                  <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
                     {t('luxuryTransfer.description')}
                   </p>
 
@@ -224,7 +224,7 @@ export default function Home() {
                   <ul className="space-y-4 mb-8">
                     {t.raw('luxuryTransfer.features').map((feature: string, index: number) => (
                       <li key={index} className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-secondary rounded-full flex-shrink-0" />
+                        <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
                         <span className="text-gray-300">{feature}</span>
                       </li>
                     ))}
@@ -234,7 +234,7 @@ export default function Home() {
                   <Button 
                     size="lg"
                     asChild
-                    className="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
+                    className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     <Link href="/transfers">
                       {t('luxuryTransfer.cta')}
@@ -253,7 +253,7 @@ export default function Home() {
             <div className="container mx-auto">
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
-                  <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
                     {t('whyChoose.title')}
                   </h2>
                 </div>
@@ -262,8 +262,8 @@ export default function Home() {
                   {/* Premium Fleet */}
                   <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary/10 rounded-2xl mb-6">
-                        <Award className="w-8 h-8 text-secondary" />
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
+                        <Award className="w-8 h-8 text-primary" />
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-4">
                         {t('whyChoose.features.0.title')}
@@ -277,8 +277,8 @@ export default function Home() {
                   {/* Reliable Service */}
                   <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary/10 rounded-2xl mb-6">
-                        <Clock className="w-8 h-8 text-secondary" />
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
+                        <Clock className="w-8 h-8 text-primary" />
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-4">
                         {t('whyChoose.features.1.title')}
@@ -292,8 +292,8 @@ export default function Home() {
                   {/* Professional Care */}
                   <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary/10 rounded-2xl mb-6">
-                        <Shield className="w-8 h-8 text-secondary" />
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
+                        <Shield className="w-8 h-8 text-primary" />
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-4">
                         {t('whyChoose.features.2.title')}
@@ -315,7 +315,7 @@ export default function Home() {
             <div className="container mx-auto">
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
-                  <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
                     {t('bookingProcess.title')}
                   </h2>
                   <p className="text-muted-foreground text-lg">
@@ -327,10 +327,10 @@ export default function Home() {
                   {/* Step 1: Choose Your Dates */}
                   <div className="text-center relative">
                     {/* Connection Line - Hidden on mobile, visible on desktop */}
-                    <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-secondary -z-10" style={{ width: 'calc(100% + 2rem)' }}></div>
+                    <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-primary -z-10" style={{ width: 'calc(100% + 2rem)' }}></div>
                     
                     <div className="relative inline-flex items-center justify-center mb-6">
-                      <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center text-white relative z-10">
+                      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white relative z-10">
                         <Calendar className="w-8 h-8" />
                       </div>
                       <div className="absolute -top-2 -right-2 w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold z-20">
@@ -390,7 +390,7 @@ export default function Home() {
                   <Button 
                     size="lg"
                     asChild
-                    className="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
+                    className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     <Link href="/cars">
                       {t('bookingProcess.cta')}

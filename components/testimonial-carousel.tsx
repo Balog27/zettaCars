@@ -69,18 +69,18 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
             {/* Left Navigation Button */}
             <button
               onClick={() => handleNavigation('left')}
-              className={`absolute left-0 md:left-8 z-10 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary group ${
+              className={`absolute left-2 md:left-8 z-10 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary group ${
                 leftButtonPressed ? 'scale-110 bg-white/30' : ''
               }`}
               aria-label="Previous testimonial"
             >
-              <ChevronLeft className={`w-6 h-6 text-white transition-all duration-200 ${
+              <ChevronLeft className={`w-5 h-5 md:w-6 md:h-6 text-white transition-all duration-200 ${
                 leftButtonPressed ? 'scale-110' : 'group-hover:scale-105'
               }`} />
             </button>
 
             {/* Testimonial Content */}
-            <div className="flex-1 max-w-4xl mx-auto px-16 md:px-20">
+            <div className="flex-1 max-w-4xl mx-auto px-12 sm:px-16 md:px-20">
               <div className="text-center">
                 <div className="mb-8">
                   <Quote className="w-16 h-16 text-secondary mx-auto mb-8" />
@@ -88,7 +88,7 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
                 
                 {/* Animated testimonial content */}
                 <div className="transition-all duration-500 ease-in-out">
-                  <blockquote className="text-xl md:text-2xl text-gray-300 leading-relaxed mb-8">
+                  <blockquote className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed mb-8">
                     {currentReview.text}
                   </blockquote>
                   
@@ -107,12 +107,12 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
             {/* Right Navigation Button */}
             <button
               onClick={() => handleNavigation('right')}
-              className={`absolute right-0 md:right-8 z-10 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary group ${
+              className={`absolute right-2 md:right-8 z-10 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary group ${
                 rightButtonPressed ? 'scale-110 bg-white/30' : ''
               }`}
               aria-label="Next testimonial"
             >
-              <ChevronRight className={`w-6 h-6 text-white transition-all duration-200 ${
+              <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 text-white transition-all duration-200 ${
                 rightButtonPressed ? 'scale-110' : 'group-hover:scale-105'
               }`} />
             </button>

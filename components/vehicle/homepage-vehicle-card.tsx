@@ -107,29 +107,29 @@ export function HomepageVehicleCard({
           </div>
         )}
         
-        {/* Hover Overlay with Car Details */}
-        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center text-white p-6">
+        {/* Hover/Touch Overlay with Car Details */}
+        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 flex flex-col justify-center items-center text-white p-4 sm:p-6">
           {/* Car Specifications */}
           <div className="space-y-3 text-center">
-            <div className="flex justify-around items-center w-full text-sm">
-              <div className="flex items-center space-x-2">
-                <CarFront className="h-4 w-4" />
+            <div className="grid grid-cols-2 gap-4 w-full text-sm">
+              <div className="flex items-center justify-center space-x-2">
+                <CarFront className="h-4 w-4 flex-shrink-0" />
                 <span>{vehicle.year || t('notAvailable')}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Icon iconNode={gearbox} className="h-4 w-4" />
-                <span>{vehicle.transmission || t('notAvailable')}</span>
+              <div className="flex items-center justify-center space-x-2">
+                <Icon iconNode={gearbox} className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">{vehicle.transmission || t('notAvailable')}</span>
               </div>
             </div>
             
-            <div className="flex justify-around items-center w-full text-sm">
-              <div className="flex items-center space-x-2">
-                <Cog className="h-4 w-4" />
-                <span>{vehicle.engineCapacity ? `${vehicle.engineCapacity.toFixed(1)}L` : t('notAvailable')}</span>
+            <div className="grid grid-cols-2 gap-4 w-full text-sm">
+              <div className="flex items-center justify-center space-x-2">
+                <Cog className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">{vehicle.engineCapacity ? `${vehicle.engineCapacity.toFixed(1)}L` : t('notAvailable')}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Fuel className="h-4 w-4" />
-                <span>{vehicle.fuelType || t('notAvailable')}</span>
+              <div className="flex items-center justify-center space-x-2">
+                <Fuel className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">{vehicle.fuelType || t('notAvailable')}</span>
               </div>
             </div>
 
@@ -137,7 +137,7 @@ export function HomepageVehicleCard({
             {pickupDate && returnDate && (
               <div className="mt-4 space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-secondary">
+                  <div className="text-2xl font-bold text-primary">
                     {currentPricePerDay} {currency}
                   </div>
                   <div className="text-sm text-gray-300">{t('perDay')}</div>
@@ -163,7 +163,7 @@ export function HomepageVehicleCard({
             {/* Book Now Button */}
             <div className="mt-4">
               <Button 
-                className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-6 py-2"
+                className="bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-2"
                 asChild
                 onClick={(e) => e.stopPropagation()}
               >
@@ -181,9 +181,9 @@ export function HomepageVehicleCard({
         <h3 className="text-lg font-semibold text-gray-900">
           {vehicle.make} {vehicle.model}
         </h3>
-        {vehicle.category && (
+        {vehicle.class && (
           <p className="text-sm text-gray-600 mt-1">
-            {vehicle.category}
+            {vehicle.class}
           </p>
         )}
       </div>

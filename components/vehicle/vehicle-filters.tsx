@@ -84,11 +84,11 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
   }
 
   return (
-    <Card className="mb-6 shadow-lg bg-accent">
+    <Card className="mb-6 shadow-lg bg-white">
       <CardContent className="p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <Label htmlFor="brand-filter" className="text-sm font-medium">{t('brand')}</Label>
+            <Label htmlFor="brand-filter" className="text-sm font-medium text-primary">{t('brand')}</Label>
             <Select value={brandFilter} onValueChange={setBrandFilter}>
               <SelectTrigger id="brand-filter" className="mt-1">
                 <SelectValue placeholder={t('selectBrand')} />
@@ -104,7 +104,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
           </div>
 
           <div>
-            <Label htmlFor="fuel-type-filter" className="text-sm font-medium">{t('fuelType')}</Label>
+            <Label htmlFor="fuel-type-filter" className="text-sm font-medium text-primary">{t('fuelType')}</Label>
             <Select value={fuelTypeFilter} onValueChange={setFuelTypeFilter}>
               <SelectTrigger id="fuel-type-filter" className="mt-1">
                 <SelectValue placeholder={t('selectFuelType')} />
@@ -120,7 +120,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
           </div>
 
           <div>
-            <Label htmlFor="transmission-filter" className="text-sm font-medium">{t('transmission')}</Label>
+            <Label htmlFor="transmission-filter" className="text-sm font-medium text-primary">{t('transmission')}</Label>
             <Select value={transmissionFilter} onValueChange={setTransmissionFilter}>
               <SelectTrigger id="transmission-filter" className="mt-1">
                 <SelectValue placeholder={t('selectTransmission')} />
@@ -136,7 +136,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
           </div>
 
           <div>
-            <Label htmlFor="type-filter" className="text-sm font-medium">{t('type')}</Label>
+            <Label htmlFor="type-filter" className="text-sm font-medium text-primary">{t('type')}</Label>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger id="type-filter" className="mt-1">
                 <SelectValue placeholder={t('selectType')} />

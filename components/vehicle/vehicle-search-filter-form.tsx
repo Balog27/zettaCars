@@ -261,7 +261,7 @@ export function VehicleSearchFilterForm({
           </div>
         </CardContent>
         <CardFooter className="flex justify-center pt-4 lg:pt-8 sm:pt-6 lg:p-6 md:pt-8">
-          <Button type="submit" size="lg" className="w-full lg:w-auto lg:px-12 text-base py-3 bg-secondary hover:bg-secondary/90" disabled={isLoading}>
+          <Button type="submit" size="lg" className="w-full lg:w-auto lg:px-12 text-base py-3 bg-primary hover:bg-primary/90" disabled={isLoading}>
             <Search className="mr-2 h-5 w-5" />
             {isLoading ? t('searchingCars') : t('searchCars')}
           </Button>

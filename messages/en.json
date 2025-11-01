@@ -807,5 +807,18 @@
     "availableCars": "Available Cars",
     "couldNotLoadVehicles": "Could not load vehicles. Please try searching again.",
     "noVehiclesFoundMessage": "No vehicles found matching your criteria. Try broadening your search or check back later."
+  },
+  "vehicleTypes": {
+    "allVehicles": "All Vehicles",
+    "luxurySedan": "Luxury Sedan",
+    "executiveSedan": "Executive Sedan",
+    "luxurySUV": "Luxury SUV",
+    "premiumSedan": "Premium Sedan",
+    "sportSUV": "Sport SUV",
+    "electricLuxury": "Electric Luxury"
+  },
+  "contactBanner": {
+    "title": "Need a custom package or have special requirements?",
+    "buttonText": "Contact Our Team"
   }
 }

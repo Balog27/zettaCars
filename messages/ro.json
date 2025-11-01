@@ -808,5 +808,18 @@
     "availableCars": "Mașini disponibile",
     "couldNotLoadVehicles": "Nu s-au putut încărca vehiculele. Încercați să căutați din nou.",
     "noVehiclesFoundMessage": "Nu s-au găsit vehicule care să corespundă criteriilor. Încercați să extindeți căutarea sau verificați mai târziu."
+  },
+  "vehicleTypes": {
+    "allVehicles": "Toate Vehiculele",
+    "luxurySedan": "Sedan Luxury",
+    "executiveSedan": "Sedan Executive",
+    "luxurySUV": "SUV Luxury",
+    "premiumSedan": "Sedan Premium",
+    "sportSUV": "SUV Sport",
+    "electricLuxury": "Luxury Electric"
+  },
+  "contactBanner": {
+    "title": "Ai nevoie de un pachet personalizat sau cerințe speciale?",
+    "buttonText": "Contactează Echipa Noastră"
   }
 }
