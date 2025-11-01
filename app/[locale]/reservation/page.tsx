@@ -646,7 +646,7 @@ function ReservationPageContent() {
   if (!vehicleId) {
     return (
       <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">{t('reservation.invalid.title')}</h1>
@@ -659,7 +659,7 @@ function ReservationPageContent() {
             </Link>
           </div>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
@@ -667,11 +667,11 @@ function ReservationPageContent() {
   if (vehicle === undefined) {
     return (
       <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
           <p className="text-muted-foreground">{t('reservation.loadingDetails')}</p>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
@@ -679,7 +679,7 @@ function ReservationPageContent() {
   if (vehicle === null) {
     return (
       <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">{t('reservation.vehicleNotFound.title')}</h1>
@@ -692,14 +692,14 @@ function ReservationPageContent() {
             </Link>
           </div>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
 
   return (
     <div className="relative flex flex-col min-h-screen">
-      <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
 
       <main className="flex-grow p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
@@ -1484,7 +1484,7 @@ function ReservationPageContent() {
                   <div className="border-t pt-2">
                     <div className="flex justify-between font-semibold">
                       <span>{t('reservationSummary.totalPrice')}:</span>
-                      <span className="text-green-600">
+                      <span className="text-primary">
                         {totalPrice || 0} EUR
                         {!isSCDWSelected && warrantyAmount && warrantyAmount > 0 && (
                           <span className="text-sm font-normal text-muted-foreground ml-2">
@@ -1501,10 +1501,25 @@ function ReservationPageContent() {
                   </div>
                 </div>
 
+                {/* Rental Requirements */}
+                <div className="space-y-3 p-4 bg-secondary/10 rounded-lg border">
+                  <h3 className="font-semibold text-foreground">
+                    {t('reservationSummary.requirements.title')}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary text-secondary-foreground">
+                      {t('reservationSummary.requirements.physicalId')}
+                    </span>
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary text-secondary-foreground">
+                      {t('reservationSummary.requirements.drivingLicense')}
+                    </span>
+                  </div>
+                </div>
+
                 <Button 
                   onClick={handleSendReservation}
                   size="lg" 
-                  className="w-full bg-[#055E3B] hover:bg-[#055E3B]/80 text-white font-bold py-4 text-lg"
+                  className="w-full font-bold py-4 text-lg"
                   disabled={isSubmitting}
                 >
                   <Send className="mr-2 h-4 w-4" />
@@ -1517,7 +1532,7 @@ function ReservationPageContent() {
       </main>
 
       <Footer
-        logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />}
+  logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />}
         brandName=""
       />
     </div>

@@ -14,15 +14,74 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { usePathname } from "next/navigation"
-import React from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { useUser } from "@clerk/nextjs"
+import React, { useEffect, useState } from "react"
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const { user, isLoaded } = useUser()
+  const router = useRouter()
   const pathname = usePathname()
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Fix hydration issues
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Simple admin check - for now just check if user email is yours
+  useEffect(() => {
+    if (isLoaded && isMounted) {
+      console.log("=== ADMIN DEBUG START ===")
+      console.log("isLoaded:", isLoaded)
+      console.log("isMounted:", isMounted)  
+      console.log("Clerk user:", user)
+      console.log("User email:", user?.emailAddresses?.[0]?.emailAddress)
+      console.log("=== ADMIN DEBUG END ===")
+
+      // If no user, redirect
+      if (!user) {
+        console.log("No user signed in, redirecting...")
+        router.push("/")
+        return
+      }
+
+      // Simple email check for admin (temporary)
+      const userEmail = user.emailAddresses?.[0]?.emailAddress
+      const adminEmails = ["david27balogg@yahoo.com"] // Add your email here
+      
+      if (!userEmail || !adminEmails.includes(userEmail)) {
+        console.log(`User email "${userEmail}" is not in admin list, redirecting...`)
+        router.push("/")
+        return
+      }
+
+      console.log("✅ Admin access granted based on email!")
+    }
+  }, [isLoaded, isMounted, user, router])
+
+  // Show loading while checking authentication
+  if (!isLoaded || !isMounted) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-lg">Loading...</div>
+      </div>
+    )
+  }
+
+  // If no user is signed in
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-lg">Redirecting...</div>
+      </div>
+    )
+  }
+
   const breadcrumbItems = pathname.split("/").filter(Boolean).map((item, index, array) => {
     const href = "/" + array.slice(0, index + 1).join("/")
     return {
@@ -30,7 +89,6 @@ export default function AdminLayout({
       label: item.charAt(0).toUpperCase() + item.slice(1).replace(/-/g, " "),
     }
   })    
-
 
   return (
     <SidebarProvider>
@@ -65,4 +123,4 @@ export default function AdminLayout({
       </SidebarInset>
     </SidebarProvider>
   )
-} 
+}

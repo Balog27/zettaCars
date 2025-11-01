@@ -100,7 +100,7 @@ We would like to suggest some modifications to better serve you:
 If you agree with these changes, please reply to confirm, and we will proceed with your reservation.
 
 Best regards,
-Rent'n Go Team
+Zetta Cars Team
 
 Reservation Details:
 - Vehicle: ${vehicleName}
@@ -125,8 +125,8 @@ Reservation Details:
 
 We look forward to serving you!
 
-Best regards,
-Rent'n Go Team`
+                Best regards,
+                Zetta Cars Team`
         };
       case "cancellation":
         return {
@@ -139,8 +139,8 @@ We regret to inform you that your reservation for the ${vehicleName} from ${star
 
 If you have any questions or would like to make a new reservation, please don't hesitate to contact us.
 
-Best regards,
-Rent'n Go Team`
+                Best regards,
+                Zetta Cars Team`
         };
       case "reminder":
         return {
@@ -155,8 +155,8 @@ This is a friendly reminder about your upcoming reservation:
 
 Please ensure you have all necessary documents ready for pickup.
 
-Best regards,
-Rent'n Go Team`
+                Best regards,
+                Zetta Cars Team`
         };
       default:
         return { subject: "", message: "" };

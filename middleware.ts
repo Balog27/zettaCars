@@ -9,6 +9,8 @@ const ADMIN_USER_IDS = [
   "user_2wrgqldXONHGnBJvkeLqTMisRiZ", // mihai dev env
   "user_2ysDX4oi6GmtJ9xKYVBSFFFjflH", // tudor prod env
   "user_2xbWHVNoaZTbon4ptfxvjwet6lT", // mihai prod env
+  "user_34hX57hWaPmeMPS5oUMtSwV3QL2",  // new admin user
+  "user_34Qbtnh4X9AysmuJ9ExoxjZOESw"
 ];
 
 // Create the internationalization middleware

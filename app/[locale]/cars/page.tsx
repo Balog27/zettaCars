@@ -53,7 +53,7 @@ export default function CarsPage() {
         "availability": "https://schema.org/InStock",
         "seller": {
           "@type": "Organization",
-          "name": "Rent'n Go",
+          "name": "Zetta Cars",
           "url": "https://rngo.com"
         }
       },
@@ -75,7 +75,7 @@ export default function CarsPage() {
       })),
       "provider": {
         "@type": "Organization",
-        "name": "Rent'n Go",
+        "name": "Zetta Cars",
         "url": "https://rngo.com",
         "address": {
           "@type": "PostalAddress",
@@ -94,8 +94,8 @@ export default function CarsPage() {
   return (
     <>
       <Head>
-        <title>Masini de Inchiriat Cluj-Napoca | Rent'n Go</title>
-        <meta name="description" content="Găsește masini de inchiriat Cluj-Napoca cu Rent'n Go. Flotă largă de vehicule moderne, prețuri competitive, rezervare online rapidă. Car rentals Cluj-Napoca disponibile 24/7." />
+  <title>Masini de Inchiriat Cluj-Napoca | Zetta Cars</title>
+  <meta name="description" content="Găsește masini de inchiriat Cluj-Napoca cu Zetta Cars. Flotă largă de vehicule moderne, prețuri competitive, rezervare online rapidă. Car rentals Cluj-Napoca disponibile 24/7." />
         <meta name="keywords" content="masini de inchiriat cluj-napoca, car rentals cluj, închiriere auto cluj, rent car cluj-napoca, vehicule închiriere cluj" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://rngo.com/cars" />

@@ -1,6 +1,6 @@
 # Email System Architecture
 
-This directory contains the modular email system for Rent'n Go, designed to be type-safe, maintainable, and extensible.
+This directory contains the modular email system for Zetta Cars, designed to be type-safe, maintainable, and extensible.
 
 ## Overview
 

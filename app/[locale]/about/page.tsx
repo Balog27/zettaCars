@@ -88,17 +88,17 @@ const AboutPage = () => {
   return (
     <div className="relative flex flex-col min-h-screen">
       <Head>
-        <title>Despre Rent'n Go - Masini de Inchiriat Cluj-Napoca</title>
-        <meta name="description" content="Află mai multe despre Rent'n Go, liderul în masini de inchiriat Cluj-Napoca. Servicii profesionale de închiriere auto în Cluj cu experiență de peste 5 ani." />
-        <meta name="keywords" content="despre rent n go, masini de inchiriat cluj-napoca, car rentals cluj-napoca, istoric companie închiriere auto" />
+        <title>Despre Zetta Cars - Masini de Inchiriat Cluj-Napoca</title>
+        <meta name="description" content="Află mai multe despre Zetta Cars, liderul în masini de inchiriat Cluj-Napoca. Servicii profesionale de închiriere auto în Cluj cu experiență de peste 5 ani." />
+    <meta name="keywords" content="despre zetta cars, masini de inchiriat cluj-napoca, car rentals cluj-napoca, istoric companie închiriere auto" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Rent'n Go",
-              "alternateName": "Rent'n Go Cluj-Napoca",
+              "name": "Zetta Cars",
+              "alternateName": "Zetta Cars Cluj-Napoca",
               "url": "https://rngo.com",
               "logo": "https://rngo.com/logo.png",
               "contactPoint": {
@@ -134,14 +134,14 @@ const AboutPage = () => {
                 },
                 "geoRadius": "50"
               },
-              "description": "Rent'n Go oferă servicii profesionale cu masini de inchiriat Cluj-Napoca. Flotă modernă de vehicule și prețuri competitive. Experți în închiriere auto Cluj cu servicii de calitate."
+              "description": "Zetta Cars oferă servicii profesionale cu masini de inchiriat Cluj-Napoca. Flotă modernă de vehicule și prețuri competitive. Experți în închiriere auto Cluj cu servicii de calitate."
             })
           }}
         />
       </Head>
       <BackgroundImage bottomGradient={true} />
 
-      <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
 
       <main className="relative z-10 flex flex-col gap-8 flex-grow">
         <div className="flex flex-col gap-12 max-w-5xl mx-auto p-4 md:p-6 lg:p-8 w-full mt-[10%] md:mt-[15%] lg:mt-[20%]">
@@ -359,7 +359,7 @@ const AboutPage = () => {
       </main>
 
       <Footer
-        logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />}
+        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />}
         brandName=""
       />
     </div>

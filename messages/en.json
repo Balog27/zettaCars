@@ -2,11 +2,107 @@
   "homepage": {
     "title": "Car Rentals Cluj-Napoca",
     "subtitle": "Explore Cluj-Napoca with our wide range of rental cars. Easy booking, competitive prices, reliable service.",
+    "hero": {
+      "headline": "Drive in Style with Zetta Cars",
+      "subheadline": "Experience luxury transportation with our premium fleet and exceptional service. From car rentals to airport transfers or corporate events, we deliver elegance and reliability.",
+      "cta": "Explore Our Fleet"
+    },
+    "luxuryTransfer": {
+      "headline": "Luxury Transfer Services",
+      "description": "Experience premium comfort and reliability with Zetta Cars. Our luxury transfer services combine elegance with punctuality, ensuring seamless transportation for business travelers and upscale customers. From airport transfers to corporate events, arrive in style with our high-end fleet.",
+      "features": [
+        "Professional chauffeurs with years of experience",
+        "Latest luxury vehicles with premium amenities", 
+        "24/7 availability for all your transfer needs"
+      ],
+      "cta": "Book Your Transfer"
+    },
+    "whyChoose": {
+      "title": "Why Choose Zetta Cars?",
+      "features": [
+        {
+          "title": "Premium Fleet",
+          "description": "High-end, luxury vehicle fleet with the latest models for an exceptional experience."
+        },
+        {
+          "title": "Reliable Service",
+          "description": "Punctual transfers and seamless booking process ensure your time is valued."
+        },
+        {
+          "title": "Professional Care",
+          "description": "Elegant staff and personalized solutions tailored to your transportation needs."
+        }
+      ]
+    },
+    "bookingProcess": {
+      "title": "Seamless Booking Process",
+      "subtitle": "Three simple steps to your premium ride",
+      "steps": [
+        {
+          "title": "Choose Your Dates",
+          "description": "Select pickup and drop-off times that work for you"
+        },
+        {
+          "title": "Select Your Vehicle",
+          "description": "Browse our premium fleet and pick your perfect ride"
+        },
+        {
+          "title": "Confirm & Book",
+          "description": "Review details and complete your reservation instantly"
+        }
+      ],
+      "cta": "Start Booking"
+    },
+    "clientTestimonials": {
+      "title": "What Our Clients Say",
+      "reviews": [
+        {
+          "text": "Zetta Cars provided an exceptional experience with their luxurious fleet and professional service. The attention to detail was outstanding.",
+          "name": "Jane D.",
+          "title": "Business Executive"
+        },
+        {
+          "text": "Outstanding service and premium vehicles. The booking process was seamless and the driver was incredibly professional.",
+          "name": "Michael R.",
+          "title": "Event Coordinator"
+        },
+        {
+          "text": "Perfect for our corporate events. Reliable, elegant, and always on time. Highly recommended for business travel!",
+          "name": "Sarah L.",
+          "title": "Marketing Director"
+        },
+        {
+          "text": "The luxury transfer service exceeded all expectations. Comfortable ride, punctual service, and excellent customer care.",
+          "name": "Alexander M.",
+          "title": "Hotel Manager"
+        },
+        {
+          "text": "Fantastic experience from start to finish. The vehicle was immaculate and the driver was courteous and professional.",
+          "name": "Elena P.",
+          "title": "Travel Consultant"
+        },
+        {
+          "text": "Zetta Cars made our wedding day transportation perfect. Elegant vehicles and impeccable service. Thank you!",
+          "name": "David & Maria C.",
+          "title": "Newlyweds"
+        },
+        {
+          "text": "Reliable, comfortable, and always on schedule. Zetta Cars has become our go-to choice for all business transfers.",
+          "name": "Robert T.",
+          "title": "CEO"
+        },
+        {
+          "text": "Excellent airport transfer service. Clean vehicles, friendly drivers, and competitive pricing. Highly recommend!",
+          "name": "Anna K.",
+          "title": "Frequent Traveler"
+        }
+      ]
+    },
     "viewAllCars": "View All Cars",
     "ourStory": {
       "title": "Our Story",
       "subtitle": "Your trusted partner for car rentals in Cluj-Napoca and beyond",
-      "description1": "At Rent'n Go, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
+  "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
       "description2": "Whether you're exploring the historic streets of Cluj-Napoca, venturing into the beautiful Transylvanian countryside, or need a reliable vehicle for business, we're here to make your journey smooth and enjoyable.",
       "description3": "Our carefully curated fleet of modern vehicles, combined with transparent pricing and exceptional customer service, ensures that your rental experience exceeds expectations every time."
     },
@@ -21,7 +117,7 @@
     }
   },
   "aboutPage": {
-    "title": "About Rent'n Go - Car Rentals Cluj-Napoca",
+  "title": "About Zetta Cars - Car Rentals Cluj-Napoca",
     "heroTitle": "Your Journey, Our Passion",
     "heroDescription": "Since 2024, we've been dedicated to providing exceptional car rental experiences in Cluj-Napoca. Combining quality vehicles with outstanding customer service.",
     "stats": {
@@ -58,12 +154,12 @@
     "ourStory": {
       "title": "Our Story",
       "subtitle": "Your trusted partner for exploring Cluj-Napoca and beyond",
-      "description1": "At Rent'n Go, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
+  "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
       "description2": "Whether you're exploring the historic streets of Cluj-Napoca, venturing into the beautiful Transylvanian countryside, or need a reliable vehicle for business, we're here to make your journey smooth and enjoyable.",
       "description3": "Our carefully curated fleet of modern vehicles, combined with transparent pricing and exceptional customer service, ensures that your rental experience exceeds expectations every time."
     },
     "whyChoose": {
-      "title": "Why Choose Rent'n Go?",
+  "title": "Why Choose Zetta Cars?",
       "subtitle": "Experience the difference that sets us apart",
       "transparentPricing": {
         "title": "Transparent Pricing",
@@ -88,7 +184,7 @@
     "founder": {
       "name": "Tudor",
       "title": "Founder & CEO",
-      "description": "With over a decade of experience in the automotive industry, Tudor founded Rent'n Go with a simple mission: to provide premium vehicles and exceptional service that exceeds expectations. His attention to detail and commitment to customer satisfaction drives every aspect of our business.",
+  "description": "With over a decade of experience in the automotive industry, Tudor founded Zetta Cars with a simple mission: to provide premium vehicles and exceptional service that exceeds expectations. His attention to detail and commitment to customer satisfaction drives every aspect of our business.",
       "badges": {
         "expert": "Automotive Expert",
         "customerFirst": "Customer-First"
@@ -236,6 +332,11 @@
       "totalPrice": "Total Price",
       "warranty": "warranty",
       "warrantyRefundable": "Warranty is refundable if no damages",
+      "requirements": {
+        "title": "What you need for renting a car:",
+        "physicalId": "Your physical ID",
+        "drivingLicense": "Your physical driving license"
+      },
       "sendReservationRequest": "Send Reservation Request",
       "processing": "Processing..."
     },
@@ -343,9 +444,10 @@
       "cancelled": "Cancelled"
     }
   },
-  "transfersPage": {
-    "comingSoon": "Coming Soon",
-    "description": "Our transfers page is under construction. Stay tuned!"
+  
+  "blogPage": {
+    "title": "Blog",
+    "subtitle": "Coming Soon"
   },
   "common": {
     "loading": "Loading...",
@@ -378,6 +480,7 @@
     "transfers": "Transfers",
     "about": "About",
     "contact": "Contact",
+    "blog": "Blog",
     "login": "Login",
     "signUp": "Sign Up",
     "language": "Language",
@@ -430,7 +533,7 @@
     "contact": "Contact",
     "privacy": "Privacy",
     "terms": "Terms",
-    "copyright": "© 2025 Rent'n Go Cluj",
+  "copyright": "© 2025 Zetta Cars Cluj",
     "allRightsReserved": "All rights reserved",
     "builtBy": "Built by"
   },
@@ -552,8 +655,7 @@
     "editReservation": "Edit Reservation",
     "vehicleDetails": "Vehicle Details",
     "customerInformation": "Customer Information",
-    "rentalPeriod": "Rental Period",
-    "pricing": "Pricing",
+  "rentalPeriod": "Rental Period",
     "tabs": {
       "basic": "Basic Info",
       "customer": "Customer",
@@ -608,9 +710,9 @@
     "subtitle": "Our transfers page is under construction. Stay tuned!"
   },
   "email": {
-    "companyName": "Rent'n Go",
-    "address": "Calea Turzii 23, Cluj-Napoca, Romania",
-    "automatedMessage": "This is an automated notification from Rent'n Go reservation system.",
+  "companyName": "Zetta Cars",
+  "address": "Calea Turzii 23, Cluj-Napoca, Romania",
+  "automatedMessage": "This is an automated notification from Zetta Cars reservation system.",
     "carRentalServices": "Car Rental Services",
     "copyright": "© 2025 {companyName}. All rights reserved."
   },

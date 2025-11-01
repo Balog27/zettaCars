@@ -32,9 +32,9 @@ const ContactPage = () => {
   return (
     <div className="relative flex flex-col min-h-screen">
       <Head>
-        <title>Contact Rent'n Go - Masini de Inchiriat Cluj-Napoca</title>
-        <meta name="description" content="Contactează Rent'n Go pentru masini de inchiriat Cluj-Napoca. Telefon: +40 773 932 961. Email: office@rngo.com. Servicii profesionale de închiriere auto în Cluj." />
-        <meta name="keywords" content="contact rent n go, masini de inchiriat cluj-napoca, telefon închiriere auto cluj, car rentals cluj contact" />
+  <title>Contact Zetta Cars - Masini de Inchiriat Cluj-Napoca</title>
+  <meta name="description" content="Contactează Zetta Cars pentru masini de inchiriat Cluj-Napoca. Telefon: +40 773 932 961. Email: office@rngo.com. Servicii profesionale de închiriere auto în Cluj." />
+  <meta name="keywords" content="contact zetta cars, masini de inchiriat cluj-napoca, telefon închiriere auto cluj, car rentals cluj contact" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -43,7 +43,7 @@ const ContactPage = () => {
               "@type": "ContactPage",
               "mainEntity": {
                 "@type": "Organization",
-                "name": "Rent'n Go",
+                "name": "Zetta Cars",
                 "telephone": "+40-773-932-961",
                 "email": "office@rngo.com",
                 "address": {
@@ -75,8 +75,8 @@ const ContactPage = () => {
             })
           }}
         />
-      </Head>
-      <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  </Head>
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
 
       <main className="flex-grow bg-gradient-to-br from-background via-background to-muted/30">
         {/* Hero Section */}
@@ -246,7 +246,7 @@ const ContactPage = () => {
                       <div className="h-80 relative">
                         <Image
                           src="/maps.png"
-                          alt="Rent'n Go Office Location Map"
+                          alt="Zetta Cars Office Location Map"
                           fill
                           className="object-cover"
                           priority
@@ -308,7 +308,7 @@ const ContactPage = () => {
       </main>
 
       <Footer
-        logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />}
+        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />}
         brandName=""
       />
     </div>

@@ -52,7 +52,7 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
       
       <main className="flex-1">
         <div className="container mx-auto py-8 px-4 max-w-6xl">
@@ -104,7 +104,7 @@ export default function ProfilePage() {
       </main>
 
       <Footer
-        logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />}
+  logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />}
         brandName=""
       />
     </div>

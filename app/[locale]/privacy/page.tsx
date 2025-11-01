@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
               Protecția datelor dvs. cu caracter personal este importantă pentru noi, motiv pentru care am aderat la principii stricte în această privință.
             </p>
             <p>
-              Atunci când vă prelucrăm datele cu caracter personal, noi, Rent'n Go Prodexa S.R.L., acționăm în calitate de operator în conformitate cu prevederile GDPR.
+              Atunci când vă prelucrăm datele cu caracter personal, noi, Zetta Cars Prodexa S.R.L., acționăm în calitate de operator în conformitate cu prevederile GDPR.
             </p>
             <p>
               Pentru orice aspect cu privire la prelucrarea datelor cu caracter personal puteți contacta responsabilul nostru cu protecția datelor la următoarele date de contact:

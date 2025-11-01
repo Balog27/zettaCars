@@ -43,13 +43,19 @@ export function Header({ logo, brandName }: HeaderProps) {
     { name: t('transfers'), href: `/${locale}/transfers` },
     { name: t('about'), href: `/${locale}/about` },
     { name: t('contact'), href: `/${locale}/contact` },
+    { name: t('blog'), href: `/${locale}/blog` },
   ];
 
-  // Navigation items for desktop NavigationMenu
-  const navigationItems = [
+  // Left navigation items for desktop
+  const leftNavigationItems = [
     { name: t('home'), href: `/${locale}` },
     { name: t('cars'), href: `/${locale}/cars` },
     { name: t('transfers'), href: `/${locale}/transfers` },
+    { name: t('blog'), href: `/${locale}/blog` },
+  ];
+
+  // Right navigation items for desktop
+  const rightNavigationItems = [
     { name: t('about'), href: `/${locale}/about` },
     { name: t('contact'), href: `/${locale}/contact` },
   ];
@@ -88,20 +94,10 @@ export function Header({ logo, brandName }: HeaderProps) {
           : "border-transparent bg-transparent"
       )}
     >
-      <div className="relative container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center">
-          <Link
-            href="/"
-            className="mr-6 flex items-center space-x-2"
-            onClick={handleLinkClick}
-          >
-            {logo}
-            {/* {brandName && <span className="text-lg font-semibold hidden sm:inline">{brandName}</span>} */}
-          </Link>
-        </div>
-
-        <nav className="hidden lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:flex lg:items-center lg:gap-6">
-          {navigationItems.map((item) => (
+      <div className="relative container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8 lg:gap-8">
+        {/* Left Navigation */}
+        <nav className="hidden lg:flex lg:items-center lg:gap-12 flex-1">
+          {leftNavigationItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -112,8 +108,32 @@ export function Header({ logo, brandName }: HeaderProps) {
           ))}
         </nav>
 
-        <div className="flex items-center space-x-2">
-          <div className="hidden lg:flex items-center space-x-4">
+        {/* Logo in the center */}
+        <div className="flex-1 flex justify-center px-8">
+          <Link
+            href="/"
+            className="flex items-center space-x-2"
+            onClick={handleLinkClick}
+          >
+            {logo}
+          </Link>
+        </div>
+
+        {/* Right Navigation and User Controls */}
+        <div className="flex items-center space-x-4 flex-1 justify-end">
+          <nav className="hidden lg:flex lg:items-center lg:gap-12">
+            {rightNavigationItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={getNavLinkStyles(item.href)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden lg:flex items-center space-x-6">
             <LanguageSelector />
             <SignedIn>
               <UserButton />

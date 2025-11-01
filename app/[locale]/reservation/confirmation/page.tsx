@@ -63,7 +63,7 @@ function ReservationConfirmationContent() {
   if (!reservationId) {
     return (
       <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-6">
             <AlertCircle className="h-16 w-16 text-amber-500 mx-auto mb-4" />
@@ -87,7 +87,7 @@ function ReservationConfirmationContent() {
             </div>
           </div>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
@@ -95,14 +95,14 @@ function ReservationConfirmationContent() {
   if (reservation === undefined || vehicle === undefined) {
     return (
       <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
             <p className="text-muted-foreground">{t('loadingReservation')}</p>
           </div>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
@@ -110,7 +110,7 @@ function ReservationConfirmationContent() {
   if (reservation === null || vehicle === null) {
     return (
       <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-6">
             <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
@@ -132,7 +132,7 @@ function ReservationConfirmationContent() {
             </div>
           </div>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
@@ -206,7 +206,7 @@ function ReservationConfirmationContent() {
 
   return (
     <div className="relative flex flex-col min-h-screen">
-      <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
 
       <main className="flex-grow p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
@@ -560,7 +560,7 @@ function ReservationConfirmationContent() {
       </main>
 
       <Footer
-        logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />}
+        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />}
         brandName=""
       />
     </div>

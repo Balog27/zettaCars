@@ -10,7 +10,7 @@ interface EmailHeaderProps {
 export const EmailHeader: React.FC<EmailHeaderProps> = ({ 
   title, 
   logoUrl = "https://rngo.ro/_next/image?url=%2Flogo.png&w=256&q=75",
-  logoAlt = "Rent'n Go Logo"
+  logoAlt = "Zetta Cars Logo"
 }) => {
   return (
     <Section className="bg-white text-center py-[16px] rounded-t-[8px] border-b border-solid border-gray-200 px-0" style={{ width: '100%' }}>
