@@ -125,7 +125,7 @@ export default function Home() {
             <div 
               className="w-full h-full bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`
+                backgroundImage: `url('/mercedes-background.jpg')`
               }}
             />
             <div className="absolute inset-0 bg-black/50" />
@@ -203,7 +203,7 @@ export default function Home() {
                 <div 
                   className="w-full h-full bg-cover bg-center bg-no-repeat min-h-[400px] md:min-h-full"
                   style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80')`
+                    backgroundImage: `url('/luxuaryTransfers.jpg')`
                   }}
                 />
                 <div className="absolute inset-0 bg-black/20" />
