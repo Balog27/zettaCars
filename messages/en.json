@@ -2,53 +2,56 @@
   "homepage": {
     "title": "Car Rentals Cluj-Napoca",
     "subtitle": "Explore Cluj-Napoca with our wide range of rental cars. Easy booking, competitive prices, reliable service.",
+    "viewAllCars": "View All Cars",
     "hero": {
-      "headline": "Drive in Style with Zetta Cars",
-      "subheadline": "Experience luxury transportation with our premium fleet and exceptional service. From car rentals to airport transfers or corporate events, we deliver elegance and reliability.",
-      "cta": "Explore Our Fleet"
+      "headline": "Premium Car Rentals with Zetta Cars in Cluj-Napoca",
+      "subheadline": "Discover Cluj-Napoca and beyond with our premium fleet of vehicles. Professional service, competitive prices, and exceptional customer experience.",
+      "cta": "Browse Our Fleet"
     },
     "luxuryTransfer": {
-      "headline": "Luxury Transfer Services",
-      "description": "Experience premium comfort and reliability with Zetta Cars. Our luxury transfer services combine elegance with punctuality, ensuring seamless transportation for business travelers and upscale customers. From airport transfers to corporate events, arrive in style with our high-end fleet.",
+      "headline": "Premium Transfer Services",
+      "description": "Experience luxury and comfort with our premium transfer services. Professional drivers, high-end vehicles, and personalized service for every journey.",
       "features": [
-        "Professional chauffeurs with years of experience",
-        "Latest luxury vehicles with premium amenities", 
-        "24/7 availability for all your transfer needs"
+        "Professional chauffeur service",
+        "Luxury vehicle fleet",
+        "Airport transfers available",
+        "24/7 customer support",
+        "Flexible scheduling"
       ],
-      "cta": "Book Your Transfer"
+      "cta": "Book Transfer"
     },
     "whyChoose": {
       "title": "Why Choose Zetta Cars?",
       "features": [
         {
           "title": "Premium Fleet",
-          "description": "High-end, luxury vehicle fleet with the latest models for an exceptional experience."
+          "description": "Modern, well-maintained vehicles from trusted brands with the latest safety features and comfort amenities."
         },
         {
           "title": "Reliable Service",
-          "description": "Punctual transfers and seamless booking process ensure your time is valued."
+          "description": "Professional service with on-time delivery, transparent pricing, and 24/7 customer support for your peace of mind."
         },
         {
           "title": "Professional Care",
-          "description": "Elegant staff and personalized solutions tailored to your transportation needs."
+          "description": "Experienced team dedicated to providing exceptional customer service and ensuring your rental experience exceeds expectations."
         }
       ]
     },
     "bookingProcess": {
-      "title": "Seamless Booking Process",
-      "subtitle": "Three simple steps to your premium ride",
+      "title": "How It Works",
+      "subtitle": "Simple steps to get you on the road",
       "steps": [
         {
           "title": "Choose Your Dates",
-          "description": "Select pickup and drop-off times that work for you"
+          "description": "Select your pickup and return dates, times, and locations that work best for you."
         },
         {
           "title": "Select Your Vehicle",
-          "description": "Browse our premium fleet and pick your perfect ride"
+          "description": "Browse our premium fleet and choose the perfect car for your needs and budget."
         },
         {
           "title": "Confirm & Book",
-          "description": "Review details and complete your reservation instantly"
+          "description": "Review your details, complete your reservation, and get ready to hit the road."
         }
       ],
       "cta": "Start Booking"
@@ -57,52 +60,26 @@
       "title": "What Our Clients Say",
       "reviews": [
         {
-          "text": "Zetta Cars provided an exceptional experience with their luxurious fleet and professional service. The attention to detail was outstanding.",
-          "name": "Jane D.",
-          "title": "Business Executive"
+          "text": "Exceptional service and premium vehicles. Zetta Cars made our Cluj-Napoca trip unforgettable with their professional approach.",
+          "name": "Maria Ionescu",
+          "title": "Business Traveler"
         },
         {
-          "text": "Outstanding service and premium vehicles. The booking process was seamless and the driver was incredibly professional.",
-          "name": "Michael R.",
-          "title": "Event Coordinator"
+          "text": "Reliable, clean cars and excellent customer service. I always choose Zetta Cars for my rental needs in Cluj-Napoca.",
+          "name": "Alexandru Popescu",
+          "title": "Local Customer"
         },
         {
-          "text": "Perfect for our corporate events. Reliable, elegant, and always on time. Highly recommended for business travel!",
-          "name": "Sarah L.",
-          "title": "Marketing Director"
-        },
-        {
-          "text": "The luxury transfer service exceeded all expectations. Comfortable ride, punctual service, and excellent customer care.",
-          "name": "Alexander M.",
-          "title": "Hotel Manager"
-        },
-        {
-          "text": "Fantastic experience from start to finish. The vehicle was immaculate and the driver was courteous and professional.",
-          "name": "Elena P.",
-          "title": "Travel Consultant"
-        },
-        {
-          "text": "Zetta Cars made our wedding day transportation perfect. Elegant vehicles and impeccable service. Thank you!",
-          "name": "David & Maria C.",
-          "title": "Newlyweds"
-        },
-        {
-          "text": "Reliable, comfortable, and always on schedule. Zetta Cars has become our go-to choice for all business transfers.",
-          "name": "Robert T.",
-          "title": "CEO"
-        },
-        {
-          "text": "Excellent airport transfer service. Clean vehicles, friendly drivers, and competitive pricing. Highly recommend!",
-          "name": "Anna K.",
-          "title": "Frequent Traveler"
+          "text": "Professional staff and transparent pricing. The booking process was smooth and the car exceeded my expectations.",
+          "name": "Elena Stoica",
+          "title": "Tourist"
         }
       ]
     },
-    "viewAllCars": "View All Cars",
     "ourStory": {
       "title": "Our Story",
       "subtitle": "Your trusted partner for car rentals in Cluj-Napoca and beyond",
-  "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
+      "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
       "description2": "Whether you're exploring the historic streets of Cluj-Napoca, venturing into the beautiful Transylvanian countryside, or need a reliable vehicle for business, we're here to make your journey smooth and enjoyable.",
       "description3": "Our carefully curated fleet of modern vehicles, combined with transparent pricing and exceptional customer service, ensures that your rental experience exceeds expectations every time."
     },
@@ -117,7 +94,7 @@
     }
   },
   "aboutPage": {
-  "title": "About Zetta Cars - Car Rentals Cluj-Napoca",
+    "title": "About Zetta Cars - Car Rentals Cluj-Napoca",
     "heroTitle": "Your Journey, Our Passion",
     "heroDescription": "Since 2024, we've been dedicated to providing exceptional car rental experiences in Cluj-Napoca. Combining quality vehicles with outstanding customer service.",
     "stats": {
@@ -154,12 +131,12 @@
     "ourStory": {
       "title": "Our Story",
       "subtitle": "Your trusted partner for exploring Cluj-Napoca and beyond",
-  "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
+      "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
       "description2": "Whether you're exploring the historic streets of Cluj-Napoca, venturing into the beautiful Transylvanian countryside, or need a reliable vehicle for business, we're here to make your journey smooth and enjoyable.",
       "description3": "Our carefully curated fleet of modern vehicles, combined with transparent pricing and exceptional customer service, ensures that your rental experience exceeds expectations every time."
     },
     "whyChoose": {
-  "title": "Why Choose Zetta Cars?",
+      "title": "Why Choose Zetta Cars?",
       "subtitle": "Experience the difference that sets us apart",
       "transparentPricing": {
         "title": "Transparent Pricing",
@@ -184,7 +161,7 @@
     "founder": {
       "name": "Tudor",
       "title": "Founder & CEO",
-  "description": "With over a decade of experience in the automotive industry, Tudor founded Zetta Cars with a simple mission: to provide premium vehicles and exceptional service that exceeds expectations. His attention to detail and commitment to customer satisfaction drives every aspect of our business.",
+      "description": "With over a decade of experience in the automotive industry, Tudor founded Zetta Cars with a simple mission: to provide premium vehicles and exceptional service that exceeds expectations. His attention to detail and commitment to customer satisfaction drives every aspect of our business.",
       "badges": {
         "expert": "Automotive Expert",
         "customerFirst": "Customer-First"
@@ -221,6 +198,39 @@
       "sunday": "Sunday",
       "mondayToSundayTime": "24/7",
       "sundayTime": "24/7"
+    },
+    "contactForm": {
+      "yourName": "Your Name",
+      "enterYourName": "Enter your name",
+      "emailAddress": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "phoneNumber": "Phone Number",
+      "phonePlaceholder": "+123 456 7890",
+      "message": "Message",
+      "messagePlaceholder": "Tell us about your transportation needs...",
+      "sendMessage": "Send Message",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "addressText": "Cluj \"Avram Iancu\" International Airport\nStrada Traian Vuia 149-151, Cluj-Napoca 400397",
+      "office": "OFFICE"
+    },
+    "socialMedia": {
+      "tiktok": {
+        "title": "TikTok",
+        "description": "Follow us for the latest updates and behind-the-scenes content",
+        "buttonText": "Follow on TikTok"
+      },
+      "instagram": {
+        "title": "Instagram", 
+        "description": "See our luxury vehicles and customer experiences",
+        "buttonText": "Follow on Instagram"
+      },
+      "facebook": {
+        "title": "Facebook",
+        "description": "Join our community for news and special offers",
+        "buttonText": "Follow on Facebook"
+      }
     }
   },
   "reservationPage": {
@@ -332,11 +342,6 @@
       "totalPrice": "Total Price",
       "warranty": "warranty",
       "warrantyRefundable": "Warranty is refundable if no damages",
-      "requirements": {
-        "title": "What you need for renting a car:",
-        "physicalId": "Your physical ID",
-        "drivingLicense": "Your physical driving license"
-      },
       "sendReservationRequest": "Send Reservation Request",
       "processing": "Processing..."
     },
@@ -382,6 +387,13 @@
       "fixErrorsBeforeSubmitting": "Please fix the errors in the form before submitting.",
       "returnTimeSameDay": "Return time must be after pick-up time when returning on the same day",
       "formErrors": "Please fix the errors in the form before submitting."
+    },
+    "carDetailPage": {
+      "requirements": {
+        "title": "What you need to bring",
+        "idCard": "ID Card/Passport",
+        "driverLicense": "Driver's License"
+      }
     }
   },
   "confirmationPage": {
@@ -444,10 +456,9 @@
       "cancelled": "Cancelled"
     }
   },
-  
   "blogPage": {
-    "title": "Blog",
-    "subtitle": "Coming Soon"
+    "title": "Coming Soon",
+    "subtitle": "Our blog is under construction. Stay tuned!"
   },
   "common": {
     "loading": "Loading...",
@@ -533,7 +544,7 @@
     "contact": "Contact",
     "privacy": "Privacy",
     "terms": "Terms",
-  "copyright": "© 2025 Zetta Cars Cluj",
+    "copyright": "© 2025 Zetta Cars Cluj",
     "allRightsReserved": "All rights reserved",
     "builtBy": "Built by"
   },
@@ -655,7 +666,7 @@
     "editReservation": "Edit Reservation",
     "vehicleDetails": "Vehicle Details",
     "customerInformation": "Customer Information",
-  "rentalPeriod": "Rental Period",
+    "rentalPeriod": "Rental Period",
     "tabs": {
       "basic": "Basic Info",
       "customer": "Customer",
@@ -710,9 +721,9 @@
     "subtitle": "Our transfers page is under construction. Stay tuned!"
   },
   "email": {
-  "companyName": "Zetta Cars",
-  "address": "Calea Turzii 23, Cluj-Napoca, Romania",
-  "automatedMessage": "This is an automated notification from Zetta Cars reservation system.",
+    "companyName": "Zetta Cars",
+    "address": "Calea Turzii 23, Cluj-Napoca, Romania",
+    "automatedMessage": "This is an automated notification from Zetta Cars reservation system.",
     "carRentalServices": "Car Rental Services",
     "copyright": "© 2025 {companyName}. All rights reserved."
   },
@@ -728,7 +739,12 @@
       "cars": "Cars"
     },
     "reserveThisCar": "Reserve This Car",
-    "reserveDescription": "Click to proceed with your reservation"
+    "reserveDescription": "Click to proceed with your reservation",
+    "requirements": {
+      "title": "What you need to have with you",
+      "idCard": "ID card/Passport",
+      "driverLicense": "Driver license"
+    }
   },
   "vehicleSpecifications": {
     "specificationsTitle": "Specifications",
@@ -818,7 +834,7 @@
     "electricLuxury": "Electric Luxury"
   },
   "contactBanner": {
-    "title": "Need a custom package or have special requirements?",
-    "buttonText": "Contact Our Team"
+    "title": "Need Help Choosing? Contact Us!",
+    "buttonText": "Contact Us"
   }
 }

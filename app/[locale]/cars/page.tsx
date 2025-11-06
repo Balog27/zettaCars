@@ -21,17 +21,6 @@ export default function CarsPage() {
   const [selectedVehicleType, setSelectedVehicleType] = useState<string | null>(null);
   const t = useTranslations();
 
-  // Filter vehicles by type when selectedVehicleType changes
-  useEffect(() => {
-    if (!allVehicles) return;
-    
-    let filteredVehicles = allVehicles;
-    if (selectedVehicleType) {
-      filteredVehicles = allVehicles.filter(vehicle => vehicle.type === selectedVehicleType);
-    }
-    setDisplayedVehicles(filteredVehicles);
-  }, [selectedVehicleType, allVehicles, setDisplayedVehicles]);
-
   // Generate schema markup for vehicle listings
   const generateVehicleListSchema = () => {
     if (!displayedVehicles || displayedVehicles.length === 0) return null;
@@ -109,8 +98,8 @@ export default function CarsPage() {
   return (
     <>
       <Head>
-  <title>Masini de Inchiriat Cluj-Napoca | Zetta Cars</title>
-  <meta name="description" content="Găsește masini de inchiriat Cluj-Napoca cu Zetta Cars. Flotă largă de vehicule moderne, prețuri competitive, rezervare online rapidă. Car rentals Cluj-Napoca disponibile 24/7." />
+        <title>Masini de Inchiriat Cluj-Napoca | Zetta Cars</title>
+        <meta name="description" content="Găsește masini de inchiriat Cluj-Napoca cu Zetta Cars. Flotă largă de vehicule moderne, prețuri competitive, rezervare online rapidă. Car rentals Cluj-Napoca disponibile 24/7." />
         <meta name="keywords" content="masini de inchiriat cluj-napoca, car rentals cluj, închiriere auto cluj, rent car cluj-napoca, vehicule închiriere cluj" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://rngo.com/cars" />
@@ -142,6 +131,7 @@ export default function CarsPage() {
             <VehicleFiltersSkeleton />
           ) : (
             <VehicleFilters 
+              vehicles={allVehicles} 
               allVehicles={allVehicles} 
               onFilterChange={setDisplayedVehicles} 
             />
@@ -178,4 +168,4 @@ export default function CarsPage() {
       </PageLayout>
     </>
   );
-} 
+}

@@ -87,7 +87,7 @@ export function HomepageVehicleCard({
 
   return (
     <div 
-      className="relative bg-white rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl group cursor-pointer"
+      className="relative bg-card-darker dark:bg-card-darker rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl group cursor-pointer"
       onClick={handleImageClick}
     >
       {/* Car Image */}
@@ -178,11 +178,11 @@ export function HomepageVehicleCard({
 
       {/* Car Brand and Model - Always Visible */}
       <div className="p-4 text-center">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           {vehicle.make} {vehicle.model}
         </h3>
         {vehicle.class && (
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
             {vehicle.class}
           </p>
         )}

@@ -2,53 +2,56 @@
   "homepage": {
     "title": "Masini de Inchiriat Cluj-Napoca",
     "subtitle": "Explorează Cluj-Napoca cu gama noastră largă de masini de inchiriat. Rezervare ușoară, prețuri competitive, servicii de încredere.",
+    "viewAllCars": "Vezi Toate Mașinile",
     "hero": {
-      "headline": "Conduci cu Stil cu Zetta Cars",
-      "subheadline": "Experimentează transport de lux cu flota noastră premium și servicii excepționale. De la închirierea de mașini la transferuri aeroportuare sau evenimente corporative, oferim eleganță și fiabilitate.",
-      "cta": "Explorează Flota Noastră"
+      "headline": "Închirieri Auto Premium cu Zetta Cars în Cluj-Napoca",
+      "subheadline": "Descoperă Cluj-Napoca și împrejurimile cu flota noastră premium de vehicule. Servicii profesionale, prețuri competitive și experiență excepțională pentru clienți.",
+      "cta": "Vezi Flota Noastră"
     },
     "luxuryTransfer": {
-      "headline": "Servicii de Transfer de Lux",
-      "description": "Experimentați confortul și fiabilitatea premium cu Zetta Cars. Serviciile noastre de transfer de lux combină eleganța cu punctualitatea, asigurând transport fără probleme pentru călătorii de afaceri și clienți de nivel înalt. De la transferuri aeroportuare la evenimente corporative, sosește cu stil cu flota noastră de înaltă clasă.",
+      "headline": "Servicii Premium de Transfer",
+      "description": "Experimentează luxul și confortul cu serviciile noastre premium de transfer. Șoferi profesioniști, vehicule de lux și servicii personalizate pentru fiecare călătorie.",
       "features": [
-        "Șoferi profesioniști cu ani de experiență",
-        "Vehicule de lux de ultimă generație cu amenități premium",
-        "Disponibilitate 24/7 pentru toate nevoile dumneavoastră de transport"
+        "Servicii de șofer profesionist",
+        "Flotă de vehicule de lux",
+        "Transferuri la aeroport disponibile",
+        "Suport clienți 24/7",
+        "Program flexibil"
       ],
-      "cta": "Rezervă Transferul"
+      "cta": "Rezervă Transfer"
     },
     "whyChoose": {
-      "title": "De Ce Să Alegi Zetta Cars?",
+      "title": "De Ce să Alegi Zetta Cars?",
       "features": [
         {
           "title": "Flotă Premium",
-          "description": "Flotă de vehicule de lux de înaltă clasă cu cele mai noi modele pentru o experiență excepțională."
+          "description": "Vehicule moderne, bine întreținute de la mărci de încredere cu cele mai noi caracteristici de siguranță și confort."
         },
         {
           "title": "Servicii de Încredere",
-          "description": "Transferuri punctuale și proces de rezervare fără probleme asigură că timpul tău este prețuit."
+          "description": "Servicii profesionale cu livrare la timp, prețuri transparente și suport clienți 24/7 pentru liniștea ta."
         },
         {
           "title": "Îngrijire Profesională",
-          "description": "Personal elegant și soluții personalizate adaptate nevoilor tale de transport."
+          "description": "Echipă experimentată dedicată să ofere servicii excepționale pentru clienți și să se asigure că experiența ta depășește așteptările."
         }
       ]
     },
     "bookingProcess": {
-      "title": "Proces de Rezervare Fără Probleme",
-      "subtitle": "Trei pași simpli către călătoria ta premium",
+      "title": "Cum Funcționează",
+      "subtitle": "Pași simpli pentru a te pune pe drum",
       "steps": [
         {
           "title": "Alege Datele",
-          "description": "Selectează orele de ridicare și returnare care funcționează pentru tine"
+          "description": "Selectează datele de ridicare și returnare, orele și locațiile care funcționează cel mai bine pentru tine."
         },
         {
           "title": "Selectează Vehiculul",
-          "description": "Răsfoiește flota noastră premium și alege-ți călătoria perfectă"
+          "description": "Răsfoiește flota noastră premium și alege mașina perfectă pentru nevoile și bugetul tău."
         },
         {
           "title": "Confirmă și Rezervă",
-          "description": "Verifică detaliile și finalizează rezervarea instantaneu"
+          "description": "Verifică detaliile, completează rezervarea și pregătește-te să pleci la drum."
         }
       ],
       "cta": "Începe Rezervarea"
@@ -57,52 +60,26 @@
       "title": "Ce Spun Clienții Noștri",
       "reviews": [
         {
-          "text": "Zetta Cars a oferit o experiență excepțională cu flota lor luxoasă și serviciul profesional. Atenția la detalii a fost remarcabilă.",
-          "name": "Jane D.",
-          "title": "Director Executiv"
+          "text": "Servicii excepționale și vehicule premium. Zetta Cars ne-a făcut călătoria în Cluj-Napoca de neuitat cu abordarea lor profesională.",
+          "name": "Maria Ionescu",
+          "title": "Călător de Afaceri"
         },
         {
-          "text": "Serviciu remarcabil și vehicule premium. Procesul de rezervare a fost fără probleme și șoferul incredibil de profesional.",
-          "name": "Mihai R.",
-          "title": "Coordonator Evenimente"
+          "text": "Mașini fiabile, curate și servicii excelente pentru clienți. Aleg întotdeauna Zetta Cars pentru nevoile mele de închiriere în Cluj-Napoca.",
+          "name": "Alexandru Popescu",
+          "title": "Client Local"
         },
         {
-          "text": "Perfect pentru evenimentele noastre corporative. De încredere, elegant și întotdeauna la timp. Foarte recomandat pentru călătorii de afaceri!",
-          "name": "Sara L.",
-          "title": "Director Marketing"
-        },
-        {
-          "text": "Serviciul de transfer de lux a depășit toate așteptările. Călătorie confortabilă, serviciu punctual și atenție excelentă pentru clienți.",
-          "name": "Alexandru M.",
-          "title": "Manager Hotel"
-        },
-        {
-          "text": "Experiență fantastică de la început la sfârșit. Vehiculul era impecabil și șoferul curtenitor și profesional.",
-          "name": "Elena P.",
-          "title": "Consultant Turism"
-        },
-        {
-          "text": "Zetta Cars a făcut transportul de nuntă perfect. Vehicule elegante și serviciu impecabil. Mulțumim!",
-          "name": "David & Maria C.",
-          "title": "Miri"
-        },
-        {
-          "text": "De încredere, confortabil și întotdeauna la programul stabilit. Zetta Cars a devenit alegerea noastră pentru toate transferurile de afaceri.",
-          "name": "Robert T.",
-          "title": "CEO"
-        },
-        {
-          "text": "Serviciu excelent de transfer la aeroport. Vehicule curate, șoferi prietenoși și prețuri competitive. Foarte recomandat!",
-          "name": "Ana K.",
-          "title": "Călător Frecvent"
+          "text": "Personal profesionist și prețuri transparente. Procesul de rezervare a fost ușor și mașina a depășit așteptările mele.",
+          "name": "Elena Stoica",
+          "title": "Turist"
         }
       ]
     },
-    "viewAllCars": "Vezi Toate Mașinile",
     "ourStory": {
       "title": "Povestea Noastră",
       "subtitle": "Partenerul tău de încredere pentru masini de inchiriat în Cluj-Napoca și nu numai",
-  "description1": "La Zetta Cars, credem că fiecare călătorie ar trebui să fie memorabilă. Fondată cu o pasiune pentru călătorii și un angajament pentru excelență, servim comunitatea din Cluj-Napoca cu soluții fiabile și accesibile pentru masini de inchiriat.",
+      "description1": "La Zetta Cars, credem că fiecare călătorie ar trebui să fie memorabilă. Fondată cu o pasiune pentru călătorii și un angajament pentru excelență, servim comunitatea din Cluj-Napoca cu soluții fiabile și accesibile pentru masini de inchiriat.",
       "description2": "Indiferent dacă explorezi străzile istorice ale Cluj-Napoca, te aventurezi în frumoasa țară transilvăneană sau ai nevoie de un vehicul de încredere pentru afaceri, suntem aici să-ți facem călătoria lină și plăcută.",
       "description3": "Flota noastră atent selectată de vehicule moderne, combinată cu prețuri transparente și servicii excepționale pentru clienți, asigură că experiența ta de închiriere depășește așteptările de fiecare dată."
     },
@@ -117,7 +94,7 @@
     }
   },
   "aboutPage": {
-  "title": "Despre Zetta Cars - Masini de Inchiriat Cluj-Napoca",
+    "title": "Despre Zetta Cars - Masini de Inchiriat Cluj-Napoca",
     "heroTitle": "Călătoria Ta, Pasiunea Noastră",
     "heroDescription": "Din 2024, ne-am dedicat furnizării de experiențe excepționale cu masini de inchiriat în Cluj-Napoca. Combinând vehicule de calitate cu servicii pentru clienți de excepție.",
     "stats": {
@@ -154,12 +131,12 @@
     "ourStory": {
       "title": "Povestea Noastră",
       "subtitle": "Partenerul tău de încredere pentru explorarea Cluj-Napoca și nu numai",
-  "description1": "La Zetta Cars, credem că fiecare călătorie ar trebui să fie memorabilă. Fondată cu o pasiune pentru călătorii și un angajament pentru excelență, servim comunitatea din Cluj-Napoca cu soluții de închiriere auto fiabile și accesibile.",
+      "description1": "La Zetta Cars, credem că fiecare călătorie ar trebui să fie memorabilă. Fondată cu o pasiune pentru călătorii și un angajament pentru excelență, servim comunitatea din Cluj-Napoca cu soluții de închiriere auto fiabile și accesibile.",
       "description2": "Indiferent dacă explorezi străzile istorice ale Cluj-Napoca, te aventurezi în frumoasa țară transilvăneană sau ai nevoie de un vehicul de încredere pentru afaceri, suntem aici să-ți facem călătoria lină și plăcută.",
       "description3": "Flota noastră atent selectată de vehicule moderne, combinată cu prețuri transparente și servicii excepționale pentru clienți, asigură că experiența ta de închiriere depășește așteptările de fiecare dată."
     },
     "whyChoose": {
-  "title": "De Ce să Alegeți Zetta Cars?",
+      "title": "De Ce să Alegeți Zetta Cars?",
       "subtitle": "Experimentați diferența care ne face să ieșim în evidență",
       "transparentPricing": {
         "title": "Prețuri Transparente",
@@ -184,7 +161,7 @@
     "founder": {
       "name": "Tudor",
       "title": "Fondator și CEO",
-  "description": "Cu peste un deceniu de experiență în industria auto, Tudor a fondat Zetta Cars cu o misiune simplă: să ofere vehicule premium și servicii excepționale care să depășească așteptările. Atenția sa la detalii și angajamentul față de satisfacția clienților conduce fiecare aspect al afacerii noastre.",
+      "description": "Cu peste un deceniu de experiență în industria auto, Tudor a fondat Zetta Cars cu o misiune simplă: să ofere vehicule premium și servicii excepționale care să depășească așteptările. Atenția sa la detalii și angajamentul față de satisfacția clienților conduce fiecare aspect al afacerii noastre.",
       "badges": {
         "expert": "Expert Auto",
         "customerFirst": "Clientul pe Primul Loc"
@@ -221,6 +198,39 @@
       "sunday": "Duminică",
       "mondayToSundayTime": "24/7",
       "sundayTime": "24/7"
+    },
+    "contactForm": {
+      "yourName": "Numele Tău",
+      "enterYourName": "Introduceți numele",
+      "emailAddress": "Adresa de Email",
+      "emailPlaceholder": "email@exemplu.com",
+      "phoneNumber": "Numărul de Telefon",
+      "phonePlaceholder": "+40 123 456 789",
+      "message": "Mesaj",
+      "messagePlaceholder": "Spuneți-ne despre nevoile dumneavoastră de transport...",
+      "sendMessage": "Trimite Mesaj",
+      "phone": "Telefon",
+      "email": "Email",
+      "address": "Adresa",
+      "addressText": "Aeroportul Internațional Cluj \"Avram Iancu\"\nStrada Traian Vuia 149-151, Cluj-Napoca 400397",
+      "office": "BIROU"
+    },
+    "socialMedia": {
+      "tiktok": {
+        "title": "TikTok",
+        "description": "Urmărește-ne pentru ultimele actualizări și conținut din culise",
+        "buttonText": "Urmărește pe TikTok"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "description": "Vezi vehiculele noastre de lux și experiențele clienților",
+        "buttonText": "Urmărește pe Instagram"
+      },
+      "facebook": {
+        "title": "Facebook",
+        "description": "Alătură-te comunității noastre pentru știri și oferte speciale",
+        "buttonText": "Urmărește pe Facebook"
+      }
     }
   },
   "reservationPage": {
@@ -332,11 +342,6 @@
       "totalPrice": "Preț Total",
       "warranty": "garanție",
       "warrantyRefundable": "Garanția este restituibilă dacă nu sunt daune",
-      "requirements": {
-        "title": "Ce ai nevoie pentru închirierea unei mașini:",
-        "physicalId": "Cartea ta de identitate fizică",
-        "drivingLicense": "Permisul tău de conducere fizic"
-      },
       "sendReservationRequest": "Trimite Cererea de Rezervare",
       "processing": "Se procesează..."
     },
@@ -382,6 +387,13 @@
       "fixErrorsBeforeSubmitting": "Vă rugăm să corectați erorile din formular înainte de a trimite.",
       "returnTimeSameDay": "Ora de returnare trebuie să fie după ora de ridicare când returnezi în aceeași zi",
       "formErrors": "Vă rugăm să corectați erorile din formular înainte de a trimite."
+    },
+    "carDetailPage": {
+      "requirements": {
+        "title": "Ce trebuie să ai cu tine",
+        "idCard": "Buletin/Pașaport",
+        "driverLicense": "Permis de conducere"
+      }
     }
   },
   "confirmationPage": {
@@ -444,10 +456,9 @@
       "cancelled": "Anulată"
     }
   },
-
   "blogPage": {
-    "title": "Blog",
-    "subtitle": "In curând"
+    "title": "În Curând",
+    "subtitle": "Blogul nostru este în construcție. Rămâneți aproape!"
   },
 
   "common": {
@@ -479,9 +490,9 @@
     "home": "Acasă",
     "cars": "Mașini",
     "transfers": "Transferuri",
-    "blog": "Blog",
     "about": "Despre",
     "contact": "Contact",
+    "blog": "Blog",
     "login": "Conectare",
     "signUp": "Înregistrare",
     "language": "Limba",
@@ -534,7 +545,7 @@
     "contact": "Contact",
     "privacy": "Confidențialitate",
     "terms": "Termeni",
-  "copyright": "© 2025 Zetta Cars Cluj",
+    "copyright": "© 2025 Zetta Cars Cluj",
     "allRightsReserved": "Toate drepturile rezervate",
     "builtBy": "Creat de"
   },
@@ -711,9 +722,9 @@
     "subtitle": "Pagina noastră de transferuri este în construcție. Rămâneți aproape!"
   },
   "email": {
-  "companyName": "Zetta Cars",
+    "companyName": "Zetta Cars",
     "address": "Calea Turzii 23, Cluj-Napoca, România",
-  "automatedMessage": "Aceasta este o notificare automată de la sistemul de rezervări Zetta Cars.",
+    "automatedMessage": "Aceasta este o notificare automată de la sistemul de rezervări Zetta Cars.",
     "carRentalServices": "Servicii de Închiriere Auto",
     "copyright": "© 2025 {companyName}. Toate drepturile rezervate."
   },
@@ -729,7 +740,12 @@
       "cars": "Mașini"
     },
     "reserveThisCar": "Rezervă Această Mașină",
-    "reserveDescription": "Apasă pentru a continua cu rezervarea"
+    "reserveDescription": "Apasă pentru a continua cu rezervarea",
+    "requirements": {
+      "title": "Ce trebuie să ai cu tine",
+      "idCard": "Buletin/Pașaport",
+      "driverLicense": "Permis de conducere"
+    }
   },
   "vehicleSpecifications": {
     "specificationsTitle": "Specificații",
@@ -819,7 +835,7 @@
     "electricLuxury": "Luxury Electric"
   },
   "contactBanner": {
-    "title": "Ai nevoie de un pachet personalizat sau cerințe speciale?",
-    "buttonText": "Contactează Echipa Noastră"
+    "title": "Ai Nevoie de Ajutor la Alegere? Contactează-ne!",
+    "buttonText": "Contactează-ne"
   }
 }

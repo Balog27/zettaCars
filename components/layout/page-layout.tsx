@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
+import { Logo } from "@/components/ui/logo";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -12,14 +12,14 @@ interface PageLayoutProps {
 export function PageLayout({ children, className = "" }: PageLayoutProps) {
   return (
     <div className="relative flex flex-col min-h-screen">
-  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} className="object-contain" />} />
+      <Header logo={<Logo alt="Zetta Cars Logo" />} />
       
       <main className={`flex-grow ${className}`}>
         {children}
       </main>
       
       <Footer 
-        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} className="object-contain" />} 
+        logo={<Logo alt="Zetta Cars Logo" />} 
         brandName=""
       />
     </div>

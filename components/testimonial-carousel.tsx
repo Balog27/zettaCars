@@ -55,11 +55,11 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
   const currentReview = reviews[currentIndex];
 
   return (
-    <section className="py-16 px-4 bg-slate-900 text-white">
+    <section className="py-16 px-4 bg-section">
       <div className="container mx-auto">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white">
               {title}
             </h2>
           </div>
@@ -69,12 +69,12 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
             {/* Left Navigation Button */}
             <button
               onClick={() => handleNavigation('left')}
-              className={`absolute left-2 md:left-8 z-10 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary group ${
-                leftButtonPressed ? 'scale-110 bg-white/30' : ''
+              className={`absolute left-2 md:left-8 z-10 p-2 md:p-3 rounded-full bg-gray-800/10 hover:bg-gray-800/20 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary group ${
+                leftButtonPressed ? 'scale-110 bg-gray-800/30 dark:bg-white/30' : ''
               }`}
               aria-label="Previous testimonial"
             >
-              <ChevronLeft className={`w-5 h-5 md:w-6 md:h-6 text-white transition-all duration-200 ${
+              <ChevronLeft className={`w-5 h-5 md:w-6 md:h-6 text-gray-800 dark:text-white transition-all duration-200 ${
                 leftButtonPressed ? 'scale-110' : 'group-hover:scale-105'
               }`} />
             </button>
@@ -83,20 +83,20 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
             <div className="flex-1 max-w-4xl mx-auto px-12 sm:px-16 md:px-20">
               <div className="text-center">
                 <div className="mb-8">
-                  <Quote className="w-16 h-16 text-secondary mx-auto mb-8" />
+                  <Quote className="w-16 h-16 text-primary mx-auto mb-8" />
                 </div>
                 
                 {/* Animated testimonial content */}
                 <div className="transition-all duration-500 ease-in-out">
-                  <blockquote className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed mb-8">
+                  <blockquote className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
                     {currentReview.text}
                   </blockquote>
                   
                   <div className="text-center">
-                    <div className="font-semibold text-lg text-white mb-1">
+                    <div className="font-semibold text-lg text-gray-800 dark:text-white mb-1">
                       {currentReview.name}
                     </div>
-                    <div className="text-gray-400">
+                    <div className="text-gray-600 dark:text-gray-400">
                       {currentReview.title}
                     </div>
                   </div>
@@ -107,12 +107,12 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
             {/* Right Navigation Button */}
             <button
               onClick={() => handleNavigation('right')}
-              className={`absolute right-2 md:right-8 z-10 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary group ${
-                rightButtonPressed ? 'scale-110 bg-white/30' : ''
+              className={`absolute right-2 md:right-8 z-10 p-2 md:p-3 rounded-full bg-gray-800/10 hover:bg-gray-800/20 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary group ${
+                rightButtonPressed ? 'scale-110 bg-gray-800/30 dark:bg-white/30' : ''
               }`}
               aria-label="Next testimonial"
             >
-              <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 text-white transition-all duration-200 ${
+              <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 text-gray-800 dark:text-white transition-all duration-200 ${
                 rightButtonPressed ? 'scale-110' : 'group-hover:scale-105'
               }`} />
             </button>
@@ -120,7 +120,7 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
 
           {/* Review Counter */}
           <div className="text-center mt-8">
-            <div className="text-gray-400">
+            <div className="text-gray-600 dark:text-gray-400">
               {currentIndex + 1} of {reviews.length}
             </div>
           </div>

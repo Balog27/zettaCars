@@ -33,7 +33,7 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
             transition-all duration-200 font-medium py-3 px-4 h-auto whitespace-nowrap
             ${selectedType === type.key 
               ? 'bg-primary text-white border-primary shadow-sm' 
-              : 'bg-white text-slate-600 border-slate-200 hover:border-primary hover:text-primary hover:bg-primary/5'
+              : 'bg-card text-muted-foreground border-border hover:border-primary hover:text-primary hover:bg-primary/5'
             }
           `}
         >

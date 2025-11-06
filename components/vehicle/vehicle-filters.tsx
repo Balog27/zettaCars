@@ -84,7 +84,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
   }
 
   return (
-    <Card className="mb-6 shadow-lg bg-white">
+    <Card className="mb-6 shadow-lg bg-card">
       <CardContent className="p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div>

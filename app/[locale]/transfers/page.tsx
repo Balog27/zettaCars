@@ -16,10 +16,10 @@ export default function TransfersPage() {
       "@type": "Service",
       "name": "Transfer Services Cluj-Napoca",
       "alternateName": "Servicii Transfer Cluj-Napoca",
-  "description": "Servicii profesionale de transfer în Cluj-Napoca și împrejurimi cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate. În curând disponibil!",
+      "description": "Servicii profesionale de transfer în Cluj-Napoca și împrejurimi cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate. În curând disponibil!",
       "provider": {
         "@type": "Organization",
-  "name": "Zetta Cars",
+        "name": "Zetta Cars",
         "url": "https://rngo.com",
         "logo": "https://rngo.com/logo.png",
         "contactPoint": {
@@ -96,9 +96,9 @@ export default function TransfersPage() {
   return (
     <>
       <Head>
-  <title>Transfer Services Cluj-Napoca | Zetta Cars - În Curând</title>
-  <meta name="description" content="Servicii transfer Cluj-Napoca cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate. Servicii profesionale de transport în Cluj-Napoca - în curând disponibil!" />
-  <meta name="keywords" content="transfer cluj-napoca, transfer aeroport cluj, transport privat cluj, servicii transfer romania, zetta cars transfers" />
+        <title>Transfer Services Cluj-Napoca | Zetta Cars - În Curând</title>
+        <meta name="description" content="Servicii transfer Cluj-Napoca cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate. Servicii profesionale de transport în Cluj-Napoca - în curând disponibil!" />
+        <meta name="keywords" content="transfer cluj-napoca, transfer aeroport cluj, transport privat cluj, servicii transfer romania, rent n go transfers" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://rngo.com/transfers" />
         
@@ -110,7 +110,7 @@ export default function TransfersPage() {
         />
       </Head>
       <div className="flex flex-col min-h-screen">
-  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="Zetta Cars" />
+      <Header logo={<Image src="/logo.png" alt="ZettaCars Logo" width={150} height={50} />} brandName="ZettaCars" />
 
       <main className="flex-grow flex flex-col items-center justify-center">
         <h1 className="text-5xl font-bold text-center">{t('title')}</h1>
@@ -120,7 +120,7 @@ export default function TransfersPage() {
       </main>
 
       <Footer
-        logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />}
+        logo={<Image src="/logo.png" alt="ZettaCars Logo" width={150} height={50} />}
         brandName="" // Assuming empty brandName like in app/page.tsx
       />
 

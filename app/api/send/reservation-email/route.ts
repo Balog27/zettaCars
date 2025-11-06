@@ -105,7 +105,7 @@ export async function POST(request: Request) {
             <body>
                 <div class="email-container">
                     <div class="header">
-                        <div class="logo">Zetta Cars</div>
+                        <div class="logo">Rent'n Go</div>
                         <span class="email-type ${emailType}">${emailType} Email</span>
                     </div>
                     
@@ -144,10 +144,10 @@ export async function POST(request: Request) {
                     ` : ''}
                     
                     <div class="footer">
-                        <p>Thank you for choosing Zetta Cars!</p>
+                        <p>Thank you for choosing Rent'n Go!</p>
                         <div class="contact-info">
                             <p>Questions? Contact us at office@rngo.ro or visit our website</p>
-                            <p>Zetta Cars - Your trusted car rental partner</p>
+                            <p>Rent'n Go - Your trusted car rental partner</p>
                         </div>
                     </div>
                 </div>
@@ -156,7 +156,7 @@ export async function POST(request: Request) {
         `;
 
         const { data, error } = await resend.emails.send({
-        from: 'Zetta Cars <noreply@rngo.ro>',
+            from: 'Rent\'n Go <noreply@rngo.ro>',
             to: to,
             subject: subject,
             html: htmlContent,

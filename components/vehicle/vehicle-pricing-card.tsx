@@ -64,7 +64,7 @@ export function VehiclePricingCard({
         <div className="space-y-4">
           {/* Price per day */}
           <div className="text-center">
-            <span className="text-3xl font-bold text-yellow-500">
+            <span className="text-3xl font-bold text-pink-500">
               {currentPricePerDay}
             </span>
             <span className="text-lg text-muted-foreground ml-2">

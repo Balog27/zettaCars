@@ -73,7 +73,7 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
             <SidebarMenuItem>
                 <SidebarMenuButton>
                     <Building2 className="h-6 w-6 text-primary" />
-          <span className="font-semibold text-lg">Zetta Cars</span>
+                    <span className="font-semibold text-lg">Rent'n Go</span>
                 </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarMenu>

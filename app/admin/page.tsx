@@ -88,7 +88,7 @@ export default function AdminOverviewPage() {
       <div>
         <h1 className="text-3xl font-bold">Admin Overview</h1>
         <p className="text-muted-foreground">
-          Welcome to the Zetta Cars admin dashboard
+          Welcome to the Rent'n Go admin dashboard
         </p>
       </div>
       

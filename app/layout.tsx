@@ -18,11 +18,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://rngo.ro"),
   title: {
-    default: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
-    template: "%s | Zetta Cars Cluj-Napoca",
+    default: "Rent'n Go Cluj-Napoca | Masini de Inchiriat",
+    template: "%s | Rent'n Go Cluj-Napoca",
   },
   description:
-    "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Car rentals Cluj-Napoca cu prețuri competitive. Servicii profesionale de închiriere auto în Cluj-Napoca.",
+    "Masini de inchiriat Cluj-Napoca cu Rent'n Go. Car rentals Cluj-Napoca cu prețuri competitive. Servicii profesionale de închiriere auto în Cluj-Napoca.",
   keywords: [
     "masini de inchiriat Cluj-Napoca",
     "car rentals Cluj-Napoca",
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     "rental cars Cluj-Napoca",
     "închiriat mașini Cluj",
   ],
-  authors: [{ name: "Zetta Cars" }],
-  creator: "Zetta Cars",
-  publisher: "Zetta Cars",
+  authors: [{ name: "Rent'n Go" }],
+  creator: "Rent'n Go",
+  publisher: "Rent'n Go",
   robots: {
     index: true,
     follow: true,
@@ -50,24 +50,24 @@ export const metadata: Metadata = {
     locale: "ro_RO",
     alternateLocale: ["en_US"],
     url: "https://rngo.ro",
-    siteName: "Zetta Cars Cluj-Napoca",
-    title: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
+    siteName: "Rent'n Go Cluj-Napoca",
+    title: "Rent'n Go Cluj-Napoca | Masini de Inchiriat",
     description:
-      "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Servicii profesionale de închiriere auto cu prețuri competitive.",
+      "Masini de inchiriat Cluj-Napoca cu Rent'n Go. Servicii profesionale de închiriere auto cu prețuri competitive.",
     images: [
       {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Zetta Cars Cluj-Napoca - Închiriere Mașini",
+        alt: "Rent'n Go Cluj-Napoca - Închiriere Mașini",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-  title: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
+    title: "Rent'n Go Cluj-Napoca | Masini de Inchiriat",
     description:
-      "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Car rentals Cluj-Napoca cu servicii de calitate.",
+      "Masini de inchiriat Cluj-Napoca cu Rent'n Go. Car rentals Cluj-Napoca cu servicii de calitate.",
     images: ["/logo.png"],
   },
   icons: {

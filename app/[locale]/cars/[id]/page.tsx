@@ -130,7 +130,7 @@ export default function CarDetailPage() {
       "@type": "Vehicle",
       "@id": `https://rngo.com/cars/${vehicle._id}`,
       "name": vehicleName,
-  "description": `${vehicleName} disponibil pentru închiriere în Cluj-Napoca. Masini de inchiriat cu Zetta Cars - servicii profesionale de închiriere auto.`,
+      "description": `${vehicleName} disponibil pentru închiriere în Cluj-Napoca. Masini de inchiriat cu Rent'n Go - servicii profesionale de închiriere auto.`,
       "brand": {
         "@type": "Brand",
         "name": vehicle.make
@@ -162,7 +162,7 @@ export default function CarDetailPage() {
         "validFrom": new Date().toISOString(),
         "seller": {
           "@type": "Organization",
-          "name": "Zetta Cars",
+          "name": "Rent'n Go",
           "url": "https://rngo.com",
           "address": {
             "@type": "PostalAddress",
@@ -193,8 +193,8 @@ export default function CarDetailPage() {
   return (
     <>
       <Head>
-  <title>{vehicleName} - Masini de Inchiriat Cluj-Napoca | Zetta Cars</title>
-  <meta name="description" content={`Închiriază ${vehicleName} în Cluj-Napoca cu Zetta Cars. ${vehicle.seats} locuri, ${vehicle.fuelType || 'Petrol'}, ${vehicle.transmission || 'Manual'}. Rezervare online rapidă pentru masini de inchiriat Cluj.`} />
+        <title>{vehicleName} - Masini de Inchiriat Cluj-Napoca | Rent'n Go</title>
+        <meta name="description" content={`Închiriază ${vehicleName} în Cluj-Napoca cu Rent'n Go. ${vehicle.seats} locuri, ${vehicle.fuelType || 'Petrol'}, ${vehicle.transmission || 'Manual'}. Rezervare online rapidă pentru masini de inchiriat Cluj.`} />
         <meta name="keywords" content={`${vehicleName}, masini de inchiriat cluj-napoca, ${vehicle.make} închiriere, car rental ${vehicle.model}, rent ${vehicle.make} cluj`} />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`https://rngo.com/cars/${vehicle._id}`} />
@@ -284,7 +284,7 @@ export default function CarDetailPage() {
             <div className="space-y-4">
               <Button 
                 size="lg" 
-                className="w-full font-bold py-4 text-lg"
+                className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 text-lg"
                 asChild
               >
                 <Link href={reservationUrl}>

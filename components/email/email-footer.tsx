@@ -8,9 +8,9 @@ interface EmailFooterProps {
 }
 
 export const EmailFooter: React.FC<EmailFooterProps> = ({ 
-  companyName = "Zetta Cars",
+  companyName = "Rent'n Go",
   address = "Cluj \"Avram Iancu\" International Airport, Strada Traian Vuia 149-151, Cluj-Napoca, Romania",
-  customMessage = "This is an automated notification from Zetta Cars reservation system."
+  customMessage = "This is an automated notification from Rent'n Go reservation system."
 }) => {
   return (
     <Section className="bg-gray-50 py-[16px] text-center m-0" style={{ width: '100%' }}>
