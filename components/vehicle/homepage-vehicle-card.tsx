@@ -133,32 +133,7 @@ export function HomepageVehicleCard({
               </div>
             </div>
 
-            {/* Pricing when dates are selected */}
-            {pickupDate && returnDate && (
-              <div className="mt-4 space-y-2">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">
-                    {currentPricePerDay} {currency}
-                  </div>
-                  <div className="text-sm text-gray-300">{t('perDay')}</div>
-                </div>
-                {priceDetails.totalPrice !== null && priceDetails.days !== null && (
-                  <div className="text-center">
-                    <div className="text-lg font-semibold text-white">
-                      {t('totalFor', { 
-                        days: priceDetails.days, 
-                        plural: locale === 'ro' ? ((priceDetails.days === 1) ? "" : "le") : ((priceDetails.days === 1) ? "" : "s") 
-                      })}: {priceDetails.totalPrice} {currency}
-                    </div>
-                    {priceDetails.totalLocationFees > 0 && (
-                      <div className="text-xs text-gray-300">
-                        +{priceDetails.totalLocationFees} {currency} {t('fees')}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Pricing removed from homepage hover overlay per UX requirement */}
             
             {/* Book Now Button */}
             <div className="mt-4">

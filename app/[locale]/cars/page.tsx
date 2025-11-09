@@ -2,12 +2,14 @@
 
 import { VehicleFilters } from "@/components/vehicle/vehicle-filters";
 import { VehicleFiltersSkeleton } from "@/components/vehicle/vehicle-filters-skeleton";
-import { VehicleTypeNavigation } from "@/components/vehicle/vehicle-type-navigation";
 import { ContactCtaBanner } from "@/components/contact-cta-banner";
-import { PageLayout } from "@/components/layout/page-layout";
+import { Header } from "@/components/ui/header";
+import { Footer } from "@/components/ui/footer";
+import { Logo } from "@/components/ui/logo";
 import { VehicleSearchForm } from "@/components/vehicle/vehicle-search-form";
 import { VehicleSearchFormSkeleton } from "@/components/vehicle/vehicle-search-form-skeleton";
 import { VehicleListDisplay } from "@/components/vehicle/vehicle-list-display";
+import { BackgroundSlideshow } from "@/components/ui/background-slideshow";
 import { useVehicleSearch } from "@/hooks/useVehicleSearch";
 import { useVehicleList } from "@/hooks/useVehicleList";
 import Head from "next/head";
@@ -18,7 +20,7 @@ export default function CarsPage() {
   // Use custom hooks for state management
   const { searchState, updateSearchField } = useVehicleSearch();
   const { allVehicles, displayedVehicles, isLoading, error, setDisplayedVehicles } = useVehicleList(searchState.isHydrated);
-  const [selectedVehicleType, setSelectedVehicleType] = useState<string | null>(null);
+  
   const t = useTranslations();
 
   // Generate schema markup for vehicle listings
@@ -95,6 +97,13 @@ export default function CarsPage() {
 
   const vehicleSchema = generateVehicleListSchema();
 
+  // Background slideshow images
+  const backgroundImages = [
+    "/carBanner1.png",
+    "/carBanner2.png",
+    "/carBanner3.png"
+  ];
+
   return (
     <>
       <Head>
@@ -113,8 +122,22 @@ export default function CarsPage() {
           />
         )}
       </Head>
-      <PageLayout className="p-4 md:p-8 flex flex-col gap-8">
-        <div className="max-w-7xl mx-auto w-full">
+
+      <div className="relative flex flex-col min-h-screen">
+        {/* Header */}
+        <Header logo={<Logo alt="Zetta Cars Logo" />} />
+
+        {/* Background Slideshow Hero Section */}
+        <BackgroundSlideshow 
+          images={backgroundImages}
+          interval={20000}
+          className="h-[60vh] min-h-[400px] w-full"
+        >
+        </BackgroundSlideshow>
+
+        {/* Main Content */}
+        <main className="flex-grow p-4 md:p-8 flex flex-col gap-8">
+          <div className="max-w-7xl mx-auto w-full">
           {/* Search Form - show skeleton while loading or not hydrated */}
           {(!searchState.isHydrated || isLoading) ? (
             <VehicleSearchFormSkeleton />
@@ -131,21 +154,12 @@ export default function CarsPage() {
             <VehicleFiltersSkeleton />
           ) : (
             <VehicleFilters 
-              vehicles={allVehicles} 
               allVehicles={allVehicles} 
               onFilterChange={setDisplayedVehicles} 
             />
           )}
 
-          {/* Vehicle Type Navigation */}
-          {searchState.isHydrated && !isLoading && allVehicles && (
-            <div className="mb-8 w-full">
-              <VehicleTypeNavigation 
-                selectedType={selectedVehicleType}
-                onTypeChange={setSelectedVehicleType}
-              />
-            </div>
-          )}
+          {/* Vehicle Type Navigation removed per request */}
           
           {/* Vehicle List Display - already has internal skeleton handling */}
           <VehicleListDisplay
@@ -165,7 +179,14 @@ export default function CarsPage() {
             </div>
           )}
         </div>
-      </PageLayout>
+      </main>
+
+      {/* Footer */}
+      <Footer 
+        logo={<Logo alt="Zetta Cars Logo" />} 
+        brandName=""
+      />
+    </div>
     </>
   );
 }

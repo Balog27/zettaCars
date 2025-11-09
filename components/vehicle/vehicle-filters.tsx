@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { VehicleTypeNavigation } from "@/components/vehicle/vehicle-type-navigation";
 import { Vehicle } from "@/types/vehicle";
 import { useTranslations } from 'next-intl';
 
@@ -25,7 +26,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
   const [brandFilter, setBrandFilter] = React.useState<string>("all");
   const [fuelTypeFilter, setFuelTypeFilter] = React.useState<string>("all");
   const [transmissionFilter, setTransmissionFilter] = React.useState<string>("all");
-  const [typeFilter, setTypeFilter] = React.useState<string>("all");
+  const [selectedType, setSelectedType] = React.useState<string | null>(null);
 
   // Extract unique brands
   const brands = React.useMemo(() => {
@@ -48,12 +49,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
     return ["all", ...Array.from(uniqueTransmissions)];
   }, [allVehicles]);
 
-  // Extract unique vehicle types
-  const vehicleTypes = React.useMemo(() => {
-    if (!allVehicles) return [];
-    const uniqueTypes = new Set(allVehicles.map(v => v.type).filter(Boolean) as string[]); 
-    return ["all", ...Array.from(uniqueTypes)];
-  }, [allVehicles]);
+  
 
   React.useEffect(() => {
     if (!allVehicles) {
@@ -72,12 +68,13 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
     if (transmissionFilter !== "all") {
       filtered = filtered.filter(v => v.transmission === transmissionFilter);
     }
-    if (typeFilter !== "all") {
-      filtered = filtered.filter(v => v.type === typeFilter);
+
+    if (selectedType) {
+      filtered = filtered.filter(v => v.type === selectedType);
     }
 
     onFilterChange(filtered);
-  }, [allVehicles, brandFilter, fuelTypeFilter, transmissionFilter, typeFilter, onFilterChange]);
+  }, [allVehicles, brandFilter, fuelTypeFilter, transmissionFilter, selectedType, onFilterChange]);
 
   if (!allVehicles || allVehicles.length === 0) {
     return null; // Don't show filters if there are no vehicles to filter
@@ -86,11 +83,12 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
   return (
     <Card className="mb-6 shadow-lg bg-card">
       <CardContent className="p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Make filters occupy the full width: 3 columns on small+ screens so the three selects span the card */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4">
           <div>
             <Label htmlFor="brand-filter" className="text-sm font-medium text-primary">{t('brand')}</Label>
             <Select value={brandFilter} onValueChange={setBrandFilter}>
-              <SelectTrigger id="brand-filter" className="mt-1">
+              <SelectTrigger id="brand-filter" className="mt-1 w-full">
                 <SelectValue placeholder={t('selectBrand')} />
               </SelectTrigger>
               <SelectContent>
@@ -106,7 +104,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
           <div>
             <Label htmlFor="fuel-type-filter" className="text-sm font-medium text-primary">{t('fuelType')}</Label>
             <Select value={fuelTypeFilter} onValueChange={setFuelTypeFilter}>
-              <SelectTrigger id="fuel-type-filter" className="mt-1">
+              <SelectTrigger id="fuel-type-filter" className="mt-1 w-full">
                 <SelectValue placeholder={t('selectFuelType')} />
               </SelectTrigger>
               <SelectContent>
@@ -122,7 +120,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
           <div>
             <Label htmlFor="transmission-filter" className="text-sm font-medium text-primary">{t('transmission')}</Label>
             <Select value={transmissionFilter} onValueChange={setTransmissionFilter}>
-              <SelectTrigger id="transmission-filter" className="mt-1">
+              <SelectTrigger id="transmission-filter" className="mt-1 w-full">
                 <SelectValue placeholder={t('selectTransmission')} />
               </SelectTrigger>
               <SelectContent>
@@ -135,21 +133,12 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
             </Select>
           </div>
 
-          <div>
-            <Label htmlFor="type-filter" className="text-sm font-medium text-primary">{t('type')}</Label>
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger id="type-filter" className="mt-1">
-                <SelectValue placeholder={t('selectType')} />
-              </SelectTrigger>
-              <SelectContent>
-                {vehicleTypes.map(type => (
-                  <SelectItem key={type} value={type} className="capitalize">
-                    {type === "all" ? t('allTypes') : type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Type dropdown removed per request */}
+        </div>
+
+        {/* Re-add type buttons (VehicleTypeNavigation) so users can filter by type with individual buttons */}
+        <div className="mt-4">
+          <VehicleTypeNavigation selectedType={selectedType} onTypeChange={setSelectedType} />
         </div>
       </CardContent>
     </Card>

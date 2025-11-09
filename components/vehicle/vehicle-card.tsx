@@ -126,15 +126,15 @@ export function VehicleCard({
         {pickupDate && returnDate && (
           <div className="space-y-2">
             <div className="flex justify-between items-baseline">
-              <div>
-                <span className="text-2xl font-bold text-yellow-500">
+                <div>
+                <span className="text-2xl font-bold text-pink-500">
                   {currentPricePerDay}
                 </span>
                 <span className="text-sm text-muted-foreground"> {currency} {t('perDay')}</span>
               </div>
               {priceDetails.totalPrice !== null && priceDetails.days !== null && (
                 <div>
-                  <span className="text-xl font-semibold text-yellow-600">
+                  <span className="text-xl font-semibold text-pink-600">
                     {priceDetails.totalPrice}
                   </span>
                   <span className="text-xs text-muted-foreground">

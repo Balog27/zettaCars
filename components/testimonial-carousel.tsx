@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Review {
   text: string;
@@ -120,9 +122,23 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
 
           {/* Review Counter */}
           <div className="text-center mt-8">
-            <div className="text-gray-600 dark:text-gray-400">
+            <div className="text-gray-600 dark:text-gray-400 mb-6">
               {currentIndex + 1} of {reviews.length}
             </div>
+            
+            {/* Leave a Review Button */}
+            <Button 
+              asChild
+              className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
+            >
+              <Link 
+                href="/review"
+                className="inline-flex items-center"
+              >
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Leave a Review
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

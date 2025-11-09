@@ -159,36 +159,44 @@ export default function Home() {
 
         {/* Price Calculator Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-          <section id="price-calculator" className="min-h-[calc(100vh-64px)] bg-background">
-            <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-[calc(100vh-64px)]">
-              {/* Left Side - Price Calculator */}
-              <div className="flex items-center justify-center p-8 md:p-12 lg:p-16">
-                <div className="max-w-lg w-full">
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-                    Find Your Perfect Car
-                  </h2>
-                  
-                  <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed">
-                    Search and compare our premium vehicle fleet. Get instant pricing and availability for your dates.
-                  </p>
+          <section id="price-calculator" className="min-h-[calc(100vh-64px)] bg-background pt-8 mt-8 md:mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-[60%_40%] h-full min-h-[calc(100vh-64px)] items-stretch">
+              {/* Left Side - Price calculator (no background photo) */}
+              <div className="relative overflow-hidden bg-section">
+                {/* Plain section background instead of a large photo so the calculator is always visible */}
+                <div className="absolute inset-0 bg-section/80 dark:bg-card-dark/60" />
+                <div className="relative z-10 flex items-start justify-start p-8 md:p-12 lg:p-16">
+                  <div className="w-full">
+                    <div className="p-6 md:pl-10 lg:pl-12">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">
+                        Find Your Perfect Car
+                      </h2>
 
-                  <VehicleSearchFilterForm 
-                    searchState={searchState}
-                    updateSearchField={updateSearchField}
-                  />
+                      <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 leading-relaxed">
+                        Search and compare our premium vehicle fleet. Get instant pricing and availability for your dates.
+                      </p>
+
+                      <VehicleSearchFilterForm 
+                        searchState={searchState}
+                        updateSearchField={updateSearchField}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Right Side - Image */}
-              <div className="relative overflow-hidden">
-                <Image
-                  src="/priceCalculatorPhoto.jpg"
-                  alt="Zetta Cars Price Calculator"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-black/20" />
+              {/* Right Side - Image (match left column height on md+) */}
+              <div className="flex items-start justify-center">
+                <div className="relative w-full h-80 md:h-full overflow-hidden">
+                  <Image
+                    src="/priceCalculatorPhoto.jpg"
+                    alt="Zetta Cars Price Calculator"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
+                </div>
               </div>
             </div>
           </section>
@@ -232,7 +240,7 @@ export default function Home() {
                 <div 
                   className="w-full h-full bg-cover bg-center bg-no-repeat min-h-[400px] md:min-h-full"
                   style={{
-                    backgroundImage: `url('/luxuaryTransfers.jpg')`
+                    backgroundImage: `url('/luxuaryTransfers.png')`
                   }}
                 />
                 <div className="absolute inset-0 bg-black/20" />
