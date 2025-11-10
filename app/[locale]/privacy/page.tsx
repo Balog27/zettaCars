@@ -45,9 +45,9 @@ export default function PrivacyPolicyPage() {
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                adresa de e-mail: <Link href="mailto:office@rngo.ro" className="text-primary hover:underline">office@rngo.ro</Link>
+                adresa de e-mail: <Link href="mailto:contact@zettacarrental.com" className="text-primary hover:underline">contact@zettacarrental.com</Link>
               </li>
-              <li>telefon: +40773932961</li>
+              <li>telefon: +40750250121</li>
             </ul>
           </CardContent>
         </Card>

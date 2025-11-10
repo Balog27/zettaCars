@@ -31,7 +31,7 @@ export function Footer({ logo, brandName }: FooterProps) {
         <div className="md:flex md:items-end md:justify-between">
           <Link href="/" className="flex items-center gap-x-2" aria-label={brandName || "Go to homepage"}>
             {logo}
-            {brandName && <span className="font-bold text-xl text-gray-800 dark:text-white">{brandName}</span>}
+            {brandName && <span className="font-bold text-xl text-white dark:text-white">{brandName}</span>}
           </Link>
           <div className="flex items-center gap-3 mt-6 md:mt-0">
             {/* Social Media Icons */}
@@ -40,7 +40,7 @@ export function Footer({ logo, brandName }: FooterProps) {
                 href="https://www.tiktok.com/@zettacars.ro?_r=1&_t=ZN-914li9Q4jA3"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors"
+                className="p-2 text-white dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
                 aria-label="Follow us on TikTok"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -52,7 +52,7 @@ export function Footer({ logo, brandName }: FooterProps) {
                 href="https://www.instagram.com/zettacars.ro?igsh=MXRmbGIza3kyY3p6dw=="
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-pink-500 transition-colors"
+                className="p-2 text-white dark:text-gray-300 hover:text-pink-500 transition-colors"
                 aria-label="Follow us on Instagram"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -64,7 +64,7 @@ export function Footer({ logo, brandName }: FooterProps) {
                 href="https://www.facebook.com/share/1FxdHKPc5L/?mibextid=wwXIfr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
+                className="p-2 text-white dark:text-gray-300 hover:text-blue-500 transition-colors"
                 aria-label="Follow us on Facebook"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -83,7 +83,7 @@ export function Footer({ logo, brandName }: FooterProps) {
                 <li key={i} className="my-1 mx-2 shrink-0">
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-700 dark:text-gray-300 hover:text-primary hover:underline underline-offset-4 transition-colors"
+                    className="text-sm text-white dark:text-gray-300 hover:text-primary hover:underline underline-offset-4 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -97,7 +97,7 @@ export function Footer({ logo, brandName }: FooterProps) {
                 <li key={i} className="my-1 mx-3 shrink-0">
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary hover:underline underline-offset-4 transition-colors"
+                    className="text-sm text-white dark:text-gray-400 hover:text-primary hover:underline underline-offset-4 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -105,7 +105,7 @@ export function Footer({ logo, brandName }: FooterProps) {
               ))}
             </ul>
           </div>
-          <div className="mt-6 text-sm leading-6 text-gray-600 dark:text-gray-400 whitespace-nowrap lg:mt-0 lg:row-start-1 lg:col-span-4 xl:col-span-5">
+          <div className="mt-6 text-sm leading-6 text-white dark:text-gray-400 whitespace-nowrap lg:mt-0 lg:row-start-1 lg:col-span-4 xl:col-span-5">
             <div>{t('copyright')}</div>
             <div>{t('allRightsReserved')}</div>
           </div>

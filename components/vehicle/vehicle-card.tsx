@@ -165,7 +165,7 @@ export function VehicleCard({
       </div>
 
       <div className="p-3 border-t border-border bg-muted/30">
-        <div className="flex justify-around items-center w-full text-xs text-muted-foreground">
+        <div className="flex justify-around items-center w-full text-xs text-foreground">
           <div className="flex items-center space-x-1">
             <CarFront className="h-4 w-4" />
             <span>{vehicle.year || t('notAvailable')}</span>

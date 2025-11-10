@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     };
 
     try {
-        const adminEmail = process.env.ADMIN_EMAIL || 'office@rngo.ro';
+    const adminEmail = process.env.ADMIN_EMAIL || 'contact@zettacarrental.com';
 
         const [adminResult, userResult] = await Promise.all([
             resend.emails.send({
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
                 to: customerInfo.email,
                 subject: `Request submitted #${reservationNumber ?? reservationId}`,
                 react: UserReservationEmail({ data: emailData }) as React.ReactElement,
-                replyTo: 'office@rngo.ro',
+                replyTo: 'contact@zettacarrental.com',
             })
         ]);
 

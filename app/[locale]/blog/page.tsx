@@ -24,7 +24,7 @@ export default function BlogPage() {
         "logo": "https://rngo.com/logo.png",
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+40-773-932-961",
+          "telephone": "+40750250121",
           "contactType": "customer service",
           "areaServed": "Cluj-Napoca",
           "availableLanguage": ["Romanian", "English"]

@@ -103,7 +103,7 @@ const AboutPage = () => {
               "logo": "https://rngo.com/logo.png",
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+40-773-932-961",
+                "telephone": "+40750250121",
                 "contactType": "customer service",
                 "areaServed": "RO",
                 "availableLanguage": ["Romanian", "English"]
@@ -139,7 +139,7 @@ const AboutPage = () => {
           }}
         />
       </Head>
-      <BackgroundImage bottomGradient={true} />
+  <BackgroundImage bottomGradient={true} src="/carInterior.jpg" />
 
       <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
 
@@ -226,16 +226,16 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Values Section */}
-        <section className="py-16 px-4 bg-muted/20">
+  {/* Values Section */}
+  <section className="py-16 px-4 bg-section text-white dark:text-foreground">
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
               <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
                 <div className="text-center mb-12">
-                  <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  <h2 className="text-3xl md:text-4xl font-bold text-white dark:text-foreground mb-4">
                     {t('values.title')}
                   </h2>
-                  <p className="text-muted-foreground text-lg">
+                  <p className="text-white/90 dark:text-gray-300 text-lg">
                     {t('values.subtitle')}
                   </p>
                 </div>
@@ -249,10 +249,10 @@ const AboutPage = () => {
                             <value.icon className="w-6 h-6 text-primary" />
                           </div>
                           <div>
-                            <h3 className="text-xl font-semibold text-foreground mb-2">
+                            <h3 className="text-xl font-semibold text-white dark:text-foreground mb-2">
                               {value.title}
                             </h3>
-                            <p className="text-muted-foreground leading-relaxed">
+                            <p className="text-white/90 dark:text-gray-300 leading-relaxed">
                               {value.description}
                             </p>
                           </div>

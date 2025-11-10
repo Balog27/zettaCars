@@ -2,6 +2,7 @@
 
 import { VehicleFilters } from "@/components/vehicle/vehicle-filters";
 import { VehicleFiltersSkeleton } from "@/components/vehicle/vehicle-filters-skeleton";
+import { VehicleTypeNavigation } from "@/components/vehicle/vehicle-type-navigation";
 import { ContactCtaBanner } from "@/components/contact-cta-banner";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
@@ -20,7 +21,7 @@ export default function CarsPage() {
   // Use custom hooks for state management
   const { searchState, updateSearchField } = useVehicleSearch();
   const { allVehicles, displayedVehicles, isLoading, error, setDisplayedVehicles } = useVehicleList(searchState.isHydrated);
-  
+  const [selectedVehicleType, setSelectedVehicleType] = useState<string | null>(null);
   const t = useTranslations();
 
   // Generate schema markup for vehicle listings
@@ -90,7 +91,7 @@ export default function CarsPage() {
           "postalCode": "400397",
           "addressCountry": "RO"
         },
-        "telephone": "+40-773-932-961"
+        "telephone": "+40750250121"
       }
     };
   };
@@ -159,7 +160,15 @@ export default function CarsPage() {
             />
           )}
 
-          {/* Vehicle Type Navigation removed per request */}
+          {/* Vehicle Type Navigation */}
+          {searchState.isHydrated && !isLoading && allVehicles && (
+            <div className="mb-8 w-full">
+              <VehicleTypeNavigation 
+                selectedType={selectedVehicleType}
+                onTypeChange={setSelectedVehicleType}
+              />
+            </div>
+          )}
           
           {/* Vehicle List Display - already has internal skeleton handling */}
           <VehicleListDisplay

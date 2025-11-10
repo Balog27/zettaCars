@@ -19,7 +19,7 @@ export function Providers({
         <UserEnsurer>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange={false}
           >

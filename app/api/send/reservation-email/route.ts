@@ -1,6 +1,10 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
+if (!process.env.RESEND_API_KEY) {
+    console.error('Missing RESEND_API_KEY in environment. Emails will not be sent.');
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
@@ -105,7 +109,7 @@ export async function POST(request: Request) {
             <body>
                 <div class="email-container">
                     <div class="header">
-                        <div class="logo">Rent'n Go</div>
+                        <div class="logo">Zetta Cars</div>
                         <span class="email-type ${emailType}">${emailType} Email</span>
                     </div>
                     
@@ -144,10 +148,10 @@ export async function POST(request: Request) {
                     ` : ''}
                     
                     <div class="footer">
-                        <p>Thank you for choosing Rent'n Go!</p>
+                        <p>Thank you for choosing Zetta Cars!</p>
                         <div class="contact-info">
-                            <p>Questions? Contact us at office@rngo.ro or visit our website</p>
-                            <p>Rent'n Go - Your trusted car rental partner</p>
+                            <p>Questions? Contact us at contact@zettacarrental.com or visit our website</p>
+                            <p>Zetta Cars - Your trusted car rental partner</p>
                         </div>
                     </div>
                 </div>
@@ -160,12 +164,23 @@ export async function POST(request: Request) {
             to: to,
             subject: subject,
             html: htmlContent,
-            replyTo: 'office@rngo.ro',
+            replyTo: 'contact@zettacarrental.com',
         });
-
         if (error) {
             console.error('Resend error:', error);
-            return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
+
+            // Detect domain verification issues and return a clear, actionable message
+            const name = (error as any)?.name || (error as any)?.type || '';
+            const message = (error as any)?.message || JSON.stringify(error);
+
+            if (name.toLowerCase().includes('validation') || message.toLowerCase().includes('not verified') || message.toLowerCase().includes('not_verified')) {
+                return NextResponse.json({
+                    error: 'Resend domain not verified. Please verify your sending domain on https://resend.com/domains and add the required DNS records (SPF/DKIM).',
+                    details: message,
+                }, { status: 400 });
+            }
+
+            return NextResponse.json({ error: 'Failed to send email', details: message }, { status: 500 });
         }
 
         return NextResponse.json({ 

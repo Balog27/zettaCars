@@ -132,7 +132,7 @@ function ReservationConfirmationContent() {
             </div>
           </div>
         </main>
-        <Footer logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} brandName="" />
+  <Footer logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} brandName="" />
       </div>
     );
   }
@@ -206,7 +206,7 @@ function ReservationConfirmationContent() {
 
   return (
     <div className="relative flex flex-col min-h-screen">
-      <Header logo={<Image src="/logo.png" alt="Rent'n Go Logo" width={150} height={50} />} />
+  <Header logo={<Image src="/logo.png" alt="Zetta Cars Logo" width={150} height={50} />} />
 
       <main className="flex-grow p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
@@ -526,14 +526,14 @@ function ReservationConfirmationContent() {
                     <Phone className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <p className="font-medium">{t('customerSupport')}</p>
-                      <p className="text-sm text-muted-foreground">+40 773 932 961</p>
+                      <p className="text-sm text-muted-foreground">+40750250121</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Mail className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <p className="font-medium">{t('emailSupport')}</p>
-                      <p className="text-sm text-muted-foreground">office@rngo.ro</p>
+                      <p className="text-sm text-muted-foreground">contact@zettacarrental.com</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">

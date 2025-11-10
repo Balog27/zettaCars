@@ -8,7 +8,7 @@ export function ContactCtaBanner() {
   const t = useTranslations('contactBanner');
 
   return (
-    <div className="w-full bg-card-light border border-border rounded-lg p-6 md:p-8">
+    <div className="w-full bg-card border border-border rounded-lg p-6 md:p-8">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="text-center md:text-left">
           <h3 className="text-lg md:text-xl font-semibold text-foreground mb-1">

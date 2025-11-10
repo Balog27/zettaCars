@@ -8,6 +8,7 @@
       "subheadline": "Discover Cluj-Napoca and beyond with our premium fleet of vehicles. Professional service, competitive prices, and exceptional customer experience.",
       "cta": "Browse Our Fleet"
     },
+    "tagline": "Premium fleet, transparent pricing and 24/7 support — ready when you are.",
     "luxuryTransfer": {
       "headline": "Premium Transfer Services",
       "description": "Experience luxury and comfort with our premium transfer services. Professional drivers, high-end vehicles, and personalized service for every journey.",
@@ -175,7 +176,7 @@
       "phone": {
         "title": "Phone",
         "description": "Call us directly",
-        "buttonText": "+40 773 932 961"
+        "buttonText": "+40750250121"
       },
       "whatsapp": {
         "title": "WhatsApp",
@@ -185,7 +186,7 @@
       "email": {
         "title": "Email",
         "description": "Detailed inquiries",
-        "buttonText": "office@rngo.com"
+        "buttonText": "contact@zettacarrental.com"
       }
     },
     "followUs": "Follow Us",
@@ -214,6 +215,8 @@
       "address": "Address",
       "addressText": "Cluj \"Avram Iancu\" International Airport\nStrada Traian Vuia 149-151, Cluj-Napoca 400397",
       "office": "OFFICE"
+      ,
+      "pickupNote": "Need a specific pickup spot? We can meet you at the airport, your hotel, or any address that works best — just tell us where."
     },
     "socialMedia": {
       "tiktok": {

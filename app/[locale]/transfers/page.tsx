@@ -24,7 +24,7 @@ export default function TransfersPage() {
         "logo": "https://rngo.com/logo.png",
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+40-773-932-961",
+          "telephone": "+40750250121",
           "contactType": "customer service",
           "areaServed": "Cluj-Napoca",
           "availableLanguage": ["Romanian", "English"]
@@ -51,11 +51,11 @@ export default function TransfersPage() {
         "City Transfer",
         "Business Transport"
       ],
-      "availableChannel": {
+        "availableChannel": {
         "@type": "ServiceChannel",
         "serviceUrl": "https://rngo.com/transfers",
-        "serviceSmsNumber": "+40-773-932-961",
-        "servicePhone": "+40-773-932-961"
+        "serviceSmsNumber": "+40750250121",
+        "servicePhone": "+40750250121"
       },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",

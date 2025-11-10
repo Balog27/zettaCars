@@ -57,11 +57,11 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
   const currentReview = reviews[currentIndex];
 
   return (
-    <section className="py-16 px-4 bg-section">
+    <section className="py-16 px-4 bg-section text-white dark:text-foreground">
       <div className="container mx-auto">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white">
+            <h2 className="text-4xl md:text-5xl font-bold text-white dark:text-foreground">
               {title}
             </h2>
           </div>
@@ -90,15 +90,15 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
                 
                 {/* Animated testimonial content */}
                 <div className="transition-all duration-500 ease-in-out">
-                  <blockquote className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+                  <blockquote className="text-lg sm:text-xl md:text-2xl text-white/90 dark:text-gray-300 leading-relaxed mb-8">
                     {currentReview.text}
                   </blockquote>
                   
                   <div className="text-center">
-                    <div className="font-semibold text-lg text-gray-800 dark:text-white mb-1">
+                    <div className="font-semibold text-lg text-white dark:text-white mb-1">
                       {currentReview.name}
                     </div>
-                    <div className="text-gray-600 dark:text-gray-400">
+                    <div className="text-white/90 dark:text-gray-400">
                       {currentReview.title}
                     </div>
                   </div>
@@ -122,7 +122,7 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
 
           {/* Review Counter */}
           <div className="text-center mt-8">
-            <div className="text-gray-600 dark:text-gray-400 mb-6">
+            <div className="text-white/90 dark:text-gray-400 mb-6">
               {currentIndex + 1} of {reviews.length}
             </div>
             

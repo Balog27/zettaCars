@@ -130,7 +130,7 @@ export default function CarDetailPage() {
       "@type": "Vehicle",
       "@id": `https://rngo.com/cars/${vehicle._id}`,
       "name": vehicleName,
-      "description": `${vehicleName} disponibil pentru închiriere în Cluj-Napoca. Masini de inchiriat cu Rent'n Go - servicii profesionale de închiriere auto.`,
+  "description": `${vehicleName} disponibil pentru închiriere în Cluj-Napoca. Masini de inchiriat cu Zetta Cars - servicii profesionale de închiriere auto.`,
       "brand": {
         "@type": "Brand",
         "name": vehicle.make
@@ -160,9 +160,9 @@ export default function CarDetailPage() {
         },
         "availability": "https://schema.org/InStock",
         "validFrom": new Date().toISOString(),
-        "seller": {
+          "seller": {
           "@type": "Organization",
-          "name": "Rent'n Go",
+          "name": "Zetta Cars",
           "url": "https://rngo.com",
           "address": {
             "@type": "PostalAddress",
@@ -171,7 +171,7 @@ export default function CarDetailPage() {
             "postalCode": "400397",
             "addressCountry": "RO"
           },
-          "telephone": "+40-773-932-961"
+          "telephone": "+40750250121"
         }
       },
       "potentialAction": {
@@ -193,8 +193,8 @@ export default function CarDetailPage() {
   return (
     <>
       <Head>
-        <title>{vehicleName} - Masini de Inchiriat Cluj-Napoca | Rent'n Go</title>
-        <meta name="description" content={`Închiriază ${vehicleName} în Cluj-Napoca cu Rent'n Go. ${vehicle.seats} locuri, ${vehicle.fuelType || 'Petrol'}, ${vehicle.transmission || 'Manual'}. Rezervare online rapidă pentru masini de inchiriat Cluj.`} />
+        <title>{vehicleName} - Masini de Inchiriat Cluj-Napoca | Zetta Cars</title>
+        <meta name="description" content={`Închiriază ${vehicleName} în Cluj-Napoca cu Zetta Cars. ${vehicle.seats} locuri, ${vehicle.fuelType || 'Petrol'}, ${vehicle.transmission || 'Manual'}. Rezervare online rapidă pentru masini de inchiriat Cluj.`} />
         <meta name="keywords" content={`${vehicleName}, masini de inchiriat cluj-napoca, ${vehicle.make} închiriere, car rental ${vehicle.model}, rent ${vehicle.make} cluj`} />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`https://rngo.com/cars/${vehicle._id}`} />

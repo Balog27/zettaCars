@@ -25,7 +25,7 @@ const ContactPage = () => {
 
   const handleWhatsAppClick = () => {
     // Replace with actual WhatsApp number
-    const whatsappUrl = "https://wa.me/40773932961?text=Hello!%20I'm%20interested%20in%20your%20rental%20services.";
+    const whatsappUrl = "https://wa.me/40750250121?text=Hello!%20I'm%20interested%20in%20your%20rental%20services.";
     window.open(whatsappUrl, '_blank');
   };
 
@@ -33,7 +33,7 @@ const ContactPage = () => {
     <div className="relative flex flex-col min-h-screen" suppressHydrationWarning>
       <Head>
         <title>Contact Zetta Cars - Masini de Inchiriat Cluj-Napoca</title>
-        <meta name="description" content="Contactează Zetta Cars pentru masini de inchiriat Cluj-Napoca. Telefon: +40 773 932 961. Email: office@rngo.com. Servicii profesionale de închiriere auto în Cluj." />
+  <meta name="description" content="Contactează Zetta Cars pentru masini de inchiriat Cluj-Napoca. Telefon: +40750250121. Email: contact@zettacarrental.com. Servicii profesionale de închiriere auto în Cluj." />
         <meta name="keywords" content="contact zetta cars, masini de inchiriat cluj-napoca, telefon închiriere auto cluj, car rentals cluj contact" />
         <script
           type="application/ld+json"
@@ -44,8 +44,8 @@ const ContactPage = () => {
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Zetta Cars",
-                "telephone": "+40-773-932-961",
-                "email": "office@rngo.com",
+                "telephone": "+40750250121",
+                "email": "contact@zettacarrental.com",
                 "address": {
                   "@type": "PostalAddress",
                   "streetAddress": "Cluj \"Avram Iancu\" International Airport, Strada Traian Vuia 149-151",
@@ -59,14 +59,14 @@ const ContactPage = () => {
                 "contactPoint": [
                   {
                     "@type": "ContactPoint",
-                    "telephone": "+40-773-932-961",
+                    "telephone": "+40750250121",
                     "contactType": "customer service",
                     "availableLanguage": ["Romanian", "English"],
                     "areaServed": "Cluj-Napoca"
                   },
                   {
                     "@type": "ContactPoint",
-                    "email": "office@rngo.com",
+                    "email": "contact@zettacarrental.com",
                     "contactType": "customer service",
                     "availableLanguage": ["Romanian", "English"]
                   }
@@ -78,7 +78,7 @@ const ContactPage = () => {
       </Head>
       <Header logo={<Logo alt="Zetta Cars Logo" />} />
 
-      <main className="flex-grow bg-white">
+  <main className="flex-grow bg-white">
         {/* Hero Section */}
         <section className="py-16 px-4 bg-hero-section">
           <div className="container mx-auto text-center">
@@ -93,15 +93,15 @@ const ContactPage = () => {
           </div>
         </section>
 
-        {/* Contact Form Section */}
-        <section className="py-16 px-4 bg-form-section">`
+  {/* Contact Form Section */}
+  <section className="py-16 px-4 bg-background">
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
               <AnimatedGroup variants={contactAnimationVariants} threshold={0.2} triggerOnce={true}>
-                <Card className="overflow-hidden shadow-xl bg-card-footer-color">
+                <Card className="overflow-hidden shadow-xl bg-card">
                   <div className="grid md:grid-cols-2 gap-0">
                     {/* Left Side - Contact Form */}
-                    <div className="p-8 md:p-12 bg-background border-r border-border md:border-r border-border">
+                    <div className="p-8 md:p-12 border-r border-border">
                       <form className="space-y-6">
                         <div>
                           <label className="block text-sm font-medium text-foreground mb-2">
@@ -110,7 +110,7 @@ const ContactPage = () => {
                           <input
                             type="text"
                             placeholder={t('contactForm.enterYourName')}
-                            className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                            className="w-full px-4 py-3 rounded-lg border border-primary bg-background text-foreground focus:ring-0 focus:border-primary focus:outline-none transition-all"
                             suppressHydrationWarning
                           />
                         </div>
@@ -122,7 +122,7 @@ const ContactPage = () => {
                           <textarea
                             rows={6}
                             placeholder={t('contactForm.messagePlaceholder')}
-                            className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                            className="w-full px-4 py-3 rounded-lg border border-primary bg-background text-foreground focus:ring-0 focus:border-primary focus:outline-none transition-all resize-none"
                             suppressHydrationWarning
                           />
                         </div>
@@ -155,6 +155,14 @@ const ContactPage = () => {
                           <div>
                             <p className="font-medium text-foreground">{t('contactForm.address')}</p>
                             <p className="text-muted-foreground">{t('contactForm.addressText')}</p>
+                            <div className="flex items-start space-x-3 mt-4">
+                              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mt-1">
+                                <ExternalLink className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <p className="text-base text-foreground">{t('contactForm.pickupNote')}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -190,8 +198,8 @@ const ContactPage = () => {
           </div>
         </section>
 
-        {/* Contact Information */}
-        <section className="py-16 px-4 bg-form-section">`
+  {/* Contact Information */}
+  <section className="py-16 px-4 bg-background">
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
               <AnimatedGroup variants={contactAnimationVariants} threshold={0.2} triggerOnce={true}>

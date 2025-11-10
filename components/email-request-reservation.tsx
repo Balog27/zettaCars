@@ -65,8 +65,8 @@ const CarRentalReservationEmail: React.FC<CarRentalReservationEmailProps> = ({ d
       warrantyText: isRo ? 'Garanție (restituibilă)' : 'Warranty (deductible)',
     },
     footerMessage: isRo
-      ? 'Aceasta este o notificare automată din sistemul de rezervări Rent\'n Go.'
-      : "This is an automated notification from Rent'n Go reservation system.",
+      ? 'Aceasta este o notificare automată din sistemul de rezervări Zetta Cars.'
+      : "This is an automated notification from Zetta Cars reservation system.",
   };
 
   return (

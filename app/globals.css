@@ -42,9 +42,16 @@
   --sidebar-border: oklch(0.94 0 0);
   --sidebar-ring: oklch(0.77 0 0);
   --section-bg: #e8e8e8;
-  --footer-bg: #e8e8e8;
+  /* explicit light / dark tokens so we can target .bg-section independently */
+  --section-bg-light: #4e4d4d;
+  /* footer tokens - use these to control footer color separately in light/dark */
+  --footer-bg-light: var(--section-bg-light);
+  --footer-bg: #bfbfbf;
   --card-dark: #d4d4d4;
   --card-darker: #b8b8b8;
+  /* card background tokens (light / dark) - set these to change card colors app-wide */
+  --card-bg-light: #bfbfbf; /* default light card color (change me) */
+  --card-bg-dark: oklch(0.20 0.00 67.71); /* default dark card color */
   --step-number-bg: #ffffff;
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
@@ -95,6 +102,10 @@
   --sidebar-border: oklch(0.94 0 0);
   --sidebar-ring: oklch(0.77 0 0);
   --section-bg: oklch(0.24 0.00 67.71);
+  /* explicit dark token to use in .dark mode for .bg-section */
+  --section-bg-dark: oklch(0.24 0.00 67.71);
+  /* footer dark token */
+  --footer-bg-dark: oklch(0.24 0.00 67.71);
   --footer-bg: oklch(0.24 0.00 67.71);
   --card-dark: oklch(0.20 0.00 67.71);
   --card-darker: oklch(0.16 0.00 67.71);
@@ -193,11 +204,20 @@
 
 /* Custom utility classes for section backgrounds */
 .bg-section {
-  background-color: var(--section-bg);
+  /* Prefer explicit light/dark vars, fall back to the existing --section-bg if not set */
+  background-color: var(--section-bg-light, var(--section-bg));
+}
+
+.dark .bg-section {
+  background-color: var(--section-bg-dark, var(--section-bg));
 }
 
 .bg-footer {
-  background-color: var(--footer-bg);
+  /* light-mode footer color (falls back to --footer-bg) */
+  background-color: var(--footer-bg-light, var(--footer-bg));
+}
+.dark .bg-footer {
+  background-color: var(--footer-bg-dark, var(--footer-bg));
 }
 
 .bg-card-dark {
@@ -209,11 +229,14 @@
 }
 
 .bg-card-light {
-  background-color: var(--footer-bg);
+  /* card light helper should reference card token, not footer */
+  background-color: var(--card-bg-light, var(--card));
 }
 
 .bg-form-section {
-  background-color: var(--footer-bg);
+
+  /* leave section backgrounds transparent in light mode so page-level bg (white) shows */
+  background-color: transparent;
 }
 
 .bg-card-footer-color {
@@ -221,7 +244,8 @@
 }
 
 .bg-hero-section {
-  background-color: var(--footer-bg);
+  /* hero sections should be transparent in light mode (page uses white) */
+  background-color: transparent;
 }
 
 .dark .bg-hero-section {
@@ -230,4 +254,54 @@
 
 .bg-step-number {
   background-color: var(--step-number-bg);
+}
+
+/* Global card background utility that references CSS vars so you can
+   control card colors from globals.css */
+.bg-card {
+  background-color: var(--card-bg-light, var(--card));
+}
+.dark .bg-card {
+  background-color: var(--card-bg-dark, var(--card-dark));
+}
+
+/* helper for semi-opaque card panels (e.g. bg-card/95) */
+.bg-card\/95 {
+  background-color: color-mix(in srgb, var(--card-bg-light) 95%, transparent);
+}
+.dark .bg-card\/95 {
+  background-color: color-mix(in srgb, var(--card-bg-dark) 95%, transparent);
+}
+
+/* Make buttons inside card panels appear white in light mode, and keep
+   explicit selected state (bg-primary) untouched so selected becomes pink. */
+.bg-card [data-slot="button"]:not(.bg-primary) {
+  background-color: #ffffff !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.dark .bg-card [data-slot="button"]:not(.bg-primary) {
+  /* In dark mode keep the default button styling (do not force white) */
+  background-color: initial !important;
+  color: initial !important;
+  border-color: initial !important;
+}
+
+/* Make Radix select triggers and native selects white in light mode site-wide */
+[data-slot="select-trigger"],
+select,
+select[class] {
+  background-color: #ffffff !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Keep dark theme unchanged */
+.dark [data-slot="select-trigger"],
+.dark select,
+.dark select[class] {
+  background-color: transparent !important;
+  color: initial !important;
+  border-color: initial !important;
 }

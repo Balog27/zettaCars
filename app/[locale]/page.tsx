@@ -126,7 +126,9 @@ export default function Home() {
             <div 
               className="w-full h-full bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`
+                backgroundImage: `url('/homepage.jpg')`,
+                /* move the image content lower within the hero (not the hero itself) */
+                backgroundPosition: 'center 70%'
               }}
             />
             <div className="absolute inset-0 bg-black/50" />
@@ -155,24 +157,34 @@ export default function Home() {
               </Button>
             </AnimatedGroup>
           </div>
-        </section>
+  </section>
 
+        {/* Small hero bottom band to improve spacing under the landing hero */}
+        <section className="py-6 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="rounded-lg bg-card p-6 text-center shadow-md">
+                <p className="text-lg md:text-xl text-foreground">{t('tagline')}</p>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* Price Calculator Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
           <section id="price-calculator" className="min-h-[calc(100vh-64px)] bg-background pt-8 mt-8 md:mt-12">
             <div className="grid grid-cols-1 md:grid-cols-[60%_40%] h-full min-h-[calc(100vh-64px)] items-stretch">
               {/* Left Side - Price calculator (no background photo) */}
-              <div className="relative overflow-hidden bg-section">
+              <div className="relative overflow-hidden bg-section text-white dark:text-foreground">
                 {/* Plain section background instead of a large photo so the calculator is always visible */}
                 <div className="absolute inset-0 bg-section/80 dark:bg-card-dark/60" />
                 <div className="relative z-10 flex items-start justify-start p-8 md:p-12 lg:p-16">
                   <div className="w-full">
                     <div className="p-6 md:pl-10 lg:pl-12">
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
                         Find Your Perfect Car
                       </h2>
 
-                      <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 leading-relaxed">
+                      <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
                         Search and compare our premium vehicle fleet. Get instant pricing and availability for your dates.
                       </p>
 
@@ -233,7 +245,7 @@ export default function Home() {
 
         {/* Luxury Transfer Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-          <section className="min-h-[calc(100vh-64px)] bg-section text-gray-800 dark:text-white">
+          <section className="min-h-[calc(100vh-64px)] bg-section text-white dark:text-foreground">
             <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-[calc(100vh-64px)]">
               {/* Left Side - Image */}
               <div className="relative overflow-hidden">
@@ -249,11 +261,11 @@ export default function Home() {
               {/* Right Side - Content */}
               <div className="flex items-center justify-center p-8 md:p-12 lg:p-16">
                 <div className="max-w-lg">
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 dark:text-white mb-6 leading-tight">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white dark:text-foreground mb-6 leading-tight">
                     {t('luxuryTransfer.headline')}
                   </h2>
                   
-                  <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                  <p className="text-base sm:text-lg md:text-xl text-white/90 dark:text-gray-300 mb-8 leading-relaxed">
                     {t('luxuryTransfer.description')}
                   </p>
 
@@ -262,7 +274,7 @@ export default function Home() {
                     {t.raw('luxuryTransfer.features').map((feature: string, index: number) => (
                       <li key={index} className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
-                        <span className="text-gray-600 dark:text-gray-300">{feature}</span>
+                        <span className="text-white/90 dark:text-gray-300">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -297,7 +309,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {/* Premium Fleet */}
-                  <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-gray-600 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
+                  <div className="bg-card rounded-2xl border border-gray-200 dark:border-gray-600 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
                     <div className="text-center">
                       <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
                         <Award className="w-8 h-8 text-primary" />
@@ -312,7 +324,7 @@ export default function Home() {
                   </div>
 
                   {/* Reliable Service */}
-                  <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-gray-600 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
+                  <div className="bg-card rounded-2xl border border-gray-200 dark:border-gray-600 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
                     <div className="text-center">
                       <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
                         <Clock className="w-8 h-8 text-primary" />
@@ -327,7 +339,7 @@ export default function Home() {
                   </div>
 
                   {/* Professional Care */}
-                  <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-gray-600 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
+                  <div className="bg-card rounded-2xl border border-gray-200 dark:border-gray-600 p-8 shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[240px] w-full">
                     <div className="text-center">
                       <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
                         <Shield className="w-8 h-8 text-primary" />
@@ -348,7 +360,7 @@ export default function Home() {
 
         {/* Booking Process Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-          <section className="py-16 px-4 bg-section">
+          <section className="py-16 px-4 bg-background">
             <div className="container mx-auto">
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
@@ -441,10 +453,14 @@ export default function Home() {
 
         {/* Client Testimonials Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-          <TestimonialCarousel 
-            title={t('clientTestimonials.title')}
-            reviews={t.raw('clientTestimonials.reviews')}
-          />
+          <section className="py-16 bg-section text-white dark:text-foreground">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
+              <TestimonialCarousel 
+                title={t('clientTestimonials.title')}
+                reviews={t.raw('clientTestimonials.reviews')}
+              />
+            </div>
+          </section>
         </AnimatedGroup>
 
         {/* FAQ Section */}
