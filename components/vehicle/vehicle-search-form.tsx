@@ -20,17 +20,12 @@ export function VehicleSearchForm({
   const t = useTranslations('vehicleSearchForm');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-
   return (
-    <div className="mb-8">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold">{t('title')}</h1>
-        <p className="text-muted-foreground">{t('subtitle')}</p>
-      </div>
-      
-      <Card className="shadow-md">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+    <Card className="shadow-lg rounded-lg">
+      <CardContent className="p-8 min-h-[220px]">
+        {/* Locations on the first row, dates on the second row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div>
             <LocationPicker
               id="deliveryLocation"
               label={t('pickupLocation')}
@@ -39,44 +34,50 @@ export function VehicleSearchForm({
               placeholder={t('selectPickup')}
               disabled={isLoading}
             />
-            
-                         <DateTimePicker
-               id="pickupDate"
-               label={t('pickupDateTime')}
-               disabledDateRanges={{ before: today }}
-               dateState={searchState.pickupDate}
-               setDateState={(date) => updateSearchField('pickupDate', date)}
-               timeState={searchState.pickupTime || null}
-               setTimeState={(time) => updateSearchField('pickupTime', time)}
-               minDate={today}
-               isLoading={isLoading}
-             />
-             
-             <LocationPicker
-               id="restitutionLocation"
-               label={t('returnLocation')}
-               value={searchState.restitutionLocation || ""}
-               onValueChange={(value) => updateSearchField('restitutionLocation', value)}
-               placeholder={t('selectReturn')}
-               disabled={isLoading}
-             />
-             
-             <DateTimePicker
-               id="returnDate"
-               label={t('returnDateTime')}
-               dateState={searchState.returnDate}
-               setDateState={(date) => updateSearchField('returnDate', date)}
-               timeState={searchState.returnTime || null}
-               setTimeState={(time) => updateSearchField('returnTime', time)}
-               minDate={searchState.pickupDate || today}
-               disabledDateRanges={searchState.pickupDate ? { before: searchState.pickupDate } : { before: today }}
-               isLoading={isLoading || !searchState.pickupDate}
-               pickupDate={searchState.pickupDate}
-               pickupTime={searchState.pickupTime || null}
-             />
           </div>
-        </CardContent>
-      </Card>
-    </div>
+
+          <div>
+            <LocationPicker
+              id="restitutionLocation"
+              label={t('returnLocation')}
+              value={searchState.restitutionLocation || ""}
+              onValueChange={(value) => updateSearchField('restitutionLocation', value)}
+              placeholder={t('selectReturn')}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div>
+            <DateTimePicker
+              id="pickupDate"
+              label={t('pickupDateTime')}
+              disabledDateRanges={{ before: today }}
+              dateState={searchState.pickupDate}
+              setDateState={(date) => updateSearchField('pickupDate', date)}
+              timeState={searchState.pickupTime || null}
+              setTimeState={(time) => updateSearchField('pickupTime', time)}
+              minDate={today}
+              isLoading={isLoading}
+            />
+          </div>
+
+          <div>
+            <DateTimePicker
+              id="returnDate"
+              label={t('returnDateTime')}
+              dateState={searchState.returnDate}
+              setDateState={(date) => updateSearchField('returnDate', date)}
+              timeState={searchState.returnTime || null}
+              setTimeState={(time) => updateSearchField('returnTime', time)}
+              minDate={searchState.pickupDate || today}
+              disabledDateRanges={searchState.pickupDate ? { before: searchState.pickupDate } : { before: today }}
+              isLoading={isLoading || !searchState.pickupDate}
+              pickupDate={searchState.pickupDate}
+              pickupTime={searchState.pickupTime || null}
+            />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 } 

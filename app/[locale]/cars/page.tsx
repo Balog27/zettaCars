@@ -2,14 +2,16 @@
 
 import { VehicleFilters } from "@/components/vehicle/vehicle-filters";
 import { VehicleFiltersSkeleton } from "@/components/vehicle/vehicle-filters-skeleton";
-import { VehicleTypeNavigation } from "@/components/vehicle/vehicle-type-navigation";
+// VehicleTypeNavigation is rendered inside the filters card; removed the duplicate rendering below.
 import { ContactCtaBanner } from "@/components/contact-cta-banner";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
 import { Logo } from "@/components/ui/logo";
 import { VehicleSearchForm } from "@/components/vehicle/vehicle-search-form";
+import Link from 'next/link';
 import { VehicleSearchFormSkeleton } from "@/components/vehicle/vehicle-search-form-skeleton";
 import { VehicleListDisplay } from "@/components/vehicle/vehicle-list-display";
+import { VehicleTypeNavigation } from "@/components/vehicle/vehicle-type-navigation";
 import { BackgroundSlideshow } from "@/components/ui/background-slideshow";
 import { useVehicleSearch } from "@/hooks/useVehicleSearch";
 import { useVehicleList } from "@/hooks/useVehicleList";
@@ -23,6 +25,19 @@ export default function CarsPage() {
   const { allVehicles, displayedVehicles, isLoading, error, setDisplayedVehicles } = useVehicleList(searchState.isHydrated);
   const [selectedVehicleType, setSelectedVehicleType] = useState<string | null>(null);
   const t = useTranslations();
+  const vf = useTranslations('vehicleSearchForm');
+
+  // When the top vehicle-type navigation changes, update displayed vehicles accordingly
+  useEffect(() => {
+    if (!allVehicles) return;
+
+    if (!selectedVehicleType) {
+      setDisplayedVehicles(allVehicles);
+      return;
+    }
+
+    setDisplayedVehicles(allVehicles.filter((v) => v.type === selectedVehicleType));
+  }, [selectedVehicleType, allVehicles, setDisplayedVehicles]);
 
   // Generate schema markup for vehicle listings
   const generateVehicleListSchema = () => {
@@ -139,34 +154,46 @@ export default function CarsPage() {
         {/* Main Content */}
         <main className="flex-grow p-4 md:p-8 flex flex-col gap-8">
           <div className="max-w-7xl mx-auto w-full">
-          {/* Search Form - show skeleton while loading or not hydrated */}
-          {(!searchState.isHydrated || isLoading) ? (
-            <VehicleSearchFormSkeleton />
-          ) : (
-            <VehicleSearchForm
-              searchState={searchState}
-              updateSearchField={updateSearchField}
-              isLoading={isLoading}
-            />
-          )}
-          
-          {/* Filters - show skeleton while loading or when vehicles aren't loaded */}
+          {/* Search Form + Filters: when hydrated and vehicles loaded, render both stacked inside a single link wrapper; otherwise show skeletons individually. */}
           {(!searchState.isHydrated || isLoading || !allVehicles) ? (
-            <VehicleFiltersSkeleton />
+            <>
+              <VehicleSearchFormSkeleton />
+              <VehicleFiltersSkeleton />
+            </>
           ) : (
-            <VehicleFilters 
-              allVehicles={allVehicles} 
-              onFilterChange={setDisplayedVehicles} 
-            />
+            <>
+              {/* Centered title above both cards */}
+              <div className="mb-6 text-center">
+                {/* Use the same translation keys as the search form */}
+                <h1 className="text-2xl font-semibold">{vf('title')}</h1>
+                <p className="text-muted-foreground">{vf('subtitle')}</p>
+              </div>
+
+              <Link href="/cars" className="block no-underline" aria-label="Open car search results">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                  <div className="w-full">
+                    <VehicleSearchForm
+                      searchState={searchState}
+                      updateSearchField={updateSearchField}
+                      isLoading={isLoading}
+                    />
+                  </div>
+
+                  <div className="w-full">
+                    <VehicleFilters 
+                      allVehicles={allVehicles} 
+                      onFilterChange={setDisplayedVehicles} 
+                    />
+                  </div>
+                </div>
+              </Link>
+            </>
           )}
 
-          {/* Vehicle Type Navigation */}
-          {searchState.isHydrated && !isLoading && allVehicles && (
-            <div className="mb-8 w-full">
-              <VehicleTypeNavigation 
-                selectedType={selectedVehicleType}
-                onTypeChange={setSelectedVehicleType}
-              />
+          {/* Upper vehicle type navigation (restored). */}
+          {(!searchState.isHydrated || isLoading) ? null : (
+            <div className="mt-6">
+              <VehicleTypeNavigation selectedType={selectedVehicleType} onTypeChange={setSelectedVehicleType} />
             </div>
           )}
           

@@ -101,7 +101,7 @@ const ContactPage = () => {
                 <Card className="overflow-hidden shadow-xl bg-card">
                   <div className="grid md:grid-cols-2 gap-0">
                     {/* Left Side - Contact Form */}
-                    <div className="p-8 md:p-12 border-r border-border">
+                    <div className="p-8 md:p-12 border-r border-border min-h-[520px]">
                       <form className="space-y-6">
                         <div>
                           <label className="block text-sm font-medium text-foreground mb-2">
@@ -137,40 +137,45 @@ const ContactPage = () => {
                       </form>
                       
                       {/* Contact Info Below Form */}
-                      <div className="mt-8 pt-8 border-t border-border space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                            <Clock className="w-4 h-4 text-primary" />
+                      <div className="mt-8 pt-8 border-t border-border space-y-6">
+                        {/* Business hours row */}
+                        <div className="flex items-start space-x-6">
+                          <div style={{width: 64, height: 64}} className="w-16 h-16 aspect-square bg-pink-50 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <Clock className="w-8 h-8 text-pink-500" />
                           </div>
                           <div>
-                            <p className="font-medium text-foreground">{t('businessHours.title')}</p>
-                            <p className="text-muted-foreground">{t('businessHours.mondayToSunday')}: {t('businessHours.mondayToSundayTime')}</p>
+                            <p className="text-base md:text-lg font-semibold text-foreground">{t('businessHours.title')}</p>
+                            <p className="text-sm md:text-base text-muted-foreground">{t('businessHours.mondayToSunday')}: {t('businessHours.mondayToSundayTime')}</p>
                           </div>
                         </div>
-                        
-                        <div className="flex items-start space-x-3">
-                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mt-1">
-                            <MapPin className="w-4 h-4 text-primary" />
+
+                        {/* Address row */}
+                        <div className="flex items-start space-x-6">
+                          <div style={{width: 64, height: 64}} className="w-16 h-16 aspect-square bg-pink-50 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <MapPin className="w-8 h-8 text-pink-500" />
                           </div>
                           <div>
-                            <p className="font-medium text-foreground">{t('contactForm.address')}</p>
-                            <p className="text-muted-foreground">{t('contactForm.addressText')}</p>
-                            <div className="flex items-start space-x-3 mt-4">
-                              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mt-1">
-                                <ExternalLink className="w-4 h-4 text-primary" />
-                              </div>
-                              <div>
-                                <p className="text-base text-foreground">{t('contactForm.pickupNote')}</p>
-                              </div>
-                            </div>
+                            <p className="text-base md:text-lg font-semibold text-foreground">{t('contactForm.address')}</p>
+                            <p className="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">{t('contactForm.addressText')}</p>
+                          </div>
+                        </div>
+
+                        {/* Pickup note row */}
+                        <div className="flex items-start space-x-6">
+                          <div style={{width: 64, height: 64}} className="w-16 h-16 aspect-square bg-pink-50 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <ExternalLink className="w-8 h-8 text-pink-500" />
+                          </div>
+                          <div>
+                            <p className="text-base md:text-lg font-semibold text-foreground">{t('contactForm.pickupNoteTitle')}</p>
+                            <p className="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">{t('contactForm.pickupNote')}</p>
                           </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Right Side - Location Map */}
-                    <div className="relative">
-                      <div className="h-full min-h-[600px] relative">
+                    <div className="relative min-h-[520px]">
+                      <div className="h-full min-h-[520px] relative">
                         <Image
                           src="/maps.png"
                           alt="Zetta Cars Office Location Map"
@@ -183,9 +188,6 @@ const ContactPage = () => {
                           <div className="relative">
                             <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-white">
                               <MapPin className="w-8 h-8 text-white" />
-                            </div>
-                            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                              {t('contactForm.office')}
                             </div>
                           </div>
                         </div>

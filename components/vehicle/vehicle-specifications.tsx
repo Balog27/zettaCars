@@ -76,8 +76,8 @@ export function VehicleSpecifications({ vehicle }: VehicleSpecificationsProps) {
               const IconComponent = spec.icon;
               return (
                 <div key={index} className="flex items-center space-x-2">
-                  <IconComponent className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{spec.label}: {spec.value}</span>
+          <IconComponent className="h-4 w-4 text-foreground/85" />
+            <span className="text-sm text-foreground/85">{spec.label}: {spec.value}</span>
                 </div>
               );
             })}

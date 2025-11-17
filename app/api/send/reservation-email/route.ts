@@ -160,7 +160,7 @@ export async function POST(request: Request) {
         `;
 
         const { data, error } = await resend.emails.send({
-            from: 'Rent\'n Go <noreply@rngo.ro>',
+            from: 'contact@zettacarrental.com',
             to: to,
             subject: subject,
             html: htmlContent,

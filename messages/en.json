@@ -8,6 +8,10 @@
       "subheadline": "Discover Cluj-Napoca and beyond with our premium fleet of vehicles. Professional service, competitive prices, and exceptional customer experience.",
       "cta": "Browse Our Fleet"
     },
+    "findYour": {
+      "title": "Find Your Perfect Car",
+      "description": "Search and compare our premium vehicle fleet. Get instant pricing and availability for your dates."
+    },
     "tagline": "Premium fleet, transparent pricing and 24/7 support — ready when you are.",
     "luxuryTransfer": {
       "headline": "Premium Transfer Services",
@@ -59,23 +63,7 @@
     },
     "clientTestimonials": {
       "title": "What Our Clients Say",
-      "reviews": [
-        {
-          "text": "Exceptional service and premium vehicles. Zetta Cars made our Cluj-Napoca trip unforgettable with their professional approach.",
-          "name": "Maria Ionescu",
-          "title": "Business Traveler"
-        },
-        {
-          "text": "Reliable, clean cars and excellent customer service. I always choose Zetta Cars for my rental needs in Cluj-Napoca.",
-          "name": "Alexandru Popescu",
-          "title": "Local Customer"
-        },
-        {
-          "text": "Professional staff and transparent pricing. The booking process was smooth and the car exceeded my expectations.",
-          "name": "Elena Stoica",
-          "title": "Tourist"
-        }
-      ]
+      "reviews": []
     },
     "ourStory": {
       "title": "Our Story",
@@ -135,6 +123,7 @@
       "description1": "At Zetta Cars, we believe that every journey should be memorable. Founded with a passion for travel and a commitment to excellence, we've been serving the Cluj-Napoca community with reliable, affordable car rental solutions.",
       "description2": "Whether you're exploring the historic streets of Cluj-Napoca, venturing into the beautiful Transylvanian countryside, or need a reliable vehicle for business, we're here to make your journey smooth and enjoyable.",
       "description3": "Our carefully curated fleet of modern vehicles, combined with transparent pricing and exceptional customer service, ensures that your rental experience exceeds expectations every time."
+      ,"imageAlt": "Mercedes"
     },
     "whyChoose": {
       "title": "Why Choose Zetta Cars?",
@@ -217,6 +206,8 @@
       "office": "OFFICE"
       ,
       "pickupNote": "Need a specific pickup spot? We can meet you at the airport, your hotel, or any address that works best — just tell us where."
+  ,
+  "pickupNoteTitle": "Pickup point"
     },
     "socialMedia": {
       "tiktok": {

@@ -89,7 +89,7 @@ export function VehicleCard({
 
   return (
     <div 
-      className="relative flex flex-col bg-card-light text-card-foreground overflow-hidden rounded-lg shadow-lg w-full max-w-sm transition-all duration-300 hover:shadow-xl hover:scale-105 group before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-primary/20 before:scale-110 before:opacity-0 before:transition-all before:duration-300 group-hover:before:opacity-100 before:pointer-events-none"
+      className="relative flex flex-col bg-card dark:bg-card-darker text-card-foreground overflow-hidden rounded-lg shadow-lg w-full max-w-sm transition-all duration-300 hover:shadow-xl hover:scale-105 group before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-primary/20 before:scale-110 before:opacity-0 before:transition-all before:duration-300 group-hover:before:opacity-100 before:pointer-events-none"
     >
       <div 
         className="aspect-[4/3] relative w-full bg-muted overflow-hidden cursor-pointer"
@@ -164,7 +164,7 @@ export function VehicleCard({
         </Button>
       </div>
 
-      <div className="p-3 border-t border-border bg-muted/30">
+  <div className="p-3 border-t border-border bg-muted/30 dark:bg-card-darker">
         <div className="flex justify-around items-center w-full text-xs text-foreground">
           <div className="flex items-center space-x-1">
             <CarFront className="h-4 w-4" />

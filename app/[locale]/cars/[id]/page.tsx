@@ -298,7 +298,10 @@ export default function CarDetailPage() {
           </div>
         </div>
 
-        {/* Pricing Tiers Table - Full Width Below Main Content */}
+        {/* Pricing Tiers Table - Full Width Below Main Content
+            Temporarily hidden per request. To restore, remove the surrounding
+            comment markers below. */}
+        {/*
         {vehicle.pricingTiers && vehicle.pricingTiers.length > 0 && (
           <div className="mt-12">
             <PricingTiersTable 
@@ -308,6 +311,7 @@ export default function CarDetailPage() {
             />
           </div>
         )}
+        */}
       </div>
     </PageLayout>
     </>

@@ -86,7 +86,7 @@ export function RentalDetails({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Pickup Details */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+            <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
               {t('pickupDetails')}
             </h4>
             <div className="space-y-4">
@@ -128,7 +128,7 @@ export function RentalDetails({
 
           {/* Return Details */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+            <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
               {t('returnDetails')}
             </h4>
             <div className="space-y-4">

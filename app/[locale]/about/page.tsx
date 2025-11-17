@@ -214,8 +214,14 @@ const AboutPage = () => {
                   <div className="relative">
                     <Card className="overflow-hidden shadow-xl">
                       <CardContent className="p-0">
-                        <div className="relative h-80 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                          <Car className="w-24 h-24 text-primary/60" />
+                        <div className="relative h-80 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                          {/* Replace the placeholder with the provided photo 'mercedes+ancuta.jpg' in /public */}
+                          <Image
+                            src="/mercedes+ancuta.jpg"
+                            alt={t('ourStory.imageAlt', { default: 'Mercedes' })}
+                            fill
+                            className="object-cover"
+                          />
                         </div>
                       </CardContent>
                     </Card>
@@ -266,7 +272,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Mission Section */}
+        {/* Mission Section - commented out per request
         <section className="py-16 px-4">
           <div className="container mx-auto">
             <div className="max-w-4xl mx-auto">
@@ -292,6 +298,7 @@ const AboutPage = () => {
             </div>
           </div>
         </section>
+        */}
 
         <Separator className="my-0" />
 
@@ -312,9 +319,9 @@ const AboutPage = () => {
                 <div className="grid md:grid-cols-3 gap-8">
                   <Card className="text-center hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
-                      <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
-                      </div>
+                          <div className="w-16 h-16 bg-pink-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Shield className="w-8 h-8 text-pink-600 dark:text-pink-400" />
+                          </div>
                       <h3 className="text-xl font-semibold text-foreground mb-3">
                         {t('whyChoose.transparentPricing.title')}
                       </h3>
@@ -326,8 +333,8 @@ const AboutPage = () => {
 
                   <Card className="text-center hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
-                      <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Car className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                      <div className="w-16 h-16 bg-pink-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Car className="w-8 h-8 text-pink-600 dark:text-pink-400" />
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-3">
                         {t('whyChoose.qualityFleet.title')}
@@ -340,8 +347,8 @@ const AboutPage = () => {
 
                   <Card className="text-center hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
-                      <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Clock className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                      <div className="w-16 h-16 bg-pink-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Clock className="w-8 h-8 text-pink-600 dark:text-pink-400" />
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-3">
                         {t('whyChoose.support247.title')}

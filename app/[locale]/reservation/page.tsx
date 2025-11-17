@@ -650,7 +650,7 @@ function ReservationPageContent() {
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">{t('reservation.invalid.title')}</h1>
-            <p className="text-muted-foreground mb-6">{t('reservation.invalid.description')}</p>
+            <p className="text-foreground/85 mb-6">{t('reservation.invalid.description')}</p>
             <Link href="/cars">
               <Button>
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -669,7 +669,7 @@ function ReservationPageContent() {
       <div className="relative flex flex-col min-h-screen">
         <Header logo={<Image src="/logo.png" alt="ZettaCars Logo" width={150} height={50} />} />
         <main className="flex-grow flex items-center justify-center">
-          <p className="text-muted-foreground">{t('reservation.loadingDetails')}</p>
+          <p className="text-foreground/85">{t('reservation.loadingDetails')}</p>
         </main>
         <Footer logo={<Image src="/logo.png" alt="ZettaCars Logo" width={150} height={50} />} brandName="" />
       </div>
@@ -683,7 +683,7 @@ function ReservationPageContent() {
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">{t('reservation.vehicleNotFound.title')}</h1>
-            <p className="text-muted-foreground mb-6">{t('reservation.vehicleNotFound.description')}</p>
+            <p className="text-foreground/85 mb-6">{t('reservation.vehicleNotFound.description')}</p>
             <Link href="/cars">
               <Button>
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -712,7 +712,7 @@ function ReservationPageContent() {
             </Link>
             
             <div className="flex items-center space-x-3">
-              <div className="text-sm text-muted-foreground font-medium">
+              <div className="text-sm text-foreground/85 font-medium">
                 {t('formProgress')}: {formProgress}%
               </div>
               <Progress value={formProgress} className="w-32 sm:w-40" />
@@ -731,7 +731,7 @@ function ReservationPageContent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Pickup Details */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                  <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
                     {t('rentalDetails.pickupDetails')}
                   </h4>
                   <div className="space-y-4">
@@ -787,7 +787,7 @@ function ReservationPageContent() {
 
                 {/* Return Details */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                  <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
                     {t('rentalDetails.returnDetails')}
                   </h4>
                   <div className="space-y-4">
@@ -870,7 +870,7 @@ function ReservationPageContent() {
                           sizes="80px"
                         />
                       ) : (
-                        <div className="flex items-center justify-center h-full text-muted-foreground text-xs">
+                        <div className="flex items-center justify-center h-full text-foreground/85 text-xs">
                           {t('vehicleDetails.noImage')}
                         </div>
                       )}
@@ -879,13 +879,13 @@ function ReservationPageContent() {
                       <h3 className="text-lg font-semibold">
                         {vehicle.make} {vehicle.model}
                       </h3>
-                      <p className="text-muted-foreground">{vehicle.year}</p>
+                      <p className="text-foreground/85">{vehicle.year}</p>
                       <div>
                         <p className="text-lg font-bold text-pink-500">
                           {days ? getPriceForDurationWithSeason(vehicle, days, seasonalMultiplier) : Math.round(getBasePricePerDay(vehicle) * seasonalMultiplier)} EUR / Day
                         </p>
                         {days && vehicle.pricingTiers && vehicle.pricingTiers.length > 0 && (
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-foreground/85">
                             {t('vehicleDetails.rateFor')} {days} {locale === 'ro' ? ((days === 1) ? "zi" : "zile") : ((days === 1) ? "day" : "days")} {t('vehicleDetails.rental')}
                           </p>
                         )}
@@ -915,7 +915,7 @@ function ReservationPageContent() {
                             {t('additionalFeatures.snowChains')}
                           </Label>
                           <div className="flex justify-between text-sm mt-1">
-                            <span className="text-muted-foreground">{t('additionalFeatures.pricePerDay')}</span>
+                            <span className="text-foreground/85">{t('additionalFeatures.pricePerDay')}</span>
                             <span className="font-medium">
                               {snowChainsSelected && days ? `${days * 3} EUR` : '0 EUR'}
                             </span>
@@ -957,7 +957,7 @@ function ReservationPageContent() {
                               {childSeat1to4Count > 0 && days ? `${childSeat1to4Count * days * 3} EUR` : '0 EUR'}
                             </span>
                           </div>
-                          <div className="text-xs text-muted-foreground mt-1">
+                          <div className="text-xs text-foreground/70 mt-1">
                             {t('additionalFeatures.pricePerSeat')}
                           </div>
                         </div>
@@ -997,7 +997,7 @@ function ReservationPageContent() {
                               {childSeat5to12Count > 0 && days ? `${childSeat5to12Count * days * 3} EUR` : '0 EUR'}
                             </span>
                           </div>
-                          <div className="text-xs text-muted-foreground mt-1">
+                          <div className="text-xs text-foreground/70 mt-1">
                             {t('additionalFeatures.pricePerSeat')}
                           </div>
                         </div>
@@ -1037,7 +1037,7 @@ function ReservationPageContent() {
                               {extraKilometersCount > 0 ? `${extraKilometersCount * 5} EUR` : '0 EUR'}
                             </span>
                           </div>
-                          <div className="text-xs text-muted-foreground mt-1">
+                          <div className="text-xs text-foreground/70 mt-1">
                             {t('additionalFeatures.extraKmDescription')}
                             {days && (
                               <div className="mt-1">
@@ -1134,7 +1134,7 @@ function ReservationPageContent() {
                             {errors.personalInfo.phone}
                           </p>
                         )}
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-foreground/70 mt-1">
                           {t('personalInfo.phoneFormat')}
                         </p>
                       </div>
@@ -1201,7 +1201,7 @@ function ReservationPageContent() {
                           <div className="flex-1">
                             <Label htmlFor={method.id} className={`${method.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
                               <div className="font-medium">{method.label}</div>
-                              <div className="text-sm text-muted-foreground">{method.description}</div>
+                              <div className="text-sm text-foreground/85">{method.description}</div>
                             </Label>
                           </div>
                         </div>
@@ -1294,49 +1294,49 @@ function ReservationPageContent() {
                 {/* Summary Details */}
                 <div className="space-y-3 text-sm">
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="font-medium text-muted-foreground">{t('reservationSummary.vehicle')}:</span>
+                    <span className="font-medium text-foreground/85">{t('reservationSummary.vehicle')}:</span>
                     <span>{vehicle.make} {vehicle.model} ({vehicle.year})</span>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="font-medium text-muted-foreground">{t('reservationSummary.pickup')}:</span>
+                    <span className="font-medium text-foreground/85">{t('reservationSummary.pickup')}:</span>
                     <span>{deliveryLocation || t('reservationSummary.notSelected')}</span>
                   </div>
                   
                   {pickupDate && pickupTime && (
                     <div className="grid grid-cols-2 gap-2">
-                      <span className="font-medium text-muted-foreground">{t('reservationSummary.pickupDate')}:</span>
+                      <span className="font-medium text-foreground/85">{t('reservationSummary.pickupDate')}:</span>
                       <span>{pickupDate.toLocaleDateString(locale)} at {pickupTime}</span>
                     </div>
                   )}
                   
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="font-medium text-muted-foreground">{t('reservationSummary.return')}:</span>
+                    <span className="font-medium text-foreground/85">{t('reservationSummary.return')}:</span>
                     <span>{restitutionLocation || t('reservationSummary.notSelected')}</span>
                   </div>
                   
                   {returnDate && returnTime && (
                     <div className="grid grid-cols-2 gap-2">
-                      <span className="font-medium text-muted-foreground">{t('reservationSummary.returnDate')}:</span>
+                      <span className="font-medium text-foreground/85">{t('reservationSummary.returnDate')}:</span>
                       <span>{returnDate.toLocaleDateString(locale)} at {returnTime}</span>
                     </div>
                   )}
                   
-                  <div className="grid grid-cols-2 gap-2">
-                    <span className="font-medium text-muted-foreground">{t('reservationSummary.duration')}:</span>
-                    <span>{days ? t('reservationSummary.daysCount', { days, plural: locale === 'ro' ? ((days === 1) ? "" : "le") : ((days === 1) ? "" : "s") }) : t('reservationSummary.notCalculated')}</span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <span className="font-medium text-foreground/85">{t('reservationSummary.duration')}:</span>
+                      <span>{days ? t('reservationSummary.daysCount', { days, plural: locale === 'ro' ? ((days === 1) ? "" : "le") : ((days === 1) ? "" : "s") }) : t('reservationSummary.notCalculated')}</span>
                   </div>
                   
                   {days && (
                     <div className="grid grid-cols-2 gap-2">
-                      <span className="font-medium text-muted-foreground">{t('reservationSummary.totalKilometers')}:</span>
+                      <span className="font-medium text-foreground/85">{t('reservationSummary.totalKilometers')}:</span>
                       <span>{calculateIncludedKilometers(days) + (extraKilometersCount * 50)} km</span>
                     </div>
                   )}
                   
                   {personalInfo.flightNumber && (
                     <div className="grid grid-cols-2 gap-2">
-                      <span className="font-medium text-muted-foreground">{t('reservationSummary.flight')}:</span>
+                      <span className="font-medium text-foreground/85">{t('reservationSummary.flight')}:</span>
                       <span>{personalInfo.flightNumber}</span>
                     </div>
                   )}
@@ -1345,7 +1345,7 @@ function ReservationPageContent() {
                 {/* Protection Toggle */}
                 <div className="border-t pt-4 space-y-4">
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                    <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
                       {t('protectionOptions.title')}
                     </h4>
                     <div className="p-3 bg-card-light rounded-lg space-y-3">
@@ -1356,12 +1356,12 @@ function ReservationPageContent() {
                           </Label>
                           <HoverCard>
                             <HoverCardTrigger asChild>
-                              <Info className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-help" />
+                              <Info className="h-4 w-4 text-foreground/85 hover:text-foreground cursor-help" />
                             </HoverCardTrigger>
                             <HoverCardContent className="w-80">
                               <div className="space-y-2">
                                 <h4 className="text-sm font-semibold">{t('protectionOptions.title')}</h4>
-                                <div className="text-xs text-muted-foreground space-y-2">
+                                <div className="text-xs text-foreground/70 space-y-2">
                                   <div>
                                     <p className="font-medium">{t('protectionOptions.warrantyDefault')}:</p>
                                     <p>• {t('protectionOptions.refundableDeposit')}</p>
@@ -1386,7 +1386,7 @@ function ReservationPageContent() {
                       </div>
                       
                       <div className="flex items-center justify-center space-x-4">
-                        <Label className={`text-sm font-medium ${!isSCDWSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        <Label className={`text-sm font-medium ${!isSCDWSelected ? 'text-foreground' : 'text-foreground/85'}`}>
                           {t('protectionOptions.standardWarranty')}
                         </Label>
                         <Switch
@@ -1394,12 +1394,12 @@ function ReservationPageContent() {
                           checked={isSCDWSelected}
                           onCheckedChange={(checked) => setIsSCDWSelected(checked)}
                         />
-                        <Label className={`text-sm font-medium ${isSCDWSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        <Label className={`text-sm font-medium ${isSCDWSelected ? 'text-foreground' : 'text-foreground/85'}`}>
                           {t('protectionOptions.scdw')}
                         </Label>
                       </div>
                       
-                      <p className="text-xs text-center text-muted-foreground">
+                      <p className="text-xs text-center text-foreground/70">
                         {isSCDWSelected 
                           ? t('protectionOptions.nonRefundableInsurance') 
                           : t('protectionOptions.refundableIfNoDamages')}
@@ -1433,7 +1433,7 @@ function ReservationPageContent() {
                   )}
                   
                   {totalLocationFees > 0 && (
-                    <div className="flex justify-between text-sm text-muted-foreground/60">
+                    <div className="flex justify-between text-sm text-foreground/70">
                       <span>{t('reservationSummary.totalLocationFees')}:</span>
                       <span>{totalLocationFees} EUR</span>
                     </div>
@@ -1475,7 +1475,7 @@ function ReservationPageContent() {
                   )}
                   
                   {totalAdditionalFeatures > 0 && (
-                    <div className="flex justify-between text-sm text-muted-foreground/60">
+                    <div className="flex justify-between text-sm text-foreground/70">
                       <span>{t('reservationSummary.totalAdditionalFeatures')}:</span>
                       <span>{totalAdditionalFeatures} EUR</span>
                     </div>
@@ -1487,14 +1487,14 @@ function ReservationPageContent() {
                       <span className="text-pink-500">
                         {totalPrice || 0} EUR
                         {!isSCDWSelected && warrantyAmount && warrantyAmount > 0 && (
-                          <span className="text-sm font-normal text-muted-foreground ml-2">
+                          <span className="text-sm font-normal text-foreground/70 ml-2">
                             + {warrantyAmount} EUR {t('reservationSummary.warranty')}
                           </span>
                         )}
                       </span>
                     </div>
                     {!isSCDWSelected && warrantyAmount && warrantyAmount > 0 && (
-                      <div className="text-right text-xs text-muted-foreground mt-1">
+                      <div className="text-right text-xs text-foreground/70 mt-1">
                         {t('reservationSummary.warrantyRefundable')}
                       </div>
                     )}
@@ -1503,7 +1503,7 @@ function ReservationPageContent() {
 
                 {/* Requirements Section */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                  <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
                     {t('carDetailPage.requirements.title')}
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

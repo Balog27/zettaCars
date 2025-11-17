@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { TestimonialsSection } from "@/components/blocks/testimonials-with-marquee";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
+import ErrorBoundary from "@/components/ui/error-boundary";
 import { Header } from "@/components/ui/header";
 import { VehicleSearchFilterForm } from "@/components/vehicle/vehicle-search-filter-form"; // Import the new form
 import { VehicleCard } from "@/components/vehicle/vehicle-card"; // Import the new VehicleCard
@@ -25,6 +26,7 @@ import { AnimatedGroup } from "@/components/ui/animated-group"; // Import Animat
 import { Slideshow } from "@/components/ui/slideshow"; // Import the new Slideshow component
 import { Vehicle } from "@/types/vehicle"; // Import centralized Vehicle type
 import { useHomepageFeaturedVehicles } from "@/hooks/useHomepageFeaturedVehicles";
+import { useHomepageReviews } from "@/hooks/useHomepageReviews";
 import { sectionAnimationVariants } from "@/lib/animations";
 import { useTranslations } from 'next-intl';
 import { useVehicleSearch } from "@/hooks/useVehicleSearch";
@@ -105,6 +107,9 @@ export default function Home() {
     { question: tFaq('questions.6.question'), answer: tFaq('questions.6.answer') },
   ];
 
+  // Fetch homepage reviews from backend
+  const { reviews: homepageReviews } = useHomepageReviews(6);
+
 
 
   const scrollToCalculator = () => {
@@ -138,9 +143,9 @@ export default function Home() {
           <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
             <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                {t('hero.headline').split('Zetta Cars')[0]}
-                <span className="text-primary">Zetta Cars</span>
-                {t('hero.headline').split('Zetta Cars')[1]}
+                <span className="block text-primary uppercase tracking-tight">ZETTA CARS</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">Rent and Transfers</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Cluj-Napoca</span>
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
                 {t('hero.subheadline')}
@@ -160,18 +165,21 @@ export default function Home() {
   </section>
 
         {/* Small hero bottom band to improve spacing under the landing hero */}
-        <section className="py-6 bg-background">
+        <section className="py-2 bg-background">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="rounded-lg bg-card p-6 text-center shadow-md">
-                <p className="text-lg md:text-xl text-foreground">{t('tagline')}</p>
+              {/* tighter symmetric vertical padding so the spacing above/below the logo
+                  is much smaller and visually balanced */}
+              <div className="py-2 text-center flex items-center justify-center">
+                {/* Logo adapts to theme: light/dark images are handled inside the Logo component */}
+                <Logo alt="Zetta Cars Logo" width={220} height={60} />
               </div>
             </div>
           </div>
         </section>
         {/* Price Calculator Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-          <section id="price-calculator" className="min-h-[calc(100vh-64px)] bg-background pt-8 mt-8 md:mt-12">
+          <section id="price-calculator" className="min-h-[calc(100vh-64px)] bg-background pt-2 mt-2 md:mt-2">
             <div className="grid grid-cols-1 md:grid-cols-[60%_40%] h-full min-h-[calc(100vh-64px)] items-stretch">
               {/* Left Side - Price calculator (no background photo) */}
               <div className="relative overflow-hidden bg-section text-white dark:text-foreground">
@@ -181,11 +189,11 @@ export default function Home() {
                   <div className="w-full">
                     <div className="p-6 md:pl-10 lg:pl-12">
                       <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-                        Find Your Perfect Car
+                        {t('findYour.title')}
                       </h2>
 
                       <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
-                        Search and compare our premium vehicle fleet. Get instant pricing and availability for your dates.
+                        {t('findYour.description')}
                       </p>
 
                       <VehicleSearchFilterForm 
@@ -214,34 +222,36 @@ export default function Home() {
           </section>
         </AnimatedGroup>
 
-        {/* Featured Vehicles Section */}
-        <section className="py-16 bg-background">
-          <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
-            <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-              <div className="my-8">
-                <h3 className="text-3xl font-semibold mb-6 text-center">
-                  {currentTitle}
-                </h3>
-                <VehicleList
-                  vehicles={vehiclesToDisplay}
-                  isLoading={isLoading}
-                  searchState={searchState}
-                />
-                <div className="flex justify-center mt-12">
-                  <Button
-                    variant="default"
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90 text-white"
-                    onClick={() => window.location.href = '/cars'}
-                  >
-                    {t('viewAllCars')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+        {/* Featured Vehicles Section (wrapped in ErrorBoundary to avoid client crashes when Convex/remote services are unreachable) */}
+        <ErrorBoundary fallback={<div className="py-16 bg-background"><div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8"><p className="text-center text-destructive">{t('couldNotLoadFeaturedCars')}</p></div></div>}>
+          <section className="py-16 bg-background">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
+              <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
+                <div className="my-8">
+                  <h3 className="text-3xl font-semibold mb-6 text-center">
+                    {currentTitle}
+                  </h3>
+                  <VehicleList
+                    vehicles={vehiclesToDisplay}
+                    isLoading={isLoading}
+                    searchState={searchState}
+                  />
+                  <div className="flex justify-center mt-12">
+                    <Button
+                      variant="default"
+                      size="lg"
+                      className="bg-primary hover:bg-primary/90 text-white"
+                      onClick={() => window.location.href = '/cars'}
+                    >
+                      {t('viewAllCars')}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </AnimatedGroup>
-          </div>
-        </section>
+              </AnimatedGroup>
+            </div>
+          </section>
+        </ErrorBoundary>
 
         {/* Luxury Transfer Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
@@ -457,7 +467,7 @@ export default function Home() {
             <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
               <TestimonialCarousel 
                 title={t('clientTestimonials.title')}
-                reviews={t.raw('clientTestimonials.reviews')}
+                reviews={homepageReviews}
               />
             </div>
           </section>

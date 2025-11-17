@@ -165,6 +165,19 @@ export default defineSchema({
   }).index("by_user", ["userId"])
     .index("by_reservation", ["reservationId"]),
 
+  // Reviews table - store customer reviews/testimonials
+  reviews: defineTable({
+    name: v.string(),
+    email: v.optional(v.string()),
+    rating: v.number(),
+    title: v.optional(v.string()),
+    text: v.string(),
+    locale: v.optional(v.union(v.literal("en"), v.literal("ro"))),
+    approved: v.boolean(),
+    createdAt: v.number(),
+    source: v.optional(v.string())
+  }).index("by_createdAt", ["createdAt"]),
+
   // Seasons table - defines seasonal pricing multipliers and their periods
   seasons: defineTable({
     name: v.string(), // "High Season", "Low Season", "Holiday Season", "Extra Season"

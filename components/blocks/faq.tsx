@@ -72,7 +72,8 @@ const FaqSection = React.forwardRef<HTMLElement, FaqSectionProps>(
               {title}
             </h2>
             {description && (
-              <p className="text-sm text-muted-foreground">{description}</p>
+              // Make FAQ description more visible (darker, slightly larger)
+              <p className="text-base text-foreground/85">{description}</p>
             )}
           </motion.div>
 
@@ -211,7 +212,8 @@ const FaqItem = React.forwardRef<
                 initial={{ y: -10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -10, opacity: 0 }}
-                className="text-sm text-muted-foreground leading-relaxed break-words hyphens-auto"
+                // Make FAQ answer text more legible: slightly larger and darker
+                className="text-base text-foreground/85 leading-relaxed break-words hyphens-auto"
               >
                 {answer}
               </motion.p>

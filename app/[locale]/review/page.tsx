@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function ReviewPage() {
   const t = useTranslations();
@@ -42,14 +44,20 @@ export default function ReviewPage() {
     }
 
     setIsSubmitting(true);
-    
+
     try {
-      // Here you would typically send the review to your backend
-      // For now, we'll just simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast.success("Thank you for your review! We appreciate your feedback.");
-      
+      // Call Convex mutation to create a review
+      await createReview({
+        name: formData.name,
+        email: formData.email || undefined,
+        rating: formData.rating,
+        title: formData.title || undefined,
+        text: formData.review,
+        locale: undefined,
+      });
+
+      toast.success("Thank you for your review! It will appear on the homepage shortly.");
+
       // Reset form
       setFormData({
         name: "",
@@ -59,11 +67,15 @@ export default function ReviewPage() {
         review: "",
       });
     } catch (error) {
+      console.error(error);
       toast.error("Failed to submit review. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Convex mutation
+  const createReview = useMutation(api.reviews.createReview);
 
   return (
     <div className="relative flex flex-col min-h-screen">
@@ -94,7 +106,7 @@ export default function ReviewPage() {
           </div>
 
           {/* Review Form */}
-          <Card className="max-w-2xl mx-auto">
+          <Card className="max-w-2xl mx-auto bg-card dark:bg-card-darker text-card-foreground">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold text-center">
                 Leave a Review

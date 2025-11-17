@@ -8,6 +8,10 @@
       "subheadline": "Descoperă Cluj-Napoca și împrejurimile cu flota noastră premium de vehicule. Servicii profesionale, prețuri competitive și experiență excepțională pentru clienți.",
       "cta": "Vezi Flota Noastră"
     },
+    "findYour": {
+      "title": "Găsește Mașina Perfectă",
+      "description": "Caută și compară flota noastră premium de vehicule. Obține prețuri și disponibilitate instantanee pentru datele tale."
+    },
     "tagline": "Flotă premium, prețuri transparente și suport 24/7 — gata când ai nevoie.",
     "luxuryTransfer": {
       "headline": "Servicii Premium de Transfer",
@@ -135,6 +139,7 @@
       "description1": "La Zetta Cars, credem că fiecare călătorie ar trebui să fie memorabilă. Fondată cu o pasiune pentru călătorii și un angajament pentru excelență, servim comunitatea din Cluj-Napoca cu soluții de închiriere auto fiabile și accesibile.",
       "description2": "Indiferent dacă explorezi străzile istorice ale Cluj-Napoca, te aventurezi în frumoasa țară transilvăneană sau ai nevoie de un vehicul de încredere pentru afaceri, suntem aici să-ți facem călătoria lină și plăcută.",
       "description3": "Flota noastră atent selectată de vehicule moderne, combinată cu prețuri transparente și servicii excepționale pentru clienți, asigură că experiența ta de închiriere depășește așteptările de fiecare dată."
+      ,"imageAlt": "Mercedes"
     },
     "whyChoose": {
       "title": "De Ce să Alegeți Zetta Cars?",
@@ -217,6 +222,8 @@
       "office": "BIROU"
       ,
       "pickupNote": "Ai nevoie de un punct de ridicare anume? Te putem întâlni la aeroport, la hotel sau la orice adresă preferi — spune-ne doar unde."
+  ,
+  "pickupNoteTitle": "Punct de ridicare"
     },
     "socialMedia": {
       "tiktok": {
@@ -448,10 +455,9 @@
     "fuel": "Combustibil:",
     "browseCars": "Răsfoiește Mașinile",
     "goBack": "Înapoi",
-    "paymentMethods": {
-      "cashOnDelivery": "Plata Cash la Livrare",
-      "cardOnDelivery": "Plata cu Cardul la Livrare",
-      "cardOnline": "Plata cu Cardul Online"
+    "paymentMethod": {
+      "title": "Metoda de Plată",
+      "termsAcceptance": "Accept Termenii și Condițiile și Politica de Confidențialitate"
     },
     "status": {
       "confirmed": "Confirmată",
@@ -502,7 +508,7 @@
     "profile": "Profil",
     "logout": "Deconectare"
   },
-  "profile": {
+    "profile": {
     "title": "Profilul Meu",
     "subtitle": "Gestionează setările contului și vezi rezervările tale",
     "userDetails": "Detalii Utilizator",
@@ -645,7 +651,7 @@
         "answer": "Da, poți modifica sau anula rezervarea cu până la 24 de ore înainte de ora de ridicare fără taxe. Modificările făcute în 24 de ore pot atrage taxe suplimentare."
       },
       "3": {
-        "question": "Este combustibilul inclus în prețul închirierii?",
+        "question": "Combustibilul este inclus?",
         "answer": "Nu, combustibilul nu este inclus. Vei primi mașina cu rezervorul plin și ar trebui să o returnezi cu rezervorul plin pentru a evita taxele de realimentare."
       },
       "4": {

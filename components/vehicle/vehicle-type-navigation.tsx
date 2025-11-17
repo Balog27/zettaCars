@@ -13,12 +13,12 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
 
   const vehicleTypes = [
     { key: null, label: t('allVehicles') },
-    { key: 'Luxury Sedan', label: t('luxurySedan') },
-    { key: 'Executive Sedan', label: t('executiveSedan') },
-    { key: 'Luxury SUV', label: t('luxurySUV') },
-    { key: 'Premium Sedan', label: t('premiumSedan') },
-    { key: 'Sport SUV', label: t('sportSUV') },
-    { key: 'Electric Luxury', label: t('electricLuxury') }
+    { key: 'compact', label: 'Compact' },
+    { key: 'comfort', label: 'Comfort' },
+    { key: 'business', label: 'Business' },
+    { key: 'SUV', label: 'SUV' },
+    { key: 'premium', label: 'Premium' },
+    { key: 'van', label: 'Van' }
   ];
 
   return (
@@ -32,9 +32,9 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
           className={`
             transition-all duration-200 font-medium py-3 px-4 h-auto whitespace-nowrap
             ${selectedType === type.key 
-              ? 'bg-primary text-white border-primary shadow-sm' 
-              : 'bg-card text-muted-foreground border-border hover:border-primary hover:text-primary hover:bg-primary/5'
-            }
+                ? 'bg-primary text-white border-primary shadow-sm' 
+                : 'bg-white text-muted-foreground border-border hover:border-primary hover:text-primary hover:bg-primary/5 dark:bg-card'
+              }
           `}
         >
           {type.label}

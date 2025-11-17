@@ -1,5 +1,6 @@
-'use client'
+"use client"
 
+import React from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLocale } from 'next-intl'
@@ -13,6 +14,11 @@ export function LanguageSelector() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = useLocale()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
   
   const handleLanguageChange = (newLocale: string) => {
     // Remove current locale from pathname if it exists
@@ -27,10 +33,10 @@ export function LanguageSelector() {
   return (
     <Select value={locale} onValueChange={handleLanguageChange}>
       <SelectTrigger className="w-[70px]">
-        <SelectValue>
-          {languages[locale as keyof typeof languages]?.flag}
-        </SelectValue>
-      </SelectTrigger>
+          <SelectValue>
+            {mounted ? languages[locale as keyof typeof languages]?.flag : null}
+          </SelectValue>
+        </SelectTrigger>
       <SelectContent>
         <SelectItem value="ro">
           <div className="flex items-center gap-2">

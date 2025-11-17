@@ -21,17 +21,54 @@ export function TestimonialCarousel({ title, reviews }: TestimonialCarouselProps
   const [isAutoPlaying, setIsAutoPlaying] = React.useState(true);
   const [leftButtonPressed, setLeftButtonPressed] = React.useState(false);
   const [rightButtonPressed, setRightButtonPressed] = React.useState(false);
-
   // Auto-rotation every 30 seconds
   React.useEffect(() => {
     if (!isAutoPlaying) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % reviews.length);
+      const len = Array.isArray(reviews) ? reviews.length : 0;
+      if (len === 0) return;
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % len);
     }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
-  }, [reviews.length, isAutoPlaying]);
+  }, [reviews, isAutoPlaying]);
+
+  // Keep currentIndex within bounds when the reviews array changes
+  React.useEffect(() => {
+    const len = Array.isArray(reviews) ? reviews.length : 0;
+    if (len === 0) {
+      setCurrentIndex(0);
+      return;
+    }
+    setCurrentIndex((ci) => Math.min(ci, len - 1));
+  }, [reviews]);
+
+  // Defensive: if reviews is missing or empty, render a friendly fallback
+  if (!Array.isArray(reviews) || reviews.length === 0) {
+    return (
+      <section className="py-16 px-4 bg-section text-white dark:text-foreground">
+        <div className="container mx-auto">
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white dark:text-foreground mb-6">{title}</h2>
+            <p className="text-lg text-white/90 mb-6">There are no reviews yet. Be the first to leave feedback!</p>
+            <div className="flex justify-center">
+              <Button
+                asChild
+                className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg shadow-lg"
+              >
+                <Link href="/review" className="inline-flex items-center">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Leave a Review
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
 
   // Handle navigation with visual feedback
   const handleNavigation = (direction: 'left' | 'right') => {

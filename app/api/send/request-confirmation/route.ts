@@ -70,18 +70,18 @@ export async function POST(request: Request) {
     };
 
     try {
-    const adminEmail = process.env.ADMIN_EMAIL || 'contact@zettacarrental.com';
+    const adminEmail = 'contact@zettacarrental.com';
 
         const [adminResult, userResult] = await Promise.all([
             resend.emails.send({
-                from: 'Rent\'n Go <noreply@rngo.ro>',
+                from: 'contact@zettacarrental.com',
                 to: adminEmail,
                 subject: `New reservation request #${reservationNumber ?? reservationId}`,
                 react: RentalRequestEmail({ data: emailData }) as React.ReactElement,
                 replyTo: customerInfo.email,
             }),
             resend.emails.send({
-                from: 'Rent\'n Go <noreply@rngo.ro>',
+                from: 'contact@zettacarrental.com',
                 to: customerInfo.email,
                 subject: `Request submitted #${reservationNumber ?? reservationId}`,
                 react: UserReservationEmail({ data: emailData }) as React.ReactElement,
