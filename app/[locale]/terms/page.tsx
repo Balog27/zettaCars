@@ -8,40 +8,38 @@ export default function TermsAndConditionsPage() {
     <PageLayout>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-center mb-4">
-            TERMENI SI CONDITII
-          </h1>
+        <div className="mb-4 text-center">
+          <h1 className="text-4xl font-bold mb-2">TERMENI ȘI CONDIȚII</h1>
+          <p className="text-sm text-muted-foreground">Zetta Cars SRL (CUI 52480190)</p>
         </div>
 
         <Separator className="mb-8" />
 
-        {/* I. DISPOZIŢII GENERALE */}
+        {/* I. DISPOZIȚII GENERALE */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">I. DISPOZIŢII GENERALE</CardTitle>
+            <CardTitle className="text-2xl">I. DISPOZIȚII GENERALE</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              1.1. Termenii și Condițiile (denumite în continuare T&amp;C) reglementează funcționarea platformei de
-              închirieri www.rngo.ro (denumită în continuare Site-ul), deținută de societatea RENT&apos;N GO PRODEXA
-              S.R.L. , persoană juridică română cu sediul în Sat Florești, strada Tăuțului, Nr.214D, Jud. Cluj,
-              înregistrată la Registrul Comerțului de pe lângă Tribunalul Cluj sub nr. J12/1445/2024, având C.U.I.
-              49799254 (denumită în continuare Societatea). T&amp;C sunt concepute pentru a oferi informații relevante
-              despre serviciile de închiriere.
+              1.1. Prezentul document („Termeni și Condiții”, denumit în continuare T&C) stabilește regulile de utilizare a
+              platformei de rezervări auto disponibilă pe www.zettacarrental.com (denumită în continuare Site-ul), operată de
+              Zetta Cars SRL, persoană juridică română, CUI 52480190, înregistrată în România (denumită în continuare Societatea).
+              Scopul T&C este de a informa corect utilizatorii atât cu privire la serviciile de închiriere auto și transferuri cât și cu
+              privire la utilizarea Site-ului.
             </p>
             <p>
-              1.2. Prin utilizarea și/sau rezervarea unui autovehicul de pe acest Site și nu numai, vă supuneți în
-              totalitate acestor Termeni și Condiții, precum și legislației din România.
+              1.2. Accesarea Site-ului și/sau trimiterea unei cereri de rezervare implică acceptarea integrală a acestor T&C, precum
+              și a legislației aplicabile din România.
             </p>
             <p>
-              1.3. Navigând pe acest site și/sau efectuând rezervarea unui autovehicul pe www.rngo.ro, declarați că
-              ați înțeles și acceptat prezentele Termeni și Condiții, precum și Politica de Confidențialitate.
+              1.3. Prin navigarea pe Site și/sau prin efectuarea unei rezervări, declarați că ați citit, înțeles și agreat T&C și Politica
+              de Confidențialitate.
             </p>
             <p>
-              1.4. T&amp;C sunt valabile pe o perioadă nedeterminată. Utilizatorii înțeleg că Societatea are dreptul de a le
-              modifica unilateral fără notificare prealabilă către aceștia. Orice modificări vor intra în vigoare imediat
-              după publicarea lor pe Site. Utilizatorii sunt îndemnați să monitorizeze eventualele modificări.
+              1.4. T&C se aplică pe durată nedeterminată. Societatea poate modifica unilateral conținutul lor, fără notificare
+              prealabilă. Versiunea actualizată devine aplicabilă imediat ce este publicată pe Site. Recomandăm verificarea
+              periodică a eventualelor actualizări.
             </p>
           </CardContent>
         </Card>
@@ -53,20 +51,19 @@ export default function TermsAndConditionsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              2.1. RENT&apos; N GO PRODEXA este o companie de închirieri auto care vă pune la dispoziție autoturisme
-              în stare optimă de funcționare, curate atât în interior, cât și în exterior. Prin semnarea contractului de
-              închiriere, vă exprimați acordul cu termenii și condițiile, precum și cu politica de confidențialitate a
-              companiei.
+              2.1. Zetta Cars SRL oferă servicii de închiriere auto. Vehiculele sunt predate în stare tehnică bună și curățenie
+              corespunzătoare (interior/exterior). Semnarea contractului de închiriere confirmă acordul dvs. cu T&C și cu
+              Politica de Confidențialitate.
             </p>
             <p>
-              2.2. Toate modelele de autoturisme prezentate pe site reflectă gama existentă în flota noastră, dar
-              afișarea acestora nu garantează disponibilitatea în timpul solicitării dvs. După plasarea unei cereri de
-              rezervare, disponibilitatea modelului ales va fi confirmată prin e-mail, telefon sau WhatsApp de către
-              unul dintre reprezentanții noștri.
+              2.2. Modelele afișate pe Site reprezintă gama de referință a flotei. Afișarea unui model nu garantează disponibilitatea
+              la data aleasă. După trimiterea cererii, disponibilitatea este confirmată de un reprezentant Zetta Cars (telefon,
+              e-mail sau WhatsApp).
             </p>
             <p>
-              2.3. Vă reamintim că transmiterea unei cereri de rezervare nu constituie o rezervare fermă a
-              autoturismului respectiv.
+              2.3. Trimiterea cererii pe Site constituie o solicitare de rezervare, nu o rezervare confirmată. Rezervarea devine
+              confirmată numai după comunicarea expresă a acestui fapt din partea Societății și, în anumite situații, achitarea sumei
+              solicitate (avans/garanție/asigurare).
             </p>
           </CardContent>
         </Card>
@@ -78,227 +75,187 @@ export default function TermsAndConditionsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              3.1. Taxa pentru închirierea mașinilor în Cluj, asigurarea completă SCDW sau garanția de închiriere se
-              plătesc în avans, fie la confirmarea rezervării, fie la preluarea autoturismului de către dumneavoastră.
-              Perioada minimă de închiriere este de o (1) zi, cu excepția perioadelor de sărbători precum Paștele,
-              Crăciunul, Revelionul și perioada de vară(din luna Iunie până în Septembrie) când perioada minimă de
-              închiriere este de 10 (zece) zile.
+              3.1. Taxele aplicabile (tarif de închiriere, asigurare SCDW, garanție, taxă de livrare/returnare, după caz) se
+              achită în avans, fie la confirmare, fie la preluarea vehiculului. Perioada minimă de închiriere este de 1 (una)
+              zi (24h), iar în perioade de vârf (Paște, Crăciun, Revelion și sezon estival – iunie-septembrie) perioada minimă
+              poate fi de 3 (trei) zile.
             </p>
             <p>
-              3.2. Vârsta minimă pentru închiriere este de 23 de ani, iar conducătorii auto trebuie să dețină permisul
-              de conducere de cel puțin doi an. În caz contrar, ne rezervăm dreptul de a anula comanda
-              dumneavoastră, fără a implica alte consecințe asupra firmei.
+              3.2. Conducătorul auto trebuie să aibă cel puțin 23 de ani și permis de conducere valabil de minimum 2 ani. În
+              lipsa îndeplinirii acestor condiții, Societatea poate anula comanda fără alte consecințe asupra sa.
             </p>
             <p>
-              3.3. Orice modificare a datelor din contract trebuie comunicată expres de către client, însă nu mai târziu
-              de 24 de ore de la momentul preluării mașinii.
+              3.3. Orice modificare a datelor contractuale (date de contact, perioadă, șoferi autorizați etc.) trebuie comunicată
+              în scris în cel mult 24 de ore de la preluarea mașinii.
             </p>
             <p>
-              3.4. În perioadele foarte aglomerate, ne rezervăm dreptul de a solicita un avans de 10% din valoarea
-              totală a închirierii. Acest avans este nereturnabil în cazul în care clientul anulează rezervarea sau nu se
-              prezintă pentru preluarea autoturismului la ora și locația stabilite în confirmarea rezervării. De
-              asemenea, în cazul în care a fost aleasă plata integrală la confirmarea rezervării, în cazul anulării
-              rezervării, se va reține doar 10% din suma totală a perioadei de închiriere.3.5. Facturarea in RON se face la cursul de vanzare al BNR +1% din ziua semnarii Contractului.
+              3.4. În perioade aglomerate, Societatea poate solicita un avans de 10% din valoarea totală a închirierii. Avansul este
+              nereturnabil dacă Clientul anulează sau nu se prezintă la data/ora/locul confirmate. Dacă s-a achitat integral la
+              confirmare și Clientul anulează, Societatea reține 10% din valoarea totală a perioadei rezervate.
             </p>
             <p>
-              3.6. In cazul intarzierii platii, peste termenul stipulat in Contract, Societatea are dreptul de a percepe
-              penalitati in valoare de 3%, din valoarea sumei datorate, pentru fiecare zi de intarziere.
+              3.5. Facturarea în RON se poate face la cursul de vânzare BNR + 1% din ziua semnării contractului, dacă părțile au
+              convenit tarife în EUR.
             </p>
             <p>
-              3.7. În perioadele extrem de aglomerate, din cauza volumului mare de cereri și a situațiilor neprevăzute
-              precum accidentele sau defectele tehnice, ne rezervăm dreptul de a vă oferi un model similar celui ales
-              inițial. Refuzul dumneavoastră de a accepta modelul oferit nu atrage obligația noastră de a vă returna
-              avansul plătit.
+              3.6. Pentru întârzieri la plată peste termenele contractuale, se pot percepe penalități de 3%/zi aplicate sumei
+              datorate.
             </p>
             <p>
-              3.8. Clientul este responsabil să returneze autoturismul în aceeași stare în care a fost preluat, inclusiv
-              toate documentele și accesoriile furnizate în momentul închirierii. Autoturismul trebuie să fie returnat cu
-              rezervorul plin și să fie curățat atât în interior, cât și în exterior. În cazul în care nu puteți returna
-              autoturismul curat, va fi aplicată o taxă de spălare în valoare de 10 euro, iar pentru autoturismele
-              premium și Mini-vanuri, taxa va fi de 18 euro.
+              3.7. În situații excepționale (cerere mare, evenimente neprevăzute – avarii, imobilizări tehnice), Societatea poate
+              livra un vehicul similar clasei rezervate. Refuzul Clientului de a accepta alternativa nu conferă dreptul la
+              rambursarea avansului.
             </p>
             <p>
-              3.9. Orice întârziere care depășește ora stabilită în contract va fi taxată cu o zi întreagă de închiriere
-              pentru primele 2 ore. Orice depășire a orei specificate în contract cu peste 2 ore va fi raportată poliției
-              și va fi taxată cu sume între 100 și 300 euro, în funcție de valoarea autoturismului. O excepție pentru
-              paragraful de mai sus poate fi făcută doar în situația în care este menționată în mod explicit în contract
-              și este semnată de ambele părți.
+              3.8. Vehiculul se returnează în stare similară cu cea de la predare, cu toate documentele și accesoriile primite,
+              inclusiv cablul/încărcătorul pentru vehiculele plug-in hybrid (acolo unde este cazul). Rezervorul trebuie
+              readus la nivelul de la preluare. Taxa de curățare se aplică doar în situațiile în care autovehiculul este returnat
+              cu murdării semnificative care nu pot fi îndepărtate printr-o spălare uzuală și necesită proceduri de detailing
+              profesional. Valoarea acestei taxe este de 10 EUR pentru clasele standard și 18 EUR pentru vehiculele premium
+              sau mini-vanuri.
             </p>
             <p>
-              3.10. Tariful de închiriere acoperă o medie de 200 km/zi. Kilometrii suplimentari vor fi taxați cu 5
-              EUR/50km pentru clasele standard și business și cu 8 EURO/50km pentru clasa premium. În cazul în
-              care autoturismul este returnat cu o cantitate mai mică de combustibil față de momentul închirierii, se va
-              aplica o taxă de 2.5 EUR/litru.
+              3.9. În cazul în care autovehiculul este returnat cu întârziere față de ora stabilită în contract, fără ca această
+              întârziere să fi fost convenită în prealabil de comun acord între Client și Societate, se poate aplica o taxă
+              cuprinsă între 100 și 300 EUR, în funcție de clasa autovehiculului. Dacă întârzierea depășește 6 ore,
+              Societatea își rezervă dreptul de a dispune măsuri suplimentare conform prevederilor legale și contractuale.
             </p>
             <p>
-              3.12. Pierderea sau distrugerea cheilor autoturismului va fi taxată între 200 și 700 EUR, iar pierderea
-              sau distrugerea documentelor autoturismului va fi taxată cu 100 EUR.
+              3.10. Tariful standard include o medie de 200 km/zi. Kilometrii suplimentari se taxează cu 5–15 EUR / 50 km,
+              în funcție de model/clasă. Combustibilul lipsă la returnare se taxează la 2,5 EUR/litru.
             </p>
             <p>
-              3.13. În anumite condiții, este posibilă conducerea autoturismelor în afara granițelor României, însă doar
-              în țările membre ale UE. Acest aspect trebuie notificat la confirmarea rezervării și implică o taxă de 50
-              EUR/ieșire, necesară extinderii teritoriale a asigurărilor și emiterii imputernicirilor de conducere pentru
-              șoferi.
+              3.11. Pierderea/distrugerea cheilor: 200–700 EUR. Pierderea/distrugerea documentelor: 100 EUR.
             </p>
             <p>
-              3.14. Taxe suplimentare: Orice amendă, pene de cauciuc, taxă de drum sau de parcare etc., precum și
-              contravaloarea eventualelor reparații pe perioada închirierii, rezultate din acțiunile chiriașului, vor fi suportate de către acesta. În plus, în cazul în care, din vina chiriașului, mașina nu mai poate fi condusă
-              pe propriile roți în urma unui accident, prin semnarea acestui contract, clientul se obligă să acopere
-              cheltuielile cu transportul acesteia pe o platformă până la sediul de unde a închiriat-o.
+              3.12. Ieşirea din țară este permisă doar în state membre UE, cu notificare prealabilă și acordul Societății,
+              implicând taxă de 50 EUR/ieșire (extindere teritoriu asigurări + împuterniciri).
+            </p>
+            <p>
+              3.13. Costuri suplimentare (amenzi, taxă drum/parcare, pene, anvelope, reparații ca urmare a utilizării neconforme
+              etc.) sunt în sarcina Clientului. Dacă vehiculul devine nefuncțional din vina Clientului și necesită transport pe
+              platformă, Clientul suportă costul repatrierii la punctul de lucru indicat de Societate.
             </p>
           </CardContent>
         </Card>
 
-        {/* IV. GARANTIA ȘI ASIGURAREA SCDW */}
+        {/* IV. GARANȚIE DE ÎNCHIRIERE & ASIGURARE SCDW */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">IV. GARANTIA ȘI ASIGURAREA SCDW</CardTitle>
+            <CardTitle className="text-2xl">IV. GARANȚIE DE ÎNCHIRIERE &amp; ASIGURARE SCDW</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              4.1. În momentul preluării autoturismului, clientul este de acord cu blocarea unei garanții cuprinse între
-              200 și 1800 EUR (în funcție de valoarea mașinii închiriate), fie prin intermediul unui card bancar, fie în
-              numerar. Această sumă va fi restituită integral în cazul în care clientul returnează autoturismul în stare
-              nevătămată, curat și cu toate accesoriile, la locul, data și ora convenite în contract, sau prin achitarea
-              asigurării SCDW (Super Collision Damage Waiver), calculată în funcție de numărul de zile și clasa
-              autoturismului închiriat.
+              4.1. La preluare, Clientul achită sau acceptă blocarea unei garanții (depozit) sau optează pentru SCDW
+              (Super Collision Damage Waiver), conform clasei și duratei. Restituirea garanției are loc la returnarea
+              vehiculului în condiții corespunzătoare (stare, curățenie, accesorii, oră/loc), cu respectarea procedurilor de
+              constatare.
             </p>
             <p>
-              4.2. În cazul garanției de închiriere, aceasta va fi percepută la începutul perioadei de închiriere sau
-              blocată pe cardul bancar și ulterior deblocată la restituirea autoturismului în aceleași condiții ca la preluare. În situația în care autoturismul este returnat foarte murdar, ne rezervăm dreptul de a bloca această garanție până la curățarea autoturismului și stabilirea exactă a stării de returnare. În cazul în
-              care autoturismul este returnat cu daune sau lipsă de accesorii, garanția de închiriere va fi reținută parțial
-              sau integral. Garnția acoperă parțial situația daunelor totale. În această situație, clientul se obligă să
-              achite între 1000 și 8000 EUR în funcție de modelul închiriat.
+              4.2. Varianta „Garanție” (fără SCDW): Societatea acoperă costul daunelor până la 3.000 EUR per eveniment; orice
+              sumă peste 3.000 EUR este achitată de Client. În caz de daună totală, se aplică același plafon. Dacă vehiculul
+              este returnat foarte murdar sau există suspiciuni de daune, restituirea garanției poate fi amânată până la
+              finalizarea verificărilor și a evaluării.
             </p>
             <p>
-              4.3. Asigurarea SCDW este o asigurare complementară pentru protecția împotriva daunelor și
-              evenimentelor posibile produse din vina clientului sau a unei terțe persoane. Aceasta exonerează
-              clientul de răspunderea financiară în cazul daunelor și reduce la zero valoarea garanției. Asigurarea SCDW acoperă parțial situația daunelor totale. În această situație, clientul se obligă să achite între 1000
-              și 8000 EUR în funcție de modelul închiriat.
+              4.3. Varianta „SCDW”: SCDW este o protecție suplimentară oferită de Societate; Societatea acoperă costul daunelor
+              până la 6.000 EUR per eveniment; orice sumă peste 6.000 EUR este achitată de Client; garanția se poate reduce la
+              zero sau la un nivel minim operațional, conform clasei.
             </p>
             <p>
-              4.4. Asigurarea SCDW nu acoperă combustibilul consumat, daunele aduse anvelopelor și părții
-              inferioare a autovehiculului (sasiu, bloc motor, baie de ulei, cutie de viteze) datorate unei acțiuni
-              deliberare sau neglijente, precum și în cazul pierderii accesoriilor autoturismului.
-            </p>
-            <p>
-              Atât asigurarea SCDW, cât și garanția de închiriere acoperă doar persoanele înscrise în contract cu
-              dreptul de a conduce autoturismul închiriat.
+              4.4. Nici garanția, nici SCDW nu acoperă: combustibil, daune la anvelope/jante, partea inferioară (șasiu, baie ulei,
+              cutie, bloc motor), utilizări abuzive/neglijență, pierderea accesoriilor (inclusiv cablul/încărcătorul PHEV), costuri
+              cu lipsa de folosință, tractări generate de utilizare neconformă, încălcări legale. Protecțiile se aplică exclusiv
+              conducătorilor înscriși în contract.
             </p>
           </CardContent>
         </Card>
 
-        {/* V. OBLIGATIILE CLIENTULUI */}
+        {/* V. OBLIGAȚIILE CLIENTULUI */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">V. OBLIGATIILE CLIENTULUI</CardTitle>
+            <CardTitle className="text-2xl">V. OBLIGAȚIILE CLIENTULUI</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              5.1. Clientul este responsabil să notifice imediat agenția rent a car despre orice observații referitoare la starea autoturismului în momentul preluării acestuia. În cazul în care observă aspecte suspecte sau
-              semne anormale de funcționare care ar putea afecta starea sau siguranța autoturismului închiriat, este
-              obligat să oprească călătoria și să informeze reprezentantul firmei Societății.
+              5.1. La preluare, Clientul verifică vehiculul și raportează imediat orice observații. Dacă apar semne de
+              funcționare anormală pe parcurs, Clientul oprește deplasarea și contactează Societatea.
             </p>
             <p>
-              5.2. Prin semnarea contractului de închiriere, Clientul se angajează să respecte următoarele condiții
-              generale de utilizare a mașinii:
+              5.2. Clientul se obligă, între altele, să:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>a. Respectarea tuturor legilor românești în vigoare referitoare la circulația rutieră.</li>
-              <li>b. Anunțarea firmei de închirieri înainte de a scoate mașina în afara țării.</li>
-              <li>c. Abținerea de la împrumutarea mașinii altor persoane care nu sunt înscrise în contract.</li>
-              <li>d. Abținerea de la subînchirierea mașinii către terți.</li>
-              <li>e. Evitarea supraîncărcării mașinii (atât în ceea ce privește numărul de locuri, cât și greutatea) peste limitele maxime prevăzute în talonul de înmatriculare.</li>
-              <li>f. Abținerea de la utilizarea autovehiculului în competiții, teste auto sau alte activități de acest gen.</li>
-              <li>g. Efectuarea reparațiilor autovehiculului doar în service-urile agreate de proprietar.</li>
-              <li>h. Asigurarea că autovehiculul nu este lăsat descuiat, cu cheile în contact sau cu geamurile/portbagajul deschise.</li>
-              <li>i. Conducerea autovehiculului doar pe drumurile publice, fiind interzisă utilizarea acestuia pe drumuri forestiere.</li>
-              <li>j. Abținerea de la împingerea sau tractarea altor vehicule, rulote sau alte obiecte.</li>
-              <li>k. Abținerea de la conducerea sub influența băuturilor alcoolice, narcoticelor sau oricărei alte substanțe care ar putea afecta capacitatea sau starea de concentrare a șoferului.</li>
-              <li>l. Să prezinte originalul permisului de conducere valabil împreună cu un act de identitate.</li>
-              <li>m. Să nu conducă autovehiculul în afara drumurilor publice, pe drumuri nepavate, neasfaltate sau închise circulației publice.</li>
-              <li>n. Nu efectuează sau permite intervenții tehnice sau estetice asupra autovehiculului fără consimțământul scris al Societății.</li>
-              <li>o. În cazul solicitării, informează Societatea despre locația autovehiculului și permite examinarea acestuia de către reprezentanții Societății în maxim 12 de ore de la cerere.</li>
-              <li>p. Nu utilizează autovehiculul pentru taximetrie, transport alternativ (de exemplu: Uber, Bolt, Bla Bla Car etc.), școli de șoferi, activități de tractare, curse, antrenamente, concursuri, transport de substanțe periculoase sau alte activități ilegale care ar putea deteriora starea autovehiculului. În cazul în care autoturismul închiriat este confiscat sau deteriorat de autorități sau de client prin utilizarea sa în scopuri ilegale, clientul este responsabil pentru achitarea contravaloarii completă a autovehiculului pe care scietatea l-a achitat la achiziționarea acestuia .</li>
-              <li>q. Clientul are obligația de a menține autovehiculul într-o stare corespunzătoare de funcționare pe întreaga durată a contractului și de a-l preda înapoi în aceeași stare în care a fost preluat. În cazul oricăror daune produse autovehiculului pe durata contractului (inclusiv daune cauzate de coliziuni cu animale sau daune de autor necunoscut), clientul este obligat să suporte costurile tuturor reparațiilor necesare pentru a restabili starea autovehiculului la cea existentă la momentul preluării, cu respectarea procedurii descrise la punctul VII. În caz contrar, clientul va fi responsabil pentru întreaga valoare a reparațiilor, costurile de imobilizare și cheltuielile generate de lipsa de folosință a mașinii.</li>
+              <li>a) respecte legislația rutieră;</li>
+              <li>b) anunțe și obțină acordul scris al Societății pentru ieșirea din țară;</li>
+              <li>c) nu permită conducerea de către persoane neînscrise în contract;</li>
+              <li>d) nu subînchirieze vehiculul;</li>
+              <li>e) nu depășească sarcina/numărul de locuri prevăzute;</li>
+              <li>f) nu folosească vehiculul în competiții/teste;</li>
+              <li>g) efectueze reparații doar în service-uri agreate de Societate;</li>
+              <li>h) păstreze vehiculul încuiat și în siguranță (fără chei la vedere);</li>
+              <li>i) circule doar pe drumuri publice deschise traficului;</li>
+              <li>j) nu tracteze/împingă alte vehicule;</li>
+              <li>k) nu conducă sub influența alcoolului/drogurilor/medicației incompatibile;</li>
+              <li>l) prezinte la preluare permisul valabil și act de identitate în original;</li>
+              <li>m) nu utilizeze pe drumuri neamenajate/nepavate sau închise circulației;</li>
+              <li>n) nu intervină tehnic/estetic fără acord scris;</li>
+              <li>o) comunice, la cerere, locația vehiculului și să permită inspecția în max. 12 ore;</li>
+              <li>p) nu utilizeze în scopuri comerciale neautorizate (taximetrie, ride-sharing, școală de șoferi etc.) sau activități ilegale;</li>
+              <li>q) mențină starea vehiculului și suporte costurile reparațiilor pentru daune apărute pe durata contractului.</li>
             </ul>
             <p>
-              5.3. Pentru nerespectarea obligațiilor enumerate în acest articol Societatea poate să rețină avansurilor
-              încasate, depozitul de garanție, inclusiv în cazul taxelor SCDW.
+              5.3. Pentru nerespectarea obligațiilor, Societatea poate reține avansuri, garanția și/sau sumele SCDW, după caz,
+              în limita prevederilor contractuale și legale.
             </p>
           </CardContent>
         </Card>
 
-        {/* VI. OBLIGATIILE SOCIETĂȚII */}
+        {/* VI. OBLIGAȚIILE SOCIETĂȚII */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">VI. OBLIGATIILE SOCIETĂȚII</CardTitle>
+            <CardTitle className="text-2xl">VI. OBLIGAȚIILE SOCIETĂȚII</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              6.1. Sa transmita Clientului dreptul de folosinta asupra autovehiculului ce constituie obiectul Contractului
-              prin: livrarea autovehiculului, completarea datelor de predare-preluare, inmanarea cheilor si a actelor
-              masinii (certificat de inmatriculare, polita de asigurare RCA) in original sau copie.
+              6.1. Să predea Clientului dreptul de folosință asupra vehiculului prin: livrare, completare documente de
+              predare-primire și înmânarea cheilor și actelor necesare (RCA, certificat înmatriculare).
             </p>
             <p>
-              6.2. Sa asigure Clientului asistenta rutiera, pe teritoriul Romaniei, pe toata durata contractului, in caz de
-              accident sau pana mecanica (defectiune tehnica). Societatea nu este responsabila de remedierea
-              anvelopei in caz de pana.
+              6.2. Să asigure asistență rutieră pe teritoriul României pe durata contractului, pentru accidente sau defecțiuni
+              tehnice. Penele de cauciuc nu intră în responsabilitatea Societății.
             </p>
             <p>
-              6.3. Societatea nu este responsabila de pierderile suportate de catre Client in caz de defectare sau
-              avarie a autovehiculului, cu exceptia cheltuielilor autorizate de Societate pentru reparatii.
+              6.3. Societatea nu răspunde pentru pierderile suferite de Client din defectări/avarii, în afara cheltuielilor
+              expres autorizate de Societate.
             </p>
             <p>
-              6.4. Din momentul livrarii autovehiculului si pana la reintrarea in posesia acestuia, Societatea este
-              exonerata de raspundere pentru daunele provocate in trafic de autovehiculul inchiriat Clientului, precum
-              si de taxele de drum ori de pod sau amenzi rezultate din ocuparea abuziva a unui loc de parcare,
-              nerespectarea legislatiei rutiere sau a legilor Romaniei.
+              6.4. Din momentul predării și până la returnare, Societatea este exonerată de răspundere pentru daunele
+              provocate în trafic de vehiculul închiriat, taxe/amenzi, trecere pod, parcări abuzive etc.
             </p>
           </CardContent>
         </Card>
 
-        {/* VII. OBLIGAȚIILE CLIENTULUI ÎN CAZ DE AVARII ȘI ACCIDENTE */}
+        {/* VII. PROCEDURĂ ÎN CAZ DE AVARII/ACCIDENTE */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">VII. OBLIGAȚIILE CLIENTULUI ÎN CAZ DE AVARII ȘI ACCIDENTE</CardTitle>
+            <CardTitle className="text-2xl">VII. PROCEDURĂ ÎN CAZ DE AVARII/ACCIDENTE</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>7.1. Este responsabilitatea clientului să informeze imediat Societatea despre orice nouă avarie
-            descoperită la autovehiculul închiriat.</p>
-            <p>7.2. În situația în care dauna este provocată de un autor necunoscut, clientul trebuie să obțină în
-            prealabil Autorizația de Reparație de la autoritățile competente.</p>
-            <p>7.3. În cazul în care accidentul implică vina clientului și sunt implicate două vehicule:</p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>· Clientul trebuie să completeze formularul de constatare amiabilă în cazul în care ambele părți recunosc vina.</li>
-              <li>· În absența unui acord amiabil, este necesară completarea unui Proces Verbal și obținerea Autorizației de Reparație de la autoritățile competente.</li>
-            </ul>
-            <p>7.4. Dacă accidentul nu este din culpa clientului și sunt implicate două vehicule:</p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>· Clientul trebuie să completeze formularul de constatare amiabilă în cazul în care ambele părți recunosc vina.</li>
-              <li>· De asemenea, trebuie furnizate copii ale RCA, Certificatului de Înmatriculare, Cărții de Identitate și Permisului de Conducere ale părții vinovate.</li>
-              <li>· În cazul în care nu se ajunge la un acord amiabil, este necesară prezentarea copiilor respective, alături de Procesul Verbal și Autorizația de Reparație de la autoritățile competente.</li>
-            </ul>
+            <p>7.1. Clientul anunță imediat Societatea la constatarea oricărei avarii.</p>
+            <p>7.2. Autor necunoscut: Clientul obține Autorizație de Reparație de la autorități.</p>
             <p>
-              7.5. În cazul în care sunt implicate mai mult de două vehicule sau rezultă vătămări corporale, clientul
-              trebuie să contacteze imediat autoritățile pentru a obține un Proces Verbal și o Autorizație de Reparație.
+              7.3. Două vehicule, vina Clientului: se completează constatare amiabilă dacă părțile cad de acord; în lipsa
+              acordului, se solicită Proces-Verbal și Autorizație de Reparație.
             </p>
             <p>
-              7.6. Dacă autovehiculul este implicat într-un incident în care este lovit un animal, clientul trebuie să
-              anunțe imediat autoritățile competente.
+              7.4. Două vehicule, fără vina Clientului: constatare amiabilă, dacă e posibil; se furnizează copii ale RCA, CI,
+              permis și certificat înmatriculare ale părții vinovate; în lipsa acordului, se obțin PV și Autorizație de Reparație.
             </p>
-            <p>
-              7.7. Clientul are obligația de a verifica corectitudinea completării formularului de constatare amiabilă,
-              Autorizației de Reparație și Procesului Verbal eliberate de autorități în toate cazurile menționate anterior.
-            </p>
-            <p>
-              7.8. În cazul în care clientul nu respectă procedura în caz de daună, acesta va fi responsabil pentru
-              toate costurile asociate reparațiilor, imobilizării vehiculului și pierderilor de utilizare a mașinii.
-            </p>
-            <p>
-              7.9. Orice daună apărută în timpul perioadei de închiriere a autovehiculului va fi facturată, inclusiv
-              zgârieturile și alte daune minore.
-            </p>
+            <p>7.5. Peste două vehicule sau vătămări corporale: contactați imediat autoritățile pentru PV și Autorizație de Reparație.</p>
+            <p>7.6. Impact cu animale: notificare imediată a autorităților și Societății.</p>
+            <p>7.7. Clientul verifică exactitatea tuturor documentelor (amiabilă, PV, Autorizație).</p>
+            <p>7.8. Nerespectarea procedurii atrage răspunderea Clientului pentru costurile reparațiilor, imobilizare și lipsă de folosință.</p>
+            <p>7.9. Orice daună apărută pe durata închirierii poate fi facturată (inclusiv zgârieturi minore).</p>
           </CardContent>
         </Card>
 
@@ -309,15 +266,13 @@ export default function TermsAndConditionsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              8.1. Societatea nu va fi responsabilă pentru întârzieri sau incapacitatea de a îndeplini obligațiile
-              contractuale din cauza forței majore, inclusiv dar fără a se limita la cutremure, inundații, incendii, conflicte armate, greve, embargouri sau alte circumstanțe independente de voința sa. În astfel de situații,
-              societatea își va depune toate eforturile rezonabile pentru a minimiza impactul asupra clienților și va
-              comunica în mod corespunzător orice modificări în prestarea serviciilor.
+              8.1. Societatea nu răspunde pentru întârzieri ori neexecutare cauzate de forță majoră (cutremure, inundații,
+              incendii, conflicte, greve, embargouri etc.). Vor fi depuse eforturi rezonabile pentru diminuarea efectelor și
+              informarea clienților.
             </p>
             <p>
-              8.2. În cazul în care forța majoră sau alte circumstanțe imprevizibile și imposibile de controlat de către
-              societate fac imposibilă executarea contractului, părțile vor fi eliberate de obligațiile lor fără ca vreo parte
-              să fie răspunzătoare față de cealaltă pentru daune sau alte obligații compensatorii.
+              8.2. Dacă forța majoră sau alte situații imprevizibile fac imposibilă executarea contractului, părțile sunt
+              exonerate de răspundere, fără despăgubiri.
             </p>
           </CardContent>
         </Card>
@@ -329,69 +284,50 @@ export default function TermsAndConditionsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              9.1 Tot ceea ce este postat pe Site precum și pe diverse tipuri de suporturi, cum ar fi, însă fără a se
-              limita la, imagini, texte, elemente de grafică, simboluri, logo-uri, baze de date etc. este proprietatea
-              Societății. Toate acestea cad sub incidența legislației în materie de proprietate intelectuală.
+              9.1. Conținutul Site-ului (texte, imagini, mărci, elemente grafice, baze de date etc.) aparține Societății și este
+              protejat de legislația în vigoare.
             </p>
             <p>
-              9.2 Vizitatorii și Terții nu pot utiliza, copia, distribui, publica sau incorpora în alte documente sau
-              materiale astfel de marcaje/informații sub nicio formă în scopul obținerii de venituri fără permisiunea
-              prealabilă scrisă și expresă a Societății.
+              9.2. Este interzisă utilizarea/copierea/distribuirea/publicarea conținutului în scop comercial fără acordul scris al Societății.
             </p>
           </CardContent>
         </Card>
 
-        {/* X. FURNIZAREA DE INFORMAȚII/ TENTATIVE DE FRAUDĂ */}
+        {/* X. INFORMAȚII, SECURITATE & LINK-URI */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">X. FURNIZAREA DE INFORMAȚII/ TENTATIVE DE FRAUDĂ</CardTitle>
+            <CardTitle className="text-2xl">X. INFORMAȚII, SECURITATE &amp; LINK-URI</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              10.1 Pentru a utiliza Site-ul, utilizatorii Site-ului sunt de acord să furnizeze informații reale despre ei.
+              10.1. Utilizatorii declară că furnizează informații reale și complete.
             </p>
             <p>
-              10.2 Orice încercare de a furniza informații false, de a accesa datele personale ale altui utilizator, de a
-              modifica conținutul Site-ului sau de a afecta performanțele serverului pe care este postat Site-ul, va fi
-              considerată tentativă de fraudare a sistemelor Societății şi va duce la blocarea imediată a accesului. De
-              asemenea, Societatea își rezervă dreptul de a anunța autoritățile competente despre această tentativă.
+              10.2. Orice încercare de fraudă (identități false, acces neautorizat, manipulare conținut, afectare performanță server etc.) duce la blocarea accesului și, după caz, sesizarea autorităților.
             </p>
             <p>
-              10.3. Societatea nu poate fi făcută responsabilă pentru orice consecințe rezultate din nefuncționarea
-              website-ului său, inclusiv, dar fără a se limita la, indisponibilitatea temporară sau permanentă a acestuia,
-              bug-uri software, erori de programare, sau alte probleme tehnice care pot afecta accesul sau utilizarea
-              platformei online. Utilizatorul acceptă că societatea depune toate eforturile rezonabile pentru a menține
-              funcționarea corespunzătoare a website-ului, însă nu poate garanta lipsa totală a unor astfel de
-              probleme tehnice. În măsura permisă de lege, societatea nu va fi responsabilă față de client sau orice
-              altă parte pentru daunele sau pierderile suferite ca urmare a unor astfel de incidente tehnice legate de
-              website.
+              10.3. Societatea nu poate fi ținută responsabilă pentru indisponibilități ale Site-ului, bug-uri sau alte probleme tehnice. Vor fi depuse eforturi rezonabile pentru funcționare normală, dar nu se garantează lipsa totală a erorilor.
             </p>
             <p>
-              10.4. Acest Site poate include link-uri catre alte platforme de internet. Noi nu recomandam alte site-uri
-              web si nu suntem raspunzatori pentru informatiile, materialele, produsele sau serviciile continute in sau
-              accesibile prin intermediul acelor site-uri web. Accesul si utilizarea altor site-uri web se fac exclusiv pe
-              propriul risc.
+              10.4. Site-ul poate conține link-uri către terți. Zetta Cars nu garantează conținutul/serviciile terților. Accesul se face pe riscul exclusiv al utilizatorului.
             </p>
           </CardContent>
         </Card>
 
-        {/* XI. CONFLICTE */}
+        {/* XI. LITIGII */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">XI. CONFLICTE</CardTitle>
+            <CardTitle className="text-2xl">XI. LITIGII</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              11.1 Orice conflict apărut între Societate și clienții săi se va soluționa pe cale amiabilă. În cazul în care
-              acest lucru nu este posibil, soluționarea conflictelor este de competența instanțelor române din Cluj-
-              Napoca.
+              11.1. Divergențele se soluționează pe cale amiabilă. În lipsa unei soluții, competența aparține instanțelor din Cluj-Napoca (dacă nu se prevede altfel prin lege).
             </p>
-            <p>11.2 Legea aplicabilă este legea română.</p>
+            <p>11.2. Legea aplicabilă: legea română.</p>
             <p>
-              11.3. Clientul este pus de drept în întarziere pentru toate obligatiile asumate in Contract si nerespectate
-              ca atare la termenele prevăzute sau comunicate.
+              11.3. Clientul este de drept în întârziere pentru obligațiile neexecutate la termenele convenite.
             </p>
-            <p>11.4. Pentru orice disputa, acești T&amp;C constituie o dovada.</p>
+            <p>11.4. Prezentul document constituie probă între părți.</p>
           </CardContent>
         </Card>
 
@@ -402,17 +338,13 @@ export default function TermsAndConditionsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              12.1 T&amp;C reprezintă Contractul dintre consumator și Societate, pot fi cesionate de către aceasta din
-              urmă fără a fi necesar acordul clientului.
+              12.1. T&C reprezintă contractul dintre consumator și Societate. Societatea poate cesiona contractul fără consimțământul Clientului, cu respectarea legii.
             </p>
             <p>
-              12.2. Numele capitolelor și sub-titlurile sunt doar pentru referință și nu trebuie luate în considerare în
-              interpretarea sau construcția prezentelor T&amp;C.
+              12.2. Titlurile secțiunilor au rol orientativ și nu afectează interpretarea clauzelor.
             </p>
             <p>
-              12.3. În cazul declarării vreuneia din clauzele prezentul T&amp;C nulă sau inaplicabilă, restul clauzelor vor
-              continua să își producă efectele, iar clauză declarată nulă sau inaplicabilă va fi înlocuită de o nouă clauză
-              care să reflecte cât mai apropiat cu putință voința Societății.
+              12.3. Dacă vreo clauză devine nulă/inaplicabilă, restul rămân valabile; clauza va fi înlocuită cu una care reflectă cât mai fidel intenția Societății.
             </p>
           </CardContent>
         </Card>
@@ -425,7 +357,7 @@ export default function TermsAndConditionsPage() {
             <CardTitle className="text-2xl">Informații de Contact</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <p><strong>Rent&apos;n Go Prodexa S.R.L.</strong></p>
+            <p><strong>Zetta Cars S.R.L.</strong> (CUI 52480190)</p>
             <p>Email: <Link href="mailto:contact@zettacarrental.com" className="text-primary hover:underline">contact@zettacarrental.com</Link></p>
             <p>Telefon: +40750250121</p>
             <p>Adresă: Cluj "Avram Iancu" International Airport, Strada Traian Vuia 149-151, Cluj-Napoca, România</p>
@@ -436,12 +368,8 @@ export default function TermsAndConditionsPage() {
 
         {/* Footer Note */}
         <div className="text-center">
-          <p className="text-sm text-muted-foreground">
-            Termeni și condiții actualizați ultima dată: Ianuarie 2024
-          </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Prin utilizarea serviciilor noastre, recunoașteți că ați citit și înțeles acești termeni și condiții.
-          </p>
+          <p className="text-sm text-muted-foreground">Termeni și condiții actualizați ultima dată: 17 Noiembrie 2025</p>
+          <p className="text-sm text-muted-foreground mt-2">Prin utilizarea serviciilor noastre, recunoașteți că ați citit și înțeles acești termeni și condiții.</p>
         </div>
       </div>
     </PageLayout>
