@@ -65,6 +65,9 @@
       "title": "What Our Clients Say",
       "reviews": []
     },
+    "loadingFeaturedCars": "Loading featured cars...",
+    "couldNotLoadFeaturedCars": "Could not load featured cars.",
+    "noFeaturedCarsAvailable": "No featured cars available at the moment.",
     "ourStory": {
       "title": "Our Story",
       "subtitle": "Your trusted partner for car rentals in Cluj-Napoca and beyond",

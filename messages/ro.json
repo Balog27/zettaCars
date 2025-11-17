@@ -81,6 +81,9 @@
         }
       ]
     },
+    "loadingFeaturedCars": "Se încarcă mașinile recomandate...",
+    "couldNotLoadFeaturedCars": "Nu s-au putut încărca mașinile recomandate.",
+    "noFeaturedCarsAvailable": "Nu sunt disponibile mașini recomandate momentan.",
     "ourStory": {
       "title": "Povestea Noastră",
       "subtitle": "Partenerul tău de încredere pentru masini de inchiriat în Cluj-Napoca și nu numai",
@@ -455,10 +458,6 @@
     "fuel": "Combustibil:",
     "browseCars": "Răsfoiește Mașinile",
     "goBack": "Înapoi",
-    "paymentMethod": {
-      "title": "Metoda de Plată",
-      "termsAcceptance": "Accept Termenii și Condițiile și Politica de Confidențialitate"
-    },
     "status": {
       "confirmed": "Confirmată",
       "pending": "În Așteptare",
