@@ -1,17 +1,15 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import createMiddleware from 'next-intl/middleware';
 
 // Admin routes that require admin role
-// The app uses locale prefixes like /ro and /en. createRouteMatcher used with
-// "/admin(.*)" won't match paths like `/ro/admin`. Use a small helper that
-// recognizes both prefixed and non-prefixed admin routes.
+// We need to support locale-prefixed paths (e.g. /ro/admin, /en/admin).
 const LOCALES = ['ro', 'en'];
-const isAdminRoute = (req: any) => {
-  const pathname = req?.nextUrl?.pathname || (typeof req === 'string' ? req : '/');
-  // Match either /admin or /<locale>/admin
-  const localePart = LOCALES.join('|');
-  const re = new RegExp(`^\\/(?:${localePart})?\\/admin(\\b|\\/|$)`);
+const isAdminPath = (pathname: string) => {
+  if (!pathname || typeof pathname !== 'string') return false;
+  // Match /admin or /<locale>/admin and their subpaths
+  // Examples matched: /admin, /admin/, /admin/foo, /ro/admin, /ro/admin/foo
+  const re = new RegExp(`^\\/(?:${LOCALES.join('|')}\\/)?admin(?:$|\\/|\\?.*)`);
   return re.test(pathname);
 };
 
@@ -34,13 +32,13 @@ export default clerkMiddleware(async (auth, req) => {
   const pathname = req.nextUrl.pathname;
   
   // Skip internationalization for admin routes, API routes, and static files
-  if (isAdminRoute(req) || 
-      pathname.startsWith('/api/') || 
-      pathname.startsWith('/_next/') ||
-      pathname.includes('.')) {
+  if (isAdminPath(pathname) || 
+    pathname.startsWith('/api/') || 
+    pathname.startsWith('/_next/') ||
+    pathname.includes('.')) {
     
     // Handle admin routes
-    if (isAdminRoute(req)) {
+  if (isAdminPath(pathname)) {
       const { userId } = await auth();
       
       // If no user is authenticated, redirect to sign-in
