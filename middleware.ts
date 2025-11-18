@@ -9,7 +9,8 @@ const ADMIN_USER_IDS = [
   //"user_35f7uaMn9wVbfVvKMs0f5qlkggG", // david prod
   "user_34Qbtnh4X9AysmuJ9ExoxjZOESw", // david dev
   "user_35fCFwodslsEUu3aVJEZUVYkXfz", // contact zetta 
-  "user_35fBxExtXbbKRitefXI7P5CXSM0" // ancuta 
+  "user_35fBxExtXbbKRitefXI7P5CXSM0", // ancuta 
+  "user_35fIfKmiVCvPYC74Z2rzcQim6y6" //gmail david
 ];
 
 // Create the internationalization middleware
