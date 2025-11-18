@@ -8,8 +8,8 @@ const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const ADMIN_USER_IDS = [
   "user_35f7uaMn9wVbfVvKMs0f5qlkggG", // david prod
   "user_34Qbtnh4X9AysmuJ9ExoxjZOESw", // david dev
-  "user_35f6jksTFLoRdCMqaxnS89VQqGX", // contact zetta 
-  "user_35f6h4Y00GlBxoeVtLwRUB8MCx4" // ancuta 
+  "user_35fCFwodslsEUu3aVJEZUVYkXfz", // contact zetta 
+  "user_35fBxExtXbbKRitefXI7P5CXSM0" // ancuta 
 ];
 
 // Create the internationalization middleware
