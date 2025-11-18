@@ -194,9 +194,9 @@ const AboutPage = () => {
                   <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     {t('ourStory.title')}
                   </h2>
-                  <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                  {/* <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
                     {t('ourStory.subtitle')}
-                  </p>
+                  </p> */}
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-12 items-center">

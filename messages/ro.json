@@ -15,13 +15,13 @@
     "tagline": "Flotă premium, prețuri transparente și suport 24/7 — gata când ai nevoie.",
     "luxuryTransfer": {
       "headline": "Servicii Premium de Transfer",
-      "description": "Experimentează luxul și confortul cu serviciile noastre premium de transfer. Șoferi profesioniști, vehicule de lux și servicii personalizate pentru fiecare călătorie.",
+      "description": "Alege Zetta Cars pentru transferuri rapide, sigure și confortabile. Fie că mergi spre aeroport, un eveniment important sau o întâlnire de afaceri, flota noastră premium și șoferii profesioniști îți garantează o experiență liniștită și elegantă, de la plecare până la destinație.",
       "features": [
-        "Servicii de șofer profesionist",
-        "Flotă de vehicule de lux",
-        "Transferuri la aeroport disponibile",
+        "Punctualitate absolută  plecări și sosiri la timp, fără excepție",
+        "Confort premium  mașini business și van-uri spațioase, impecabil întreținute",
+        "Tarife corecte  fără extra costuri, fără surprize",
         "Suport clienți 24/7",
-        "Program flexibil"
+        "Șoferi profesioniști – discreți, atenți și bine pregătiți"
       ],
       "cta": "Rezervă Transfer"
     },
@@ -102,9 +102,9 @@
     }
   },
   "aboutPage": {
-    "title": "Despre Zetta Cars - Masini de Inchiriat Cluj-Napoca",
-    "heroTitle": "Călătoria Ta, Pasiunea Noastră",
-    "heroDescription": "Din 2024, ne-am dedicat furnizării de experiențe excepționale cu masini de inchiriat în Cluj-Napoca. Combinând vehicule de calitate cu servicii pentru clienți de excepție.",
+    "title": "Despre Zetta Cars - Masini de Inchiriat si Transferuri Cluj-Napoca",
+    "heroTitle": "Your Best Ride",
+    "heroDescription": "La Zetta Cars credem în servicii făcute cu grijă, transparență și atenție deplină la detalii. Oferim experiențe premium de închirieri și transferuri, cu mașini mereu curate, punctualitate, profesionalism și confort la fiecare drum.",
     "stats": {
       "vehicles": "Vehicule",
       "customers": "Clienți Mulțumiți",
@@ -115,20 +115,20 @@
       "title": "Valorile Noastre",
       "subtitle": "Principiile care ne ghidează în tot ceea ce facem",
       "safetyFirst": {
-        "title": "Siguranța pe Primul Loc",
-        "description": "Toate vehiculele noastre trec prin inspecții riguroase de siguranță și întreținere pentru a vă asigura liniștea la fiecare călătorie."
+        "title": "Punctualitate",
+        "description": "Respectăm timpul fiecărui client, asigurând plecări și sosiri exact la ora stabilită — fără întârzieri, fără stres."
       },
       "customerCare": {
-        "title": "Grija pentru Client",
-        "description": "Credem în construirea de relații durabile cu clienții noștri prin servicii excepționale și atenție personalizată."
+        "title": "Transparență",
+        "description": "Tarife corecte, fără costuri ascunse și fără surprize. Comunicăm clar, simplu și onest, de la început până la finalul serviciului."
       },
       "reliability": {
-        "title": "Fiabilitate",
-        "description": "Contați pe noi pentru servicii punctuale, vehicule bine întreținute și prețuri transparente fără taxe ascunse."
+        "title": "Confort Premium",
+        "description": "Fiecare mașină este atent întreținută, impecabil curată și pregătită pentru o experiență elegantă și relaxantă, indiferent de rută."
       },
       "localExpertise": {
-        "title": "Expertiză Locală",
-        "description": "Ca localnici din Cluj-Napoca, cunoaștem cele mai bune rute și vă putem oferi sfaturi din interior pentru călătoriile voastre."
+        "title": "Profesionalism",
+        "description": "O echipă dedicată, atentă și bine pregătită, care pune mereu nevoile clientului pe primul loc și oferă servicii la standarde înalte."
       }
     },
     "mission": {
@@ -137,33 +137,33 @@
       "buttonText": "Intră în Contact"
     },
     "ourStory": {
-      "title": "Povestea Noastră",
-      "subtitle": "Partenerul tău de încredere pentru explorarea Cluj-Napoca și nu numai",
-      "description1": "La Zetta Cars, credem că fiecare călătorie ar trebui să fie memorabilă. Fondată cu o pasiune pentru călătorii și un angajament pentru excelență, servim comunitatea din Cluj-Napoca cu soluții de închiriere auto fiabile și accesibile.",
-      "description2": "Indiferent dacă explorezi străzile istorice ale Cluj-Napoca, te aventurezi în frumoasa țară transilvăneană sau ai nevoie de un vehicul de încredere pentru afaceri, suntem aici să-ți facem călătoria lină și plăcută.",
-      "description3": "Flota noastră atent selectată de vehicule moderne, combinată cu prețuri transparente și servicii excepționale pentru clienți, asigură că experiența ta de închiriere depășește așteptările de fiecare dată."
+      "title": "Despre Zetta Cars - Povestea Noastră",
+      "description1": "Zetta Cars s-a născut dintr-o poveste începută în 2007, când o afacere de familie a pus bazele unor servicii construite cu seriozitate, grijă și respect pentru fiecare client. De-a lungul anilor, aceste valori au devenit fundația unei tradiții care a crescut odată cu oamenii din spatele ei o tradiție în care promisiunile sunt respectate, iar calitatea nu este niciodată negociată.",
+      "description2": "Astăzi, Zetta Cars reprezintă continuarea firească a acelei viziuni. Am preluat experiența și stabilitatea unei istorii de peste un deceniu și le-am împletit cu o abordare modernă, premium și orientată spre detalii.",
+      "description3": "La Zetta Cars, nu vorbim doar despre mașini, ci despre confort, despre încredere și despre o experiență care te însoțește de la primul contact până la destinație. Flota noastră atent aleasă, standardele ridicate și atenția personalizată pe care o oferim fiecărui client sunt modul nostru de a onora moștenirea începută în familie și de a o duce la următorul nivel.",
+      "description4": "Zetta Cars este despre eleganță, simplitate și promisiunea unei călătorii în care te simți cu adevărat bine. Un brand modern, cu rădăcini autentice — creat pentru cei care caută Your Best Ride."
       ,"imageAlt": "Mercedes"
     },
     "whyChoose": {
       "title": "De Ce să Alegeți Zetta Cars?",
       "subtitle": "Experimentați diferența care ne face să ieșim în evidență",
       "transparentPricing": {
-        "title": "Prețuri Transparente",
-        "description": "Fără taxe ascunse, fără surprize. Ce vedeți este ce plătiți, cu tarife competitive și pachete flexibile."
+        "title": "Experiență personalizată",
+        "description": "Fiecare transfer și închiriere este adaptată nevoilor tale atenție reală, servicii curate și fără stres."
       },
       "qualityFleet": {
-        "title": "Flotă de Calitate",
-        "description": "Vehicule moderne, bine întreținute de la mărci de încredere, service regulate și curățate temeinic pentru confortul vostru."
+        "title": " Flotă variată și modernă",
+        "description": "Sedanuri, SUV-uri și van-uri premium, mereu în stare impecabilă și pregătite pentru orice tip de călătorie."
       },
       "support247": {
-        "title": "Suport 24/7",
-        "description": "Asistență non-stop ori de câte ori aveți nevoie, asigurându-vă că călătoria voastră este lină de la început până la sfârșit."
+        "title": " Disponibilitate și flexibilitate",
+        "description": "Rezervări rapide și oricând ai nevoie, cu rute și ore adaptate programului tău."
       }
     }
   },
   "contactPage": {
-    "title": "Contact - Masini de Inchiriat Cluj-Napoca",
-    "subtitle": "Gata să închiriezi o mașină în Cluj-Napoca? Suntem aici să-ți facem experiența lină și memorabilă.",
+    "title": "Contactează echipa Zetta Cars",
+    "subtitle": "Ai nevoie de o mașină de închiriat sau de un transfer premium? Îți oferim suport complet, simplu și fără stres.",
     "meetTheMan": "Cunoaște Omul",
     "visionaryTitle": "Vizionarul din Spatele Volanului",
     "visionarySubtitle": "Mânat de pasiune",
@@ -177,7 +177,7 @@
       }
     },
     "letsConnect": {
-      "title": "Să Ne Conectăm",
+      "title": "Spune-ne cu ce te putem ajuta",
       "subtitle": "Multiple modalități de a ne contacta - alegeți ce funcționează cel mai bine pentru voi"
     },
     "contactMethods": {
@@ -224,7 +224,7 @@
       "addressText": "Aeroportul Internațional Cluj \"Avram Iancu\"\nStrada Traian Vuia 149-151, Cluj-Napoca 400397",
       "office": "BIROU"
       ,
-      "pickupNote": "Ai nevoie de un punct de ridicare anume? Te putem întâlni la aeroport, la hotel sau la orice adresă preferi — spune-ne doar unde."
+      "pickupNote": "Ai o locație anume în minte? Te preluăm de la aeroport, hotel sau oriunde ai nevoie."
   ,
   "pickupNoteTitle": "Punct de ridicare"
     },
@@ -816,8 +816,8 @@
     "selectReturnLocation": "Selectează locația de returnare"
   },
   "vehicleSearchForm": {
-    "title": "Masini de Inchiriat Cluj-Napoca - Găsește-ți Vehiculul Perfect",
-    "subtitle": "Explorează Cluj-Napoca cu gama noastră largă de masini de inchiriat. Rezervare ușoară, prețuri competitive, servicii de încredere.",
+    "title": "Închirieri Auto Premium",
+    "subtitle": "Alege mașina potrivită pentru orice drum flota noastră este mereu curată, modernă și pregătită pentru experiența ta perfectă.",
     "pickupLocation": "Locația de Ridicare",
     "pickupDateTime": "Data și Ora de Ridicare",
     "returnLocation": "Locația de Returnare",
@@ -843,7 +843,7 @@
     "electricLuxury": "Luxury Electric"
   },
   "contactBanner": {
-    "title": "Ai Nevoie de Ajutor la Alegere? Contactează-ne!",
+    "title": "Ai nevoie de ajutor personalizat? Contactează-ne!",
     "buttonText": "Contactează-ne"
   }
 }
