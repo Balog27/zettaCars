@@ -144,7 +144,7 @@ export default function Home() {
             <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
                 <span className="block text-primary uppercase tracking-tight">ZETTA CARS</span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">Rent and Transfers</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">Inchirieri auto si Transferuri</span>
                 <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Cluj-Napoca</span>
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">

@@ -146,7 +146,7 @@ export default function CarsPage() {
         {/* Background Slideshow Hero Section */}
         <BackgroundSlideshow 
           images={backgroundImages}
-          interval={20000}
+          interval={7000}
           className="h-[60vh] min-h-[400px] w-full"
         >
         </BackgroundSlideshow>

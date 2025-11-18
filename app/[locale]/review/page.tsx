@@ -18,7 +18,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 export default function ReviewPage() {
-  const t = useTranslations();
+  const t = useTranslations('reviewPage');
   
   const [formData, setFormData] = useState({
     name: "",
@@ -39,7 +39,7 @@ export default function ReviewPage() {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.rating || !formData.review) {
-      toast.error("Please fill in all required fields");
+      toast.error(t('validationFillFields'));
       return;
     }
 
@@ -56,7 +56,7 @@ export default function ReviewPage() {
         locale: undefined,
       });
 
-      toast.success("Thank you for your review! It will appear on the homepage shortly.");
+  toast.success(t('successToast'));
 
       // Reset form
       setFormData({
@@ -68,7 +68,7 @@ export default function ReviewPage() {
       });
     } catch (error) {
       console.error(error);
-      toast.error("Failed to submit review. Please try again.");
+  toast.error(t('errorToast'));
     } finally {
       setIsSubmitting(false);
     }
@@ -88,7 +88,7 @@ export default function ReviewPage() {
             <Link href="/">
               <Button variant="outline" size="sm" className="mb-6">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
+                {t('backToHome')}
               </Button>
             </Link>
             
@@ -97,10 +97,10 @@ export default function ReviewPage() {
                 <MessageSquare className="w-8 h-8 text-primary" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Share Your Experience
+                {t('header.title')}
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                We'd love to hear about your experience with Zetta Cars. Your feedback helps us improve our services.
+                {t('header.subtitle')}
               </p>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function ReviewPage() {
           <Card className="max-w-2xl mx-auto bg-card dark:bg-card-darker text-card-foreground">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold text-center">
-                Leave a Review
+                {t('card.title')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -117,22 +117,22 @@ export default function ReviewPage() {
                 {/* Name and Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="name">Full Name *</Label>
+                    <Label htmlFor="name">{t('nameLabel')}</Label>
                     <Input
                       id="name"
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder={t('namePlaceholder')}
                       value={formData.name}
                       onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email">Email Address *</Label>
+                    <Label htmlFor="email">{t('emailLabel')}</Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder={t('emailPlaceholder')}
                       value={formData.email}
                       onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                       required
@@ -143,7 +143,7 @@ export default function ReviewPage() {
                 {/* Star Rating */}
                 <div>
                   <Label className="text-base font-medium mb-3 block">
-                    Rate Your Experience *
+                    {t('rateLabel')}
                   </Label>
                   <div className="flex items-center space-x-1">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -165,18 +165,18 @@ export default function ReviewPage() {
                       </button>
                     ))}
                     <span className="ml-3 text-sm text-muted-foreground">
-                      {formData.rating ? `${formData.rating} out of 5 stars` : "Click to rate"}
+                      {formData.rating ? `${formData.rating} ${t('outOfFive')}` : t('ratingTextClickToRate')}
                     </span>
                   </div>
                 </div>
 
                 {/* Review Title */}
                 <div>
-                  <Label htmlFor="title">Review Title (Optional)</Label>
+                  <Label htmlFor="title">{t('reviewTitleLabel')}</Label>
                   <Input
                     id="title"
                     type="text"
-                    placeholder="e.g., Excellent service and clean cars"
+                    placeholder={t('reviewTitlePlaceholder')}
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                   />
@@ -184,17 +184,17 @@ export default function ReviewPage() {
 
                 {/* Review Text */}
                 <div>
-                  <Label htmlFor="review">Your Review *</Label>
+                  <Label htmlFor="review">{t('reviewLabel')}</Label>
                   <Textarea
                     id="review"
-                    placeholder="Tell us about your experience with Zetta Cars..."
+                    placeholder={t('reviewPlaceholder')}
                     value={formData.review}
                     onChange={(e) => setFormData(prev => ({ ...prev, review: e.target.value }))}
                     rows={6}
                     required
                   />
                   <p className="text-sm text-muted-foreground mt-1">
-                    Please share details about the vehicle, service, and overall experience.
+                    {t('reviewHelpText')}
                   </p>
                 </div>
 
@@ -209,12 +209,12 @@ export default function ReviewPage() {
                     {isSubmitting ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Submitting...
+                        {t('submitting')}
                       </>
                     ) : (
                       <>
                         <Send className="mr-2 h-4 w-4" />
-                        Submit Review
+                        {t('submitButton')}
                       </>
                     )}
                   </Button>
@@ -226,7 +226,7 @@ export default function ReviewPage() {
           {/* Additional Info */}
           <div className="text-center mt-12 text-muted-foreground">
             <p className="text-sm">
-              Your review will help other customers make informed decisions and help us improve our services.
+              {t('additionalInfo')}
             </p>
           </div>
         </div>

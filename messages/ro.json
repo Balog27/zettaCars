@@ -44,7 +44,7 @@
     },
     "bookingProcess": {
       "title": "Cum Funcționează",
-      "subtitle": "Pași simpli pentru a te pune pe drum",
+      "subtitle": "Procese rapide, drumuri fără griji",
       "steps": [
         {
           "title": "Alege Datele",
@@ -845,5 +845,33 @@
   "contactBanner": {
     "title": "Ai nevoie de ajutor personalizat? Contactează-ne!",
     "buttonText": "Contactează-ne"
+  },
+  "reviewPage": {
+    "backToHome": "Înapoi la început",
+    "header": {
+      "title": "Împărtășește-ți experiența",
+      "subtitle": "Ne-ar plăcea să aflăm despre experiența ta cu Zetta Cars. Feedback-ul tău ne ajută să îmbunătățim serviciile."
+    },
+    "card": {
+      "title": "Lasă un review"
+    },
+    "nameLabel": "Nume complet *",
+    "namePlaceholder": "Introduceți numele complet",
+    "emailLabel": "Adresă de email *",
+    "emailPlaceholder": "Introduceți emailul",
+    "rateLabel": "Evaluează experiența *",
+    "outOfFive": "din 5 stele",
+    "ratingTextClickToRate": "Click pentru a evalua",
+    "reviewTitleLabel": "Titlu review (Opțional)",
+    "reviewTitlePlaceholder": "ex: Serviciu excelent și mașini curate",
+    "reviewLabel": "Review-ul tău *",
+    "reviewPlaceholder": "Spune-ne despre experiența ta cu Zetta Cars...",
+    "reviewHelpText": "Te rugăm să oferi detalii despre vehicul, serviciu și experiența generală.",
+    "submitButton": "Trimite Review",
+    "submitting": "Se trimite...",
+    "successToast": "Mulțumim pentru review! Va apărea în curând pe pagina principală.",
+    "errorToast": "Trimiterea review-ului a eșuat. Te rugăm încearcă din nou.",
+    "validationFillFields": "Completează toate câmpurile obligatorii",
+    "additionalInfo": "Review-ul tău îi va ajuta pe ceilalți clienți să ia decizii informate și ne va ajuta să îmbunătățim serviciile."
   }
 }

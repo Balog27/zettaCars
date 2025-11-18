@@ -833,5 +833,33 @@
   "contactBanner": {
     "title": "Need Help Choosing? Contact Us!",
     "buttonText": "Contact Us"
+  },
+  "reviewPage": {
+    "backToHome": "Back to Home",
+    "header": {
+      "title": "Share Your Experience",
+      "subtitle": "We'd love to hear about your experience with Zetta Cars. Your feedback helps us improve our services."
+    },
+    "card": {
+      "title": "Leave a Review"
+    },
+    "nameLabel": "Full Name *",
+    "namePlaceholder": "Enter your full name",
+    "emailLabel": "Email Address *",
+    "emailPlaceholder": "Enter your email",
+    "rateLabel": "Rate Your Experience *",
+    "outOfFive": "out of 5 stars",
+    "ratingTextClickToRate": "Click to rate",
+    "reviewTitleLabel": "Review Title (Optional)",
+    "reviewTitlePlaceholder": "e.g., Excellent service and clean cars",
+    "reviewLabel": "Your Review *",
+    "reviewPlaceholder": "Tell us about your experience with Zetta Cars...",
+    "reviewHelpText": "Please share details about the vehicle, service, and overall experience.",
+    "submitButton": "Submit Review",
+    "submitting": "Submitting...",
+    "successToast": "Thank you for your review! It will appear on the homepage shortly.",
+    "errorToast": "Failed to submit review. Please try again.",
+    "validationFillFields": "Please fill in all required fields",
+    "additionalInfo": "Your review will help other customers make informed decisions and help us improve our services."
   }
 }

@@ -57,7 +57,7 @@ export const metadata: Metadata = {
       "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Servicii profesionale de închiriere auto cu prețuri competitive.",
     images: [
       {
-        url: "/logo.png",
+        url: "https://rngo.ro/logo.png",
         width: 1200,
         height: 630,
         alt: "Zetta Cars Cluj-Napoca - Închiriere Mașini",
@@ -69,12 +69,12 @@ export const metadata: Metadata = {
     title: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
     description:
       "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Car rentals Cluj-Napoca cu servicii de calitate.",
-    images: ["/logo.png"],
+    images: ["https://rngo.ro/logo.png"],
   },
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: "https://rngo.ro/logo.png",
+    shortcut: "https://rngo.ro/logo.png",
+    apple: "https://rngo.ro/logo.png",
   },
   alternates: {
     canonical: "https://rngo.ro",
