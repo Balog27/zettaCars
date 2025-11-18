@@ -6,11 +6,10 @@ import createMiddleware from 'next-intl/middleware';
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
 const ADMIN_USER_IDS = [
-  "user_2wrgqldXONHGnBJvkeLqTMisRiZ", // mihai dev env
-  "user_2ysDX4oi6GmtJ9xKYVBSFFFjflH", // tudor prod env
-  "user_2xbWHVNoaZTbon4ptfxvjwet6lT", // mihai prod env
-  "user_34hX57hWaPmeMPS5oUMtSwV3QL2",  // new admin user
-  "user_34Qbtnh4X9AysmuJ9ExoxjZOESw"
+  "user_35f7uaMn9wVbfVvKMs0f5qlkggG", // david prod
+  "user_34Qbtnh4X9AysmuJ9ExoxjZOESw", // david dev
+  "user_35f6jksTFLoRdCMqaxnS89VQqGX", // contact zetta 
+  "user_35f6h4Y00GlBxoeVtLwRUB8MCx4" // ancuta 
 ];
 
 // Create the internationalization middleware
