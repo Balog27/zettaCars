@@ -3,7 +3,17 @@ import { NextResponse } from "next/server";
 import createMiddleware from 'next-intl/middleware';
 
 // Admin routes that require admin role
-const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+// The app uses locale prefixes like /ro and /en. createRouteMatcher used with
+// "/admin(.*)" won't match paths like `/ro/admin`. Use a small helper that
+// recognizes both prefixed and non-prefixed admin routes.
+const LOCALES = ['ro', 'en'];
+const isAdminRoute = (req: any) => {
+  const pathname = req?.nextUrl?.pathname || (typeof req === 'string' ? req : '/');
+  // Match either /admin or /<locale>/admin
+  const localePart = LOCALES.join('|');
+  const re = new RegExp(`^\\/(?:${localePart})?\\/admin(\\b|\\/|$)`);
+  return re.test(pathname);
+};
 
 const ADMIN_USER_IDS = [
   //"user_35f7uaMn9wVbfVvKMs0f5qlkggG", // david prod
