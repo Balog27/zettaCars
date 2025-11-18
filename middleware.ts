@@ -25,7 +25,9 @@ const ADMIN_USER_IDS = [
 const intlMiddleware = createMiddleware({
   locales: ['ro', 'en'],
   defaultLocale: 'ro',
-  localePrefix: 'always' // Both /ro and /en will have explicit prefixes
+  // Set localePrefix to 'as-needed' to avoid automatically redirecting the default
+  // locale to a prefixed path (so visiting /admin won't be forced to /ro/admin).
+  localePrefix: 'as-needed'
 });
 
 export default clerkMiddleware(async (auth, req) => {
