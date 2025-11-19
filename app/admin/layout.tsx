@@ -41,6 +41,12 @@ export default function AdminLayout({
       console.log("isMounted:", isMounted)  
       console.log("Clerk user:", user)
       console.log("User email:", user?.emailAddresses?.[0]?.emailAddress)
+      // Debug public env var values (client-side)
+      try {
+        console.log('client: NEXT_PUBLIC_ADMIN_EMAILS raw =', process.env.NEXT_PUBLIC_ADMIN_EMAILS)
+      } catch (e) {
+        console.log('client: cannot read process.env.NEXT_PUBLIC_ADMIN_EMAILS', e)
+      }
       console.log("=== ADMIN DEBUG END ===")
 
       // If no user, redirect
@@ -51,9 +57,19 @@ export default function AdminLayout({
       }
 
       // Simple email check for admin (temporary)
-      const userEmail = user.emailAddresses?.[0]?.emailAddress
-      const adminEmails = ["david27balogg@yahoo.com"] // Add your email here
-      
+      // Prefer using NEXT_PUBLIC_ADMIN_EMAILS so the client list can be configured per deploy.
+      const userEmail = user.emailAddresses?.[0]?.emailAddress?.toLowerCase()
+      const envAdminEmails = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_ADMIN_EMAILS
+        ? process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean)
+        : []
+
+      // Log what the client computed for easier debugging in production
+      console.log('client: envAdminEmails =', envAdminEmails)
+
+      // Fallback to a small local/dev list so local dev still works without env vars
+      const fallbackAdminEmails = ["david27balogg@yahoo.com"]
+      const adminEmails = envAdminEmails.length > 0 ? envAdminEmails : fallbackAdminEmails
+
       if (!userEmail || !adminEmails.includes(userEmail)) {
         console.log(`User email "${userEmail}" is not in admin list, redirecting...`)
         router.push("/")
