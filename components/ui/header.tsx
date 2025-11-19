@@ -177,91 +177,106 @@ export function Header({ logo, brandName }: HeaderProps) {
                   />
                 </button>
               </DrawerTrigger>
-              <DrawerContent className="h-full overflow-auto">
-                <DrawerHeader className="text-left">
-                  <DrawerTitle className="flex items-center space-x-2">
-                    {logo}
-                    {brandName && <span className="text-lg font-semibold">{brandName}</span>}
-                  </DrawerTitle>
-                  <DrawerDescription>
-                    Navigate through our services
-                  </DrawerDescription>
-                </DrawerHeader>
-                
-                <div className="px-4 pb-4">
-                  <nav className="space-y-2">
-                    {menuItems.map((item, index) => (
-                      <Link
-                        key={index}
-                        href={item.href}
-                        className={cn(
-                          "block py-3 px-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                          // when active, use the accent-bg paired foreground so text remains readable
-                          pathname === item.href ? "text-accent-foreground bg-accent" : "text-muted-foreground"
-                        )}
-                        onClick={handleLinkClick}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </nav>
-                  
-                  {/* Language selector in mobile drawer */}
-                  <div className="mt-4 pt-4 border-t">
-                    <div className="mb-2 text-sm font-medium text-muted-foreground">{t('language')}</div>
-                    <LanguageSelector />
-                  </div>
-                </div>
 
-                <DrawerFooter className="py-6">
-                  <SignedIn>
-                    <div className="flex flex-col gap-3 border-t pt-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full justify-start" 
-                        onClick={() => {
-                          router.push('/profile');
-                          handleLinkClick();
-                        }}
-                      >
-                        <User className="mr-2 h-4 w-4" />
-                        {t('profile')}
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full justify-start" 
-                        onClick={() => {
-                          signOut({ redirectUrl: '/' });
-                          handleLinkClick();
-                        }}
-                      >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        {t('logout')}
-                      </Button>
+              <DrawerContent>
+                <div className="flex flex-col h-screen">
+                  <DrawerHeader className="text-left">
+                    <DrawerTitle className="flex items-center space-x-2">
+                      {logo}
+                      {brandName && <span className="text-lg font-semibold">{brandName}</span>}
+                    </DrawerTitle>
+                    <DrawerDescription>
+                      Navigate through our services
+                    </DrawerDescription>
+                  </DrawerHeader>
+
+                  <div className="px-4 pb-4 flex-1 overflow-auto">
+                    <nav className="space-y-2">
+                      {menuItems.map((item, index) => (
+                        <Link
+                          key={index}
+                          href={item.href}
+                          className={cn(
+                            "block py-3 px-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                            pathname === item.href ? "text-accent-foreground bg-accent" : "text-muted-foreground"
+                          )}
+                          onClick={handleLinkClick}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </nav>
+
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="mb-2 text-sm font-medium text-muted-foreground">{t('language')}</div>
+                      <LanguageSelector />
                     </div>
-                  </SignedIn>
-                  <SignedOut>
-                    <div className="flex flex-col gap-3 border-t pt-4">
-                      <SignInButton mode="modal">
-                        <Button variant="outline" size="sm" className="w-full" onClick={handleLinkClick}>
-                          {t('login')}
+                  </div>
+
+                  <DrawerFooter className="py-6 flex-shrink-0">
+                    <SignedIn>
+                      <div className="flex flex-col gap-3 border-t pt-4">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full justify-start" 
+                          onClick={() => {
+                            router.push(`/${locale}/profile`);
+                            handleLinkClick();
+                          }}
+                        >
+                          <User className="mr-2 h-4 w-4" />
+                          {t('profile')}
                         </Button>
-                      </SignInButton>
-                      <SignInButton mode="modal">
-                        <Button size="sm" className="w-full" onClick={handleLinkClick}>
-                          {t('signUp')}
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full justify-start" 
+                          onClick={() => {
+                            signOut({ redirectUrl: '/' });
+                            handleLinkClick();
+                          }}
+                        >
+                          <LogOut className="mr-2 h-4 w-4" />
+                          {t('logout')}
                         </Button>
-                      </SignInButton>
+                      </div>
+                    </SignedIn>
+                    <SignedOut>
+                      <div className="flex flex-col gap-3 border-t pt-4">
+                        <SignInButton mode="modal">
+                          <Button variant="outline" size="sm" className="w-full" onClick={handleLinkClick}>
+                            {t('login')}
+                          </Button>
+                        </SignInButton>
+                        <SignInButton mode="modal">
+                          <Button size="sm" className="w-full" onClick={handleLinkClick}>
+                            {t('signUp')}
+                          </Button>
+                        </SignInButton>
+                      </div>
+                    </SignedOut>
+                    <div className="px-0 py-3 border-t">
+                      {/* Ensure login / sign up buttons are clearly visible on mobile */}
+                      <SignedOut>
+                        <div className="px-4 space-y-3">
+                          <SignInButton mode="modal">
+                            <Button className="w-full" variant="outline">{t('login')}</Button>
+                          </SignInButton>
+                          <SignInButton mode="modal">
+                            <Button className="w-full">{t('signUp')}</Button>
+                          </SignInButton>
+                        </div>
+                      </SignedOut>
                     </div>
-                  </SignedOut>
-                  <DrawerClose asChild>
-                    <Button variant="outline" className="mt-4">
-                      Close
-                    </Button>
-                  </DrawerClose>
-                </DrawerFooter>
+
+                    <DrawerClose asChild>
+                      <Button variant="outline" className="mt-4 mb-4 w-full">
+                        Close
+                      </Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </div>
               </DrawerContent>
             </Drawer>
           </div>
