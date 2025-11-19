@@ -67,7 +67,13 @@ export default function AdminLayout({
       console.log('client: envAdminEmails =', envAdminEmails)
 
       // Fallback to a small local/dev list so local dev still works without env vars
-      const fallbackAdminEmails = ["david27balogg@yahoo.com"]
+      // Keep this fallback list in sync with the server-side middleware defaults.
+      const fallbackAdminEmails = [
+        "david.balogg27@gmail.com",
+        "contact@zettacarrental.com",
+        "ancaturcu04@gmail.com",
+        "david27balogg@yahoo.com",
+      ]
       const adminEmails = envAdminEmails.length > 0 ? envAdminEmails : fallbackAdminEmails
 
       if (!userEmail || !adminEmails.includes(userEmail)) {
