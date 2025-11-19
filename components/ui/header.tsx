@@ -177,7 +177,7 @@ export function Header({ logo, brandName }: HeaderProps) {
                   />
                 </button>
               </DrawerTrigger>
-              <DrawerContent>
+              <DrawerContent className="h-full overflow-auto">
                 <DrawerHeader className="text-left">
                   <DrawerTitle className="flex items-center space-x-2">
                     {logo}
@@ -196,7 +196,8 @@ export function Header({ logo, brandName }: HeaderProps) {
                         href={item.href}
                         className={cn(
                           "block py-3 px-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                          pathname === item.href ? "text-primary bg-accent" : "text-muted-foreground"
+                          // when active, use the accent-bg paired foreground so text remains readable
+                          pathname === item.href ? "text-accent-foreground bg-accent" : "text-muted-foreground"
                         )}
                         onClick={handleLinkClick}
                       >

@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rngo.ro"),
+  // Use the public production domain so social previews and canonical links point to the live site
+  metadataBase: new URL("https://www.zettacarrental.com"),
   title: {
     default: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
     template: "%s | Zetta Cars Cluj-Napoca",
@@ -57,7 +58,8 @@ export const metadata: Metadata = {
       "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Servicii profesionale de închiriere auto cu prețuri competitive.",
     images: [
       {
-        url: "https://rngo.ro/logo.png",
+        // use the full-width logo intended for social previews (serve from /public)
+        url: "/logoFull.jpg",
         width: 1200,
         height: 630,
         alt: "Zetta Cars Cluj-Napoca - Închiriere Mașini",
@@ -69,18 +71,19 @@ export const metadata: Metadata = {
     title: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
     description:
       "Masini de inchiriat Cluj-Napoca cu Zetta Cars. Car rentals Cluj-Napoca cu servicii de calitate.",
-    images: ["https://rngo.ro/logo.png"],
+    images: ["/logoFull.jpg"],
   },
-  icons: {
-    icon: "https://rngo.ro/logo.png",
-    shortcut: "https://rngo.ro/logo.png",
-    apple: "https://rngo.ro/logo.png",
+    icons: {
+    // Use the Zetta Cars logo as the favicon and apple-touch icon
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logoFull.jpg",
   },
   alternates: {
-    canonical: "https://rngo.ro",
+    canonical: "https://www.zettacarrental.com",
     languages: {
-      "ro-RO": "https://rngo.ro/ro",
-      "en-US": "https://rngo.ro/en",
+      "ro-RO": "https://www.zettacarrental.com/ro",
+      "en-US": "https://www.zettacarrental.com/en",
     },
   },
 };
@@ -92,6 +95,12 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
+      <head>
+  {/* explicit favicon links to ensure the browser shows a tab image in dev and production */}
+  <link rel="icon" href="/logo.png" />
+  <link rel="shortcut icon" href="/logo.png" />
+  <link rel="apple-touch-icon" href="/logoFull.jpg" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -108,7 +117,7 @@ export default function RootLayout({
       <Script id="google-ads-init" strategy="afterInteractive">
         {`
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
+            function gtag(){dataLayer.push(arguments);} 
             gtag('js', new Date());
             gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');
           `}

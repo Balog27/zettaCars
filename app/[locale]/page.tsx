@@ -28,7 +28,8 @@ import { Vehicle } from "@/types/vehicle"; // Import centralized Vehicle type
 import { useHomepageFeaturedVehicles } from "@/hooks/useHomepageFeaturedVehicles";
 import { useHomepageReviews } from "@/hooks/useHomepageReviews";
 import { sectionAnimationVariants } from "@/lib/animations";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useVehicleSearch } from "@/hooks/useVehicleSearch";
 import { SearchData } from "@/lib/searchStorage";
 
@@ -89,6 +90,8 @@ export default function Home() {
   // }, [ensureUserMutation]);
 
   const t = useTranslations('homepage');
+  const locale = useLocale();
+  const router = useRouter();
   const tTestimonials = useTranslations('testimonials');
   const tFaq = useTranslations('faq');
   const { vehiclesToDisplay, currentTitle, isLoading } = useHomepageFeaturedVehicles();
@@ -155,7 +158,7 @@ export default function Home() {
                 asChild
                 className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
               >
-                <Link href="/cars">
+                <Link href={`/${locale}/cars`}>
                   {t('hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -241,7 +244,7 @@ export default function Home() {
                       variant="default"
                       size="lg"
                       className="bg-primary hover:bg-primary/90 text-white"
-                      onClick={() => window.location.href = '/cars'}
+                        onClick={() => router.push(`/${locale}/cars`)}
                     >
                       {t('viewAllCars')}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -295,7 +298,7 @@ export default function Home() {
                     asChild
                     className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
-                    <Link href="/transfers">
+                    <Link href={`/${locale}/transfers`}>
                       {t('luxuryTransfer.cta')}
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
