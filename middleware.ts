@@ -5,13 +5,18 @@ import createMiddleware from 'next-intl/middleware';
 // Admin routes that require admin role
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
-const ADMIN_USER_IDS = [
-  //"user_35f7uaMn9wVbfVvKMs0f5qlkggG", // david prod
-  "user_34Qbtnh4X9AysmuJ9ExoxjZOESw", // david dev
-  "user_35fCFwodslsEUu3aVJEZUVYkXfz", // contact zetta 
-  "user_35fBxExtXbbKRitefXI7P5CXSM0", // ancuta 
-  "user_35fIfKmiVCvPYC74Z2rzcQim6y6" //gmail david
-];
+// Prefer ADMIN_USER_IDS from environment in production so lists can differ per deploy.
+// Format: ADMIN_USER_IDS="user_xxx,user_yyy"
+const ADMIN_USER_IDS_FROM_ENV = process.env.ADMIN_USER_IDS;
+const ADMIN_USER_IDS = ADMIN_USER_IDS_FROM_ENV
+  ? ADMIN_USER_IDS_FROM_ENV.split(",").map((s) => s.trim()).filter(Boolean)
+  : [
+      "user_35f7uaMn9wVbfVvKMs0f5qlkggG", // david prod
+      "user_34Qbtnh4X9AysmuJ9ExoxjZOESw", // david dev
+      "user_35fCFwodslsEUu3aVJEZUVYkXfz", // contact zetta
+      "user_35fBxExtXbbKRitefXI7P5CXSM0", // ancuta
+      "user_35fIfKmiVCvPYC74Z2rzcQim6y6", // gmail david
+    ];
 
 // Create the internationalization middleware
 const intlMiddleware = createMiddleware({
