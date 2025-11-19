@@ -39,28 +39,28 @@ export default function AdminLayout({
 
   // Simple admin check - prefer authoritative DB role check (convex users.role)
   useEffect(() => {
-    if (isLoaded && isMounted) {
+    // Only run once Clerk has loaded and the client is mounted.
+    // Also wait for the Convex query to settle (dbUser !== undefined) before making a decision.
+    if (isLoaded && isMounted && dbUser !== undefined) {
       // If no Clerk user, redirect immediately
       if (!user) {
         router.push("/")
         return
       }
 
-      // Wait for Convex query to resolve. `dbUser === undefined` means still loading.
-      // The top-level render already shows a loading state while dbUser === undefined.
+      // If no DB user was found, treat as non-admin and redirect
       if (dbUser === null) {
-        // No db user found - ensureUser should normally create one, but treat as non-admin for safety
         router.push("/")
         return
       }
 
-      // If the DB user exists, check the authoritative role field
+      // If the DB user exists but their role is not admin, redirect
       if (dbUser && dbUser.role !== "admin") {
         router.push("/")
         return
       }
     }
-  }, [isLoaded, isMounted, user, router])
+  }, [isLoaded, isMounted, user, dbUser, router])
 
   // Show loading while checking authentication and while Convex query is unresolved
   if (!isLoaded || !isMounted || dbUser === undefined) {

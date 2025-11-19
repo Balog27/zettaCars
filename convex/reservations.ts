@@ -180,10 +180,12 @@ export const getReservationsByVehicle = query({
 export const getReservationsByPickupLocation = query({
   args: { pickupLocation: v.string() },
   handler: async (ctx, args) => {
-    const user = await getCurrentUserOrThrow(ctx);
+    const user = await getCurrentUser(ctx);
 
-    if (user.role !== "admin") {
-      throw new Error("User not authorized (admin only).");
+    // Return empty list for unauthorized users instead of throwing so the client
+    // can handle the result without an uncaught exception.
+    if (!user || user.role !== "admin") {
+      return [];
     }
 
     return await ctx.db
@@ -202,10 +204,10 @@ export const getReservationsByPaymentMethod = query({
     ) 
   },
   handler: async (ctx, args) => {
-    const user = await getCurrentUserOrThrow(ctx);
+    const user = await getCurrentUser(ctx);
 
-    if (user.role !== "admin") {
-      throw new Error("User not authorized (admin only).");
+    if (!user || user.role !== "admin") {
+      return [];
     }
 
     return await ctx.db
@@ -219,11 +221,15 @@ export const getReservationsByPaymentMethod = query({
 export const getAllReservations = query({
   args: {},
   handler: async (ctx) => {
-    const user = await getCurrentUserOrThrow(ctx);
+    const user = await getCurrentUser(ctx);
 
-    if (user.role !== "admin") {
-      throw new Error("User not authorized (admin only).");
+    // If the user isn't authenticated or isn't an admin, return an empty array
+    // instead of throwing. This prevents client-side exceptions when non-admin
+    // users accidentally mount admin UI that calls this query.
+    if (!user || user.role !== "admin") {
+      return [];
     }
+
     return await ctx.db.query("reservations").order("desc").collect();
   },
 });

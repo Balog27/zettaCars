@@ -11,6 +11,8 @@ import {
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const chartConfig = {
   revenue: {
@@ -24,7 +26,39 @@ const chartConfig = {
 };
 
 export default function AdminOverviewPage() {
-  // Fetch real data from Convex
+  // First, fetch the current user's DB profile to confirm admin role.
+  const dbUser = useQuery(api.users.get);
+  const router = useRouter();
+
+  // If the Convex query for user is still loading, show loading state below. If
+  // the user is not admin, redirect them back to the homepage.
+  useEffect(() => {
+    if (dbUser === null) {
+      // No DB user found -> not authorized for admin pages
+      router.push("/");
+    } else if (dbUser && dbUser.role !== "admin") {
+      router.push("/");
+    }
+  }, [dbUser, router]);
+
+  if (dbUser === undefined) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Only mount the heavy admin content after we've confirmed the user is admin.
+  if (!dbUser || dbUser.role !== "admin") {
+    return null;
+  }
+
+  return <AdminOverviewContent />;
+}
+
+function AdminOverviewContent() {
+  // Fetch real data from Convex (admin-only queries live inside this child component)
   const vehicles = useQuery(api.vehicles.getAllVehicles);
   const reservations = useQuery(api.reservations.getAllReservations);
 
