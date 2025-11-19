@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SignInButton, SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
 import React from "react";
 import { Menu, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -213,7 +213,7 @@ export function Header({ logo, brandName }: HeaderProps) {
                     </div>
                   </div>
 
-                  <DrawerFooter className="py-6 flex-shrink-0">
+                  <DrawerFooter className="py-6 flex-shrink-0" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)' }}>
                     <SignedIn>
                       <div className="flex flex-col gap-3 border-t pt-4">
                         <Button 
@@ -250,9 +250,9 @@ export function Header({ logo, brandName }: HeaderProps) {
                           <SignInButton mode="modal">
                             <Button className="w-full" variant="outline">{t('login')}</Button>
                           </SignInButton>
-                          <SignInButton mode="modal">
+                          <SignUpButton mode="modal">
                             <Button className="w-full">{t('signUp')}</Button>
-                          </SignInButton>
+                          </SignUpButton>
                         </div>
                       </SignedOut>
                     </div>
