@@ -242,20 +242,7 @@ export function Header({ logo, brandName }: HeaderProps) {
                         </Button>
                       </div>
                     </SignedIn>
-                    <SignedOut>
-                      <div className="flex flex-col gap-3 border-t pt-4">
-                        <SignInButton mode="modal">
-                          <Button variant="outline" size="sm" className="w-full" onClick={handleLinkClick}>
-                            {t('login')}
-                          </Button>
-                        </SignInButton>
-                        <SignInButton mode="modal">
-                          <Button size="sm" className="w-full" onClick={handleLinkClick}>
-                            {t('signUp')}
-                          </Button>
-                        </SignInButton>
-                      </div>
-                    </SignedOut>
+                    
                     <div className="px-0 py-3 border-t">
                       {/* Ensure login / sign up buttons are clearly visible on mobile */}
                       <SignedOut>
