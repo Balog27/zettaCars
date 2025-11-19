@@ -178,44 +178,42 @@ export function Header({ logo, brandName }: HeaderProps) {
                 </button>
               </DrawerTrigger>
 
-              <DrawerContent>
-                <div className="flex flex-col h-screen">
-                  <DrawerHeader className="text-left">
-                    <DrawerTitle className="flex items-center space-x-2">
-                      {logo}
-                      {brandName && <span className="text-lg font-semibold">{brandName}</span>}
-                    </DrawerTitle>
-                    <DrawerDescription>
-                      Navigate through our services
-                    </DrawerDescription>
-                  </DrawerHeader>
+              <DrawerContent className="h-screen overflow-auto">
+                <DrawerHeader className="text-left">
+                  <DrawerTitle className="flex items-center space-x-2">
+                    {logo}
+                    {brandName && <span className="text-lg font-semibold">{brandName}</span>}
+                  </DrawerTitle>
+                  <DrawerDescription>
+                    Navigate through our services
+                  </DrawerDescription>
+                </DrawerHeader>
 
-                  <div className="px-4 pb-4 flex-1 overflow-auto">
-                    <nav className="space-y-2">
-                      {menuItems.map((item, index) => (
-                        <Link
-                          key={index}
-                          href={item.href}
-                          className={cn(
-                            "block py-3 px-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                            pathname === item.href ? "text-accent-foreground bg-accent" : "text-muted-foreground"
-                          )}
-                          onClick={handleLinkClick}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </nav>
+                <div className="px-4 pb-4">
+                  <nav className="space-y-2">
+                    {menuItems.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.href}
+                        className={cn(
+                          "block py-3 px-2 rounded-md text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                          pathname === item.href ? "text-accent-foreground bg-accent" : "text-muted-foreground"
+                        )}
+                        onClick={handleLinkClick}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </nav>
 
-                    <div className="mt-4 pt-4 border-t">
-                      <div className="mb-2 text-sm font-medium text-muted-foreground">{t('language')}</div>
-                      <LanguageSelector />
-                    </div>
+                  <div className="mt-4 pt-4 border-t">
+                    <div className="mb-2 text-sm font-medium text-muted-foreground">{t('language')}</div>
+                    <LanguageSelector />
                   </div>
 
-                  <DrawerFooter className="py-6 flex-shrink-0" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)' }}>
+                  <div className="mt-6 pt-6 border-t">
                     <SignedIn>
-                      <div className="flex flex-col gap-3 border-t pt-4">
+                      <div className="flex flex-col gap-3">
                         <Button 
                           variant="outline" 
                           size="sm" 
@@ -242,10 +240,9 @@ export function Header({ logo, brandName }: HeaderProps) {
                         </Button>
                       </div>
                     </SignedIn>
-                    
-                    <div className="px-0 py-3 border-t">
-                      {/* Ensure login / sign up buttons are clearly visible on mobile */}
-                      <SignedOut>
+
+                    <SignedOut>
+                      <div className="px-0 py-3">
                         <div className="px-4 space-y-3">
                           <SignInButton mode="modal">
                             <Button className="w-full" variant="outline">{t('login')}</Button>
@@ -254,15 +251,18 @@ export function Header({ logo, brandName }: HeaderProps) {
                             <Button className="w-full">{t('signUp')}</Button>
                           </SignUpButton>
                         </div>
-                      </SignedOut>
-                    </div>
+                      </div>
+                    </SignedOut>
 
+                  </div>
+
+                  <div className="px-4 mt-6 mb-6">
                     <DrawerClose asChild>
-                      <Button variant="outline" className="mt-4 mb-4 w-full">
+                      <Button variant="outline" className="w-full">
                         Close
                       </Button>
                     </DrawerClose>
-                  </DrawerFooter>
+                  </div>
                 </div>
               </DrawerContent>
             </Drawer>
