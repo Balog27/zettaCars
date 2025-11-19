@@ -82,7 +82,9 @@ export default clerkMiddleware(async (auth, req) => {
       if (ADMIN_EMAILS.length > 0) {
         try {
           // Try to fetch the Clerk user and inspect email addresses
-          const user = await clerkClient.users.getUser(userId);
+          // clerkClient is an async accessor in some Clerk versions, so call it first
+          const client = await clerkClient();
+          const user = await client.users.getUser(userId);
           const emails: string[] = (user?.emailAddresses || []).map((e: any) => (e?.emailAddress || e?.email || '').toLowerCase()).filter(Boolean);
           const matched = ADMIN_EMAILS.some((a) => emails.includes(a));
           console.log('middleware: adminEmailCheck', { userId, emails, ADMIN_EMAILS, matched });
