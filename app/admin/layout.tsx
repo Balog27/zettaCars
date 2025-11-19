@@ -17,6 +17,8 @@ import {
 import { usePathname, useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
 import React, { useEffect, useState } from "react"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export default function AdminLayout({
   children,
@@ -24,6 +26,8 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const { user, isLoaded } = useUser()
+  // Query Convex for the user's DB profile (contains the authoritative `role`)
+  const dbUser = useQuery(api.users.get)
   const router = useRouter()
   const pathname = usePathname()
   const [isMounted, setIsMounted] = useState(false)
@@ -33,61 +37,33 @@ export default function AdminLayout({
     setIsMounted(true)
   }, [])
 
-  // Simple admin check - for now just check if user email is yours
+  // Simple admin check - prefer authoritative DB role check (convex users.role)
   useEffect(() => {
     if (isLoaded && isMounted) {
-      console.log("=== ADMIN DEBUG START ===")
-      console.log("isLoaded:", isLoaded)
-      console.log("isMounted:", isMounted)  
-      console.log("Clerk user:", user)
-      console.log("User email:", user?.emailAddresses?.[0]?.emailAddress)
-      // Debug public env var values (client-side)
-      try {
-        console.log('client: NEXT_PUBLIC_ADMIN_EMAILS raw =', process.env.NEXT_PUBLIC_ADMIN_EMAILS)
-      } catch (e) {
-        console.log('client: cannot read process.env.NEXT_PUBLIC_ADMIN_EMAILS', e)
-      }
-      console.log("=== ADMIN DEBUG END ===")
-
-      // If no user, redirect
+      // If no Clerk user, redirect immediately
       if (!user) {
-        console.log("No user signed in, redirecting...")
         router.push("/")
         return
       }
 
-      // Simple email check for admin (temporary)
-      // Prefer using NEXT_PUBLIC_ADMIN_EMAILS so the client list can be configured per deploy.
-      const userEmail = user.emailAddresses?.[0]?.emailAddress?.toLowerCase()
-      const envAdminEmails = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_ADMIN_EMAILS
-        ? process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean)
-        : []
-
-      // Log what the client computed for easier debugging in production
-      console.log('client: envAdminEmails =', envAdminEmails)
-
-      // Fallback to a small local/dev list so local dev still works without env vars
-      // Keep this fallback list in sync with the server-side middleware defaults.
-      const fallbackAdminEmails = [
-        "david.balogg27@gmail.com",
-        "contact@zettacarrental.com",
-        "ancaturcu04@gmail.com",
-        "david27balogg@yahoo.com",
-      ]
-      const adminEmails = envAdminEmails.length > 0 ? envAdminEmails : fallbackAdminEmails
-
-      if (!userEmail || !adminEmails.includes(userEmail)) {
-        console.log(`User email "${userEmail}" is not in admin list, redirecting...`)
+      // Wait for Convex query to resolve. `dbUser === undefined` means still loading.
+      // The top-level render already shows a loading state while dbUser === undefined.
+      if (dbUser === null) {
+        // No db user found - ensureUser should normally create one, but treat as non-admin for safety
         router.push("/")
         return
       }
 
-      console.log("✅ Admin access granted based on email!")
+      // If the DB user exists, check the authoritative role field
+      if (dbUser && dbUser.role !== "admin") {
+        router.push("/")
+        return
+      }
     }
   }, [isLoaded, isMounted, user, router])
 
-  // Show loading while checking authentication
-  if (!isLoaded || !isMounted) {
+  // Show loading while checking authentication and while Convex query is unresolved
+  if (!isLoaded || !isMounted || dbUser === undefined) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-lg">Loading...</div>
