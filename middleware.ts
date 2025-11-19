@@ -62,8 +62,17 @@ export default clerkMiddleware(async (auth, req) => {
         return NextResponse.redirect(homeUrl);
       }
 
+      // Log the currently configured admin list (helpful in production)
+      try {
+        console.log('middleware: ADMIN_USER_IDS', ADMIN_USER_IDS);
+      } catch (e) {
+        // ignore logging errors
+      }
+
       // If user is authenticated but not an admin, redirect to home (log the mismatch)
-      if (!ADMIN_USER_IDS.includes(userId)) {
+      const isAdmin = ADMIN_USER_IDS.includes(userId);
+      console.log('middleware: isAdminCheck', { userId, isAdmin });
+      if (!isAdmin) {
         console.warn('middleware: authenticated user is not in ADMIN_USER_IDS', { userId });
         const homeUrl = new URL('/', req.url);
         return NextResponse.redirect(homeUrl);
