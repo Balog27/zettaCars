@@ -25,6 +25,20 @@ const ADMIN_EMAILS = ADMIN_EMAILS_FROM_ENV
   ? ADMIN_EMAILS_FROM_ENV.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean)
   : [];
 
+// Temporary fallback: if server-side ADMIN_EMAILS is not set, try the public
+// NEXT_PUBLIC_ADMIN_EMAILS value. This helps when the deploy only set the
+// public env and not the server-side one. It's a convenience fallback and
+// should be replaced by setting ADMIN_EMAILS in the server environment.
+let EFFECTIVE_ADMIN_EMAILS = ADMIN_EMAILS;
+try {
+  if (EFFECTIVE_ADMIN_EMAILS.length === 0 && process.env.NEXT_PUBLIC_ADMIN_EMAILS) {
+    EFFECTIVE_ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+    console.log('middleware: falling back to NEXT_PUBLIC_ADMIN_EMAILS', EFFECTIVE_ADMIN_EMAILS);
+  }
+} catch (e) {
+  // ignore
+}
+
 // Create the internationalization middleware
 const intlMiddleware = createMiddleware({
   locales: ['ro', 'en'],
@@ -79,15 +93,15 @@ export default clerkMiddleware(async (auth, req) => {
 
       // Determine admin status. Prefer email-based check if ADMIN_EMAILS is set.
       let isAdmin = false;
-      if (ADMIN_EMAILS.length > 0) {
+      if (EFFECTIVE_ADMIN_EMAILS.length > 0) {
         try {
           // Try to fetch the Clerk user and inspect email addresses
           // clerkClient is an async accessor in some Clerk versions, so call it first
           const client = await clerkClient();
           const user = await client.users.getUser(userId);
           const emails: string[] = (user?.emailAddresses || []).map((e: any) => (e?.emailAddress || e?.email || '').toLowerCase()).filter(Boolean);
-          const matched = ADMIN_EMAILS.some((a) => emails.includes(a));
-          console.log('middleware: adminEmailCheck', { userId, emails, ADMIN_EMAILS, matched });
+          const matched = EFFECTIVE_ADMIN_EMAILS.some((a) => emails.includes(a));
+          console.log('middleware: adminEmailCheck', { userId, emails, EFFECTIVE_ADMIN_EMAILS, matched });
           isAdmin = matched;
         } catch (e) {
           console.error('middleware: error fetching clerk user for email check', e);
