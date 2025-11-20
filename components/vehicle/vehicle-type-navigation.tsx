@@ -10,16 +10,25 @@ interface VehicleTypeNavigationProps {
 
 export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTypeNavigationProps) {
   const t = useTranslations('vehicleTypes');
+  // Helper to format fallback labels (e.g. "hatchback" -> "Hatchback")
+  const formatLabel = (k?: string | null) => {
+    if (!k) return '';
+    return k
+      .split(/[-_\s]+/)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+  };
 
+  // Keep 'All vehicles' translatable; other type labels fall back to a humanized key.
   const vehicleTypes = [
     { key: null, label: t('allVehicles') },
-    // Keys are normalized to lowercase to match `vehicle.type` and `vehicle.class` values
-    { key: 'compact', label: 'Compact' },
-    { key: 'comfort', label: 'Comfort' },
-    { key: 'business', label: 'Business' },
-    { key: 'suv', label: 'SUV' },
-    { key: 'premium', label: 'Premium' },
-    { key: 'van', label: 'Van' }
+    // Primary vehicle types shown in the UI
+    { key: 'sedan', label: formatLabel('sedan') },
+    { key: 'suv', label: formatLabel('suv') },
+    { key: 'hatchback', label: formatLabel('hatchback') },
+    { key: 'sports', label: formatLabel('sports') },
+    { key: 'truck', label: formatLabel('truck') },
+    { key: 'van', label: formatLabel('van') }
   ];
 
   return (
