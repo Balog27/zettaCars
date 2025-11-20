@@ -141,8 +141,9 @@
       "description1": "Zetta Cars s-a născut dintr-o poveste începută în 2007, când o afacere de familie a pus bazele unor servicii construite cu seriozitate, grijă și respect pentru fiecare client. De-a lungul anilor, aceste valori au devenit fundația unei tradiții care a crescut odată cu oamenii din spatele ei o tradiție în care promisiunile sunt respectate, iar calitatea nu este niciodată negociată.",
       "description2": "Astăzi, Zetta Cars reprezintă continuarea firească a acelei viziuni. Am preluat experiența și stabilitatea unei istorii de peste un deceniu și le-am împletit cu o abordare modernă, premium și orientată spre detalii.",
       "description3": "La Zetta Cars, nu vorbim doar despre mașini, ci despre confort, despre încredere și despre o experiență care te însoțește de la primul contact până la destinație. Flota noastră atent aleasă, standardele ridicate și atenția personalizată pe care o oferim fiecărui client sunt modul nostru de a onora moștenirea începută în familie și de a o duce la următorul nivel.",
-      "description4": "Zetta Cars este despre eleganță, simplitate și promisiunea unei călătorii în care te simți cu adevărat bine. Un brand modern, cu rădăcini autentice — creat pentru cei care caută Your Best Ride."
-      ,"imageAlt": "Mercedes"
+      "description4": "Zetta Cars este despre eleganță, simplitate și promisiunea unei călătorii în care te simți cu adevărat bine. Un brand modern, cu rădăcini autentice — creat pentru cei care caută Your Best Ride.",
+      "imageAlt": "Mercedes",
+      "subtitle": "Partenerul tău de încredere pentru masini de inchiriat si transporturi în Cluj-Napoca și nu numai"
     },
     "whyChoose": {
       "title": "De Ce să Alegeți Zetta Cars?",
@@ -222,11 +223,9 @@
       "email": "Email",
       "address": "Adresa",
       "addressText": "Aeroportul Internațional Cluj \"Avram Iancu\"\nStrada Traian Vuia 149-151, Cluj-Napoca 400397",
-      "office": "BIROU"
-      ,
-      "pickupNote": "Ai o locație anume în minte? Te preluăm de la aeroport, hotel sau oriunde ai nevoie."
-  ,
-  "pickupNoteTitle": "Punct de ridicare",
+      "office": "BIROU",
+      "pickupNote": "Ai o locație anume în minte? Te preluăm de la aeroport, hotel sau oriunde ai nevoie.",
+      "pickupNoteTitle": "Punct de ridicare",
       "nameLabel": "Numele dvs.",
       "namePlaceholder": "Opțional",
       "messageLabel": "Mesaj",
@@ -474,13 +473,17 @@
       "confirmed": "Confirmată",
       "pending": "În Așteptare",
       "cancelled": "Anulată"
+    },
+    "paymentMethods": {
+      "cashOnDelivery": "Cash on Delivery",
+      "cardOnDelivery": "Card Payment on Delivery",
+      "cardOnline": "Card Payment Online"
     }
   },
   "blogPage": {
     "title": "În Curând",
     "subtitle": "Blogul nostru este în construcție. Rămâneți aproape!"
   },
-
   "common": {
     "loading": "Se încarcă...",
     "error": "Eroare",
@@ -520,7 +523,7 @@
     "profile": "Profil",
     "logout": "Deconectare"
   },
-    "profile": {
+  "profile": {
     "title": "Profilul Meu",
     "subtitle": "Gestionează setările contului și vezi rezervările tale",
     "userDetails": "Detalii Utilizator",
