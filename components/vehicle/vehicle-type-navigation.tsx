@@ -19,16 +19,17 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
       .join(' ');
   };
 
-  // Keep 'All vehicles' translatable; other type labels fall back to a humanized key.
+  // Compact categories used in the UI. These map to one or more underlying
+  // stored `type` values in the dataset. The key is what the navigation
+  // returns; the page that consumes the selection should expand these keys
+  // into the underlying types when filtering.
   const vehicleTypes = [
     { key: null, label: t('allVehicles') },
-    // Primary vehicle types shown in the UI
-    { key: 'sedan', label: formatLabel('sedan') },
-    { key: 'suv', label: formatLabel('suv') },
-    { key: 'hatchback', label: formatLabel('hatchback') },
-    { key: 'sports', label: formatLabel('sports') },
-    { key: 'truck', label: formatLabel('truck') },
-    { key: 'van', label: formatLabel('van') }
+    { key: 'comfort', label: t('comfort') || formatLabel('comfort') },
+    { key: 'business', label: t('business') || formatLabel('business') },
+    { key: 'suv', label: t('suv') || formatLabel('suv') },
+    { key: 'premium', label: t('premium') || formatLabel('premium') },
+    { key: 'van', label: t('van') || formatLabel('van') }
   ];
 
   return (

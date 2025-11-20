@@ -23,7 +23,14 @@ export default defineSchema({
     make: v.string(),
     model: v.string(),
     year: v.optional(v.number()),
-    type: v.optional(v.union(v.literal("sedan"), v.literal("suv"), v.literal("hatchback"), v.literal("sports"), v.literal("truck"), v.literal("van"))),
+    // Compact category values used across the app
+    type: v.optional(v.union(
+      v.literal("comfort"),
+      v.literal("business"),
+      v.literal("suv"),
+      v.literal("premium"),
+      v.literal("van")
+    )),
     class: v.optional(v.union(
       v.literal("economy"), 
       v.literal("van"), 

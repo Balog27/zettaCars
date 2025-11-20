@@ -16,7 +16,13 @@ export const getAll = query({
   args: { 
     paginationOpts: paginationOptsValidator,
     filters: v.optional(v.object({
-      type: v.optional(v.union(v.literal("sedan"), v.literal("suv"), v.literal("hatchback"), v.literal("sports"), v.literal("truck"), v.literal("van"))),
+  type: v.optional(v.union(
+      v.literal("comfort"),
+      v.literal("business"),
+      v.literal("suv"),
+      v.literal("premium"),
+      v.literal("van")
+    )),
       class: v.optional(v.union(
         v.literal("economy"), 
         v.literal("compact"), 
@@ -97,7 +103,13 @@ export const create = mutation({
     make: v.string(),
     model: v.string(),
     year: v.optional(v.number()),
-    type: v.optional(v.union(v.literal("sedan"), v.literal("suv"), v.literal("hatchback"), v.literal("sports"), v.literal("truck"), v.literal("van"))),
+  type: v.optional(v.union(
+      v.literal("comfort"),
+      v.literal("business"),
+      v.literal("suv"),
+      v.literal("premium"),
+      v.literal("van")
+    )),
     class: v.optional(v.union(
       v.literal("economy"), 
       v.literal("compact"), 
@@ -142,7 +154,13 @@ export const update = mutation({
     make: v.optional(v.string()),
     model: v.optional(v.string()),
     year: v.optional(v.number()),
-    type: v.optional(v.union(v.literal("sedan"), v.literal("suv"), v.literal("hatchback"), v.literal("sports"), v.literal("truck"), v.literal("van"))),
+  type: v.optional(v.union(
+      v.literal("comfort"),
+      v.literal("business"),
+      v.literal("suv"),
+      v.literal("premium"),
+      v.literal("van")
+    )),
     class: v.optional(v.union(
       v.literal("economy"), 
       v.literal("compact"), 
@@ -374,8 +392,8 @@ export const searchAvailableVehicles = query({
     endDate: v.number(),   // Unix timestamp
     deliveryLocation: v.optional(v.string()),
     
-    // Optional filters
-    type: v.optional(v.union(v.literal("sedan"), v.literal("suv"), v.literal("hatchback"), v.literal("sports"), v.literal("truck"), v.literal("van"))),
+  // Optional filters
+  type: v.optional(v.union(v.literal("comfort"), v.literal("business"), v.literal("suv"), v.literal("premium"), v.literal("van"))),
     class: v.optional(v.union(
       v.literal("economy"), 
       v.literal("compact"), 

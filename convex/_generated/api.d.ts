@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as featuredCars from "../featuredCars.js";
+import type * as migrations from "../migrations.js";
 import type * as reservations from "../reservations.js";
 import type * as reviews from "../reviews.js";
 import type * as seasons from "../seasons.js";
@@ -33,6 +34,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   featuredCars: typeof featuredCars;
+  migrations: typeof migrations;
   reservations: typeof reservations;
   reviews: typeof reviews;
   seasons: typeof seasons;

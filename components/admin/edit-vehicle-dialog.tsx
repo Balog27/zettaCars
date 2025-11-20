@@ -58,7 +58,8 @@ const vehicleSchema = z.object({
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  type: z.enum(["sedan", "suv", "hatchback", "sports", "truck", "van"], {
+  // Use compact categories in the admin form
+  type: z.enum(["comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
   }),
   // vehicle.class removed from admin form validation; admin uses `type` only
@@ -134,7 +135,7 @@ export function EditVehicleDialog({
       make: "",
       model: "",
       year: new Date().getFullYear().toString(),
-      type: "sedan",
+      type: "comfort",
       seats: "5",
       transmission: "automatic",
       fuelType: "petrol",
@@ -154,7 +155,8 @@ export function EditVehicleDialog({
         make: vehicle.make || "",
         model: vehicle.model || "",
         year: (vehicle.year || new Date().getFullYear()).toString(),
-  type: (vehicle.type as VehicleType) || "sedan",
+  // When editing, prefer the stored type (assumed compact after migration)
+  type: (vehicle.type as VehicleType) || "comfort",
   // note: vehicle.class is deprecated in the admin UI; prefer vehicle.type
         seats: (vehicle.seats || 5).toString(),
         transmission: (vehicle.transmission as TransmissionType) || "automatic",
@@ -415,11 +417,10 @@ export function EditVehicleDialog({
                             </FormControl>
 
                           <SelectContent>
-                            <SelectItem value="sedan">Sedan</SelectItem>
+                            <SelectItem value="comfort">Comfort</SelectItem>
+                            <SelectItem value="business">Business</SelectItem>
                             <SelectItem value="suv">SUV</SelectItem>
-                            <SelectItem value="hatchback">Hatchback</SelectItem>
-                            <SelectItem value="sports">Sports</SelectItem>
-                            <SelectItem value="truck">Truck</SelectItem>
+                            <SelectItem value="premium">Premium</SelectItem>
                             <SelectItem value="van">Van</SelectItem>
                           </SelectContent>
                           </Select>

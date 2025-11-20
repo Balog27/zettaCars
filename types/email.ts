@@ -12,7 +12,8 @@ export interface VehicleInfo {
   make: string;
   model: string;
   year?: number;
-  type?: "sedan" | "suv" | "hatchback" | "sports" | "truck" | "van";
+  // Vehicle types updated to compact categories
+  type?: "comfort" | "business" | "suv" | "premium" | "van";
   seats?: number;
   transmission?: "automatic" | "manual";
   fuelType?: "petrol" | "diesel" | "electric" | "hybrid" | "benzina";

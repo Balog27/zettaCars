@@ -836,6 +836,11 @@
   },
   "vehicleTypes": {
     "allVehicles": "All Vehicles",
+    "comfort": "Comfort",
+    "business": "Business",
+    "suv": "SUV",
+    "premium": "Premium",
+    "van": "Van",
     "luxurySedan": "Luxury Sedan",
     "executiveSedan": "Executive Sedan",
     "luxurySUV": "Luxury SUV",

@@ -848,6 +848,11 @@
   },
   "vehicleTypes": {
     "allVehicles": "Toate Vehiculele",
+    "comfort": "Confort",
+    "business": "Business",
+    "suv": "SUV",
+    "premium": "Premium",
+    "van": "Van",
     "luxurySedan": "Sedan Luxury",
     "executiveSedan": "Sedan Executive",
     "luxurySUV": "SUV Luxury",

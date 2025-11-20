@@ -36,15 +36,14 @@ export default function CarsPage() {
       return;
     }
 
-    // Match vehicles where the selected type equals either the canonical `type` or the legacy `class` field.
-    // This allows the UI buttons (which sometimes use class-like labels such as "compact" or "premium")
-    // to work without requiring a full data migration yet.
-    const normalizedSelection = selectedVehicleType.toLowerCase();
+    // Now the backend stores compact categories directly (comfort,business,suv,premium,van)
+    const selection = selectedVehicleType.toLowerCase();
+
     setDisplayedVehicles(
       allVehicles.filter((v) => {
-        const vehicleType = (v.type || "").toString().toLowerCase();
-        const vehicleClass = (v.class || "").toString().toLowerCase();
-        return vehicleType === normalizedSelection || vehicleClass === normalizedSelection;
+        const vehicleType = (v.type || '').toString().toLowerCase();
+        // match directly against compact category values
+        return vehicleType === selection;
       })
     );
   }, [selectedVehicleType, allVehicles, setDisplayedVehicles]);

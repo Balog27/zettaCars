@@ -58,7 +58,8 @@ const vehicleSchema = z.object({
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  type: z.enum(["sedan", "suv", "hatchback", "sports", "truck", "van"], {
+  // Use compact categories in the admin form
+  type: z.enum(["comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
   }),
   seats: z.string()
@@ -129,7 +130,7 @@ export function CreateVehicleDialog({
       make: "",
       model: "",
       year: new Date().getFullYear().toString(),
-      type: "sedan",
+      type: "comfort",
       seats: "5",
       transmission: "automatic",
       fuelType: "diesel",
@@ -149,7 +150,7 @@ export function CreateVehicleDialog({
         make: "",
         model: "",
         year: new Date().getFullYear().toString(),
-        type: "sedan",
+        type: "comfort",
         seats: "5",
         transmission: "automatic",
         fuelType: "diesel",
@@ -390,12 +391,11 @@ export function CreateVehicleDialog({
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="sedan">Sedan</SelectItem>
-                              <SelectItem value="suv">SUV</SelectItem>
-                              <SelectItem value="hatchback">Hatchback</SelectItem>
-                              <SelectItem value="sports">Sports</SelectItem>
-                              <SelectItem value="truck">Truck</SelectItem>
-                              <SelectItem value="van">Van</SelectItem>
+                                <SelectItem value="comfort">Comfort</SelectItem>
+                                <SelectItem value="business">Business</SelectItem>
+                                <SelectItem value="suv">SUV</SelectItem>
+                                <SelectItem value="premium">Premium</SelectItem>
+                                <SelectItem value="van">Van</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />

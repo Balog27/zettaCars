@@ -34,23 +34,24 @@ function groupVehiclesByType(vehicles: Vehicle[]): Record<string, Vehicle[]> {
       return;
     }
 
-    const vehicleType = vehicle.type || 'unclassified';
-    if (!grouped[vehicleType]) {
-      grouped[vehicleType] = [];
-    }
-    grouped[vehicleType].push(vehicle);
+  // After migrating to compact categories, vehicle.type should directly hold
+  // one of the compact values: comfort, business, suv, premium, van.
+  const canonicalType = (vehicle.type || '').toString().toLowerCase();
+  const mapped = canonicalType || 'unclassified';
+
+    if (!grouped[mapped]) grouped[mapped] = [];
+    grouped[mapped].push(vehicle);
   });
 
   return grouped;
 }
 
-// Define the order of vehicle types for consistent display
+// Define the order of compact categories for consistent display
 const typeOrder = [
-  'sedan',
+  'comfort',
+  'business',
   'suv',
-  'hatchback',
-  'sports',
-  'truck',
+  'premium',
   'van',
   'unclassified'
 ] as const;
@@ -64,7 +65,17 @@ function VehicleTypeSection({
   vehicles: Vehicle[];
   searchState: SearchData;
 }) {
-  const displayName = formatTypeName(typeName);
+  // Map compact keys to nicer display names
+  const displayMap: Record<string, string> = {
+    comfort: 'Comfort',
+    business: 'Business',
+    suv: 'SUV',
+    premium: 'Premium',
+    van: 'Van',
+    unclassified: 'Other',
+  };
+
+  const displayName = displayMap[typeName] ?? formatTypeName(typeName);
 
   return (
     <div className="mb-12">
