@@ -127,7 +127,6 @@ export function VehiclesTable() {
               <TableHead className="w-20">Image</TableHead>
               <TableHead>Vehicle</TableHead>
               <TableHead>Type</TableHead>
-              <TableHead>Class</TableHead>
               <TableHead>Year</TableHead>
               <TableHead>Engine</TableHead>
               <TableHead>Transmission</TableHead>
@@ -139,8 +138,8 @@ export function VehiclesTable() {
           </TableHeader>
           <TableBody>
             {vehicles.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={11} className="text-center py-8 text-muted-foreground">
+                <TableRow>
+                <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
                   No vehicles found. Add your first vehicle to get started.
                 </TableCell>
               </TableRow>
@@ -169,13 +168,7 @@ export function VehiclesTable() {
                       <span className="text-muted-foreground">-</span>
                     )}
                   </TableCell>
-                  <TableCell>
-                    {vehicle.class ? (
-                      <span className="capitalize">{vehicle.class.replace('-', ' ')}</span>
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
+                  {/* class column removed; type already displayed in previous column */}
                   <TableCell>{vehicle.year || "-"}</TableCell>
                   <TableCell>
                     {vehicle.engineCapacity && vehicle.engineType ? (

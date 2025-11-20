@@ -21,7 +21,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+// Use a plain button here to avoid SSR/CSR markup differences caused by
+// Radix Slot/asChild polymorphism when our Button component is used as
+// the child of DropdownMenuTrigger. Rendering a native element keeps
+// server and client markup consistent and avoids hydration mismatches.
 
 export function UserButton() {
   const { user } = useUser()
@@ -48,15 +51,16 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="relative h-8 w-8 rounded-full"
+        <button
+          type="button"
+          aria-label={t('profile')}
+          className="inline-flex items-center justify-center relative h-8 w-8 rounded-full"
         >
           <Avatar className="h-8 w-8">
             <AvatarImage src={user.imageUrl} alt={displayName} />
             <AvatarFallback>{userInitials}</AvatarFallback>
           </Avatar>
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">

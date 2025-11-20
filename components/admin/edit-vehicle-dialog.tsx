@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { VehicleType, VehicleClass, TransmissionType, FuelType, VehicleStatus, PricingTier } from "@/types/vehicle";
+import { VehicleType, TransmissionType, FuelType, VehicleStatus, PricingTier } from "@/types/vehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -61,9 +61,7 @@ const vehicleSchema = z.object({
   type: z.enum(["sedan", "suv", "hatchback", "sports", "truck", "van"], {
     required_error: "Vehicle type is required",
   }),
-  class: z.enum(["economy", "compact", "intermediate", "standard", "full-size", "premium", "luxury", "sport", "executive", "commercial", "convertible", "super-sport", "supercars", "business", "van"], {
-    required_error: "Vehicle class is required",
-  }),
+  // vehicle.class removed from admin form validation; admin uses `type` only
   seats: z.string()
     .min(1, "Number of seats is required")
     .regex(/^\d+$/, "Seats must be a number")
@@ -137,7 +135,6 @@ export function EditVehicleDialog({
       model: "",
       year: new Date().getFullYear().toString(),
       type: "sedan",
-      class: "economy",
       seats: "5",
       transmission: "automatic",
       fuelType: "petrol",
@@ -157,8 +154,8 @@ export function EditVehicleDialog({
         make: vehicle.make || "",
         model: vehicle.model || "",
         year: (vehicle.year || new Date().getFullYear()).toString(),
-        type: (vehicle.type as VehicleType) || "sedan",
-        class: (vehicle.class as VehicleClass) || "economy",
+  type: (vehicle.type as VehicleType) || "sedan",
+  // note: vehicle.class is deprecated in the admin UI; prefer vehicle.type
         seats: (vehicle.seats || 5).toString(),
         transmission: (vehicle.transmission as TransmissionType) || "automatic",
         fuelType: (vehicle.fuelType as FuelType) || "petrol",
@@ -227,8 +224,7 @@ export function EditVehicleDialog({
         make: values.make,
         model: values.model,
         year: parseInt(values.year),
-        type: values.type as VehicleType,
-        class: values.class as VehicleClass,
+  type: values.type as VehicleType,
         seats: parseInt(values.seats),
         transmission: values.transmission as TransmissionType,
         fuelType: values.fuelType as FuelType,
@@ -417,49 +413,15 @@ export function EditVehicleDialog({
                                 <SelectValue placeholder="Select type" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="sedan">Sedan</SelectItem>
-                              <SelectItem value="suv">SUV</SelectItem>
-                              <SelectItem value="hatchback">Hatchback</SelectItem>
-                              <SelectItem value="sports">Sports</SelectItem>
-                              <SelectItem value="truck">Truck</SelectItem>
-                              <SelectItem value="van">Van</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
 
-                    <FormField
-                      control={form.control}
-                      name="class"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Class</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select class" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="economy">Economy</SelectItem>
-                              <SelectItem value="compact">Compact</SelectItem>
-                              <SelectItem value="intermediate">Intermediate</SelectItem>
-                              <SelectItem value="standard">Standard</SelectItem>
-                              <SelectItem value="full-size">Full-Size</SelectItem>
-                              <SelectItem value="premium">Premium</SelectItem>
-                              <SelectItem value="luxury">Luxury</SelectItem>
-                              <SelectItem value="sport">Sport</SelectItem>
-                              <SelectItem value="executive">Executive</SelectItem>
-                              <SelectItem value="commercial">Commercial</SelectItem>
-                              <SelectItem value="convertible">Convertible</SelectItem>
-                              <SelectItem value="super-sport">Super Sport</SelectItem>
-                              <SelectItem value="supercars">Supercars</SelectItem>
-                              <SelectItem value="business">Business</SelectItem>
-                              <SelectItem value="van">Van</SelectItem>
-                            </SelectContent>
+                          <SelectContent>
+                            <SelectItem value="sedan">Sedan</SelectItem>
+                            <SelectItem value="suv">SUV</SelectItem>
+                            <SelectItem value="hatchback">Hatchback</SelectItem>
+                            <SelectItem value="sports">Sports</SelectItem>
+                            <SelectItem value="truck">Truck</SelectItem>
+                            <SelectItem value="van">Van</SelectItem>
+                          </SelectContent>
                           </Select>
                           <FormMessage />
                         </FormItem>

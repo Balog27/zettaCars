@@ -226,8 +226,20 @@
       ,
       "pickupNote": "Ai o locație anume în minte? Te preluăm de la aeroport, hotel sau oriunde ai nevoie."
   ,
-  "pickupNoteTitle": "Punct de ridicare"
+  "pickupNoteTitle": "Punct de ridicare",
+      "nameLabel": "Numele dvs.",
+      "namePlaceholder": "Opțional",
+      "messageLabel": "Mesaj",
+      "signInButton": "Conectează-te pentru a trimite",
+      "signInNote": "Trebuie să vă autentificați pentru a trimite acest formular.",
+      "sending": "Se trimite...",
+      "send": "Trimite"
     },
+    "pleaseSignIn": "Vă rugăm să vă autentificați pentru a trimite un mesaj.",
+    "messageTooShort": "Vă rugăm să introduceți un mesaj mai detaliat (minimum 5 caractere).",
+    "notAuthenticated": "Trebuie să fiți autentificat pentru a trimite un mesaj.",
+    "sendFailed": "Trimiterea mesajului a eșuat. Vă rugăm să încercați din nou mai târziu.",
+    "sendSuccess": "Mesaj trimis — vă vom răspunde în curând.",
     "socialMedia": {
       "tiktok": {
         "title": "TikTok",

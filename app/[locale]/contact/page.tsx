@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Header } from '@/components/ui/header';
 import { Footer } from '@/components/ui/footer';
@@ -12,6 +12,8 @@ import { AnimatedGroup } from '@/components/ui/animated-group';
 import { Phone, Mail, MapPin, MessageCircle, ExternalLink, Clock } from 'lucide-react';
 import { contactAnimationVariants, sectionAnimationVariants } from '@/lib/animations';
 import { useTranslations } from 'next-intl';
+import { useUser, SignInButton } from '@clerk/nextjs';
+import ContactForm from '@/components/contact-form';
 import Head from 'next/head';
 
 const ContactPage = () => {
@@ -102,39 +104,8 @@ const ContactPage = () => {
                   <div className="grid md:grid-cols-2 gap-0">
                     {/* Left Side - Contact Form */}
                     <div className="p-8 md:p-12 border-r border-border min-h-[520px]">
-                      <form className="space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">
-                            {t('contactForm.yourName')}
-                          </label>
-                          <input
-                            type="text"
-                            placeholder={t('contactForm.enterYourName')}
-                            className="w-full px-4 py-3 rounded-lg border border-primary bg-background text-foreground focus:ring-0 focus:border-primary focus:outline-none transition-all"
-                            suppressHydrationWarning
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">
-                            {t('contactForm.message')}
-                          </label>
-                          <textarea
-                            rows={6}
-                            placeholder={t('contactForm.messagePlaceholder')}
-                            className="w-full px-4 py-3 rounded-lg border border-primary bg-background text-foreground focus:ring-0 focus:border-primary focus:outline-none transition-all resize-none"
-                            suppressHydrationWarning
-                          />
-                        </div>
-                        
-                        <Button 
-                          type="submit" 
-                          className="w-full bg-primary hover:bg-primary/90 text-white py-3 text-lg font-semibold"
-                          suppressHydrationWarning
-                        >
-                          {t('contactForm.sendMessage')}
-                        </Button>
-                      </form>
+                      {/** Contact form wired to server; only works when user is signed in */}
+                      <ContactForm t={t} />
                       
                       {/* Contact Info Below Form */}
                       <div className="mt-8 pt-8 border-t border-border space-y-6">

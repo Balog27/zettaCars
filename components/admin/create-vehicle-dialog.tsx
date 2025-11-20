@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { VehicleType, VehicleClass, TransmissionType, FuelType, VehicleStatus, PricingTier } from "@/types/vehicle";
+import { VehicleType, TransmissionType, FuelType, VehicleStatus, PricingTier } from "@/types/vehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -60,9 +60,6 @@ const vehicleSchema = z.object({
     }, "Year must be between 1900 and next year"),
   type: z.enum(["sedan", "suv", "hatchback", "sports", "truck", "van"], {
     required_error: "Vehicle type is required",
-  }),
-  class: z.enum(["economy", "compact", "intermediate", "standard", "full-size", "premium", "luxury", "sport", "executive", "commercial", "convertible", "super-sport", "supercars", "business", "van"], {
-    required_error: "Vehicle class is required",
   }),
   seats: z.string()
     .min(1, "Number of seats is required")
@@ -133,7 +130,6 @@ export function CreateVehicleDialog({
       model: "",
       year: new Date().getFullYear().toString(),
       type: "sedan",
-      class: "economy",
       seats: "5",
       transmission: "automatic",
       fuelType: "diesel",
@@ -409,40 +405,7 @@ export function CreateVehicleDialog({
                       )}
                     />
 
-                    <FormField
-                      control={form.control}
-                      name="class"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Class</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSubmitting}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select class" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="economy">Economy</SelectItem>
-                              <SelectItem value="compact">Compact</SelectItem>
-                              <SelectItem value="intermediate">Intermediate</SelectItem>
-                              <SelectItem value="standard">Standard</SelectItem>
-                              <SelectItem value="full-size">Full-Size</SelectItem>
-                              <SelectItem value="premium">Premium</SelectItem>
-                              <SelectItem value="luxury">Luxury</SelectItem>
-                              <SelectItem value="sport">Sport</SelectItem>
-                              <SelectItem value="executive">Executive</SelectItem>
-                              <SelectItem value="commercial">Commercial</SelectItem>
-                              <SelectItem value="convertible">Convertible</SelectItem>
-                              <SelectItem value="super-sport">Super Sport</SelectItem>
-                              <SelectItem value="supercars">Supercars</SelectItem>
-                              <SelectItem value="business">Business</SelectItem>
-                              <SelectItem value="van">Van</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {/* 'Class' removed from admin form. Admin will use vehicle 'type' (same as the public /cars listing). */}
 
                     <FormField
                       control={form.control}

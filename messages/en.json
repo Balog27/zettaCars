@@ -210,8 +210,20 @@
       ,
       "pickupNote": "Need a specific pickup spot? We can meet you at the airport, your hotel, or any address that works best — just tell us where."
   ,
-  "pickupNoteTitle": "Pickup point"
+  "pickupNoteTitle": "Pickup point",
+      "nameLabel": "Your name",
+      "namePlaceholder": "Optional",
+      "messageLabel": "Message",
+      "signInButton": "Sign in to send",
+      "signInNote": "You must be signed in to submit this form.",
+      "sending": "Sending...",
+      "send": "Send"
     },
+    "pleaseSignIn": "Please sign in to send a message.",
+    "messageTooShort": "Please enter a longer message (at least 5 characters).",
+    "notAuthenticated": "You must be signed in to send a message.",
+    "sendFailed": "Failed to send message. Please try again later.",
+    "sendSuccess": "Message sent — we will reply shortly.",
     "socialMedia": {
       "tiktok": {
         "title": "TikTok",

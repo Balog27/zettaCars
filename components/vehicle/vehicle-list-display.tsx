@@ -2,7 +2,7 @@
 
 import { VehicleCard } from "@/components/vehicle/vehicle-card";
 import { VehicleCardSkeleton } from "@/components/vehicle/vehicle-card-skeleton";
-import { Vehicle, VehicleClass } from "@/types/vehicle";
+import { Vehicle } from "@/types/vehicle";
 import { SearchData } from "@/lib/searchStorage";
 import { useTranslations } from 'next-intl';
 import { Separator } from "@/components/ui/separator";
@@ -15,84 +15,72 @@ interface VehicleListDisplayProps {
   searchState: SearchData;
 }
 
-// Helper function to format class names for display
-function formatClassName(className: VehicleClass | undefined): string {
-  if (!className) return "Unclassified";
-  
-  return className
+// Helper function to format type names for display
+function formatTypeName(typeName: string | undefined): string {
+  if (!typeName) return "Unclassified";
+  return typeName
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
 
-// Helper function to group vehicles by class
-function groupVehiclesByClass(vehicles: Vehicle[]): Record<string, Vehicle[]> {
+// Helper function to group vehicles by type
+function groupVehiclesByType(vehicles: Vehicle[]): Record<string, Vehicle[]> {
   const grouped: Record<string, Vehicle[]> = {};
-  
+
   vehicles.forEach((vehicle) => {
     if (!vehicle || typeof vehicle._id !== 'string') {
       console.warn("Skipping invalid vehicle data:", vehicle);
       return;
     }
-    
-    const vehicleClass = vehicle.class || 'unclassified';
-    if (!grouped[vehicleClass]) {
-      grouped[vehicleClass] = [];
+
+    const vehicleType = vehicle.type || 'unclassified';
+    if (!grouped[vehicleType]) {
+      grouped[vehicleType] = [];
     }
-    grouped[vehicleClass].push(vehicle);
+    grouped[vehicleType].push(vehicle);
   });
-  
+
   return grouped;
 }
 
-// Define the order of vehicle classes for consistent display (hardcoded from schema)
-const classOrder = [
-  'economy',
-  'compact', 
-  'intermediate',
-  'standard',
-  'full-size',
-  'premium',
-  'luxury',
-  'sport',
-  'super-sport',
-  'supercars',
-  'business',
-  'executive',
-  'commercial',
-  'convertible',
+// Define the order of vehicle types for consistent display
+const typeOrder = [
+  'sedan',
+  'suv',
+  'hatchback',
+  'sports',
+  'truck',
   'van',
   'unclassified'
 ] as const;
 
-function VehicleClassSection({
-  className,
+function VehicleTypeSection({
+  typeName,
   vehicles,
   searchState,
 }: {
-  className: string;
+  typeName: string;
   vehicles: Vehicle[];
   searchState: SearchData;
 }) {
-  const displayName = formatClassName(className as VehicleClass);
-  
+  const displayName = formatTypeName(typeName);
+
   return (
     <div className="mb-12">
-      {/* Class header with separator line */}
       <div className="flex items-center gap-4 mb-6">
         <h2 className="text-2xl font-semibold text-foreground whitespace-nowrap">
           {displayName}
         </h2>
         <Separator className="flex-1" />
       </div>
-      
-      {/* Vehicles grid for this class */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {vehicles.map((vehicle) => (
-          <VehicleCard 
-            key={vehicle._id} 
-            vehicle={vehicle} 
-            pickupDate={searchState.pickupDate || null} 
+          <VehicleCard
+            key={vehicle._id}
+            vehicle={vehicle}
+            pickupDate={searchState.pickupDate || null}
             returnDate={searchState.returnDate || null}
             deliveryLocation={searchState.deliveryLocation || null}
             restitutionLocation={searchState.restitutionLocation || null}
@@ -105,30 +93,29 @@ function VehicleClassSection({
   );
 }
 
-function VehiclesByClass({
+function VehiclesByType({
   vehicles,
   searchState,
 }: {
   vehicles: Vehicle[];
   searchState: SearchData;
 }) {
-  const groupedVehicles = groupVehiclesByClass(vehicles);
-  
-  // Sort classes according to our defined order and only show classes that have vehicles
-  const availableClasses = classOrder.filter(className => {
-    const vehiclesInClass = groupedVehicles[className];
-    return vehiclesInClass && vehiclesInClass.length > 0;
+  const groupedVehicles = groupVehiclesByType(vehicles);
+
+  const availableTypes = typeOrder.filter(typeName => {
+    const vehiclesInType = groupedVehicles[typeName];
+    return vehiclesInType && vehiclesInType.length > 0;
   });
-  
+
   return (
     <div>
-      {availableClasses.map((className) => {
-        const vehiclesInClass = groupedVehicles[className];
+      {availableTypes.map((typeName) => {
+        const vehiclesInType = groupedVehicles[typeName];
         return (
-          <VehicleClassSection
-            key={className}
-            className={className}
-            vehicles={vehiclesInClass || []}
+          <VehicleTypeSection
+            key={typeName}
+            typeName={typeName}
+            vehicles={vehiclesInType || []}
             searchState={searchState}
           />
         );
@@ -195,7 +182,7 @@ export function VehicleListDisplay({
 
       {/* Show vehicles */}
       {isHydrated && !isLoading && vehicles && vehicles.length > 0 && (
-        <VehiclesByClass vehicles={vehicles} searchState={searchState} />
+        <VehiclesByType vehicles={vehicles} searchState={searchState} />
       )}
     </div>
   );

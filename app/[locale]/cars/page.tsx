@@ -36,7 +36,17 @@ export default function CarsPage() {
       return;
     }
 
-    setDisplayedVehicles(allVehicles.filter((v) => v.type === selectedVehicleType));
+    // Match vehicles where the selected type equals either the canonical `type` or the legacy `class` field.
+    // This allows the UI buttons (which sometimes use class-like labels such as "compact" or "premium")
+    // to work without requiring a full data migration yet.
+    const normalizedSelection = selectedVehicleType.toLowerCase();
+    setDisplayedVehicles(
+      allVehicles.filter((v) => {
+        const vehicleType = (v.type || "").toString().toLowerCase();
+        const vehicleClass = (v.class || "").toString().toLowerCase();
+        return vehicleType === normalizedSelection || vehicleClass === normalizedSelection;
+      })
+    );
   }, [selectedVehicleType, allVehicles, setDisplayedVehicles]);
 
   // Generate schema markup for vehicle listings

@@ -80,15 +80,59 @@ export function HomepageVehicleCard({
 
   const carDetailsUrl = buildCarDetailsUrl(vehicle._id);
 
-  const handleImageClick = () => {
-    // Navigate to car details page
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [isTouchDevice, setIsTouchDevice] = React.useState(false);
+
+  // Detect touch devices so we can change click behavior there
+  React.useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        // Combine several heuristics for better coverage across devices/browsers
+        const hasTouchPoints = (navigator as any).maxTouchPoints > 0;
+        const hasTouchEvent = 'ontouchstart' in window;
+        const prefersNoHover = window.matchMedia ? window.matchMedia("(hover: none) and (pointer: coarse)").matches : false;
+
+        setIsTouchDevice(Boolean(hasTouchPoints || hasTouchEvent || prefersNoHover));
+
+        // Listen for changes to the hover media query (for devices that can change)
+        if (window.matchMedia) {
+          const mq = window.matchMedia("(hover: none) and (pointer: coarse)");
+          const listener = (e: MediaQueryListEvent) => setIsTouchDevice(Boolean((navigator as any).maxTouchPoints > 0 || 'ontouchstart' in window || e.matches));
+          if (mq.addEventListener) mq.addEventListener("change", listener);
+          else if ((mq as any).addListener) (mq as any).addListener(listener);
+          return () => {
+            if (mq.removeEventListener) mq.removeEventListener("change", listener);
+            else if ((mq as any).removeListener) (mq as any).removeListener(listener);
+          };
+        }
+      }
+    } catch (err) {
+      // fallback: assume non-touch
+      setIsTouchDevice(false);
+    }
+  }, []);
+
+  const handleCardClick = (e?: React.MouseEvent) => {
+    // On touch devices: first tap shows overlay; second tap (when overlay visible) navigates to details.
+    if (isTouchDevice) {
+      e?.stopPropagation();
+      if (!showOverlay) {
+        setShowOverlay(true);
+        return;
+      }
+      // If overlay already visible, navigate to details
+      window.location.href = carDetailsUrl;
+      return;
+    }
+
+    // Non-touch: go to details as before
     window.location.href = carDetailsUrl;
   };
 
   return (
     <div 
       className="relative bg-card-darker dark:bg-card-darker rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl group cursor-pointer"
-      onClick={handleImageClick}
+      onClick={handleCardClick}
     >
       {/* Car Image */}
       <div className="aspect-[4/3] relative w-full bg-gray-100 overflow-hidden">
@@ -108,7 +152,11 @@ export function HomepageVehicleCard({
         )}
         
         {/* Hover/Touch Overlay with Car Details */}
-        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 flex flex-col justify-center items-center text-white p-4 sm:p-6">
+        <div className={
+          `absolute inset-0 bg-black/80 transition-all duration-300 flex flex-col justify-center items-center text-white p-4 sm:p-6 ` +
+          // Show overlay when hovering (desktop) OR when toggled on touch devices
+          `${showOverlay ? 'opacity-100' : 'opacity-0'} group-hover:opacity-100 group-active:opacity-100`
+        } style={{ pointerEvents: showOverlay ? 'auto' : undefined }}>
           {/* Car Specifications */}
           <div className="space-y-3 text-center">
             <div className="grid grid-cols-2 gap-4 w-full text-sm">

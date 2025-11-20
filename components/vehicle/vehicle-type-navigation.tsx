@@ -13,10 +13,11 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
 
   const vehicleTypes = [
     { key: null, label: t('allVehicles') },
+    // Keys are normalized to lowercase to match `vehicle.type` and `vehicle.class` values
     { key: 'compact', label: 'Compact' },
     { key: 'comfort', label: 'Comfort' },
     { key: 'business', label: 'Business' },
-    { key: 'SUV', label: 'SUV' },
+    { key: 'suv', label: 'SUV' },
     { key: 'premium', label: 'Premium' },
     { key: 'van', label: 'Van' }
   ];
