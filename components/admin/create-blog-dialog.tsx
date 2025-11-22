@@ -460,46 +460,56 @@ export function CreateBlogDialog({
                           {uploadedImageIds.map((imageId, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between p-2 border rounded cursor-pointer hover:bg-muted"
-                              onClick={() => {
-                                navigator.clipboard.writeText(imageId);
-                                toast.success("Storage ID copied to clipboard");
-                              }}
+                              className="space-y-2"
                             >
-                              <code className="text-xs">{imageId}</code>
                               <div
-                                className="flex gap-2"
-                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center justify-between p-2 border rounded cursor-pointer hover:bg-muted"
+                                onClick={() => {
+                                  const mdxCode = `<BlogImage storageId="${imageId}" alt="Image description" />`;
+                                  navigator.clipboard.writeText(mdxCode);
+                                  toast.success("MDX code copied! Paste it in the Content tab");
+                                }}
                               >
-                                <Button
-                                  type="button"
-                                  variant={
-                                    coverImageId === imageId
-                                      ? "default"
-                                      : "outline"
-                                  }
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setCoverImageId(imageId);
-                                    toast.success("Set as cover image");
-                                  }}
+                                <div className="flex-1">
+                                  <code className="text-xs block">{imageId}</code>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Click to copy MDX code
+                                  </p>
+                                </div>
+                                <div
+                                  className="flex gap-2"
+                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  {coverImageId === imageId
-                                    ? "Cover"
-                                    : "Set Cover"}
-                                </Button>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteUploadedImage(imageId);
-                                  }}
-                                >
-                                  <X className="h-4 w-4 text-destructive" />
-                                </Button>
+                                  <Button
+                                    type="button"
+                                    variant={
+                                      coverImageId === imageId
+                                        ? "default"
+                                        : "outline"
+                                    }
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setCoverImageId(imageId);
+                                      toast.success("Set as cover image");
+                                    }}
+                                  >
+                                    {coverImageId === imageId
+                                      ? "Cover"
+                                      : "Set Cover"}
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDeleteUploadedImage(imageId);
+                                    }}
+                                  >
+                                    <X className="h-4 w-4 text-destructive" />
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                           ))}
@@ -507,8 +517,7 @@ export function CreateBlogDialog({
                       )}
                     </div>
                     <FormDescription className="mt-2">
-                      Upload images and copy their storage IDs to use in your
-                      content
+                      Click on an image to copy the MDX code, then paste it in the Content tab where you want the image to appear
                     </FormDescription>
                   </div>
                 </TabsContent>

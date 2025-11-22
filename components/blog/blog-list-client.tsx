@@ -19,13 +19,6 @@ export function BlogListClient({ initialBlogs, locale }: BlogListClientProps) {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3">{t("title")}</h1>
-          <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-            {t("subtitle")}
-          </p>
-        </div>
-
         {blogs.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">📝</div>
@@ -34,7 +27,7 @@ export function BlogListClient({ initialBlogs, locale }: BlogListClientProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {blogs.map((blog) => (
+            {blogs.map((blog: BlogListItem) => (
               <BlogCard key={blog._id} blog={blog} locale={locale} />
             ))}
           </div>

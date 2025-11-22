@@ -24,11 +24,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Edit, Trash2, Eye } from "lucide-react";
+import { Edit, Trash2, Eye, CheckCircle, XCircle } from "lucide-react";
 // import { useTranslations } from "next-intl";
 import { formatPublishDate } from "@/lib/blogUtils";
 import { toast } from "sonner";
-import { Id } from "@/convex/_generated/dataModel";
 
 interface BlogTableProps {
   blogs: BlogListItem[];
@@ -38,14 +37,40 @@ interface BlogTableProps {
 
 export function BlogTable({ blogs, onEdit, locale }: BlogTableProps) {
   // const t = useTranslations("blogAdmin");
-  const [deleteId, setDeleteId] = useState<Id<"blogs"> | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const deleteBlog = useMutation(api.blogs.remove);
+  const updateBlog = useMutation(api.blogs.update);
+
+  const handleTogglePublish = async (blog: BlogListItem) => {
+    try {
+      const newStatus = blog.status === "published" ? "draft" : "published";
+      const updates: any = {
+        id: blog._id as any,
+        status: newStatus,
+      };
+
+      // Set publishedAt timestamp when publishing
+      if (newStatus === "published" && !blog.publishedAt) {
+        updates.publishedAt = Date.now();
+      }
+
+      await updateBlog(updates);
+      toast.success(
+        newStatus === "published"
+          ? "Blog published successfully"
+          : "Blog unpublished successfully"
+      );
+    } catch (error) {
+      toast.error("Error updating blog status");
+      console.error("Error updating blog:", error);
+    }
+  };
 
   const handleDelete = async () => {
     if (!deleteId) return;
 
     try {
-      await deleteBlog({ id: deleteId });
+  await deleteBlog({ id: deleteId as any });
       toast.success("Blog deleted successfully");
       setDeleteId(null);
     } catch (error) {
@@ -108,6 +133,22 @@ export function BlogTable({ blogs, onEdit, locale }: BlogTableProps) {
                       <Button
                         variant="ghost"
                         size="sm"
+                        onClick={() => handleTogglePublish(blog)}
+                        title={
+                          blog.status === "published"
+                            ? "Unpublish blog"
+                            : "Publish blog"
+                        }
+                      >
+                        {blog.status === "published" ? (
+                          <XCircle className="h-4 w-4 text-orange-500" />
+                        ) : (
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => onEdit(blog)}
                       >
                         <Edit className="h-4 w-4" />
@@ -115,7 +156,7 @@ export function BlogTable({ blogs, onEdit, locale }: BlogTableProps) {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => setDeleteId(blog._id)}
+                        onClick={() => setDeleteId(blog._id as any)}
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>

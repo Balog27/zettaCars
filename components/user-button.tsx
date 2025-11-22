@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import {
   LogOut,
   User,
@@ -31,8 +32,13 @@ export function UserButton() {
   const { signOut } = useClerk()
   const router = useRouter()
   const t = useTranslations('navigation')
+  const [mounted, setMounted] = useState(false)
 
-  if (!user) {
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted || !user) {
     return null
   }
 
