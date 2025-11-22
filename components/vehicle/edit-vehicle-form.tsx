@@ -28,6 +28,22 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 
 // Assuming these types are defined in a shared location or are appropriate here
 type VehicleType = "sedan" | "suv" | "hatchback" | "sports";
+// Compact categories used by the backend/schema
+type CompactVehicleType = "comfort" | "business" | "suv" | "premium" | "van";
+
+function mapToCompactType(t: VehicleType | string): CompactVehicleType {
+  // Map legacy or varied labels to the compact set expected by the server
+  switch (t) {
+    case "suv":
+      return "suv";
+    case "sports":
+      return "premium"; // treat sports as premium
+    case "hatchback":
+    case "sedan":
+    default:
+      return "comfort";
+  }
+}
 type TransmissionType = "automatic" | "manual";
 type FuelType = "benzina" | "diesel" | "electric" | "hybrid";
 type StatusType = "available" | "rented" | "maintenance"; // Assuming vehicle object has status
@@ -122,6 +138,8 @@ export function EditVehicleForm({
         ...formData,
         year: Number(formData.year),
         seats: Number(formData.seats),
+        // Ensure type is one of the compact categories expected by the backend
+        type: mapToCompactType(formData.type) as any,
         // pricePerDay removed - using pricingTiers only
         engineCapacity: Number(formData.engineCapacity), // Ensure it's a number
         engineType: formData.engineType,

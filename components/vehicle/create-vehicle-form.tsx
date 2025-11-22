@@ -37,7 +37,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { toast } from "sonner";
 
-type VehicleType = "sedan" | "suv" | "hatchback" | "sports";
+// Use the compact categories used by the backend/schema
+type VehicleType = "comfort" | "business" | "suv" | "premium" | "van";
 type TransmissionType = "automatic" | "manual";
 type FuelType = "benzina" | "diesel" | "electric" | "hybrid";
 type StatusType = "available" | "rented" | "maintenance";
@@ -52,7 +53,7 @@ const vehicleSchema = z.object({
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  type: z.enum(["sedan", "suv", "hatchback", "sports"], {
+  type: z.enum(["comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
   }),
   seats: z.string()
@@ -110,7 +111,7 @@ export function CreateVehicleForm({
       make: "",
       model: "",
       year: new Date().getFullYear().toString(),
-      type: "sedan",
+  type: "comfort",
       seats: "5",
       transmission: "automatic",
       fuelType: "benzina",
@@ -293,7 +294,11 @@ export function CreateVehicleForm({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="sedan">Sedan</SelectItem>
+                            <SelectItem value="comfort">Comfort</SelectItem>
+                            <SelectItem value="business">Business</SelectItem>
+                            <SelectItem value="suv">SUV</SelectItem>
+                            <SelectItem value="premium">Premium</SelectItem>
+                            <SelectItem value="van">Van</SelectItem>
                           <SelectItem value="suv">SUV</SelectItem>
                           <SelectItem value="hatchback">Hatchback</SelectItem>
                           <SelectItem value="sports">Sports</SelectItem>

@@ -4,10 +4,14 @@ import { Footer } from "@/components/ui/footer";
 import { Header } from "@/components/ui/header";
 import { Logo } from "@/components/ui/logo";
 import { useTranslations } from 'next-intl';
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { BlogListClient } from "@/components/blog/blog-list-client";
 import Head from 'next/head';
 
 export default function BlogPage() {
   const t = useTranslations('blogPage');
+  const blogs = useQuery(api.blogs.getAll);
 
   // Generate schema markup for blog services
   const generateBlogServiceSchema = () => {
@@ -88,11 +92,34 @@ export default function BlogPage() {
       <div className="flex flex-col min-h-screen">
       <Header logo={<Logo alt="ZettaCars Logo" />} brandName="ZettaCars" />
 
-      <main className="flex-grow flex flex-col items-center justify-center">
-        <h1 className="text-5xl font-bold text-center">{t('title')}</h1>
-        <p className="text-xl text-muted-foreground text-center mt-4">
-          {t('subtitle')}
-        </p>
+      <main className="flex-grow container mx-auto py-8 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('title')}</h1>
+            <p className="text-xl text-muted-foreground">
+              {t('subtitle')}
+            </p>
+          </div>
+          
+          {!blogs ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="text-muted-foreground">Loading blogs...</div>
+              </div>
+            </div>
+          ) : blogs.length === 0 ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <h2 className="text-2xl font-semibold mb-2">Coming Soon</h2>
+                <p className="text-muted-foreground">
+                  No blog posts available yet. Check back soon!
+                </p>
+              </div>
+            </div>
+          ) : (
+            <BlogListClient initialBlogs={blogs} locale="en" />
+          )}
+        </div>
       </main>
 
       <Footer

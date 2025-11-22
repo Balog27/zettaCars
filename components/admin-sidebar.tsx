@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   // Settings2,
   Building2,
+  BookOpen,
 } from "lucide-react"
 
 import { NavMain } from "@/components/admin/nav-main"
@@ -40,6 +41,11 @@ const navItems = [
     title: "Reservations",
     url: "/admin/reservations",
     icon: Calendar,
+  },
+  {
+    title: "Blogs",
+    url: "/admin/blogs",
+    icon: BookOpen,
   },
   {
     title: "Seasons",
