@@ -62,7 +62,9 @@ const vehicleSchema = z.object({
   type: z.enum(["comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
   }),
-  // vehicle.class removed from admin form validation; admin uses `type` only
+  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"], {
+    required_error: "Vehicle class is required",
+  }),
   seats: z.string()
     .min(1, "Number of seats is required")
     .regex(/^\d+$/, "Seats must be a number")
@@ -136,6 +138,7 @@ export function EditVehicleDialog({
       model: "",
       year: new Date().getFullYear().toString(),
       type: "comfort",
+      class: "hatchback",
       seats: "5",
       transmission: "automatic",
       fuelType: "petrol",
@@ -157,7 +160,7 @@ export function EditVehicleDialog({
         year: (vehicle.year || new Date().getFullYear()).toString(),
   // When editing, prefer the stored type (assumed compact after migration)
   type: (vehicle.type as VehicleType) || "comfort",
-  // note: vehicle.class is deprecated in the admin UI; prefer vehicle.type
+        class: (vehicle.class as "hatchback" | "sedan" | "suv" | "crossover" | "van") || "hatchback",
         seats: (vehicle.seats || 5).toString(),
         transmission: (vehicle.transmission as TransmissionType) || "automatic",
         fuelType: (vehicle.fuelType as FuelType) || "petrol",
@@ -227,6 +230,7 @@ export function EditVehicleDialog({
         model: values.model,
         year: parseInt(values.year),
   type: values.type as VehicleType,
+        class: values.class as "hatchback" | "sedan" | "suv" | "crossover" | "van",
         seats: parseInt(values.seats),
         transmission: values.transmission as TransmissionType,
         fuelType: values.fuelType as FuelType,
@@ -423,6 +427,31 @@ export function EditVehicleDialog({
                             <SelectItem value="premium">Premium</SelectItem>
                             <SelectItem value="van">Van</SelectItem>
                           </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="class"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Class</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select class" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="hatchback">Hatchback</SelectItem>
+                                <SelectItem value="sedan">Sedan</SelectItem>
+                                <SelectItem value="suv">SUV</SelectItem>
+                                <SelectItem value="crossover">Crossover</SelectItem>
+                                <SelectItem value="van">Van</SelectItem>
+                            </SelectContent>
                           </Select>
                           <FormMessage />
                         </FormItem>

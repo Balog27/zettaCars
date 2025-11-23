@@ -27,21 +27,21 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
 // Assuming these types are defined in a shared location or are appropriate here
-type VehicleType = "sedan" | "suv" | "hatchback" | "sports";
+type VehicleType = "hatchback" | "sedan" | "suv" | "crossover" | "van";
 // Compact categories used by the backend/schema
-type CompactVehicleType = "comfort" | "business" | "suv" | "premium" | "van";
+type CompactVehicleType = "hatchback" | "sedan" | "suv" | "crossover" | "van";
 
 function mapToCompactType(t: VehicleType | string): CompactVehicleType {
-  // Map legacy or varied labels to the compact set expected by the server
+  // Direct mapping now, as only allowed values are used
   switch (t) {
-    case "suv":
-      return "suv";
-    case "sports":
-      return "premium"; // treat sports as premium
     case "hatchback":
     case "sedan":
+    case "suv":
+    case "crossover":
+    case "van":
+      return t as CompactVehicleType;
     default:
-      return "comfort";
+      return "hatchback";
   }
 }
 type TransmissionType = "automatic" | "manual";
@@ -256,10 +256,11 @@ export function EditVehicleForm({
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="hatchback">Hatchback</SelectItem>
                     <SelectItem value="sedan">Sedan</SelectItem>
                     <SelectItem value="suv">SUV</SelectItem>
-                    <SelectItem value="hatchback">Hatchback</SelectItem>
-                    <SelectItem value="sports">Sports</SelectItem>
+                    <SelectItem value="crossover">Crossover</SelectItem>
+                    <SelectItem value="van">Van</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

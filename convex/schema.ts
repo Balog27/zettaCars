@@ -35,28 +35,15 @@ export default defineSchema({
         v.literal("van"),
       ),
     ),
-    // DEPRECATED: Use classId instead. Kept for data migration.
     class: v.optional(
       v.union(
-        v.literal("economy"),
+        v.literal("hatchback"),
+        v.literal("sedan"),
+        v.literal("suv"),
+        v.literal("crossover"),
         v.literal("van"),
-        v.literal("compact"),
-        v.literal("intermediate"),
-        v.literal("standard"),
-        v.literal("business"),
-        v.literal("full-size"),
-        v.literal("premium"),
-        v.literal("luxury"),
-        v.literal("sport"),
-        v.literal("super-sport"),
-        v.literal("supercars"),
-        v.literal("executive"),
-        v.literal("commercial"),
-        v.literal("convertible"),
       ),
     ),
-    classId: v.optional(v.id("vehicleClasses")), // Reference to vehicle class
-    classSortIndex: v.optional(v.number()), // For custom sorting within a class (future feature)
     seats: v.optional(v.number()),
     transmission: v.optional(
       v.union(v.literal("automatic"), v.literal("manual")),

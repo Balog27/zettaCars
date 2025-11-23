@@ -6,7 +6,7 @@ export type Vehicle = Doc<"vehicles">;
 // Extract types from the schema for use in components (derived from Convex schema)
 // export type VehicleType = "sedan" | "suv" | "hatchback" | "sports" | "truck" | "van";
 export type VehicleType = Vehicle["type"];
-// export type VehicleClass = "economy" | "compact" | "intermediate" | "standard" | "full-size" | "premium" | "luxury" | "sport" | "executive" | "commercial" | "convertible" | "super-sport" | "supercars" | "business" | "van";
+// export type VehicleClass = "hatchback" | "sedan" | "suv" | "crossover" | "van";
 export type VehicleClass = Vehicle["class"];
 // export type TransmissionType = "automatic" | "manual";
 export type TransmissionType = Vehicle["transmission"];
@@ -35,26 +35,22 @@ export interface VehicleFilters {
 }
 
 // Vehicle form data interface (for create/edit forms)
+// Vehicle form data interface (for create/edit forms)
 export interface VehicleFormData {
   make: string;
   model: string;
-  year: number;
+  year: string;
   type: VehicleType;
   class: VehicleClass;
-  seats: number;
+  seats: string;
   transmission: TransmissionType;
   fuelType: FuelType;
-  engineCapacity: number;
+  engineCapacity: string;
   engineType: string;
-  // Legacy field for backward compatibility
-  pricePerDay: number;
-  // New tiered pricing structure
-  pricingTiers: PricingTier[];
-  // Warranty amount for the vehicle
-  warranty: number;
-  location: string;
+  warranty: string;
   features: string[];
   status: VehicleStatus;
+  pricingTiers: PricingTier[];
 }
 
 // Vehicle search/display interface (for listings)

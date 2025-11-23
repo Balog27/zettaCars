@@ -96,6 +96,14 @@ export function getVehicleTypeLabel(type?: string): string {
 }
 
 /**
+ * Get vehicle class display label
+ */
+export function getVehicleClassLabel(vehicleClass?: string): string {
+  if (!vehicleClass) return '';
+  return vehicleClass.charAt(0).toUpperCase() + vehicleClass.slice(1);
+}
+
+/**
  * Check if dates are valid for rental
  */
 export function isValidRentalPeriod(pickup?: Date, restitution?: Date): boolean {

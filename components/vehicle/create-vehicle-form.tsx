@@ -38,7 +38,8 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { toast } from "sonner";
 
 // Use the compact categories used by the backend/schema
-type VehicleType = "comfort" | "business" | "suv" | "premium" | "van";
+type VehicleType = "compact" | "comfort" | "business" | "suv" | "premium" | "van";
+type VehicleClass = "hatchback" | "sedan" | "suv" | "crossover" | "van";
 type TransmissionType = "automatic" | "manual";
 type FuelType = "benzina" | "diesel" | "electric" | "hybrid";
 type StatusType = "available" | "rented" | "maintenance";
@@ -53,9 +54,8 @@ const vehicleSchema = z.object({
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  type: z.enum(["comfort", "business", "suv", "premium", "van"], {
-    required_error: "Vehicle type is required",
-  }),
+  type: z.enum(["comfort", "business", "suv", "premium", "van"]),
+  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"]),
   seats: z.string()
     .min(1, "Number of seats is required")
     .regex(/^\d+$/, "Seats must be a number")
@@ -111,13 +111,13 @@ export function CreateVehicleForm({
       make: "",
       model: "",
       year: new Date().getFullYear().toString(),
-  type: "comfort",
+      type: "comfort",
+      class: "hatchback",
       seats: "5",
       transmission: "automatic",
       fuelType: "benzina",
       engineCapacity: "",
       engineType: "",
-      // pricePerDay removed - using pricingTiers only
       location: "",
       features: [],
       status: "available",
@@ -156,9 +156,10 @@ export function CreateVehicleForm({
         model: values.model,
         year: parseInt(values.year),
         type: values.type as VehicleType,
+        class: values.class as VehicleClass,
         seats: parseInt(values.seats),
         transmission: values.transmission as TransmissionType,
-         fuelType: values.fuelType as FuelType,
+        fuelType: values.fuelType as FuelType,
         engineCapacity: parseFloat(values.engineCapacity),
         engineType: values.engineType,
         // pricePerDay removed - using pricingTiers only
@@ -294,14 +295,37 @@ export function CreateVehicleForm({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            <SelectItem value="comfort">Comfort</SelectItem>
-                            <SelectItem value="business">Business</SelectItem>
-                            <SelectItem value="suv">SUV</SelectItem>
-                            <SelectItem value="premium">Premium</SelectItem>
-                            <SelectItem value="van">Van</SelectItem>
+                          <SelectItem value="compact">Compact</SelectItem>
+                          <SelectItem value="comfort">Comfort</SelectItem>
+                          <SelectItem value="business">Business</SelectItem>
                           <SelectItem value="suv">SUV</SelectItem>
+                          <SelectItem value="premium">Premium</SelectItem>
+                          <SelectItem value="van">Van</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="class"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Class</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSubmitting}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select class" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
                           <SelectItem value="hatchback">Hatchback</SelectItem>
-                          <SelectItem value="sports">Sports</SelectItem>
+                          <SelectItem value="sedan">Sedan</SelectItem>
+                          <SelectItem value="suv">SUV</SelectItem>
+                          <SelectItem value="crossover">Crossover</SelectItem>
+                          <SelectItem value="van">Van</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

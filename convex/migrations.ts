@@ -1,4 +1,5 @@
 import { mutation } from "./_generated/server";
+import { migrateVehicleClasses } from "./migrations_migrateVehicleClasses";
 
 // Compact categories used in the data model
 type CompactVehicleType = "comfort" | "business" | "suv" | "premium" | "van";
@@ -41,3 +42,5 @@ export const migrateVehicleTypes = mutation({
     return { patched };
   }
 });
+
+export { migrateVehicleClasses };
