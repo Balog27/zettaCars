@@ -21,8 +21,10 @@ export const migrateVehicleTypes = mutation({
     patched: v.number(),
   }),
   handler: async (ctx) => {
-    // Fetch all vehicles
-    const vehicles = await ctx.db.query("vehicles").collect();
+  // Fetch all vehicles
+  // ctx typing here may not expose db in generated types for this migration file;
+  // cast to any to access db at runtime.
+  const vehicles = await (ctx as any).db.query("vehicles").collect();
     let patched = 0;
 
     for (const vehicle of vehicles) {
@@ -33,12 +35,16 @@ export const migrateVehicleTypes = mutation({
       if (mapped && mapped !== currentType) {
         try {
           // Cast mapped to the compact union expected by the schema
-          await ctx.db.patch(vehicle._id, { type: mapped as CompactVehicleType });
+          await (ctx as any).db.patch(vehicle._id, { type: mapped as CompactVehicleType });
           patched++;
         } catch (err) {
           // If patch fails for any reason, continue and report later
-          // Use console.error here because the Action/Mutation ctx may not expose a logger in this environment
-          console.error("Failed to patch vehicle", { id: vehicle._id, err });
+          // Try to use the runtime logger if available, otherwise fallback to console.error
+          try {
+            (ctx as any).log?.error?.("Failed to patch vehicle", { id: vehicle._id, err });
+          } catch (e) {
+            console.error("Failed to patch vehicle", { id: vehicle._id, err });
+          }
         }
       }
     }

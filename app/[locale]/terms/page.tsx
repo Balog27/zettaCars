@@ -360,7 +360,7 @@ export default function TermsAndConditionsPage() {
             <p><strong>Zetta Cars S.R.L.</strong> (CUI 52480190)</p>
             <p>Email: <Link href="mailto:contact@zettacarrental.com" className="text-primary hover:underline">contact@zettacarrental.com</Link></p>
             <p>Telefon: +40750250121</p>
-            <p>Adresă: Cluj "Avram Iancu" International Airport, Strada Traian Vuia 149-151, Cluj-Napoca, România</p>
+            <p>Adresă: Strada Partizanilor 32, Cluj-Napoca, Romania</p>
           </CardContent>
         </Card>
 

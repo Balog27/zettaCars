@@ -22,15 +22,17 @@ export const getAll = query({
     }),
   ),
   handler: async (ctx) => {
-    const blogs = await ctx.db
-      .query("blogs")
-      .withIndex("by_status", (q) => q.eq("status", "published"))
-      .collect();
+    // Query all blogs and filter for published ones
+    // Note: We query all and filter in JS because we need to sort by _creationTime
+    // which doesn't work well with indexed queries
+    const allBlogs = await ctx.db.query("blogs").collect();
+    
+    // Filter for published blogs and sort by creation time descending
+    const publishedBlogs = allBlogs
+      .filter((blog) => blog.status === "published")
+      .sort((a, b) => b._creationTime - a._creationTime);
 
-    // Sort by creation time descending (newest first)
-    const sortedBlogs = blogs.sort((a, b) => b._creationTime - a._creationTime);
-
-    return sortedBlogs.map((blog) => ({
+    return publishedBlogs.map((blog) => ({
       _id: blog._id,
       _creationTime: blog._creationTime,
       title: blog.title,
