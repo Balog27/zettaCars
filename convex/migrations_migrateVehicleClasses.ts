@@ -7,6 +7,7 @@ const allowedClasses = [
   "suv",
   "crossover",
   "van",
+  "compact",
 ] as const;
 type AllowedClass = typeof allowedClasses[number];
 
@@ -17,6 +18,7 @@ function mapLegacyClass(cls: string | undefined): AllowedClass {
   // Map some common legacy values if needed
   switch (cls) {
     case "compact":
+      return "compact";
     case "economy":
     case "intermediate":
     case "standard":

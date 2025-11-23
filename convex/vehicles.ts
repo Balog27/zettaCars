@@ -38,6 +38,7 @@ export const getAll = query({
           v.literal("suv"),
           v.literal("crossover"),
           v.literal("van"),
+          v.literal("compact"),
         ),
       ),
       transmission: v.optional(
@@ -146,8 +147,8 @@ export const uploadImages = action({
     }
 
 
-    // Sanitize class property before updating
-    const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van"];
+  // Sanitize class property before updating
+  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van", "compact"];
     let safeClass = vehicle.class;
     if (safeClass && !allowedClasses.includes(safeClass)) {
       safeClass = undefined;
@@ -290,6 +291,7 @@ export const create = mutation({
       v.literal("suv"),
       v.literal("crossover"),
       v.literal("van"),
+      v.literal("compact"),
     )),
     seats: v.optional(v.number()),
     transmission: v.optional(v.union(v.literal("automatic"), v.literal("manual"))),
@@ -313,8 +315,8 @@ export const create = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    // Only allow valid class values
-    const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van"];
+  // Only allow valid class values
+  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van", "compact"];
     let filteredArgs = { ...args };
     if (filteredArgs.class && !allowedClasses.includes(filteredArgs.class)) {
       filteredArgs.class = undefined;
@@ -376,8 +378,8 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const { id, ...updates } = args;
-    // Only allow valid class values
-    const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van"];
+  // Only allow valid class values
+  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van", "compact"];
     if (updates.class && !allowedClasses.includes(updates.class)) {
       updates.class = undefined;
     }
@@ -411,6 +413,7 @@ export const getAllVehiclesWithClasses = query({
           v.literal("suv"),
           v.literal("crossover"),
           v.literal("van"),
+          v.literal("compact"),
         ),
       ),
       seats: v.optional(v.number()),
