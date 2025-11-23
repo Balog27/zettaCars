@@ -24,7 +24,7 @@ export const getAll = query({
   handler: async (ctx) => {
     const blogs = await ctx.db
       .query("blogs")
-      .filter((q) => q.eq(q.field("status"), "published"))
+      .withIndex("by_status", (q) => q.eq("status", "published"))
       .order("desc")
       .collect();
 

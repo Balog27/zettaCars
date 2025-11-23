@@ -1,4 +1,5 @@
 import { mutation } from "./_generated/server";
+import { v } from "convex/values";
 import { migrateVehicleClasses } from "./migrations_migrateVehicleClasses";
 
 // Compact categories used in the data model
@@ -16,6 +17,9 @@ const legacyToCompact: Record<string, CompactVehicleType> = {
 
 export const migrateVehicleTypes = mutation({
   args: {},
+  returns: v.object({
+    patched: v.number(),
+  }),
   handler: async (ctx) => {
     // Fetch all vehicles
     const vehicles = await ctx.db.query("vehicles").collect();
