@@ -22,26 +22,34 @@ export const getAll = query({
     }),
   ),
   handler: async (ctx) => {
-    const blogs = await ctx.db
-      .query("blogs")
-      .withIndex("by_status", (q) => q.eq("status", "published"))
-      .order("desc")
-      .collect();
+    try {
+      const blogs = await ctx.db
+        .query("blogs")
+        .withIndex("by_status", (q) => q.eq("status", "published"))
+        .order("desc")
+        .collect();
 
-    return blogs.map((blog) => ({
-      _id: blog._id,
-      _creationTime: blog._creationTime,
-      title: blog.title,
-      slug: blog.slug,
-      author: blog.author,
-      description: blog.description,
-      coverImage: blog.coverImage,
-      tags: blog.tags,
-      publishedAt: blog.publishedAt,
-      status: blog.status,
-      readingTime: blog.readingTime,
-      views: blog.views,
-    }));
+      return blogs.map((blog) => ({
+        _id: blog._id,
+        _creationTime: blog._creationTime,
+        title: blog.title,
+        slug: blog.slug,
+        author: blog.author,
+        description: blog.description,
+        coverImage: blog.coverImage,
+        tags: blog.tags,
+        publishedAt: blog.publishedAt,
+        status: blog.status,
+        readingTime: blog.readingTime,
+        views: blog.views,
+      }));
+    } catch (err: any) {
+      // Log full error server-side so convex dev prints the stack and message
+      // This helps diagnose the client-facing "Server Error" from Convex.
+      console.error("Error in blogs:getAll handler:", err?.message ?? err, err);
+      // Rethrow so Convex surfaces the error to the client (and we still have full logs)
+      throw err;
+    }
   },
 });
 
