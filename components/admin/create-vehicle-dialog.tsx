@@ -175,25 +175,6 @@ export function CreateVehicleDialog({
   const onSubmit = async (values: VehicleFormData) => {
     setIsSubmitting(true);
 
-    // Basic client-side validation for pricing tiers: pricePerDay must be >= 1 and min/max days must be >= 1
-    for (const t of pricingTiers) {
-      if (!t.pricePerDay || t.pricePerDay < 1) {
-        toast.error("Each pricing tier must have Price/Day >= 1 EUR");
-        setIsSubmitting(false);
-        return;
-      }
-      if (!t.minDays || t.minDays < 1) {
-        toast.error("Each pricing tier must have Min Days >= 1");
-        setIsSubmitting(false);
-        return;
-      }
-      if (!t.maxDays || t.maxDays < 1) {
-        toast.error("Each pricing tier must have Max Days >= 1");
-        setIsSubmitting(false);
-        return;
-      }
-    }
-
     try {
       const vehicleDataToSubmit = {
         make: values.make,
@@ -624,9 +605,9 @@ export function CreateVehicleDialog({
                           <FormLabel className="text-xs">Min Days</FormLabel>
                           <Input
                             type="text"
-                            value={tier.minDays === 0 ? "" : tier.minDays.toString()}
+                            value={tier.minDays.toString()}
                             onKeyDown={handleIntegerInput}
-                            onChange={(e) => updatePricingTier(index, "minDays", e.target.value === "" ? 0 : parseInt(e.target.value))}
+                            onChange={(e) => updatePricingTier(index, "minDays", parseInt(e.target.value) || 1)}
                             disabled={isSubmitting}
                           />
                         </div>
@@ -634,9 +615,9 @@ export function CreateVehicleDialog({
                           <FormLabel className="text-xs">Max Days</FormLabel>
                           <Input
                             type="text"
-                            value={tier.maxDays === 0 ? "" : tier.maxDays.toString()}
+                            value={tier.maxDays.toString()}
                             onKeyDown={handleIntegerInput}
-                            onChange={(e) => updatePricingTier(index, "maxDays", e.target.value === "" ? 0 : parseInt(e.target.value))}
+                            onChange={(e) => updatePricingTier(index, "maxDays", parseInt(e.target.value) || 1)}
                             disabled={isSubmitting}
                           />
                         </div>
@@ -644,9 +625,9 @@ export function CreateVehicleDialog({
                           <FormLabel className="text-xs">Price/Day (EUR)</FormLabel>
                           <Input
                             type="text"
-                            value={tier.pricePerDay === 0 ? "" : tier.pricePerDay.toString()}
+                            value={tier.pricePerDay.toString()}
                             onKeyDown={handleNumberInput}
-                            onChange={(e) => updatePricingTier(index, "pricePerDay", e.target.value === "" ? 0 : parseFloat(e.target.value))}
+                            onChange={(e) => updatePricingTier(index, "pricePerDay", parseFloat(e.target.value) || 0)}
                             disabled={isSubmitting}
                           />
                         </div>

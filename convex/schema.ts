@@ -68,7 +68,7 @@ export default defineSchema({
         }),
       ),
     ),
-  warranty: v.optional(v.number()), // Warranty amount for the vehicle
+    warranty: v.optional(v.number()), // Warranty amount for the vehicle
     location: v.optional(v.string()),
     features: v.optional(v.array(v.string())),
     status: v.union(

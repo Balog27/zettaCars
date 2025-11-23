@@ -31,9 +31,13 @@ export function useHomepageFeaturedVehicles(): UseHomepageFeaturedVehiclesReturn
       // Use featured cars from backend
       vehiclesToDisplay = featuredVehicles;
       currentTitle = "Featured Cars";
-    } else if (fallbackVehiclesQuery?.page) {
-      // Fallback to random selection
-      vehiclesToDisplay = fallbackVehiclesQuery.page as Vehicle[];
+    } else if (fallbackVehiclesQuery) {
+      // Fallback may return either an array or a paginated object with `.page`.
+      if (Array.isArray(fallbackVehiclesQuery)) {
+        vehiclesToDisplay = fallbackVehiclesQuery as Vehicle[];
+      } else if ((fallbackVehiclesQuery as any).page) {
+        vehiclesToDisplay = (fallbackVehiclesQuery as any).page as Vehicle[];
+      }
       currentTitle = vehiclesToDisplay.length > 0 ? "Our Latest Cars" : "No Cars Available";
     } else {
       vehiclesToDisplay = [];

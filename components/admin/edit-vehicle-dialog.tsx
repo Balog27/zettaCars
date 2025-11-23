@@ -123,7 +123,6 @@ const vehicleSchema = z.object({
       }),
     )
     .min(1, "At least one pricing tier is required"),
-    // isOwner removed
 });
 
 type VehicleFormData = z.infer<typeof vehicleSchema>;
@@ -190,7 +189,6 @@ export function EditVehicleDialog({
       engineType: "",
       // pricePerDay removed - using pricingTiers only
       warranty: "",
-        // isOwner removed
       features: [],
       status: "available",
       pricingTiers: [{ minDays: 1, maxDays: 999, pricePerDay: 50 }], // Default tier
@@ -213,7 +211,8 @@ export function EditVehicleDialog({
         engineCapacity: (vehicle.engineCapacity || 0).toString(),
         engineType: vehicle.engineType || "",
         // pricePerDay removed - using pricingTiers only
-    warranty: (vehicle.warranty || 0).toString(),
+        warranty: (vehicle.warranty || 0).toString(),
+        // isOwner removed from schema
         features: vehicle.features || [],
         status: vehicle.status,
         pricingTiers: [],
@@ -274,60 +273,34 @@ export function EditVehicleDialog({
 
     setIsSubmitting(true);
 
-    // Basic client-side validation for pricing tiers: pricePerDay must be >= 1 and min/max days must be >= 1
-    for (const t of pricingTiers) {
-      if (!t.pricePerDay || t.pricePerDay < 1) {
-        toast.error("Each pricing tier must have Price/Day >= 1 EUR");
-        setIsSubmitting(false);
-        return;
-      }
-      if (!t.minDays || t.minDays < 1) {
-        toast.error("Each pricing tier must have Min Days >= 1");
-        setIsSubmitting(false);
-        return;
-      }
-      if (!t.maxDays || t.maxDays < 1) {
-        toast.error("Each pricing tier must have Max Days >= 1");
-        setIsSubmitting(false);
-        return;
-      }
-    }
-
-  try {
-  const vehicleDataToSubmit = {
-    id: vehicleId,
-    make: values.make,
-    model: values.model,
-    year: parseInt(values.year),
+    try {
+      const vehicleDataToSubmit = {
+        id: vehicleId,
+        make: values.make,
+        model: values.model,
+        year: parseInt(values.year),
   type: values.type as VehicleType,
   class: values.class as VehicleClass,
-    seats: parseInt(values.seats),
-    transmission: values.transmission as TransmissionType,
-    fuelType: values.fuelType as FuelType,
-  engineCapacity: values.engineCapacity ? parseFloat(values.engineCapacity) : undefined,
-    engineType: values.engineType,
-    // pricePerDay removed - using pricingTiers only
-    warranty: values.warranty ? parseFloat(values.warranty) : 0,
-    // don't include isOwner in update payload — server validator may reject unexpected fields
-    features: values.features,
-    status: values.status as VehicleStatus,
-    pricingTiers: pricingTiers,
-  };
+        seats: parseInt(values.seats),
+        transmission: values.transmission as TransmissionType,
+        fuelType: values.fuelType as FuelType,
+        engineCapacity: parseFloat(values.engineCapacity),
+        engineType: values.engineType,
+        // pricePerDay removed - using pricingTiers only
+        warranty: values.warranty ? parseFloat(values.warranty) : 0,
+        features: values.features,
+        status: values.status as VehicleStatus,
+        pricingTiers: pricingTiers,
+      };
 
-  // Omit explicitly any admin-only or extra fields that the server validator may not accept
-  const { /* isOwner, */ ...payload } = vehicleDataToSubmit as any;
+      await updateVehicle(vehicleDataToSubmit);
 
-  await updateVehicle(payload);
-
-  toast.success("Vehicle updated successfully");
-  onSuccess?.();
-  onOpenChange(false);
+      toast.success("Vehicle updated successfully");
+      onSuccess?.();
+      onOpenChange(false);
     } catch (error) {
-      // Surface detailed error information to aid debugging
       console.error("Error updating vehicle:", error);
-      const errMsg = (error as any)?.message ??
-        (typeof error === "string" ? error : JSON.stringify(error));
-      toast.error(`Failed to update vehicle: ${errMsg ?? "Unknown error"}`);
+      toast.error("Failed to update vehicle");
     } finally {
       setIsSubmitting(false);
     }
@@ -709,7 +682,7 @@ export function EditVehicleDialog({
                       )}
                     />
 
-                    {/* isOwner removed */}
+                    {/* isOwner removed from schema; ownership is not editable in admin UI */}
 
                     <FormField
                       control={form.control}
@@ -774,13 +747,13 @@ export function EditVehicleDialog({
                           <FormLabel className="text-xs">Min Days</FormLabel>
                           <Input
                             type="text"
-                            value={tier.minDays === 0 ? "" : tier.minDays.toString()}
+                            value={tier.minDays.toString()}
                             onKeyDown={handleIntegerInput}
                             onChange={(e) =>
                               updatePricingTier(
                                 index,
                                 "minDays",
-                                e.target.value === "" ? 0 : parseInt(e.target.value),
+                                parseInt(e.target.value) || 1,
                               )
                             }
                             disabled={isSubmitting}
@@ -790,13 +763,13 @@ export function EditVehicleDialog({
                           <FormLabel className="text-xs">Max Days</FormLabel>
                           <Input
                             type="text"
-                            value={tier.maxDays === 0 ? "" : tier.maxDays.toString()}
+                            value={tier.maxDays.toString()}
                             onKeyDown={handleIntegerInput}
                             onChange={(e) =>
                               updatePricingTier(
                                 index,
                                 "maxDays",
-                                e.target.value === "" ? 0 : parseInt(e.target.value),
+                                parseInt(e.target.value) || 1,
                               )
                             }
                             disabled={isSubmitting}
@@ -808,13 +781,13 @@ export function EditVehicleDialog({
                           </FormLabel>
                           <Input
                             type="text"
-                            value={tier.pricePerDay === 0 ? "" : tier.pricePerDay.toString()}
+                            value={tier.pricePerDay.toString()}
                             onKeyDown={handleNumberInput}
                             onChange={(e) =>
                               updatePricingTier(
                                 index,
                                 "pricePerDay",
-                                e.target.value === "" ? 0 : parseFloat(e.target.value),
+                                parseFloat(e.target.value) || 0,
                               )
                             }
                             disabled={isSubmitting}
