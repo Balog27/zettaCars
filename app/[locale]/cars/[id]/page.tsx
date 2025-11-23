@@ -25,7 +25,7 @@ import { VehiclePricingCardSkeleton } from "@/components/vehicle/vehicle-pricing
 import { PricingTiersTable } from "@/components/vehicle/pricing-tiers-table";
 import { PricingTiersTableSkeleton } from "@/components/vehicle/pricing-tiers-table-skeleton";
 import { useVehicleDetails } from "@/hooks/useVehicleDetails";
-import { formatVehicleName, getVehicleTypeLabel } from "@/lib/vehicleUtils";
+import { formatVehicleName, getVehicleTypeLabel, getVehicleClassLabel } from "@/lib/vehicleUtils";
 import { RentalDetails } from "@/components/rental-details";
 import { RentalDetailsSkeleton } from "@/components/rental-details-skeleton";
 import { useTranslations } from 'next-intl';
@@ -253,11 +253,18 @@ export default function CarDetailPage() {
               <h1 className="text-3xl font-bold">
                 {vehicleName}
               </h1>
-              {vehicle.type && (
-                <Badge variant="outline" className="mt-2">
-                  {getVehicleTypeLabel(vehicle.type)}
-                </Badge>
-              )}
+              <div className="flex gap-2 mt-2">
+                {vehicle.type && (
+                  <Badge variant="outline">
+                    {getVehicleTypeLabel(vehicle.type)}
+                  </Badge>
+                )}
+                {vehicle.class && (
+                  <Badge variant="outline">
+                    {getVehicleClassLabel(vehicle.class)}
+                  </Badge>
+                )}
+              </div>
             </div>
 
             {/* Rental Details Component */}

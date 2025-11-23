@@ -1,7 +1,11 @@
-import { action } from "./_generated/server";
+import { mutation } from "./_generated/server";
+import { migrateVehicleClasses } from "./migrations_migrateVehicleClasses";
+
+// Compact categories used in the data model
+type CompactVehicleType = "comfort" | "business" | "suv" | "premium" | "van";
 
 // Map legacy vehicle type values to the new compact categories
-const legacyToCompact: Record<string, string> = {
+const legacyToCompact: Record<string, CompactVehicleType> = {
   sedan: "comfort",
   hatchback: "comfort",
   sports: "premium",
@@ -10,7 +14,7 @@ const legacyToCompact: Record<string, string> = {
   van: "van",
 };
 
-export const migrateVehicleTypes = action({
+export const migrateVehicleTypes = mutation({
   args: {},
   handler: async (ctx) => {
     // Fetch all vehicles
@@ -24,11 +28,13 @@ export const migrateVehicleTypes = action({
       const mapped = legacyToCompact[currentType];
       if (mapped && mapped !== currentType) {
         try {
-          await ctx.db.patch(vehicle._id, { type: mapped });
+          // Cast mapped to the compact union expected by the schema
+          await ctx.db.patch(vehicle._id, { type: mapped as CompactVehicleType });
           patched++;
         } catch (err) {
           // If patch fails for any reason, continue and report later
-          ctx.log?.error?.("Failed to patch vehicle", { id: vehicle._id, err });
+          // Use console.error here because the Action/Mutation ctx may not expose a logger in this environment
+          console.error("Failed to patch vehicle", { id: vehicle._id, err });
         }
       }
     }
@@ -36,3 +42,5 @@ export const migrateVehicleTypes = action({
     return { patched };
   }
 });
+
+export { migrateVehicleClasses };

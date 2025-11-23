@@ -58,9 +58,12 @@ const vehicleSchema = z.object({
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  // Use compact categories in the admin form
+  // Use correct vehicle type and class enums
   type: z.enum(["comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
+  }),
+  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"], {
+    required_error: "Vehicle class is required",
   }),
   seats: z.string()
     .min(1, "Number of seats is required")
@@ -130,17 +133,17 @@ export function CreateVehicleDialog({
       make: "",
       model: "",
       year: new Date().getFullYear().toString(),
-      type: "comfort",
+  type: "comfort",
+      class: "hatchback",
       seats: "5",
       transmission: "automatic",
       fuelType: "diesel",
       engineCapacity: "",
       engineType: "",
-      // pricePerDay removed - using pricingTiers only
       warranty: "",
       features: [],
       status: "available",
-      pricingTiers: [{ minDays: 1, maxDays: 999, pricePerDay: 50 }], // Default tier
+      pricingTiers: [{ minDays: 1, maxDays: 999, pricePerDay: 50 }],
     },
   });
 
@@ -150,17 +153,17 @@ export function CreateVehicleDialog({
         make: "",
         model: "",
         year: new Date().getFullYear().toString(),
-        type: "comfort",
+  type: "comfort",
+        class: "hatchback",
         seats: "5",
         transmission: "automatic",
         fuelType: "diesel",
         engineCapacity: "",
         engineType: "",
-        // pricePerDay removed - using pricingTiers only
         warranty: "",
         features: [],
         status: "available",
-        pricingTiers: [{ minDays: 1, maxDays: 999, pricePerDay: 50 }], // Default tier
+        pricingTiers: [{ minDays: 1, maxDays: 999, pricePerDay: 50 }],
       });
       setPricingTiers([{ minDays: 1, maxDays: 999, pricePerDay: 50 }]); // Default tier
       setSelectedImageFiles([]);
@@ -177,20 +180,21 @@ export function CreateVehicleDialog({
         make: values.make,
         model: values.model,
         year: parseInt(values.year),
-        type: values.type as VehicleType,
+  type: values.type,
+        class: values.class,
         seats: parseInt(values.seats),
         transmission: values.transmission as TransmissionType,
         fuelType: values.fuelType as FuelType,
         engineCapacity: parseFloat(values.engineCapacity),
         engineType: values.engineType,
-        // pricePerDay removed - using pricingTiers only
         warranty: values.warranty ? parseFloat(values.warranty) : 0,
         features: values.features,
         status: values.status as VehicleStatus,
         pricingTiers: pricingTiers,
       };
 
-      const vehicleId = await createVehicle(vehicleDataToSubmit);
+  // Cast to any because Convex generated API types can be out-of-sync with schema during migration
+  const vehicleId = await createVehicle(vehicleDataToSubmit as any);
 
       // Upload images if any are selected
       if (selectedImageFiles.length > 0) {
@@ -403,7 +407,30 @@ export function CreateVehicleDialog({
                       )}
                     />
 
-                    {/* 'Class' removed from admin form. Admin will use vehicle 'type' (same as the public /cars listing). */}
+                    <FormField
+                      control={form.control}
+                      name="class"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Class</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSubmitting}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select class" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="hatchback">Hatchback</SelectItem>
+                                <SelectItem value="sedan">Sedan</SelectItem>
+                                <SelectItem value="suv">SUV</SelectItem>
+                                <SelectItem value="crossover">Crossover</SelectItem>
+                                <SelectItem value="van">Van</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <FormField
                       control={form.control}

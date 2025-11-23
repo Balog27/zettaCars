@@ -27,7 +27,23 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
 // Assuming these types are defined in a shared location or are appropriate here
-type VehicleType = "sedan" | "suv" | "hatchback" | "sports";
+type VehicleType = "hatchback" | "sedan" | "suv" | "crossover" | "van";
+// Compact categories used by the backend/schema
+type CompactVehicleType = "hatchback" | "sedan" | "suv" | "crossover" | "van";
+
+function mapToCompactType(t: VehicleType | string): CompactVehicleType {
+  // Direct mapping now, as only allowed values are used
+  switch (t) {
+    case "hatchback":
+    case "sedan":
+    case "suv":
+    case "crossover":
+    case "van":
+      return t as CompactVehicleType;
+    default:
+      return "hatchback";
+  }
+}
 type TransmissionType = "automatic" | "manual";
 type FuelType = "benzina" | "diesel" | "electric" | "hybrid";
 type StatusType = "available" | "rented" | "maintenance"; // Assuming vehicle object has status
@@ -122,6 +138,8 @@ export function EditVehicleForm({
         ...formData,
         year: Number(formData.year),
         seats: Number(formData.seats),
+        // Ensure type is one of the compact categories expected by the backend
+        type: mapToCompactType(formData.type) as any,
         // pricePerDay removed - using pricingTiers only
         engineCapacity: Number(formData.engineCapacity), // Ensure it's a number
         engineType: formData.engineType,
@@ -238,10 +256,11 @@ export function EditVehicleForm({
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="hatchback">Hatchback</SelectItem>
                     <SelectItem value="sedan">Sedan</SelectItem>
                     <SelectItem value="suv">SUV</SelectItem>
-                    <SelectItem value="hatchback">Hatchback</SelectItem>
-                    <SelectItem value="sports">Sports</SelectItem>
+                    <SelectItem value="crossover">Crossover</SelectItem>
+                    <SelectItem value="van">Van</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

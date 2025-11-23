@@ -9,12 +9,15 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as blogs from "../blogs.js";
 import type * as featuredCars from "../featuredCars.js";
 import type * as migrations from "../migrations.js";
+import type * as migrations_migrateVehicleClasses from "../migrations_migrateVehicleClasses.js";
 import type * as reservations from "../reservations.js";
 import type * as reviews from "../reviews.js";
 import type * as seasons from "../seasons.js";
 import type * as users from "../users.js";
+import type * as vehicleClasses from "../vehicleClasses.js";
 import type * as vehicles from "../vehicles.js";
 
 import type {
@@ -33,12 +36,15 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  blogs: typeof blogs;
   featuredCars: typeof featuredCars;
   migrations: typeof migrations;
+  migrations_migrateVehicleClasses: typeof migrations_migrateVehicleClasses;
   reservations: typeof reservations;
   reviews: typeof reviews;
   seasons: typeof seasons;
   users: typeof users;
+  vehicleClasses: typeof vehicleClasses;
   vehicles: typeof vehicles;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
