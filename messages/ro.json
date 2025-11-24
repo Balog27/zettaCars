@@ -238,6 +238,10 @@
     "notAuthenticated": "Trebuie să fiți autentificat pentru a trimite un mesaj.",
     "sendFailed": "Trimiterea mesajului a eșuat. Vă rugăm să încercați din nou mai târziu.",
     "sendSuccess": "Mesaj trimis — vă vom răspunde în curând.",
+    "sendConfirmation": {
+      "title": "Mesaj trimis — vă vom răspunde în curând.",
+      "body": "Vă vom contacta în curând la adresa de e-mail asociată contului dumneavoastră${emailPartRo}."
+    },
     "socialMedia": {
       "tiktok": {
         "title": "TikTok",
