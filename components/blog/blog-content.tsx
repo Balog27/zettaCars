@@ -20,6 +20,8 @@ export function BlogContent({ content }: BlogContentProps) {
   );
   const [mdxError, setMdxError] = useState<Error | null>(null);
   const components = useMDXComponents({ BlogImage });
+  const [renderWithoutComponents, setRenderWithoutComponents] =
+    useState(false);
 
   useEffect(() => {
     const processContent = async () => {
@@ -75,8 +77,14 @@ export function BlogContent({ content }: BlogContentProps) {
 
   return (
     <article className="prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-20">
-      <MDXErrorBoundary>
-        <MDXRemote {...mdxSource} components={components} />
+      <MDXErrorBoundary onError={(err) => setRenderWithoutComponents(true)}>
+        {/* If a custom MDX component (e.g. BlogImage) crashes in production,
+            retry rendering without the custom components to isolate the issue. */}
+        {renderWithoutComponents ? (
+          <MDXRemote {...mdxSource} />
+        ) : (
+          <MDXRemote {...mdxSource} components={components} />
+        )}
       </MDXErrorBoundary>
     </article>
   );
@@ -84,7 +92,7 @@ export function BlogContent({ content }: BlogContentProps) {
 
 // ErrorBoundary to catch render-time errors coming from MDX or custom MDX components
 class MDXErrorBoundary extends React.Component<
-  { children: React.ReactNode; fallback?: React.ReactNode },
+  { children: React.ReactNode; fallback?: React.ReactNode; onError?: (e: Error) => void },
   { hasError: boolean; error: Error | null }
 > {
   constructor(props: any) {
@@ -99,8 +107,16 @@ class MDXErrorBoundary extends React.Component<
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     // Log to console for now; in production you may send this to an error tracking service
     // Keep the message explicit so we can spot MDX serialization/render errors.
+    // Log the error and inform the parent that an error occurred so it
+    // can decide on a fallback strategy (for example: render without
+    // custom MDX components).
     // eslint-disable-next-line no-console
     console.error("MDX render error:", error, info);
+    try {
+      this.props.onError?.(error);
+    } catch (e) {
+      // ignore errors from the callback
+    }
   }
 
   render() {
