@@ -12,6 +12,9 @@ import { BlogImage } from "./blog-image";
 
 interface BlogContentProps {
   content: string;
+  // Optional label (slug or id) to include in ErrorBoundary logs for easier
+  // identification when a specific post fails in production.
+  debugLabel?: string;
 }
 
 export function BlogContent({ content }: BlogContentProps) {
@@ -77,7 +80,11 @@ export function BlogContent({ content }: BlogContentProps) {
 
   return (
     <article className="prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-20">
-      <MDXErrorBoundary onError={(err) => setRenderWithoutComponents(true)}>
+      <MDXErrorBoundary
+        debugLabel={undefined}
+        mdxSource={mdxSource}
+        onError={(err) => setRenderWithoutComponents(true)}
+      >
         {/* If a custom MDX component (e.g. BlogImage) crashes in production,
             retry rendering without the custom components to isolate the issue. */}
         {renderWithoutComponents ? (
@@ -92,7 +99,14 @@ export function BlogContent({ content }: BlogContentProps) {
 
 // ErrorBoundary to catch render-time errors coming from MDX or custom MDX components
 class MDXErrorBoundary extends React.Component<
-  { children: React.ReactNode; fallback?: React.ReactNode; onError?: (e: Error) => void },
+  {
+    children: React.ReactNode;
+    fallback?: React.ReactNode;
+    onError?: (e: Error) => void;
+    // optional debug props passed from the caller
+    debugLabel?: string | undefined;
+    mdxSource?: any;
+  },
   { hasError: boolean; error: Error | null }
 > {
   constructor(props: any) {
@@ -111,7 +125,26 @@ class MDXErrorBoundary extends React.Component<
     // can decide on a fallback strategy (for example: render without
     // custom MDX components).
     // eslint-disable-next-line no-console
-    console.error("MDX render error:", error, info);
+    try {
+      const label = this.props.debugLabel ?? "(unknown-post)";
+      const stack = info?.componentStack ?? "(no component stack)";
+      // Try to include a tiny preview of the compiled MDX to identify the post
+      const mdxPreview = (() => {
+        try {
+          const s = this.props.mdxSource?.compiledSource ?? this.props.mdxSource?.compiled ?? undefined;
+          if (!s) return undefined;
+          return String(s).slice(0, 300);
+        } catch (e) {
+          return undefined;
+        }
+      })();
+
+      console.error("MDX render error:", { label, error, stack, mdxPreview });
+    } catch (e) {
+      // fallback logging
+      // eslint-disable-next-line no-console
+      console.error("MDX render error (logging failed):", error, info);
+    }
     try {
       this.props.onError?.(error);
     } catch (e) {
@@ -126,6 +159,13 @@ class MDXErrorBoundary extends React.Component<
           <p>Sorry — there was a problem rendering this article.</p>
           <details className="whitespace-pre-wrap mt-2 text-xs text-muted-foreground">
             {String(this.state.error)}
+          </details>
+          <details className="whitespace-pre-wrap mt-2 text-xs text-muted-foreground">
+            <summary className="font-medium">Debug info</summary>
+            <div>
+              <p className="text-xs">Label: {String(this.props.debugLabel ?? "(unknown)")}</p>
+              <pre className="text-xs mt-1 max-h-40 overflow-auto">{String(this.props.mdxSource?.compiledSource ?? '').slice(0, 200)}</pre>
+            </div>
           </details>
         </div>
       );

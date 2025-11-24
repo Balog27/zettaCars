@@ -68,7 +68,7 @@ export function BlogDetailClient({
         )}
 
         <div className="mt-12">
-          <BlogContent content={blog.content} />
+          <BlogContent content={blog.content} debugLabel={slug} />
         </div>
       </div>
   );
