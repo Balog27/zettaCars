@@ -9,7 +9,9 @@ interface EmailHeaderProps {
 
 export const EmailHeader: React.FC<EmailHeaderProps> = ({ 
   title, 
-  logoUrl = "https://rngo.ro/_next/image?url=%2Flogo.png&w=256&q=75",
+  // Use the public Zetta Cars logo for emails so outgoing messages are correctly branded.
+  // Absolute URL is safer for email clients (remote image) than a Next.js image proxy path.
+  logoUrl = "https://zettacarrental.com/logo.png",
   logoAlt = "Zetta Cars Logo"
 }) => {
   return (
