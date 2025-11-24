@@ -59,7 +59,8 @@ const vehicleSchema = z.object({
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
   // Use correct vehicle type and class enums
-  type: z.enum(["comfort", "business", "suv", "premium", "van"], {
+  // Note: include "compact" to match other forms and backend schema
+  type: z.enum(["comfort", "business", "suv", "premium", "van", "compact"], {
     required_error: "Vehicle type is required",
   }),
   class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"], {
