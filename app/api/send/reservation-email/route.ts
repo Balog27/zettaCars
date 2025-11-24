@@ -109,7 +109,10 @@ export async function POST(request: Request) {
             <body>
                 <div class="email-container">
                     <div class="header">
-                        <div class="logo">Zetta Cars</div>
+                        <!-- Zetta Cars logo - use absolute URL so email clients can fetch it -->
+                        <div style="text-align:center; margin-bottom:8px;">
+                            <img src="https://zettacarrental.com/logo.png" alt="Zetta Cars Logo" style="width:120px; height:auto; display:block; margin:0 auto 8px;" />
+                        </div>
                         <span class="email-type ${emailType}">${emailType} Email</span>
                     </div>
                     

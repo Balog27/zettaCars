@@ -223,6 +223,10 @@
     "notAuthenticated": "You must be signed in to send a message.",
     "sendFailed": "Failed to send message. Please try again later.",
     "sendSuccess": "Message sent — we will reply shortly.",
+    "sendConfirmation": {
+      "title": "Message sent — we will reply shortly.",
+      "body": "We will contact you shortly at the email address associated with your account${emailPartEn}."
+    },
     "socialMedia": {
       "tiktok": {
         "title": "TikTok",
