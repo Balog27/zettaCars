@@ -352,6 +352,7 @@ export const update = mutation({
       v.literal("suv"),
       v.literal("crossover"),
       v.literal("van"),
+      v.literal("compact"),
     )),
     seats: v.optional(v.number()),
     transmission: v.optional(v.union(v.literal("automatic"), v.literal("manual"))),

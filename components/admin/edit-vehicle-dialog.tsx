@@ -77,7 +77,14 @@ const vehicleSchema = z.object({
   type: z.enum(["compact", "comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
   }),
-  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"], {
+  class: z.enum([
+    "hatchback",
+    "sedan",
+    "suv",
+    "crossover",
+    "van",
+    "compact",
+  ], {
     required_error: "Vehicle class is required",
   }),
   // vehicle.class removed from admin form validation; admin uses `type` only
