@@ -132,7 +132,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-muted-foreground text-center">Refinează căutarea folosind filtrele de mai sus pentru rezultate mai relevante.</p>
+          <p className="mt-6 text-sm text-muted-foreground text-center">Folosește filtrele de mai sus pentru a găsi mai rapid mașina potrivită.</p>
         </div>
         {/* Type navigation is handled at page level (upper row); no type buttons here. */}
       </CardContent>

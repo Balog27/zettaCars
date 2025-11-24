@@ -24,12 +24,14 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
   // returns; the page that consumes the selection should expand these keys
   // into the underlying types when filtering.
   const vehicleTypes = [
+    // Reordered so the UI shows: All Vehicles -> Premium -> SUV first,
+    // then the remaining categories.
     { key: null, label: t('allVehicles') },
+    { key: 'premium', label: t('premium') || formatLabel('premium') },
+    { key: 'suv', label: t('suv') || formatLabel('suv') },
     { key: 'comfort', label: t('comfort') || formatLabel('comfort') },
     { key: 'compact', label: t('compact') || formatLabel('compact') },
     { key: 'business', label: t('business') || formatLabel('business') },
-    { key: 'suv', label: t('suv') || formatLabel('suv') },
-    { key: 'premium', label: t('premium') || formatLabel('premium') },
     { key: 'van', label: t('van') || formatLabel('van') }
   ];
 

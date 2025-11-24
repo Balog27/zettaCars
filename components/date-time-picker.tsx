@@ -189,7 +189,7 @@ export function DateTimePicker({
             fromDate={minDate}
             className="p-2 sm:pe-3 border-border max-sm:border-b sm:border-r"
             disabled={disabledDateRanges}
-            autoFocus
+            // removed autoFocus to avoid browser auto-scrolling when the popover opens
           />
           <div className="relative w-full max-sm:h-60 sm:w-40 sm:h-[320px]">
             <ScrollArea className="h-full py-2">
