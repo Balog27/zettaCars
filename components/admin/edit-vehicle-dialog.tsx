@@ -4,7 +4,15 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { VehicleType, TransmissionType, FuelType, VehicleStatus, PricingTier } from "@/types/vehicle";
+// import { CreateClassDialog } from "@/components/admin/create-class-dialog";
+import {
+  VehicleType,
+  VehicleClass,
+  TransmissionType,
+  FuelType,
+  VehicleStatus,
+  PricingTier,
+} from "@/types/vehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -40,7 +48,7 @@ import { ModernImageUpload } from "@/components/ui/modern-image-upload";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { toast } from "sonner";
-import { Plus, X } from "lucide-react";
+import { Plus, X, FolderPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Tabs = TabsPrimitive.Root;
@@ -49,22 +57,36 @@ const TabsTrigger = TabsPrimitive.Trigger;
 const TabsContent = TabsPrimitive.Content;
 
 const vehicleSchema = z.object({
-  make: z.string().min(1, "Make is required").max(50, "Make must be less than 50 characters"),
-  model: z.string().min(1, "Model is required").max(50, "Model must be less than 50 characters"),
-  year: z.string()
+  make: z
+    .string()
+    .min(1, "Make is required")
+    .max(50, "Make must be less than 50 characters"),
+  model: z
+    .string()
+    .min(1, "Model is required")
+    .max(50, "Model must be less than 50 characters"),
+  year: z
+    .string()
     .min(1, "Year is required")
     .regex(/^\d{4}$/, "Year must be a 4-digit number")
     .refine((val) => {
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  // Use compact categories in the admin form
-  type: z.enum(["comfort", "business", "suv", "premium", "van"], {
+  // Use compact categories for type, and class for class
+  type: z.enum(["compact", "comfort", "business", "suv", "premium", "van"], {
     required_error: "Vehicle type is required",
   }),
-  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"], {
+  class: z.enum([
+    "hatchback",
+    "sedan",
+    "suv",
+    "crossover",
+    "van",
+  ], {
     required_error: "Vehicle class is required",
   }),
+  // vehicle.class removed from admin form validation; admin uses `type` only
   seats: z.string()
     .min(1, "Number of seats is required")
     .regex(/^\d+$/, "Seats must be a number")
@@ -78,26 +100,35 @@ const vehicleSchema = z.object({
   fuelType: z.enum(["petrol", "diesel", "electric", "hybrid", "benzina"], {
     required_error: "Fuel type is required",
   }),
-  engineCapacity: z.string()
+  engineCapacity: z
+    .string()
     .min(1, "Engine capacity is required")
     .regex(/^\d+(\.\d+)?$/, "Engine capacity must be a valid number")
     .refine((val) => {
       const capacity = parseFloat(val);
       return capacity > 0 && capacity <= 10;
     }, "Engine capacity must be between 0.1 and 10.0"),
-  engineType: z.string().min(1, "Engine type is required").max(20, "Engine type must be less than 20 characters"),
+  engineType: z
+    .string()
+    .min(1, "Engine type is required")
+    .max(20, "Engine type must be less than 20 characters"),
   // Remove pricePerDay validation as it's no longer needed
-  warranty: z.string()
+  warranty: z
+    .string()
     .regex(/^\d+(\.\d{1,2})?$/, "Warranty must be a valid number")
     .optional()
     .or(z.literal("")),
   features: z.array(z.string()),
   status: z.enum(["available", "rented", "maintenance"]),
-  pricingTiers: z.array(z.object({
-    minDays: z.number().min(1),
-    maxDays: z.number().min(1),
-    pricePerDay: z.number().min(0),
-  })).min(1, "At least one pricing tier is required"),
+  pricingTiers: z
+    .array(
+      z.object({
+        minDays: z.number().min(1),
+        maxDays: z.number().min(1),
+        pricePerDay: z.number().min(0),
+      }),
+    )
+    .min(1, "At least one pricing tier is required"),
 });
 
 type VehicleFormData = z.infer<typeof vehicleSchema>;
@@ -110,9 +141,20 @@ interface EditVehicleDialogProps {
 }
 
 const availableFeatures = [
-  "Air Conditioning", "Bluetooth", "Parking Sensors", "Backup Camera", 
-  "GPS", "Sunroof", "Heated Seats", "Cruise Control", "Leather Seats",
-  "USB Charging", "Wireless Charging", "Premium Audio", "Android Auto", "Apple CarPlay",
+  "Air Conditioning",
+  "Bluetooth",
+  "Parking Sensors",
+  "Backup Camera",
+  "GPS",
+  "Sunroof",
+  "Heated Seats",
+  "Cruise Control",
+  "Leather Seats",
+  "USB Charging",
+  "Wireless Charging",
+  "Premium Audio",
+  "Android Auto",
+  "Apple CarPlay",
 ];
 
 export function EditVehicleDialog({
@@ -121,15 +163,22 @@ export function EditVehicleDialog({
   vehicleId,
   onSuccess,
 }: EditVehicleDialogProps) {
-  const vehicle = useQuery(api.vehicles.getById, vehicleId ? { id: vehicleId } : "skip");
+  const vehicle = useQuery(
+    api.vehicles.getById,
+    vehicleId ? { id: vehicleId } : "skip",
+  );
   const updateVehicle = useMutation(api.vehicles.update);
   const setMainImage = useMutation(api.vehicles.setMainImage);
   const reorderImages = useMutation(api.vehicles.reorderImages);
   const removeImage = useMutation(api.vehicles.removeImage);
+  // vehicleClasses query removed; class is now a string union
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createClassDialogOpen, setCreateClassDialogOpen] = useState(false);
   const [pricingTiers, setPricingTiers] = useState<PricingTier[]>([]);
-  const [mainImageId, setMainImageIdState] = useState<Id<"_storage"> | undefined>();
+  const [mainImageId, setMainImageIdState] = useState<
+    Id<"_storage"> | undefined
+  >();
 
   const form = useForm<VehicleFormData>({
     resolver: zodResolver(vehicleSchema),
@@ -137,8 +186,8 @@ export function EditVehicleDialog({
       make: "",
       model: "",
       year: new Date().getFullYear().toString(),
-      type: "comfort",
-      class: "hatchback",
+  type: "comfort",
+  class: "hatchback",
       seats: "5",
       transmission: "automatic",
       fuelType: "petrol",
@@ -148,7 +197,7 @@ export function EditVehicleDialog({
       warranty: "",
       features: [],
       status: "available",
-      pricingTiers: [],
+      pricingTiers: [{ minDays: 1, maxDays: 999, pricePerDay: 50 }], // Default tier
     },
   });
 
@@ -160,7 +209,8 @@ export function EditVehicleDialog({
         year: (vehicle.year || new Date().getFullYear()).toString(),
   // When editing, prefer the stored type (assumed compact after migration)
   type: (vehicle.type as VehicleType) || "comfort",
-        class: (vehicle.class as "hatchback" | "sedan" | "suv" | "crossover" | "van") || "hatchback",
+  class: (vehicle.class as VehicleClass) || "hatchback",
+  // note: vehicle.class is deprecated in the admin UI; prefer vehicle.type
         seats: (vehicle.seats || 5).toString(),
         transmission: (vehicle.transmission as TransmissionType) || "automatic",
         fuelType: (vehicle.fuelType as FuelType) || "petrol",
@@ -168,13 +218,21 @@ export function EditVehicleDialog({
         engineType: vehicle.engineType || "",
         // pricePerDay removed - using pricingTiers only
         warranty: (vehicle.warranty || 0).toString(),
+        // isOwner removed from schema
         features: vehicle.features || [],
         status: vehicle.status,
         pricingTiers: [],
       });
-      const tiers = vehicle.pricingTiers && vehicle.pricingTiers.length > 0 
-        ? vehicle.pricingTiers 
-        : [{ minDays: 1, maxDays: 999, pricePerDay: vehicle.pricePerDay || 50 }]; // Create default from legacy or fallback
+      const tiers =
+        vehicle.pricingTiers && vehicle.pricingTiers.length > 0
+          ? vehicle.pricingTiers
+          : [
+              {
+                minDays: 1,
+                maxDays: 999,
+                pricePerDay: vehicle.pricePerDay || 50,
+              },
+            ]; // Create default from legacy or fallback
       setPricingTiers(tiers);
       form.setValue("pricingTiers", tiers);
       setMainImageIdState(vehicle.mainImageId);
@@ -184,8 +242,6 @@ export function EditVehicleDialog({
       setMainImageIdState(undefined);
     }
   }, [open, vehicle]);
-
-
 
   const handleSetMainImage = async (imageId: Id<"_storage">) => {
     try {
@@ -230,7 +286,7 @@ export function EditVehicleDialog({
         model: values.model,
         year: parseInt(values.year),
   type: values.type as VehicleType,
-        class: values.class as "hatchback" | "sedan" | "suv" | "crossover" | "van",
+  class: values.class as VehicleClass,
         seats: parseInt(values.seats),
         transmission: values.transmission as TransmissionType,
         fuelType: values.fuelType as FuelType,
@@ -244,7 +300,7 @@ export function EditVehicleDialog({
       };
 
       await updateVehicle(vehicleDataToSubmit);
-      
+
       toast.success("Vehicle updated successfully");
       onSuccess?.();
       onOpenChange(false);
@@ -259,16 +315,22 @@ export function EditVehicleDialog({
   const handleFeatureChange = (feature: string, checked: CheckedState) => {
     const featureLower = feature.toLowerCase();
     const currentFeatures = form.getValues("features");
-    
+
     if (checked === true) {
       form.setValue("features", [...currentFeatures, featureLower]);
     } else {
-      form.setValue("features", currentFeatures.filter(f => f !== featureLower));
+      form.setValue(
+        "features",
+        currentFeatures.filter((f) => f !== featureLower),
+      );
     }
   };
 
   const addPricingTier = () => {
-    const newTiers = [...pricingTiers, { minDays: 1, maxDays: 7, pricePerDay: 0 }];
+    const newTiers = [
+      ...pricingTiers,
+      { minDays: 1, maxDays: 7, pricePerDay: 0 },
+    ];
     setPricingTiers(newTiers);
     form.setValue("pricingTiers", newTiers);
   };
@@ -279,9 +341,13 @@ export function EditVehicleDialog({
     form.setValue("pricingTiers", newTiers);
   };
 
-  const updatePricingTier = (index: number, field: keyof PricingTier, value: number) => {
-    const newTiers = pricingTiers.map((tier, i) => 
-      i === index ? { ...tier, [field]: value } : tier
+  const updatePricingTier = (
+    index: number,
+    field: keyof PricingTier,
+    value: number,
+  ) => {
+    const newTiers = pricingTiers.map((tier, i) =>
+      i === index ? { ...tier, [field]: value } : tier,
     );
     setPricingTiers(newTiers);
     form.setValue("pricingTiers", newTiers);
@@ -289,14 +355,34 @@ export function EditVehicleDialog({
 
   // Helper function to allow only numbers in text inputs
   const handleNumberInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!/[0-9.]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+    if (
+      !/[0-9.]/.test(e.key) &&
+      ![
+        "Backspace",
+        "Delete",
+        "Tab",
+        "Enter",
+        "ArrowLeft",
+        "ArrowRight",
+      ].includes(e.key)
+    ) {
       e.preventDefault();
     }
   };
 
   // Helper function for integer-only inputs
   const handleIntegerInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+    if (
+      !/[0-9]/.test(e.key) &&
+      ![
+        "Backspace",
+        "Delete",
+        "Tab",
+        "Enter",
+        "ArrowLeft",
+        "ArrowRight",
+      ].includes(e.key)
+    ) {
       e.preventDefault();
     }
   };
@@ -311,40 +397,42 @@ export function EditVehicleDialog({
         <DialogHeader>
           <DialogTitle>Edit Vehicle</DialogTitle>
         </DialogHeader>
-        
+
         <ScrollArea className="max-h-[calc(80vh-150px)] pr-6">
           <Tabs defaultValue="basic" className="w-full">
-            <TabsList className={cn(
-              "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground w-full grid grid-cols-4"
-            )}>
-              <TabsTrigger 
+            <TabsList
+              className={cn(
+                "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground w-full grid grid-cols-4",
+              )}
+            >
+              <TabsTrigger
                 value="basic"
                 className={cn(
-                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
                 )}
               >
                 Basic Info
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="pricing"
                 className={cn(
-                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
                 )}
               >
                 Pricing
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="features"
                 className={cn(
-                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
                 )}
               >
                 Features
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="images"
                 className={cn(
-                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
                 )}
               >
                 Images
@@ -352,11 +440,14 @@ export function EditVehicleDialog({
             </TabsList>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4">
-                <TabsContent 
-                  value="basic" 
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6 py-4"
+              >
+                <TabsContent
+                  value="basic"
                   className={cn(
-                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4",
                   )}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -373,7 +464,7 @@ export function EditVehicleDialog({
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="model"
@@ -395,8 +486,8 @@ export function EditVehicleDialog({
                         <FormItem>
                           <FormLabel>Year</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               onKeyDown={handleIntegerInput}
                               disabled={isSubmitting}
                               placeholder="e.g., 2024"
@@ -413,7 +504,11 @@ export function EditVehicleDialog({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Type</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isSubmitting}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select type" />
@@ -422,6 +517,7 @@ export function EditVehicleDialog({
 
                           <SelectContent>
                             <SelectItem value="comfort">Comfort</SelectItem>
+                            <SelectItem value="compact">Compact</SelectItem>
                             <SelectItem value="business">Business</SelectItem>
                             <SelectItem value="suv">SUV</SelectItem>
                             <SelectItem value="premium">Premium</SelectItem>
@@ -439,18 +535,22 @@ export function EditVehicleDialog({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Class</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isSubmitting}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select class" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="hatchback">Hatchback</SelectItem>
-                                <SelectItem value="sedan">Sedan</SelectItem>
-                                <SelectItem value="suv">SUV</SelectItem>
-                                <SelectItem value="crossover">Crossover</SelectItem>
-                                <SelectItem value="van">Van</SelectItem>
+                              <SelectItem value="hatchback">Hatchback</SelectItem>
+                              <SelectItem value="sedan">Sedan</SelectItem>
+                              <SelectItem value="suv">SUV</SelectItem>
+                              <SelectItem value="crossover">Crossover</SelectItem>
+                              <SelectItem value="van">Van</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -465,8 +565,8 @@ export function EditVehicleDialog({
                         <FormItem>
                           <FormLabel>Seats</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               onKeyDown={handleIntegerInput}
                               disabled={isSubmitting}
                               placeholder="e.g., 5"
@@ -483,14 +583,20 @@ export function EditVehicleDialog({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Transmission</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isSubmitting}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select transmission" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="automatic">Automatic</SelectItem>
+                              <SelectItem value="automatic">
+                                Automatic
+                              </SelectItem>
                               <SelectItem value="manual">Manual</SelectItem>
                             </SelectContent>
                           </Select>
@@ -505,7 +611,11 @@ export function EditVehicleDialog({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Fuel Type</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isSubmitting}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select fuel type" />
@@ -530,8 +640,8 @@ export function EditVehicleDialog({
                         <FormItem>
                           <FormLabel>Engine Capacity (L)</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               onKeyDown={handleNumberInput}
                               disabled={isSubmitting}
                               placeholder="e.g., 1.6"
@@ -549,8 +659,8 @@ export function EditVehicleDialog({
                         <FormItem>
                           <FormLabel>Engine Type</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               disabled={isSubmitting}
                               placeholder="e.g., TSI, dCi"
                             />
@@ -567,8 +677,8 @@ export function EditVehicleDialog({
                         <FormItem>
                           <FormLabel>Warranty (EUR)</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               onKeyDown={handleNumberInput}
                               disabled={isSubmitting}
                               placeholder="e.g., 500.00"
@@ -579,22 +689,32 @@ export function EditVehicleDialog({
                       )}
                     />
 
+                    {/* isOwner removed from schema; ownership is not editable in admin UI */}
+
                     <FormField
                       control={form.control}
                       name="status"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Status</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isSubmitting}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select status" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="available">Available</SelectItem>
+                              <SelectItem value="available">
+                                Available
+                              </SelectItem>
                               <SelectItem value="rented">Rented</SelectItem>
-                              <SelectItem value="maintenance">Maintenance</SelectItem>
+                              <SelectItem value="maintenance">
+                                Maintenance
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -604,10 +724,10 @@ export function EditVehicleDialog({
                   </div>
                 </TabsContent>
 
-                <TabsContent 
-                  value="pricing" 
+                <TabsContent
+                  value="pricing"
                   className={cn(
-                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4",
                   )}
                 >
                   <div className="space-y-3">
@@ -624,16 +744,25 @@ export function EditVehicleDialog({
                         Add Tier
                       </Button>
                     </div>
-                    
+
                     {pricingTiers.map((tier, index) => (
-                      <div key={index} className="flex items-end gap-2 p-3 border rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-end gap-2 p-3 border rounded-lg"
+                      >
                         <div className="flex-1">
                           <FormLabel className="text-xs">Min Days</FormLabel>
                           <Input
                             type="text"
                             value={tier.minDays.toString()}
                             onKeyDown={handleIntegerInput}
-                            onChange={(e) => updatePricingTier(index, "minDays", parseInt(e.target.value) || 1)}
+                            onChange={(e) =>
+                              updatePricingTier(
+                                index,
+                                "minDays",
+                                parseInt(e.target.value) || 1,
+                              )
+                            }
                             disabled={isSubmitting}
                           />
                         </div>
@@ -643,17 +772,31 @@ export function EditVehicleDialog({
                             type="text"
                             value={tier.maxDays.toString()}
                             onKeyDown={handleIntegerInput}
-                            onChange={(e) => updatePricingTier(index, "maxDays", parseInt(e.target.value) || 1)}
+                            onChange={(e) =>
+                              updatePricingTier(
+                                index,
+                                "maxDays",
+                                parseInt(e.target.value) || 1,
+                              )
+                            }
                             disabled={isSubmitting}
                           />
                         </div>
                         <div className="flex-1">
-                          <FormLabel className="text-xs">Price/Day (EUR)</FormLabel>
+                          <FormLabel className="text-xs">
+                            Price/Day (EUR)
+                          </FormLabel>
                           <Input
                             type="text"
                             value={tier.pricePerDay.toString()}
                             onKeyDown={handleNumberInput}
-                            onChange={(e) => updatePricingTier(index, "pricePerDay", parseFloat(e.target.value) || 0)}
+                            onChange={(e) =>
+                              updatePricingTier(
+                                index,
+                                "pricePerDay",
+                                parseFloat(e.target.value) || 0,
+                              )
+                            }
                             disabled={isSubmitting}
                           />
                         </div>
@@ -671,10 +814,10 @@ export function EditVehicleDialog({
                   </div>
                 </TabsContent>
 
-                <TabsContent 
-                  value="features" 
+                <TabsContent
+                  value="features"
                   className={cn(
-                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4",
                   )}
                 >
                   <FormField
@@ -685,14 +828,24 @@ export function EditVehicleDialog({
                         <FormLabel>Features</FormLabel>
                         <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
                           {availableFeatures.map((feature) => (
-                            <div key={feature} className="flex items-center space-x-2">
+                            <div
+                              key={feature}
+                              className="flex items-center space-x-2"
+                            >
                               <Checkbox
-                                id={`edit-feature-${feature.toLowerCase().replace(/\s+/g, '-')}`}
-                                checked={form.watch("features").includes(feature.toLowerCase())}
-                                onCheckedChange={(checked: CheckedState) => handleFeatureChange(feature, checked)}
+                                id={`edit-feature-${feature.toLowerCase().replace(/\s+/g, "-")}`}
+                                checked={form
+                                  .watch("features")
+                                  .includes(feature.toLowerCase())}
+                                onCheckedChange={(checked: CheckedState) =>
+                                  handleFeatureChange(feature, checked)
+                                }
                                 disabled={isSubmitting}
                               />
-                              <FormLabel htmlFor={`edit-feature-${feature.toLowerCase().replace(/\s+/g, '-')}`} className="font-normal">
+                              <FormLabel
+                                htmlFor={`edit-feature-${feature.toLowerCase().replace(/\s+/g, "-")}`}
+                                className="font-normal"
+                              >
                                 {feature}
                               </FormLabel>
                             </div>
@@ -704,17 +857,18 @@ export function EditVehicleDialog({
                   />
                 </TabsContent>
 
-                <TabsContent 
-                  value="images" 
+                <TabsContent
+                  value="images"
                   className={cn(
-                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4"
+                    "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4",
                   )}
                 >
                   {vehicle.images && vehicle.images.length > 0 && (
                     <div>
                       <FormLabel>Current Images</FormLabel>
                       <p className="text-xs text-muted-foreground mb-3">
-                        Drag to reorder • Click star to set main image • Click X to remove
+                        Drag to reorder • Click star to set main image • Click X
+                        to remove
                       </p>
                       <DraggableImageList
                         images={vehicle.images}
@@ -731,7 +885,9 @@ export function EditVehicleDialog({
                   <ModernImageUpload
                     vehicleId={vehicleId}
                     onUpload={(imageIds) => {
-                      toast.success(`${imageIds.length} new images uploaded successfully`);
+                      toast.success(
+                        `${imageIds.length} new images uploaded successfully`,
+                      );
                       // The images are automatically added to the vehicle via the backend
                     }}
                     onError={(error) => {
@@ -766,6 +922,15 @@ export function EditVehicleDialog({
           </Button>
         </DialogFooter>
       </DialogContent>
+
+      {/* <CreateClassDialog
+        open={createClassDialogOpen}
+        onOpenChange={setCreateClassDialogOpen}
+        onSuccess={(newClassId: string) => {
+          form.setValue("classId", newClassId);
+          setCreateClassDialogOpen(false);
+        }}
+      /> */}
     </Dialog>
   );
-} 
+}

@@ -23,22 +23,29 @@ if (!deploymentUrl) {
 const client = new ConvexHttpClient(deploymentUrl);
 
 async function runMigration() {
-  console.log("🚀 Starting vehicle type migration...");
+  // Allow choosing which migration to run via MIGRATION env var.
+  // Supported: migrateVehicleTypes (default), migrateRemoveIsOwner
+  const migrationName = process.env.MIGRATION || "migrateVehicleTypes";
+  console.log(`🚀 Starting migration: ${migrationName}`);
   console.log(`📍 Convex deployment: ${deploymentUrl}\n`);
 
   try {
-    const result = await client.mutation(api.migrations.migrateVehicleTypes, {});
-    
-    console.log("✅ Migration completed successfully!");
-    console.log(`📊 Vehicles updated: ${result.patched}`);
-    
-    if (result.patched > 0) {
+    let result: any;
+    if (migrationName === "migrateRemoveIsOwner") {
+      result = await client.mutation(api.migrations.migrateRemoveIsOwner, {});
+      console.log("✅ migrateRemoveIsOwner completed");
+      console.log(`📊 Vehicles patched (isOwner removed): ${result.patched}`);
+      console.log("\n✨ Next steps:");
+      console.log("1. Verify in Convex dashboard that vehicles no longer contain `isOwner`");
+      console.log("2. Re-run: npx convex deploy to push the tightened schema");
+    } else {
+      result = await client.mutation(api.migrations.migrateVehicleTypes, {});
+      console.log("✅ migrateVehicleTypes completed");
+      console.log(`📊 Vehicles updated: ${result.patched}`);
       console.log("\n✨ Next steps:");
       console.log("1. Remove legacy type literals from convex/schema.ts");
       console.log("2. Run: npx convex dev --once");
       console.log("3. Run: npm run build");
-    } else {
-      console.log("\n✨ No vehicles needed updating - all types are already compact!");
     }
   } catch (error) {
     console.error("❌ Migration failed:", error);

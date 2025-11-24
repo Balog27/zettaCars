@@ -616,7 +616,8 @@
     "allTransmissions": "Toate Transmisiile",
     "type": "Tip",
     "selectType": "Selectează Tipul",
-    "allTypes": "Toate Tipurile"
+  "allTypes": "Toate Tipurile",
+  "refineSearch": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
   },
   "features": {
     "wideVehicleSelection": {

@@ -394,13 +394,14 @@ export function CreateVehicleDialog({
                                 <SelectValue placeholder="Select type" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
-                                <SelectItem value="comfort">Comfort</SelectItem>
-                                <SelectItem value="business">Business</SelectItem>
-                                <SelectItem value="suv">SUV</SelectItem>
-                                <SelectItem value="premium">Premium</SelectItem>
-                                <SelectItem value="van">Van</SelectItem>
-                            </SelectContent>
+              <SelectContent>
+                <SelectItem value="comfort">Comfort</SelectItem>
+                <SelectItem value="compact">Compact</SelectItem>
+                <SelectItem value="business">Business</SelectItem>
+                <SelectItem value="suv">SUV</SelectItem>
+                <SelectItem value="premium">Premium</SelectItem>
+                <SelectItem value="van">Van</SelectItem>
+              </SelectContent>
                           </Select>
                           <FormMessage />
                         </FormItem>

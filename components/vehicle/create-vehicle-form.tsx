@@ -54,7 +54,7 @@ const vehicleSchema = z.object({
       const year = parseInt(val);
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
-  type: z.enum(["comfort", "business", "suv", "premium", "van"]),
+  type: z.enum(["compact", "comfort", "business", "suv", "premium", "van"]),
   class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"]),
   seats: z.string()
     .min(1, "Number of seats is required")

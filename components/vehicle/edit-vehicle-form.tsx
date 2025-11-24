@@ -27,21 +27,26 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
 // Assuming these types are defined in a shared location or are appropriate here
-type VehicleType = "hatchback" | "sedan" | "suv" | "crossover" | "van";
-// Compact categories used by the backend/schema
-type CompactVehicleType = "hatchback" | "sedan" | "suv" | "crossover" | "van";
+type VehicleType = "compact" | "comfort" | "business" | "suv" | "premium" | "van";
 
-function mapToCompactType(t: VehicleType | string): CompactVehicleType {
-  // Direct mapping now, as only allowed values are used
+function mapToCompactType(t: string): VehicleType {
+  // Map legacy/class-like values to the compact-style type values used by the backend
   switch (t) {
     case "hatchback":
     case "sedan":
+      return "compact";
+    case "comfort":
+      return "comfort";
+    case "business":
+      return "business";
     case "suv":
-    case "crossover":
+      return "suv";
+    case "premium":
+      return "premium";
     case "van":
-      return t as CompactVehicleType;
+      return "van";
     default:
-      return "hatchback";
+      return "compact";
   }
 }
 type TransmissionType = "automatic" | "manual";
