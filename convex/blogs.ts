@@ -234,43 +234,44 @@ export const remove = mutation({
         throw new Error("Blog not found");
       }
 
-      // Attempt to delete cover image (if any) and surface helpful errors
+      // Collect any storage deletion failures so we can log them but still remove the DB record.
+      const failedStorageDeletes: Array<{ kind: "cover" | "image"; id: any; error: any }> = [];
+
+      // Attempt to delete cover image (if any). If it fails, log and continue.
       if (blog.coverImage) {
         try {
           await ctx.storage.delete(blog.coverImage);
         } catch (e: any) {
-          // Log server-side for better visibility in Convex/dev terminal
+          // Log server-side for visibility in Convex/dev terminal and record the failure.
           console.error("blogs.remove: failed deleting coverImage", args.id, blog.coverImage, e);
-
-          // Rethrow with context
-          throw new Error(
-            `Failed to delete coverImage (${String(blog.coverImage)}): ${e?.message || String(e)}`
-          );
+          failedStorageDeletes.push({ kind: "cover", id: blog.coverImage, error: e });
         }
       }
 
-      // Attempt to delete any additional images; surface the first failing one
+      // Attempt to delete any additional images; if any fail, record and continue.
       if (blog.images && blog.images.length > 0) {
         for (const imageId of blog.images) {
           try {
             await ctx.storage.delete(imageId);
           } catch (e: any) {
             console.error("blogs.remove: failed deleting image", args.id, imageId, e);
-
-            throw new Error(
-              `Failed to delete blog image (${String(imageId)}): ${e?.message || String(e)}`
-            );
+            failedStorageDeletes.push({ kind: "image", id: imageId, error: e });
           }
         }
       }
 
-      // Finally delete the DB record and surface DB-level issues as well
+      // Finally delete the DB record. If this fails we still surface the error.
       try {
         await ctx.db.delete(args.id);
       } catch (e: any) {
         console.error("blogs.remove: failed deleting DB record", args.id, e);
 
         throw new Error(`Failed to delete blog DB record (${String(args.id)}): ${e?.message || String(e)}`);
+      }
+
+      // After DB deletion, log any storage deletions that failed so you can track or clean them up.
+      if (failedStorageDeletes.length > 0) {
+        console.error("blogs.remove: storage deletes failed (DB removed) for", args.id, failedStorageDeletes);
       }
     } catch (err: any) {
       // Ensure we log the top-level handler error with context so you can find it by request id
@@ -332,7 +333,79 @@ export const removeImage = mutation({
 
     await ctx.db.patch(blogId, updates);
 
-    await ctx.storage.delete(imageId);
+    // Attempt to delete the storage object, but don't fail the whole mutation if it's missing
+    try {
+      await ctx.storage.delete(imageId);
+    } catch (e: any) {
+      console.error("blogs.removeImage: failed deleting storage image", { blogId, imageId, error: e });
+      // Continue — we've already removed the reference from the DB
+    }
+  },
+});
+
+// One-off repair action: scan all blogs and remove references to missing storage ids.
+// Use this in the Convex dashboard or run locally to clean up orphaned/missing storage refs.
+export const repairMissingStorageReferences = mutation({
+  args: {},
+  returns: v.array(v.object({ blogId: v.id("blogs"), removedCover: v.boolean(), removedImages: v.number() })),
+  handler: async (ctx) => {
+    const results: Array<{ blogId: Id<"blogs">; removedCover: boolean; removedImages: number }> = [];
+
+    const allBlogs = await ctx.db.query("blogs").collect();
+
+    for (const blog of allBlogs) {
+      let removedCover = false;
+      let removedImagesCount = 0;
+
+      const updates: any = {};
+
+      // Check coverImage
+      if (blog.coverImage) {
+        try {
+          const url = await ctx.storage.getUrl(blog.coverImage);
+          if (!url) {
+            updates.coverImage = undefined;
+            removedCover = true;
+          }
+        } catch (e: any) {
+          // If getUrl throws, assume missing and remove reference
+          console.error("repairMissingStorageReferences: error checking coverImage", blog._id, blog.coverImage, e);
+          updates.coverImage = undefined;
+          removedCover = true;
+        }
+      }
+
+      // Check images array
+      const currentImages: Id<"_storage">[] = blog.images || [];
+      const remainingImages: Id<"_storage">[] = [];
+
+      for (const imageId of currentImages) {
+        try {
+          const url = await ctx.storage.getUrl(imageId);
+          if (url) {
+            remainingImages.push(imageId);
+          } else {
+            removedImagesCount += 1;
+          }
+        } catch (e: any) {
+          console.error("repairMissingStorageReferences: error checking image", blog._id, imageId, e);
+          removedImagesCount += 1;
+        }
+      }
+
+      if (removedImagesCount > 0) {
+        updates.images = remainingImages;
+      }
+
+      // If we need to patch anything, do so now
+      if (Object.keys(updates).length > 0) {
+        await ctx.db.patch(blog._id, updates);
+      }
+
+      results.push({ blogId: blog._id, removedCover, removedImages: removedImagesCount });
+    }
+
+    return results;
   },
 });
 
