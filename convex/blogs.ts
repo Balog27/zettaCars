@@ -227,47 +227,57 @@ export const remove = mutation({
   args: { id: v.id("blogs") },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const blog = await ctx.db.get(args.id);
+    try {
+      const blog = await ctx.db.get(args.id);
 
-    if (!blog) {
-      throw new Error("Blog not found");
-    }
-
-    // Attempt to delete cover image (if any) and surface helpful errors
-    if (blog.coverImage) {
-      try {
-        await ctx.storage.delete(blog.coverImage);
-      } catch (e: any) {
-        // Rethrow with more context so the Convex function logs and client error
-        // show the underlying issue (e.g. invalid storage id, permission issue)
-        throw new Error(
-          `Failed to delete coverImage (${String(blog.coverImage)}): ${
-            e?.message || String(e)
-          }`
-        );
+      if (!blog) {
+        throw new Error("Blog not found");
       }
-    }
 
-    // Attempt to delete any additional images; surface the first failing one
-    if (blog.images && blog.images.length > 0) {
-      for (const imageId of blog.images) {
+      // Attempt to delete cover image (if any) and surface helpful errors
+      if (blog.coverImage) {
         try {
-          await ctx.storage.delete(imageId);
+          await ctx.storage.delete(blog.coverImage);
         } catch (e: any) {
+          // Log server-side for better visibility in Convex/dev terminal
+          console.error("blogs.remove: failed deleting coverImage", args.id, blog.coverImage, e);
+
+          // Rethrow with context
           throw new Error(
-            `Failed to delete blog image (${String(imageId)}): ${
-              e?.message || String(e)
-            }`
+            `Failed to delete coverImage (${String(blog.coverImage)}): ${e?.message || String(e)}`
           );
         }
       }
-    }
 
-    // Finally delete the DB record and surface DB-level issues as well
-    try {
-      await ctx.db.delete(args.id);
-    } catch (e: any) {
-      throw new Error(`Failed to delete blog DB record (${String(args.id)}): ${e?.message || String(e)}`);
+      // Attempt to delete any additional images; surface the first failing one
+      if (blog.images && blog.images.length > 0) {
+        for (const imageId of blog.images) {
+          try {
+            await ctx.storage.delete(imageId);
+          } catch (e: any) {
+            console.error("blogs.remove: failed deleting image", args.id, imageId, e);
+
+            throw new Error(
+              `Failed to delete blog image (${String(imageId)}): ${e?.message || String(e)}`
+            );
+          }
+        }
+      }
+
+      // Finally delete the DB record and surface DB-level issues as well
+      try {
+        await ctx.db.delete(args.id);
+      } catch (e: any) {
+        console.error("blogs.remove: failed deleting DB record", args.id, e);
+
+        throw new Error(`Failed to delete blog DB record (${String(args.id)}): ${e?.message || String(e)}`);
+      }
+    } catch (err: any) {
+      // Ensure we log the top-level handler error with context so you can find it by request id
+      console.error("blogs.remove: handler error", args, err);
+
+      // Rethrow so Convex surfaces the failure to the client (and logs it)
+      throw err;
     }
   },
 });
