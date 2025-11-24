@@ -845,6 +845,7 @@
   },
   "vehicleTypes": {
     "allVehicles": "All Vehicles",
+    "compact": "Compact",
     "comfort": "Comfort",
     "business": "Business",
     "suv": "SUV",

@@ -861,6 +861,7 @@
   },
   "vehicleTypes": {
     "allVehicles": "Toate Vehiculele",
+    "compact": "Compactă",
     "comfort": "Confort",
     "business": "Business",
     "suv": "SUV",
