@@ -39,7 +39,7 @@ import { toast } from "sonner";
 
 // Use the compact categories used by the backend/schema
 type VehicleType = "compact" | "comfort" | "business" | "suv" | "premium" | "van";
-type VehicleClass = "hatchback" | "sedan" | "suv" | "crossover" | "van" | "compact";
+type VehicleClass = "hatchback" | "sedan" | "suv" | "crossover" | "van";
 type TransmissionType = "automatic" | "manual";
 type FuelType = "benzina" | "diesel" | "electric" | "hybrid";
 type StatusType = "available" | "rented" | "maintenance";
@@ -55,7 +55,7 @@ const vehicleSchema = z.object({
       return year >= 1900 && year <= new Date().getFullYear() + 1;
     }, "Year must be between 1900 and next year"),
   type: z.enum(["compact", "comfort", "business", "suv", "premium", "van"]),
-  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van", "compact"]),
+  class: z.enum(["hatchback", "sedan", "suv", "crossover", "van"]),
   seats: z.string()
     .min(1, "Number of seats is required")
     .regex(/^\d+$/, "Seats must be a number")
@@ -321,7 +321,6 @@ export function CreateVehicleForm({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="compact">Compact</SelectItem>
                           <SelectItem value="hatchback">Hatchback</SelectItem>
                           <SelectItem value="sedan">Sedan</SelectItem>
                           <SelectItem value="suv">SUV</SelectItem>

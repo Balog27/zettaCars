@@ -83,7 +83,6 @@ const vehicleSchema = z.object({
     "suv",
     "crossover",
     "van",
-    "compact",
   ], {
     required_error: "Vehicle class is required",
   }),
@@ -518,6 +517,7 @@ export function EditVehicleDialog({
 
                           <SelectContent>
                             <SelectItem value="comfort">Comfort</SelectItem>
+                            <SelectItem value="compact">Compact</SelectItem>
                             <SelectItem value="business">Business</SelectItem>
                             <SelectItem value="suv">SUV</SelectItem>
                             <SelectItem value="premium">Premium</SelectItem>

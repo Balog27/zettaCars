@@ -26,6 +26,7 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
   const vehicleTypes = [
     { key: null, label: t('allVehicles') },
     { key: 'comfort', label: t('comfort') || formatLabel('comfort') },
+    { key: 'compact', label: t('compact') || formatLabel('compact') },
     { key: 'business', label: t('business') || formatLabel('business') },
     { key: 'suv', label: t('suv') || formatLabel('suv') },
     { key: 'premium', label: t('premium') || formatLabel('premium') },

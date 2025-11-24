@@ -49,6 +49,7 @@ function groupVehiclesByType(vehicles: Vehicle[]): Record<string, Vehicle[]> {
 // Define the order of compact categories for consistent display
 const typeOrder = [
   'comfort',
+  'compact',
   'business',
   'suv',
   'premium',
@@ -68,6 +69,7 @@ function VehicleTypeSection({
   // Map compact keys to nicer display names
   const displayMap: Record<string, string> = {
     comfort: 'Comfort',
+    compact: 'Compact',
     business: 'Business',
     suv: 'SUV',
     premium: 'Premium',

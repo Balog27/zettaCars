@@ -29,7 +29,8 @@ export const getAll = query({
         v.literal("business"),
         v.literal("suv"),
         v.literal("premium"),
-        v.literal("van")
+        v.literal("van"),
+        v.literal("compact"),
       )),
       class: v.optional(
         v.union(
@@ -37,8 +38,7 @@ export const getAll = query({
           v.literal("sedan"),
           v.literal("suv"),
           v.literal("crossover"),
-          v.literal("van"),
-          v.literal("compact"),
+          v.literal("van")
         ),
       ),
       transmission: v.optional(
@@ -148,7 +148,7 @@ export const uploadImages = action({
 
 
   // Sanitize class property before updating
-  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van", "compact"];
+  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van"];
     let safeClass = vehicle.class;
     if (safeClass && !allowedClasses.includes(safeClass)) {
       safeClass = undefined;
@@ -283,15 +283,15 @@ export const create = mutation({
       v.literal("business"),
       v.literal("suv"),
       v.literal("premium"),
-      v.literal("van")
+      v.literal("van"),
+      v.literal("compact"),
     )),
     class: v.optional(v.union(
       v.literal("hatchback"),
       v.literal("sedan"),
       v.literal("suv"),
       v.literal("crossover"),
-      v.literal("van"),
-      v.literal("compact"),
+  v.literal("van"),
     )),
     seats: v.optional(v.number()),
     transmission: v.optional(v.union(v.literal("automatic"), v.literal("manual"))),
@@ -316,7 +316,7 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
   // Only allow valid class values
-  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van", "compact"];
+  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van"];
     let filteredArgs = { ...args };
     if (filteredArgs.class && !allowedClasses.includes(filteredArgs.class)) {
       filteredArgs.class = undefined;
@@ -344,15 +344,15 @@ export const update = mutation({
       v.literal("business"),
       v.literal("suv"),
       v.literal("premium"),
-      v.literal("van")
+      v.literal("van"),
+      v.literal("compact"),
     )),
     class: v.optional(v.union(
       v.literal("hatchback"),
       v.literal("sedan"),
       v.literal("suv"),
       v.literal("crossover"),
-      v.literal("van"),
-      v.literal("compact"),
+        v.literal("van")
     )),
     seats: v.optional(v.number()),
     transmission: v.optional(v.union(v.literal("automatic"), v.literal("manual"))),
@@ -380,7 +380,7 @@ export const update = mutation({
   handler: async (ctx, args) => {
     const { id, ...updates } = args;
   // Only allow valid class values
-  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van", "compact"];
+  const allowedClasses = ["hatchback", "sedan", "suv", "crossover", "van"];
     if (updates.class && !allowedClasses.includes(updates.class)) {
       updates.class = undefined;
     }
@@ -405,6 +405,7 @@ export const getAllVehiclesWithClasses = query({
           v.literal("suv"),
           v.literal("premium"),
           v.literal("van"),
+          v.literal("compact"),
         ),
       ),
       class: v.optional(
@@ -413,8 +414,7 @@ export const getAllVehiclesWithClasses = query({
           v.literal("sedan"),
           v.literal("suv"),
           v.literal("crossover"),
-          v.literal("van"),
-          v.literal("compact"),
+          v.literal("van")
         ),
       ),
       seats: v.optional(v.number()),

@@ -1,13 +1,12 @@
 import { mutation } from "./_generated/server";
 
-// Allowed vehicle classes in the new schema
+// Allowed vehicle classes in the new schema (compact is now a 'type', not a class)
 const allowedClasses = [
   "hatchback",
   "sedan",
   "suv",
   "crossover",
   "van",
-  "compact",
 ] as const;
 type AllowedClass = typeof allowedClasses[number];
 
@@ -17,8 +16,9 @@ function mapLegacyClass(cls: string | undefined): AllowedClass {
   if (allowedClasses.includes(cls as AllowedClass)) return cls as AllowedClass;
   // Map some common legacy values if needed
   switch (cls) {
+    // Legacy 'compact' class should be mapped to the hatchback class
     case "compact":
-      return "compact";
+      return "hatchback";
     case "economy":
     case "intermediate":
     case "standard":

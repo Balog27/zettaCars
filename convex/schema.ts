@@ -33,6 +33,7 @@ export default defineSchema({
         v.literal("suv"),
         v.literal("premium"),
         v.literal("van"),
+        v.literal("compact"),
       ),
     ),
     class: v.optional(
@@ -42,7 +43,6 @@ export default defineSchema({
         v.literal("suv"),
         v.literal("crossover"),
         v.literal("van"),
-        v.literal("compact"),
       ),
     ),
     seats: v.optional(v.number()),
