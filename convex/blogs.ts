@@ -233,17 +233,42 @@ export const remove = mutation({
       throw new Error("Blog not found");
     }
 
+    // Attempt to delete cover image (if any) and surface helpful errors
     if (blog.coverImage) {
-      await ctx.storage.delete(blog.coverImage);
-    }
-
-    if (blog.images && blog.images.length > 0) {
-      for (const imageId of blog.images) {
-        await ctx.storage.delete(imageId);
+      try {
+        await ctx.storage.delete(blog.coverImage);
+      } catch (e: any) {
+        // Rethrow with more context so the Convex function logs and client error
+        // show the underlying issue (e.g. invalid storage id, permission issue)
+        throw new Error(
+          `Failed to delete coverImage (${String(blog.coverImage)}): ${
+            e?.message || String(e)
+          }`
+        );
       }
     }
 
-    await ctx.db.delete(args.id);
+    // Attempt to delete any additional images; surface the first failing one
+    if (blog.images && blog.images.length > 0) {
+      for (const imageId of blog.images) {
+        try {
+          await ctx.storage.delete(imageId);
+        } catch (e: any) {
+          throw new Error(
+            `Failed to delete blog image (${String(imageId)}): ${
+              e?.message || String(e)
+            }`
+          );
+        }
+      }
+    }
+
+    // Finally delete the DB record and surface DB-level issues as well
+    try {
+      await ctx.db.delete(args.id);
+    } catch (e: any) {
+      throw new Error(`Failed to delete blog DB record (${String(args.id)}): ${e?.message || String(e)}`);
+    }
   },
 });
 
