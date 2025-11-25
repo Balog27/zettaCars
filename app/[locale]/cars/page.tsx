@@ -148,7 +148,7 @@ export default function CarsPage() {
         )}
       </Head>
 
-      <div className="relative flex flex-col min-h-screen">
+      <div className="relative flex flex-col min-h-screen overflow-x-hidden">
         {/* Header */}
         <Header logo={<Logo alt="Zetta Cars Logo" />} />
 

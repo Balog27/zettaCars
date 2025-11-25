@@ -86,7 +86,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="relative flex flex-col min-h-screen">
+    <div className="relative flex flex-col min-h-screen overflow-x-hidden">
       <Head>
         <title>Despre Zetta Cars - Masini de Inchiriat Cluj-Napoca</title>
         <meta name="description" content="Află mai multe despre Zetta Cars, lider în masini de inchiriat Cluj-Napoca. Servicii profesionale de închiriere auto în Cluj cu experiență de peste 5 ani." />
@@ -151,7 +151,7 @@ const AboutPage = () => {
               {/* Shadow backdrop */}
               <div className="absolute inset-0 bg-black/40 blur-lg rounded-xl -z-10 transform translate-x-1 translate-y-1"></div>
               
-              <Badge variant="outline" className="mb-4 px-4 py-2 text-lg text-primary">
+              <Badge variant="outline" className="mb-4 px-3 py-2 text-sm sm:text-lg text-primary w-full block truncate">
                 {t('title')}
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">

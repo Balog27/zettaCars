@@ -47,12 +47,13 @@ function groupVehiclesByType(vehicles: Vehicle[]): Record<string, Vehicle[]> {
 }
 
 // Define the order of compact categories for consistent display
+// Match the order used by the top navigation buttons: premium, suv, comfort, compact, business, van
 const typeOrder = [
+  'premium',
+  'suv',
   'comfort',
   'compact',
   'business',
-  'suv',
-  'premium',
   'van',
   'unclassified'
 ] as const;
