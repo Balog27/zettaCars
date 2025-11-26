@@ -59,7 +59,7 @@ const AboutPage = () => {
     { icon: Car, label: t('stats.vehicles'), value: "20+" },
     { icon: Users, label: t('stats.customers'), value: "200+" },
     { icon: Award, label: t('stats.experience'), value: "5+" },
-    { icon: Star, label: t('stats.rating'), value: "4.9" },
+    { icon: Star, label: t('stats.rating'), value: "5" },
   ];
 
   const values = [

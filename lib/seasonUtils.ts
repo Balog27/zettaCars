@@ -1,125 +1,178 @@
-import { Id } from "../convex/_generated/dataModel";
+/**
+ * Client-side season calculation utilities
+ * This mirrors the logic from convex/seasons.ts but runs on the client
+ * for instant, zero-latency multiplier calculations
+ */
 
-// Type definitions matching the Convex schema
-export type Season = {
-  _id: Id<"seasons">;
-  _creationTime: number;
+export interface Season {
+  _id: string;
   name: string;
   description?: string;
   multiplier: number;
   periods: Array<{
-    startDate: string; // ISO date string "2024-06-01"
-    endDate: string; // ISO date string "2024-07-30"
+    startDate: string;
+    endDate: string;
     description?: string;
   }>;
   isActive: boolean;
-};
+}
 
-export type CurrentSeason = {
-  _id: Id<"currentSeason">;
-  _creationTime: number;
-  seasonId: Id<"seasons">;
-  setAt: number;
-  setBy?: string;
+export interface CurrentSeason {
+  seasonId: string;
   season: Season;
-};
-
-/**
- * Convert a Date object to ISO date string (YYYY-MM-DD)
- */
-export function toDateString(date: Date): string {
-  return date.toISOString().split("T")[0];
 }
 
-/**
- * Check if a date falls within a season period
- */
-function isDateInPeriod(date: string, period: { startDate: string; endDate: string }): boolean {
-  const checkDate = new Date(date);
-  const startDate = new Date(period.startDate);
-  const endDate = new Date(period.endDate);
-  return checkDate >= startDate && checkDate <= endDate;
+export interface MultiplierResult {
+  multiplier: number;
+  seasonId?: string;
+  seasonName?: string;
 }
 
-/**
- * Check if any date in a range falls within a season period
- */
-function doesDateRangeOverlapWithPeriod(
-  startDate: string,
-  endDate: string,
-  period: { startDate: string; endDate: string }
+// Helper to parse date string "YYYY-MM-DD" to comparable number YYYYMMDD
+function dateToNumber(dateStr: string): number {
+  const [year, month, day] = dateStr.split("-");
+  return parseInt(year) * 10000 + parseInt(month) * 100 + parseInt(day);
+}
+
+// Helper to add days to a date string (purely string-based)
+function addDays(dateStr: string, days: number): string {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  // Create date at noon to avoid DST issues, but we only care about the date part
+  const date = new Date(year, month - 1, day, 12, 0, 0);
+  date.setDate(date.getDate() + days);
+
+  const newYear = date.getFullYear();
+  const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+  const newDay = String(date.getDate()).padStart(2, "0");
+  return `${newYear}-${newMonth}-${newDay}`;
+}
+
+// Helper to generate all dates in range (string-based, timezone-safe)
+function getDatesInRange(startStr: string, endStr: string): string[] {
+  const dates: string[] = [];
+  const startNum = dateToNumber(startStr);
+  const endNum = dateToNumber(endStr);
+
+  if (startNum > endNum) {
+    return dates; // Invalid range
+  }
+
+  let currentDate = startStr;
+  dates.push(currentDate);
+
+  while (dateToNumber(currentDate) < endNum) {
+    currentDate = addDays(currentDate, 1);
+    dates.push(currentDate);
+  }
+
+  return dates;
+}
+
+// Helper to check if a date (MM-DD) falls within a period (handles year-spanning)
+function isDateInPeriod(
+  dateStr: string,
+  periodStart: string,
+  periodEnd: string,
 ): boolean {
-  const rangeStart = new Date(startDate);
-  const rangeEnd = new Date(endDate);
-  const periodStart = new Date(period.startDate);
-  const periodEnd = new Date(period.endDate);
-  
-  // Check if ranges overlap
-  return rangeStart <= periodEnd && rangeEnd >= periodStart;
+  const date = dateStr.substring(5); // Extract MM-DD
+  const start = periodStart.substring(5); // Extract MM-DD
+  const end = periodEnd.substring(5); // Extract MM-DD
+
+  if (start <= end) {
+    // Period within same year (e.g., "06-01" to "09-30")
+    return date >= start && date <= end;
+  } else {
+    // Period spans year boundary (e.g., "12-15" to "01-05")
+    return date >= start || date <= end;
+  }
 }
 
 /**
- * Calculate the seasonal multiplier for a date range
- * Returns the multiplier from the season that has the most overlap with the date range,
- * or falls back to the current season multiplier if no active season periods match.
+ * Calculate the multiplier for a specific date range
+ * This is the client-side version of convex/seasons.ts getMultiplierForDateRange
  */
 export function calculateMultiplierForDateRange(
-  startDate: string,
-  endDate: string,
+  startDateStr: string,
+  endDateStr: string,
   activeSeasons: Season[],
-  currentSeason: CurrentSeason | null
-): {
-  multiplier: number;
-  seasonId?: Id<"seasons">;
-  seasonName?: string;
-} {
-  // Check each active season to see if any of its periods overlap with the date range
-  let bestMatch: { season: Season; overlapDays: number } | null = null;
-  
+  currentSeason: CurrentSeason | null,
+): MultiplierResult {
+  if (activeSeasons.length === 0) {
+    // Fall back to current season
+    if (currentSeason && currentSeason.season.isActive) {
+      return {
+        multiplier: currentSeason.season.multiplier,
+        seasonId: currentSeason.season._id,
+        seasonName: currentSeason.season.name,
+      };
+    }
+    return { multiplier: 1.0 };
+  }
+
+  const rentalDates = getDatesInRange(startDateStr, endDateStr);
+  const seasonOverlaps = new Map<string, number>();
+
+  // For each active season, count how many rental days fall within its periods
   for (const season of activeSeasons) {
-    if (!season.isActive) continue;
-    
-    for (const period of season.periods) {
-      if (doesDateRangeOverlapWithPeriod(startDate, endDate, period)) {
-        // Calculate overlap days
-        const rangeStart = new Date(startDate);
-        const rangeEnd = new Date(endDate);
-        const periodStart = new Date(period.startDate);
-        const periodEnd = new Date(period.endDate);
-        
-        const overlapStart = rangeStart > periodStart ? rangeStart : periodStart;
-        const overlapEnd = rangeEnd < periodEnd ? rangeEnd : periodEnd;
-        const overlapDays = Math.max(0, Math.ceil((overlapEnd.getTime() - overlapStart.getTime()) / (1000 * 60 * 60 * 24)) + 1);
-        
-        // Keep track of the season with the most overlap
-        if (!bestMatch || overlapDays > bestMatch.overlapDays) {
-          bestMatch = { season, overlapDays };
+    let totalOverlap = 0;
+
+    for (const rentalDate of rentalDates) {
+      for (const period of season.periods) {
+        if (isDateInPeriod(rentalDate, period.startDate, period.endDate)) {
+          totalOverlap++;
+          break; // Count each rental day only once per season
         }
       }
     }
+
+    if (totalOverlap > 0) {
+      seasonOverlaps.set(season._id, totalOverlap);
+    }
   }
-  
-  // If we found a matching season period, use its multiplier
-  if (bestMatch) {
-    return {
-      multiplier: bestMatch.season.multiplier,
-      seasonId: bestMatch.season._id,
-      seasonName: bestMatch.season.name,
-    };
+
+  // Find season with most overlap
+  if (seasonOverlaps.size > 0) {
+    let maxSeasonId: string | null = null;
+    let maxOverlap = 0;
+
+    for (const [seasonId, overlap] of seasonOverlaps.entries()) {
+      if (overlap > maxOverlap) {
+        maxOverlap = overlap;
+        maxSeasonId = seasonId;
+      }
+    }
+
+    if (maxSeasonId) {
+      const winningSeason = activeSeasons.find((s) => s._id === maxSeasonId);
+      if (winningSeason) {
+        return {
+          multiplier: winningSeason.multiplier,
+          seasonId: winningSeason._id,
+          seasonName: winningSeason.name,
+        };
+      }
+    }
   }
-  
-  // Fall back to current season multiplier if no period matches
-  if (currentSeason?.season) {
+
+  // No overlap found, fall back to current season
+  if (currentSeason && currentSeason.season.isActive) {
     return {
       multiplier: currentSeason.season.multiplier,
       seasonId: currentSeason.season._id,
       seasonName: currentSeason.season.name,
     };
   }
-  
-  // Default to 1.0 if no season is active
-  return {
-    multiplier: 1.0,
-  };
+
+  // Default to 1.0 if no season matches
+  return { multiplier: 1.0 };
 }
 
+/**
+ * Convert Date object to YYYY-MM-DD string
+ */
+export function toDateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}

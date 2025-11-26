@@ -188,9 +188,9 @@ export default function Home() {
               <div className="relative overflow-hidden bg-section text-white dark:text-foreground">
                 {/* Plain section background instead of a large photo so the calculator is always visible */}
                 <div className="absolute inset-0 bg-section/80 dark:bg-card-dark/60" />
-                <div className="relative z-10 flex items-start justify-start p-4 md:p-12 lg:p-16">
-                  <div className="w-full">
-                    <div className="p-4 md:pl-10 lg:pl-12">
+                <div className="relative z-10 flex items-start justify-start p-4 md:p-12 lg:p-16 min-w-0">
+                  <div className="w-full min-w-0">
+                    <div className="p-4 md:pl-10 lg:pl-12 min-w-0">
                       <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
                         {t('findYour.title')}
                       </h2>

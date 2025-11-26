@@ -162,7 +162,7 @@ export function DateTimePicker({
   }, [dateState, id, setDateState]);
 
   return (
-    <div className={cn("grid gap-1.5 w-full", contentAlign === 'end' && "justify-items-end")}>
+    <div className={cn("grid gap-1.5 w-full min-w-0", contentAlign === 'end' && "justify-items-end")}>
       <Label htmlFor={id} className={cn("text-sm font-medium", contentAlign === 'end' && "text-right")}>{label}</Label>
       <Popover>
         <PopoverTrigger asChild>

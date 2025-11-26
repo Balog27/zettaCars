@@ -12,6 +12,11 @@ type Props = {
 
 export default function ContactForm({ t }: Props) {
   const { isSignedIn, user } = useUser();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,7 +102,8 @@ export default function ContactForm({ t }: Props) {
         </div>
 
         <div className="flex items-center space-x-3">
-          {!isSignedIn ? (
+          {!mounted ? (
+            // Render a stable placeholder during hydration so server and client markup match.
             <>
               <SignInButton>
                 <Button>{get('contactForm.signInButton', 'Sign in to send')}</Button>
@@ -105,9 +111,19 @@ export default function ContactForm({ t }: Props) {
               <p className="text-sm text-muted-foreground">{get('contactForm.signInNote', 'You must be signed in to submit this form.')}</p>
             </>
           ) : (
-            <Button type="submit" disabled={loading}>
-              {loading ? (get('contactForm.sending', 'Sending...')) : (get('contactForm.send', 'Send'))}
-            </Button>
+            // After hydration we can safely show the correct UI depending on auth state
+            !isSignedIn ? (
+              <>
+                <SignInButton>
+                  <Button>{get('contactForm.signInButton', 'Sign in to send')}</Button>
+                </SignInButton>
+                <p className="text-sm text-muted-foreground">{get('contactForm.signInNote', 'You must be signed in to submit this form.')}</p>
+              </>
+            ) : (
+              <Button type="submit" disabled={loading}>
+                {loading ? (get('contactForm.sending', 'Sending...')) : (get('contactForm.send', 'Send'))}
+              </Button>
+            )
           )}
         </div>
 

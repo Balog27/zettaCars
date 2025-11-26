@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import Image from 'next/image';
 import { Header } from '@/components/ui/header';
 import { Footer } from '@/components/ui/footer';
@@ -15,6 +16,54 @@ import { useTranslations } from 'next-intl';
 import { useUser, SignInButton } from '@clerk/nextjs';
 import ContactForm from '@/components/contact-form';
 import Head from 'next/head';
+
+function PhoneButton() {
+  const phone = "+40750250121";
+  const t = useTranslations('contactPage');
+
+  const handlePhoneClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    // Guard to ensure code only runs in browser
+    if (typeof window === 'undefined') return;
+
+    const ua = navigator.userAgent || '';
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(ua) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+
+    if (isMobile) {
+      window.location.href = `tel:${phone}`;
+      return;
+    }
+
+    // Desktop: copy to clipboard and notify
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(phone).then(() => {
+        toast.success('Phone number copied to clipboard');
+      }).catch(() => {
+        toast.error('Could not copy phone number');
+      });
+    } else {
+      // Fallback for older browsers
+      try {
+        const input = document.createElement('input');
+        input.value = phone;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        toast.success('Phone number copied to clipboard');
+      } catch (err) {
+        toast.error('Could not copy phone number');
+      }
+    }
+  }, []);
+
+  return (
+    <Button variant="outline" className="w-full" onClick={handlePhoneClick}>
+      <Phone className="w-4 h-4 mr-2" />
+      {t('contactMethods.phone.buttonText')}
+    </Button>
+  );
+}
 
 const ContactPage = () => {
   const t = useTranslations('contactPage');
@@ -194,10 +243,7 @@ const ContactPage = () => {
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-2">{t('contactMethods.phone.title')}</h3>
                       <p className="text-muted-foreground mb-4">{t('contactMethods.phone.description')}</p>
-                      <Button variant="outline" className="w-full" suppressHydrationWarning>
-                        <Phone className="w-4 h-4 mr-2" />
-                        {t('contactMethods.phone.buttonText')}
-                      </Button>
+                      <PhoneButton />
                     </CardContent>
                   </Card>
 
@@ -229,9 +275,11 @@ const ContactPage = () => {
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-2">{t('contactMethods.email.title')}</h3>
                       <p className="text-muted-foreground mb-4">{t('contactMethods.email.description')}</p>
-                      <Button variant="outline" className="w-full" suppressHydrationWarning>
-                        <Mail className="w-4 h-4 mr-2" />
-                        {t('contactMethods.email.buttonText')}
+                      <Button asChild variant="outline" className="w-full" suppressHydrationWarning>
+                        <a href="mailto:contact@zettacarrental.com">
+                          <Mail className="w-4 h-4 mr-2" />
+                          {t('contactMethods.email.buttonText')}
+                        </a>
                       </Button>
                     </CardContent>
                   </Card>

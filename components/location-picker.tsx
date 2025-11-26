@@ -112,7 +112,7 @@ interface LocationPickerProps {
 
 export function LocationPicker({ id, label, value, onValueChange, placeholder, disabled, contentAlign = 'start' }: LocationPickerProps) {
   return (
-    <div className={cn("grid gap-1.5 w-full", contentAlign === 'end' && "justify-items-end")}>
+    <div className={cn("grid gap-1.5 w-full min-w-0", contentAlign === 'end' && "justify-items-end")}>
       <Label htmlFor={id} id={id + "-label"} className={cn("text-sm font-medium", contentAlign === 'end' && "text-right")}>{label}</Label>
       <LocationCombobox
         id={id}
