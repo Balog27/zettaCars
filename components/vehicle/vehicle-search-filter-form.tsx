@@ -196,7 +196,7 @@ export function VehicleSearchFilterForm({
         <CardContent className="p-4 lg:p-6 pb-0 min-w-0">
           <div className="flex flex-col lg:flex-row gap-4 min-w-0">
             {/* Column 1: Pick-up */}
-            <div className="flex flex-col gap-4 w-full lg:w-1/2 min-w-0">
+              <div className="flex flex-col gap-4 w-full lg:w-1/2 min-w-0">
               <LocationPicker
                 id="deliveryLocation"
                 label={t('pickupLocation')}
