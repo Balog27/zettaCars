@@ -178,24 +178,22 @@ export default function CarsPage() {
                 <p className="text-muted-foreground">{vf('subtitle')}</p>
               </div>
 
-              <Link href="/cars" className="block no-underline" aria-label="Open car search results">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-                  <div className="w-full">
-                    <VehicleSearchForm
-                      searchState={searchState}
-                      updateSearchField={updateSearchField}
-                      isLoading={isLoading}
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <VehicleFilters 
-                      allVehicles={allVehicles} 
-                      onFilterChange={setDisplayedVehicles} 
-                    />
-                  </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                <div className="w-full">
+                  <VehicleSearchForm
+                    searchState={searchState}
+                    updateSearchField={updateSearchField}
+                    isLoading={isLoading}
+                  />
                 </div>
-              </Link>
+
+                <div className="w-full">
+                  <VehicleFilters 
+                    allVehicles={allVehicles} 
+                    onFilterChange={setDisplayedVehicles} 
+                  />
+                </div>
+              </div>
             </>
           )}
 
