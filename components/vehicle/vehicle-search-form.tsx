@@ -22,10 +22,10 @@ export function VehicleSearchForm({
   today.setHours(0, 0, 0, 0);
   return (
     <Card className="shadow-lg rounded-lg">
-      <CardContent className="p-8 min-h-[220px]">
+      <CardContent className="p-8 min-h-[220px] min-w-0">
         {/* Locations on the first row, dates on the second row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <div>
+          <div className="min-w-0">
             <LocationPicker
               id="deliveryLocation"
               label={t('pickupLocation')}
@@ -36,7 +36,7 @@ export function VehicleSearchForm({
             />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <LocationPicker
               id="restitutionLocation"
               label={t('returnLocation')}
@@ -47,7 +47,7 @@ export function VehicleSearchForm({
             />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <DateTimePicker
               id="pickupDate"
               label={t('pickupDateTime')}
@@ -61,7 +61,7 @@ export function VehicleSearchForm({
             />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <DateTimePicker
               id="returnDate"
               label={t('returnDateTime')}

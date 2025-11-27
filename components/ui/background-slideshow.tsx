@@ -17,6 +17,25 @@ export function BackgroundSlideshow({
   children 
 }: BackgroundSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [objectPosition, setObjectPosition] = useState('20% 60%');
+
+  // Update objectPosition based on viewport width so small screens center the image
+  useEffect(() => {
+    const updatePosition = () => {
+      if (typeof window === 'undefined') return;
+      const w = window.innerWidth;
+      // Tailwind's md breakpoint ~768px — center on smaller screens
+      if (w < 768) {
+        setObjectPosition('50% 50%');
+      } else {
+        setObjectPosition('20% 60%');
+      }
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    return () => window.removeEventListener('resize', updatePosition);
+  }, []);
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -43,7 +62,7 @@ export function BackgroundSlideshow({
             alt={`Background ${index + 1}`}
             fill
             className="object-cover"
-            style={{ objectPosition: '20% 60%' }}
+            style={{ objectPosition }}
             priority={index === 0}
             sizes="100vw"
           />
