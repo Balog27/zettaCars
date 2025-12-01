@@ -251,6 +251,23 @@ export default defineSchema({
     .index("by_sort_index", ["sortIndex"])
     .index("by_name", ["name"]),
 
+  // Transfer pricing - stores fixed prices and per-km rates for transfer categories
+  transferPricing: defineTable({
+    key: v.string(), // single doc key, e.g. 'default'
+    fixedPrices: v.object({
+      standard: v.number(),
+      premium: v.number(),
+      van: v.number(),
+    }),
+    pricePerKm: v.object({
+      standard: v.number(),
+      premium: v.number(),
+      van: v.number(),
+    }),
+    childSeatPrice: v.optional(v.number()),
+    currency: v.optional(v.string()),
+  }).index("by_key", ["key"]),
+
   // Blogs table - stores blog posts
   blogs: defineTable({
     title: v.string(),
