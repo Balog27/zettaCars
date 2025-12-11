@@ -260,9 +260,9 @@ export default defineSchema({
       van: v.number(),
     }),
     pricePerKm: v.object({
-      standard: v.number(),
-      premium: v.number(),
-      van: v.number(),
+      standard: v.object({ min: v.number(), max: v.number() }),
+      premium: v.object({ min: v.number(), max: v.number() }),
+      van: v.object({ min: v.number(), max: v.number() }),
     }),
     childSeatPrice: v.optional(v.number()),
     currency: v.optional(v.string()),

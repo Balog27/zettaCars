@@ -23,9 +23,13 @@ async function run() {
     // Use init mutation which doesn't require an authenticated admin user
     const res = await client.mutation((api as any).transfers.initDefaultTransferPricing, {
       fixedPrices: { standard: 120, premium: 200, van: 150 },
-      pricePerKm: { standard: 2, premium: 3.5, van: 2.5 },
+      pricePerKm: { 
+        standard: { min: 1.80, max: 2.20 }, 
+        premium: { min: 3.15, max: 3.85 }, 
+        van: { min: 2.70, max: 3.30 } 
+      },
       childSeatPrice: 15,
-      currency: "RON",
+      currency: "EUR",
     } as any);
 
     console.log("Result:", res);

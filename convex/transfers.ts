@@ -13,9 +13,9 @@ const pricingValidator = v.object({
     van: v.number(),
   }),
   pricePerKm: v.object({
-    standard: v.number(),
-    premium: v.number(),
-    van: v.number(),
+    standard: v.object({ min: v.number(), max: v.number() }),
+    premium: v.object({ min: v.number(), max: v.number() }),
+    van: v.object({ min: v.number(), max: v.number() }),
   }),
   childSeatPrice: v.optional(v.number()),
   currency: v.optional(v.string()),
@@ -43,9 +43,9 @@ export const updateTransferPricing = mutation({
       van: v.number(),
     }),
     pricePerKm: v.object({
-      standard: v.number(),
-      premium: v.number(),
-      van: v.number(),
+      standard: v.object({ min: v.number(), max: v.number() }),
+      premium: v.object({ min: v.number(), max: v.number() }),
+      van: v.object({ min: v.number(), max: v.number() }),
     }),
     childSeatPrice: v.optional(v.number()),
     currency: v.optional(v.string()),
@@ -68,7 +68,7 @@ export const updateTransferPricing = mutation({
       fixedPrices: args.fixedPrices,
       pricePerKm: args.pricePerKm,
       childSeatPrice: args.childSeatPrice,
-      currency: args.currency || "RON",
+      currency: args.currency || "EUR",
     };
 
     if (existing) {
@@ -93,9 +93,9 @@ export const initDefaultTransferPricing = mutation({
       van: v.number(),
     }),
     pricePerKm: v.object({
-      standard: v.number(),
-      premium: v.number(),
-      van: v.number(),
+      standard: v.object({ min: v.number(), max: v.number() }),
+      premium: v.object({ min: v.number(), max: v.number() }),
+      van: v.object({ min: v.number(), max: v.number() }),
     }),
     childSeatPrice: v.optional(v.number()),
     currency: v.optional(v.string()),
@@ -117,7 +117,7 @@ export const initDefaultTransferPricing = mutation({
       fixedPrices: args.fixedPrices,
       pricePerKm: args.pricePerKm,
       childSeatPrice: args.childSeatPrice,
-      currency: args.currency || "RON",
+      currency: args.currency || "EUR",
     } as any);
 
     return { success: true };

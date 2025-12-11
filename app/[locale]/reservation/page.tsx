@@ -1299,6 +1299,16 @@ function ReservationPageContent() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2">
+                    <span className="font-medium text-foreground/85">{t('reservationSummary.category')}:</span>
+                    <span className="capitalize">{vehicle.type}</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <span className="font-medium text-foreground/85">{t('reservationSummary.numberOfPersons')}:</span>
+                    <span>{vehicle.seats}</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium text-foreground/85">{t('reservationSummary.pickup')}:</span>
                     <span>{deliveryLocation || t('reservationSummary.notSelected')}</span>
                   </div>

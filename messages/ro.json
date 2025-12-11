@@ -261,6 +261,10 @@
     }
   },
   "reservationPage": {
+    "common": {
+      "terms": "Termeni și Condițiile",
+      "privacy": "Politica de Confidențialitate"
+    },
     "backToVehicleDetails": "Înapoi la Detaliile Vehiculului",
     "formProgress": "Progresul Formularului",
     "reservation": {
@@ -351,6 +355,8 @@
     "reservationSummary": {
       "title": "Rezumatul Rezervării",
       "vehicle": "Vehicul",
+      "category": "Categorie",
+      "numberOfPersons": "Numărul de persoane",
       "pickup": "Ridicare",
       "pickupDate": "Data de Ridicare",
       "return": "Returnare",
@@ -752,8 +758,109 @@
     }
   },
   "transfersPage": {
-    "title": "În Curând",
-    "subtitle": "Pagina noastră de transferuri este în construcție. Rămâneți aproape!"
+    "title": "Transferuri",
+    "subtitle": "Rezervă transferuri spre aeroport sau în oraș",
+    "paymentMethod": {
+      "title": "Metoda de Plată"
+    },
+    "additionalFeatures": {
+      "title": "Caracteristici Suplimentare",
+      "childSeats": "Scaune copii",
+      "age1to4": "1-4 ani",
+      "age5to12": "5-12 ani"
+    },
+    "booking": {
+      "transferDate": "Data Transferului",
+      "pickupTime": "Ora Ridicării",
+      "persons": "Persoane",
+      "pickupLocation": "Locația de Ridicare",
+      "dropoffLocation": "Locația de Destinație",
+      "category": "Categorie",
+      "recommended": "Recomandat",
+      "calculateButton": "Calculează Prețul",
+      "contactPrompt": "Dacă aveți nevoie de transport pentru mai mult de 8 persoane vă rugăm să ne {contactLink} pentru o solicitare specială.",
+      "contactLink": "contactați",
+      "standard": "Standard",
+      "van": "Van"
+    },
+    "payment": {
+      "cashOnDelivery": "Plată la livrare",
+      "cardOnDelivery": "Plată cu cardul la livrare",
+      "termsAcceptance": "Accept Termenii și Condițiile și Politica de Confidențialitate"
+    },
+    "personal": {
+      "title": "Informații Personale",
+      "signInPrefill": "Autentifică-te pentru a completa automat datele",
+      "signIn": "Autentifică-te",
+      "fullName": "Nume complet",
+      "email": "Email",
+      "phone": "Telefon",
+      "message": "Mesaj"
+    },
+    "sendButton": "Trimite Cerere Transfer",
+    "recalculateButton": "Recalculează Preț",
+    "summary": {
+      "title": "Rezumat Rezervare",
+      "summaryTitle": "Rezumat Rezervare",
+      "distance": "Distanță",
+      "return": "Returnare",
+      "pickupDate": "Data Ridicare",
+      "pickup": "Ridicare",
+      "dropoff": "Destinație",
+      "date": "Data",
+      "duration": "Durata",
+      "priceBreakdown": "Defalcarea prețului",
+      "pickupTime": "Ora Ridicării",
+      "persons": "Persoane",
+      "numberOfPersons": "Numărul de persoane",
+      "category": "Categorie",
+      "basePrice": "Preț de bază",
+      "backToTransfers": "Înapoi la Transferuri",
+      "childSeatsLabel": "Adaugă scaune copii (pe scaun: {price} {currency})",
+      "childSeatsNote": "Maxim 2 scaune",
+      "childSeats": "Scaune copii",
+      "total": "Total",
+      "addChildSeats": "Adaugă scaune copii (pe scaun: {price} {currency})",
+      "proceed": "Continuă cu Rezervarea",
+      "pricingNote": {
+        "title": "Notă privind Prețul",
+        "message": "Pentru transferurile pe bază de distanță, prețul afișat este o estimare. Prețul final va fi confirmat după ce analizez și accept comanda ta. Te vom contacta pe email cu suma exactă."
+      }
+    },
+    "specialOrders": {
+      "title": "Comenzi Speciale",
+      "sectionTitle": "Comenzi Speciale de Transfer",
+      "sectionDescription": "Aveți o nevoie unică de transfer? Contactați-ne pentru comenzi personalizate și aranjamente speciale.",
+      "signInPrompt": "Autentifică-te pentru a trimite o cerere de comandă specială",
+      "signIn": "Autentifică-te",
+      "nameLabel": "Numele Dvs.",
+      "namePlaceholder": "Introduceți-vă numele",
+      "emailLabel": "Email",
+      "emailPlaceholder": "dvs@email.com",
+      "phoneLabel": "Telefon",
+      "phonePlaceholder": "+40 750 250 121",
+      "messageLabel": "Detalii Comandă Specială",
+      "messagePlaceholder": "Descrieți cererea de transfer specială, numărul de persoane, cerințe specifice, și dacă aveți nevoie de stationare, cât timp va dura?...",
+      "pleaseSignIn": "Autentifică-te pentru a trimite o cerere de comandă specială.",
+      "messageTooShort": "Vă rugăm să introduceți un mesaj mai lung (minim 10 caractere).",
+      "notAuthenticated": "Trebuie să fii autenticat pentru a trimite o cerere.",
+      "sendFailed": "Nu s-a putut trimite cererea.",
+      "sendSuccess": "Cererea de comandă specială a fost trimisă — vom răspunde în curând.",
+      "sending": "Se trimite...",
+      "sendButton": "Trimite Comandă Specială"
+    },
+    "contactForm": {
+      "title": "Contactează-ne",
+      "description": "Ai întrebări? Suntem aici să te ajutăm.",
+      "nameLabel": "Numele tău",
+      "namePlaceholder": "Opțional",
+      "messageLabel": "Mesaj",
+      "messagePlaceholder": "Spune-ne despre nevoile tale de transport...",
+      "signInButton": "Autentifică-te pentru a trimite",
+      "signInNote": "Trebuie să fii autenticat pentru a trimite un mesaj.",
+      "send": "Trimite",
+      "sending": "Se trimite..."
+    }
   },
   "email": {
     "companyName": "Zetta Cars",

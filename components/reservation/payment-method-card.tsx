@@ -15,6 +15,8 @@ interface PaymentMethodCardProps {
   termsAccepted: boolean;
   setTermsAccepted: (accepted: boolean) => void;
   errors: FormErrors;
+  /** list of method ids to render but keep disabled (greyed) */
+  disabledOptions?: string[];
 }
 
 export function PaymentMethodCard({
@@ -22,16 +24,17 @@ export function PaymentMethodCard({
   setPaymentMethod,
   termsAccepted,
   setTermsAccepted,
-  errors
+  errors,
+  disabledOptions = []
 }: PaymentMethodCardProps) {
   const t = useTranslations('reservationPage');
 
   return (
-    <Card>
+    <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
           <CreditCard className="h-5 w-5" />
-          <span>{t('paymentMethod.title')}</span>
+          <span className="text-slate-900">{t('paymentMethod.title')}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -41,27 +44,34 @@ export function PaymentMethodCard({
             onValueChange={setPaymentMethod}
             className="space-y-3"
           >
-            {paymentMethods.map((method) => (
-              <div key={method.id} className="flex items-start space-x-3">
-                <RadioGroupItem value={method.id} id={method.id} className="mt-1" />
-                <div className="flex-1">
-                  <Label htmlFor={method.id} className="cursor-pointer">
-                    <div className="font-medium">{t(`payment.methods.${method.id}.label`)}</div>
-                    <div className="text-sm text-muted-foreground">{t(`payment.methods.${method.id}.description`)}</div>
-                  </Label>
-                </div>
-              </div>
-            ))}
+            {paymentMethods.map((method) => {
+              // translation keys use camelCase (e.g. cashOnDelivery) while method.id is snake_case (e.g. cash_on_delivery)
+              const messageKey = method.id.includes("_")
+                ? method.id.split("_").map((w, i) => i === 0 ? w : w[0].toUpperCase() + w.slice(1)).join("")
+                : method.id;
+              const disabled = disabledOptions.includes(method.id);
+              return (
+               <div key={method.id} className={`flex items-start space-x-3 ${disabled ? 'opacity-60' : ''}`}>
+                 <RadioGroupItem value={method.id} id={method.id} className="mt-1" disabled={disabled} />
+                 <div className="flex-1">
+                   <Label htmlFor={method.id} className={`cursor-pointer ${disabled ? 'cursor-not-allowed' : ''}`}>
+                     <div className="font-medium text-slate-900">{t(`payment.methods.${messageKey}.label`)}</div>
+                     <div className={`text-sm ${disabled ? 'text-slate-400' : 'text-slate-600'}`}>{t(`payment.methods.${messageKey}.description`)}</div>
+                   </Label>
+                 </div>
+               </div>
+              );
+            })}
           </RadioGroup>
-          
+
           {errors.payment?.method && (
             <p className="text-sm text-red-500 flex items-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               {errors.payment.method}
             </p>
           )}
-          
-          <div className="pt-4 border-t">
+
+          <div className="mt-4 border-t pt-3">
             <div className="flex items-start space-x-2">
               <Checkbox
                 id="terms-conditions"
@@ -69,7 +79,10 @@ export function PaymentMethodCard({
                 onCheckedChange={(checked) => setTermsAccepted(checked === true)}
               />
               <Label htmlFor="terms-conditions" className="text-sm cursor-pointer">
-                {t('paymentMethod.termsAcceptance')}
+                {t('paymentMethod.termsAcceptance')}{' '}
+                <a href="/terms" className="text-pink-600 underline ml-1">{t('common.terms') ?? 'Termeni și Condițiile'}</a>
+                {' '}
+                <a href="/privacy" className="text-pink-600 underline ml-1">{t('common.privacy') ?? 'Politica de Confidențialitate'}</a>
               </Label>
             </div>
             {errors.payment?.termsAccepted && (

@@ -69,10 +69,14 @@ export async function POST(req: Request) {
     const bothInCluj = isInCluj(pickup?.address) && isInCluj(dropoff?.address);
 
     let distanceKm: number | null = null;
-    let totalPrice = 0;
+    let durationText: string | null = null;
+    let totalPrice: number | null = null;
+    let priceMin: number | null = null;
+    let priceMax: number | null = null;
     let pricingSource = 'fixed';
 
     if (bothInCluj) {
+      // Fixed pricing for in-city transfers - single price
       totalPrice = pricing.fixedPrices?.[category] ?? 0;
       pricingSource = 'fixed';
     } else {
@@ -108,14 +112,31 @@ export async function POST(req: Request) {
       }
       const meters = elem.distance?.value ?? 0;
       distanceKm = Math.max(0, Math.round((meters / 1000) * 100) / 100); // two decimals
+      
+      // Extract duration text from Google Maps response
+      durationText = elem.duration?.text ?? null;
 
-      const perKm = pricing.pricePerKm?.[category] ?? 0;
-      totalPrice = Math.round(distanceKm * perKm * 100) / 100;
+      // Distance-based pricing - use min-max interval
+      const perKmPrice = pricing.pricePerKm?.[category];
+      const minPerKm = perKmPrice?.min ?? 0;
+      const maxPerKm = perKmPrice?.max ?? 0;
+      priceMin = Math.round(distanceKm * minPerKm * 100) / 100;
+      priceMax = Math.round(distanceKm * maxPerKm * 100) / 100;
       pricingSource = 'distance';
     }
 
     // For debugging, include pricingSource and pricing snapshot (dev only)
-    return NextResponse.json({ totalPrice, distanceKm, pricingSource, pricingUsed: pricing });
+    return NextResponse.json({ 
+      calculated: {
+        totalPrice, 
+        priceMin, 
+        priceMax, 
+        distanceKm, 
+        durationText,
+        pricingSource, 
+        pricingUsed: pricing
+      }
+    });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('[/api/transfer-price] error:', err);

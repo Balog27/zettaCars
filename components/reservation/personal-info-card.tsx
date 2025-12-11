@@ -26,7 +26,7 @@ export function PersonalInfoCard({
   const t = useTranslations('reservationPage');
 
   return (
-    <Card>
+    <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
           <User className="h-5 w-5" />
