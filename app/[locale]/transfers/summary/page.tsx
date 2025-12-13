@@ -165,8 +165,13 @@ export default function TransferSummaryPage() {
     flightNumber: "",
   });
 
-  // Minimal errors object shape (matches reservation form errors shape enough for UI)
-  const [formErrorsState, setFormErrorsState] = useState<any>({});
+  // Errors object shape matching PersonalInfoCard and PaymentMethodCard expectations
+  const [formErrorsState, setFormErrorsState] = useState<any>({
+    personalInfo: {},
+    payment: {},
+    locations: {},
+    datetime: {},
+  });
 
   const [distanceLoading, setDistanceLoading] = useState(false);
 
@@ -311,7 +316,7 @@ export default function TransferSummaryPage() {
                     localePath ? `/${localePath}/transfers` : `/transfers`,
                   )
                 }
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium transition-colors hover:text-pink-500 hover:border-pink-500"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-card-darker text-slate-900 dark:text-slate-200 text-sm font-medium transition-colors hover:text-pink-500 hover:border-pink-500 dark:hover:text-pink-400"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -347,12 +352,26 @@ export default function TransferSummaryPage() {
                     </Label>
                     <Input
                       value={pickupLocationState}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setPickupLocationState(
                           (e.target as HTMLInputElement).value,
-                        )
-                      }
+                        );
+                        setFormErrorsState(prev => ({
+                          ...prev,
+                          locations: {
+                            ...prev.locations,
+                            pickup: undefined,
+                          }
+                        }));
+                      }}
+                      className={formErrorsState.locations?.pickup ? "border-red-500" : ""}
                     />
+                    {formErrorsState.locations?.pickup && (
+                      <p className="text-sm text-red-500 mt-1 flex items-center">
+                        <span className="inline-block mr-1">⚠️</span>
+                        {formErrorsState.locations.pickup}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <Label className="text-sm font-medium">
@@ -360,23 +379,71 @@ export default function TransferSummaryPage() {
                     </Label>
                     <Input
                       value={dropoffLocationState}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setDropoffLocationState(
                           (e.target as HTMLInputElement).value,
-                        )
-                      }
+                        );
+                        setFormErrorsState(prev => ({
+                          ...prev,
+                          locations: {
+                            ...prev.locations,
+                            dropoff: undefined,
+                          }
+                        }));
+                      }}
+                      className={formErrorsState.locations?.dropoff ? "border-red-500" : ""}
                     />
+                    {formErrorsState.locations?.dropoff && (
+                      <p className="text-sm text-red-500 mt-1 flex items-center">
+                        <span className="inline-block mr-1">⚠️</span>
+                        {formErrorsState.locations.dropoff}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <DateTimePicker
                       id="ts-transfer-datetime"
                       label={t("booking.transferDate") ?? "Transfer Date"}
                       dateState={transferDateState}
-                      setDateState={setTransferDateState}
+                      setDateState={(date) => {
+                        setTransferDateState(date);
+                        setFormErrorsState(prev => ({
+                          ...prev,
+                          datetime: {
+                            ...prev.datetime,
+                            transferDate: undefined,
+                          }
+                        }));
+                      }}
                       timeState={pickupTimeState}
-                      setTimeState={setPickupTimeState}
+                      setTimeState={(time) => {
+                        setPickupTimeState(time);
+                        setFormErrorsState(prev => ({
+                          ...prev,
+                          datetime: {
+                            ...prev.datetime,
+                            pickupTime: undefined,
+                          }
+                        }));
+                      }}
                       minDate={new Date()}
                     />
+                    {(formErrorsState.datetime?.transferDate || formErrorsState.datetime?.pickupTime) && (
+                      <div className="mt-2 space-y-1">
+                        {formErrorsState.datetime?.transferDate && (
+                          <p className="text-sm text-red-500 flex items-center">
+                            <span className="inline-block mr-1">⚠️</span>
+                            {formErrorsState.datetime.transferDate}
+                          </p>
+                        )}
+                        {formErrorsState.datetime?.pickupTime && (
+                          <p className="text-sm text-red-500 flex items-center">
+                            <span className="inline-block mr-1">⚠️</span>
+                            {formErrorsState.datetime.pickupTime}
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Button
@@ -507,37 +574,32 @@ export default function TransferSummaryPage() {
                 <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm">
                   <div>
                     <dt className="font-medium">{t('summary.pickup') ?? 'Pick-up:'}</dt>
-                    <dd className="mt-1 text-slate-600">{pickupLocationState || payload.pickup?.address || '—'}</dd>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{pickupLocationState || payload.pickup?.address || '—'}</dd>
                   </div>
                   <div>
                     <dt className="font-medium">{t('summary.dropoff') ?? 'Dropoff:'}</dt>
-                    <dd className="mt-1 text-slate-600">{dropoffLocationState || payload.dropoff?.address || '—'}</dd>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{dropoffLocationState || payload.dropoff?.address || '—'}</dd>
                   </div>
                   <div>
                     <dt className="font-medium">{t('summary.date') ?? 'Date:'}</dt>
-                    <dd className="mt-1 text-slate-600">{transferDateState ? `${transferDateState.toLocaleDateString()} at ${pickupTimeState ?? payload.meta?.pickupTime ?? '—'}` : (payload.meta?.transferDate ?? '—')}</dd>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{transferDateState ? `${transferDateState.toLocaleDateString()} at ${pickupTimeState ?? payload.meta?.pickupTime ?? '—'}` : (payload.meta?.transferDate ?? '—')}</dd>
                   </div>
                   <div>
                     <dt className="font-medium">{t('summary.distance') ?? 'Distance:'}</dt>
-                    <dd className="mt-1 text-slate-600">{distanceLoading ? 'Calculating…' : (distanceKmState != null ? `${distanceKmState} km` : (payload.calculated?.distanceKm != null ? `${payload.calculated.distanceKm} km` : '-'))}</dd>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{distanceLoading ? 'Calculating…' : (distanceKmState != null ? `${distanceKmState} km` : (payload.calculated?.distanceKm != null ? `${payload.calculated.distanceKm} km` : '-'))}</dd>
                   </div>
                   <div>
                     <dt className="font-medium">{t('summary.numberOfPersons') ?? 'Number of Persons:'}</dt>
-                    <dd className="mt-1 text-slate-600">{payload?.persons ?? '-'}</dd>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{payload?.persons ?? '-'}</dd>
                   </div>
                   <div>
                     <dt className="font-medium">{t('summary.category') ?? 'Category:'}</dt>
-                    <dd className="mt-1 text-slate-600 capitalize">{payload?.category ?? '-'}</dd>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{payload?.category ?? '-'}</dd>
                   </div>
                 </dl>
 
-                <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-800 mb-4">
-                  <p className="font-medium mb-1">{t('summary.pricingNote.title') ?? 'Pricing Note'}</p>
-                  <p>{t('summary.pricingNote.message') ?? 'The final price will be confirmed after we review and accept your order. You will be contacted on email with the exact amount.'}</p>
-                </div>
-
                 <div className="mt-4">
-                  <div className="text-sm text-slate-600 mb-2">{t('summary.priceBreakdown') ?? 'Price breakdown'}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">{t('summary.priceBreakdown') ?? 'Price breakdown'}</div>
                   <div className="flex items-center justify-between text-base font-semibold">
                     <div>{t('summary.basePrice') ?? 'Base price'}</div>
                     <div>
@@ -547,7 +609,7 @@ export default function TransferSummaryPage() {
                       }
                     </div>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-slate-600 mt-2"><div>{t('summary.childSeats') ?? 'Child seats'}</div><div>{(childSeats1to4 + childSeats5to12) > 0 ? `${childSeats1to4 + childSeats5to12} × ${formatCurrency(childSeatPrice ?? 0, payload.pricing?.currency)}` : '-'}</div></div>
+                  <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300 mt-2"><div>{t('summary.childSeats') ?? 'Child seats'}</div><div>{(childSeats1to4 + childSeats5to12) > 0 ? `${childSeats1to4 + childSeats5to12} × ${formatCurrency(childSeatPrice ?? 0, payload.pricing?.currency)}` : '-'}</div></div>
                   <div className="border-t mt-4 pt-4 flex items-center justify-between">
                     <div className="text-sm font-medium">{t('summary.total') ?? 'Total'}</div>
                     <div className="text-lg font-bold">
@@ -561,10 +623,129 @@ export default function TransferSummaryPage() {
               </CardContent>
             </Card>
 
+            {!priceData.isSingle && (
+              <div className="mt-6 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md text-sm text-blue-800 dark:text-blue-300">
+                <p className="font-medium mb-1">{t('summary.pricingNote.title') ?? 'Pricing Note'}</p>
+                <p>{t('summary.pricingNote.message') ?? 'The final price will be confirmed after we review and accept your order. You will be contacted on email with the exact amount.'}</p>
+              </div>
+            )}
+
             <div className="mt-4">
               <button
                 type="button"
-                className="w-full inline-flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-md"
+                onClick={async () => {
+                  // Validation - build errors object with proper structure
+                  const errors: any = {
+                    personalInfo: {},
+                    payment: {},
+                    locations: {},
+                    datetime: {},
+                  };
+                  
+                  // Validate personal info
+                  if (!personalInfoState.name?.trim()) {
+                    errors.personalInfo.name = 'Name is required';
+                  }
+                  if (!personalInfoState.email?.trim()) {
+                    errors.personalInfo.email = 'Email is required';
+                  }
+                  if (!personalInfoState.phone?.trim()) {
+                    errors.personalInfo.phone = 'Phone is required';
+                  }
+                  
+                  // Validate locations
+                  if (!pickupLocationState?.trim()) {
+                    errors.locations.pickup = 'Pick-up location is required';
+                  }
+                  if (!dropoffLocationState?.trim()) {
+                    errors.locations.dropoff = 'Dropoff location is required';
+                  }
+                  
+                  // Validate datetime
+                  if (!transferDateState) {
+                    errors.datetime.transferDate = 'Transfer date is required';
+                  }
+                  if (!pickupTimeState) {
+                    errors.datetime.pickupTime = 'Pickup time is required';
+                  }
+                  
+                  // Validate payment method and terms
+                  if (!termsAccepted) {
+                    errors.payment.termsAccepted = 'You must accept the terms and conditions';
+                  }
+                  
+                  // Check if there are any errors
+                  const hasErrors = Object.values(errors).some((errObj: any) => Object.keys(errObj).length > 0);
+                  
+                  if (hasErrors) {
+                    setFormErrorsState(errors);
+                    return;
+                  }
+                  
+                  // Clear errors if validation passes
+                  setFormErrorsState({
+                    personalInfo: {},
+                    payment: {},
+                    locations: {},
+                    datetime: {},
+                  });
+                  
+                  // All validation passed - prepare confirmation data
+                  const confirmationData = {
+                    personalInfo: personalInfoState,
+                    transferDetails: {
+                      pickupLocation: pickupLocationState,
+                      dropoffLocation: dropoffLocationState,
+                      transferDate: transferDateState,
+                      pickupTime: pickupTimeState,
+                      category: payload?.category,
+                      persons: payload?.persons,
+                      distance: distanceKmState,
+                    },
+                    pricing: {
+                      ...priceData,
+                      currency: payload?.pricing?.currency,
+                    },
+                  };
+                  
+                  // Send transfer request email
+                  try {
+                    const emailResponse = await fetch('/api/send/transfer-request', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        personalInfo: personalInfoState,
+                        transferDetails: {
+                          pickupLocation: pickupLocationState,
+                          dropoffLocation: dropoffLocationState,
+                          transferDate: transferDateState,
+                          pickupTime: pickupTimeState,
+                          category: payload?.category,
+                          persons: payload?.persons,
+                          distance: distanceKmState,
+                        },
+                        pricing: {
+                          ...priceData,
+                          currency: payload?.pricing?.currency,
+                        },
+                        locale: localePath || 'en',
+                      }),
+                    });
+
+                    if (!emailResponse.ok) {
+                      console.error('Failed to send transfer request email', await emailResponse.json());
+                      // Don't prevent navigation even if email fails
+                    }
+                  } catch (emailError) {
+                    console.error('Error sending transfer request email:', emailError);
+                    // Don't prevent navigation even if email fails
+                  }
+                  
+                  // Navigate to confirmation page with encoded data
+                  const encoded = encodeURIComponent(Buffer.from(JSON.stringify(confirmationData)).toString('base64'));
+                  router.push(`${localePath ? `/${localePath}` : ''}/transfers/confirmation?data=${encoded}`);
+                }}
+                className="w-full inline-flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="h-4 w-4" />
                 {t("sendButton") ?? "Send Transfer Request"}

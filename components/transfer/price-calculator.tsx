@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { DateTimePicker } from '@/components/date-time-picker';
+import { LocationAutocomplete } from '@/components/transfer/location-autocomplete';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useTransferPrice } from '@/hooks/useTransferPricing';
@@ -50,6 +51,7 @@ export default function PriceCalculator() {
   const [dropoffLocation, setDropoffLocation] = useState<string>('Cluj Napoca City Center');
   const [persons, setPersons] = useState<number>(1);
   const [category, setCategory] = useState<Category>('standard');
+  const [warning, setWarning] = useState<string | null>(null);
 
   // Auto-recommend category based on number of persons
   useEffect(() => {
@@ -64,21 +66,46 @@ export default function PriceCalculator() {
     try {
       e.preventDefault();
       console.log('Form submitted - calculating price...');
+      console.log('Current state - transferDate:', transferDate, 'pickupTime:', pickupTime, 'pickupLocation:', pickupLocation, 'dropoffLocation:', dropoffLocation);
+
+      // Clear previous warning
+      setWarning(null);
+
+      // Validate required fields - be very explicit
+      if (!transferDate || !(transferDate instanceof Date) || isNaN(transferDate.getTime())) {
+        setWarning('Please select a valid transfer date');
+        return;
+      }
+
+      if (!pickupTime || pickupTime.trim() === '') {
+        setWarning('Please select a pickup time');
+        return;
+      }
+
+      if (!pickupLocation || pickupLocation.trim() === '') {
+        setWarning('Please enter a pickup location');
+        return;
+      }
+
+      if (!dropoffLocation || dropoffLocation.trim() === '') {
+        setWarning('Please enter a dropoff location');
+        return;
+      }
 
       // Ensure pricing exists
       if (!pricing) {
         console.warn('Pricing not available');
-        alert('Pricing not available yet');
+        setWarning('Pricing not available yet');
         return;
       }
 
-      console.log('Pricing available, creating payload...');
+      console.log('All validations passed, creating payload...');
       const payload = {
         pickup: { address: pickupLocation },
         dropoff: { address: dropoffLocation },
         category,
         pricing,
-        meta: { transferDate: transferDate ? transferDate.toISOString().split('T')[0] : '', pickupTime, persons }
+        meta: { transferDate: transferDate.toISOString().split('T')[0], pickupTime, persons }
       };
       console.log('Payload:', payload);
 
@@ -156,14 +183,18 @@ export default function PriceCalculator() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-muted-foreground mb-1">{t('booking.pickupLocation')}</label>
-              <Input value={pickupLocation} onChange={e => setPickupLocation(e.target.value)} className="bg-white dark:bg-input/30 dark:text-white dark:border-input" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-muted-foreground mb-1">{t('booking.dropoffLocation')}</label>
-              <Input value={dropoffLocation} onChange={e => setDropoffLocation(e.target.value)} className="bg-white dark:bg-input/30 dark:text-white dark:border-input" />
-            </div>
+            <LocationAutocomplete
+              value={pickupLocation}
+              onChange={(value) => setPickupLocation(value)}
+              label={t('booking.pickupLocation')}
+              placeholder={t('booking.pickupLocation')}
+            />
+            <LocationAutocomplete
+              value={dropoffLocation}
+              onChange={(value) => setDropoffLocation(value)}
+              label={t('booking.dropoffLocation')}
+              placeholder={t('booking.dropoffLocation')}
+            />
           </div>
 
           <div>
@@ -195,12 +226,22 @@ export default function PriceCalculator() {
             <p className="text-sm text-red-500">Pricing is not configured. Please contact admin or configure rates in the admin panel.</p>
           )}
 
+          {warning && (
+            <div className="p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200 font-semibold">⚠️ {warning}</p>
+            </div>
+          )}
+
           {error && (
             <div className="text-sm text-red-600 font-semibold">API error: {error}</div>
           )}
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={loading || !pricing} className="!bg-pink-500 hover:!bg-pink-600 !text-white">
+            <Button 
+              type="submit" 
+              disabled={loading || !pricing}
+              className="!bg-pink-500 hover:!bg-pink-600 !text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {loading ? (t('booking.calculateButton')) : t('booking.calculateButton')}
             </Button>
           </div>

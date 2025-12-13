@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../convex/_generated/api';
+import { geocodeAddress, getDistance } from '@/lib/mapbox';
 
 type Loc = {
   address?: string;
@@ -11,9 +12,37 @@ type Loc = {
 
 const CLUJ_KEYWORDS = ["cluj", "cluj-napoca", "napoca"];
 
-function isInCluj(address?: string) {
-  if (!address) return false;
-  const a = address.toLowerCase();
+// Cluj-Napoca city center coordinates
+const CLUJ_CENTER_LAT = 46.7712;
+const CLUJ_CENTER_LON = 23.6236;
+// Distance in km - transfers within this radius are considered in-city
+const CITY_RADIUS_KM = 7;
+
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth's radius in km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function isInCluj(address?: string, lat?: number, lon?: number): boolean {
+  if (!address && (lat == null || lon == null)) return false;
+
+  // If we have coordinates, use them for accurate distance-based check
+  if (lat != null && lon != null) {
+    const distanceFromCenter = calculateDistance(CLUJ_CENTER_LAT, CLUJ_CENTER_LON, lat, lon);
+    return distanceFromCenter <= CITY_RADIUS_KM;
+  }
+
+  // Fallback: if only address is available, check keywords
+  const a = address?.toLowerCase() ?? '';
   return CLUJ_KEYWORDS.some(k => a.includes(k));
 }
 
@@ -66,8 +95,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Pricing required', note: 'no pricing in request and no pricing found in Convex' }, { status: 400 });
     }
 
-    const bothInCluj = isInCluj(pickup?.address) && isInCluj(dropoff?.address);
-
     let distanceKm: number | null = null;
     let durationText: string | null = null;
     let totalPrice: number | null = null;
@@ -75,54 +102,64 @@ export async function POST(req: Request) {
     let priceMax: number | null = null;
     let pricingSource = 'fixed';
 
+    // Get coordinates for both locations (geocode if needed)
+    let fromLat = pickup.lat;
+    let fromLon = pickup.lng;
+    let toLat = dropoff.lat;
+    let toLon = dropoff.lng;
+
+    // Geocode pickup if we only have address
+    if ((fromLat == null || fromLon == null) && pickup.address) {
+      const pickupGeo = await geocodeAddress(pickup.address);
+      if (pickupGeo) {
+        fromLat = pickupGeo.coordinates.lat;
+        fromLon = pickupGeo.coordinates.lon;
+      } else {
+        return NextResponse.json({ error: 'Could not geocode pickup location', address: pickup.address }, { status: 400 });
+      }
+    }
+
+    // Geocode dropoff if we only have address
+    if ((toLat == null || toLon == null) && dropoff.address) {
+      const dropoffGeo = await geocodeAddress(dropoff.address);
+      if (dropoffGeo) {
+        toLat = dropoffGeo.coordinates.lat;
+        toLon = dropoffGeo.coordinates.lon;
+      } else {
+        return NextResponse.json({ error: 'Could not geocode dropoff location', address: dropoff.address }, { status: 400 });
+      }
+    }
+
+    if (fromLat == null || fromLon == null || toLat == null || toLon == null) {
+      return NextResponse.json({ error: 'Could not determine coordinates for locations' }, { status: 400 });
+    }
+
+    // Now check if both locations are within the city radius
+    const bothInCluj = isInCluj(pickup?.address, fromLat, fromLon) && isInCluj(dropoff?.address, toLat, toLon);
+
     if (bothInCluj) {
       // Fixed pricing for in-city transfers - single price
       totalPrice = pricing.fixedPrices?.[category] ?? 0;
       pricingSource = 'fixed';
     } else {
-      // Use Google Maps Distance Matrix API
-      const key = process.env.GOOGLE_MAPS_API_KEY;
-      if (!key) {
-        return NextResponse.json({ error: 'Server missing GOOGLE_MAPS_API_KEY' }, { status: 500 });
-      }
+      // Use Mapbox API for distance calculation
+      try {
+        const distance = await getDistance(fromLat, fromLon, toLat, toLon);
+        distanceKm = distance.distanceKm;
+        durationText = distance.durationText;
+        pricingSource = 'distance';
 
-      // Build origins/destinations
-      const origins = pickup.lat && pickup.lng ? `${pickup.lat},${pickup.lng}` : encodeURIComponent(pickup.address || '');
-      const destinations = dropoff.lat && dropoff.lng ? `${dropoff.lat},${dropoff.lng}` : encodeURIComponent(dropoff.address || '');
-
-      const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${origins}&destinations=${destinations}&key=${key}`;
-
-      const res = await fetch(url);
-      if (!res.ok) {
-        const text = await res.text();
+        // Distance-based pricing - use min-max interval
+        const perKmPrice = pricing.pricePerKm?.[category];
+        const minPerKm = perKmPrice?.min ?? 0;
+        const maxPerKm = perKmPrice?.max ?? 0;
+        priceMin = Math.round(distanceKm * minPerKm * 100) / 100;
+        priceMax = Math.round(distanceKm * maxPerKm * 100) / 100;
+      } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('[/api/transfer-price] Google Maps API error:', text);
-        return NextResponse.json({ error: 'Distance API error', details: text }, { status: 502 });
+        console.error('[/api/transfer-price] Mapbox error:', error);
+        return NextResponse.json({ error: 'Distance calculation error', details: String(error) }, { status: 502 });
       }
-      const data = await res.json();
-      // Debug log full Google Maps response
-      // eslint-disable-next-line no-console
-      console.log('[/api/transfer-price] Google Maps API response:', JSON.stringify(data));
-      // Parse distance in meters
-      const elem = data?.rows?.[0]?.elements?.[0];
-      if (!elem || elem.status !== 'OK') {
-        // eslint-disable-next-line no-console
-        console.error('[/api/transfer-price] Could not determine distance:', JSON.stringify(elem));
-        return NextResponse.json({ error: 'Could not determine distance', details: elem, fullResponse: data }, { status: 400 });
-      }
-      const meters = elem.distance?.value ?? 0;
-      distanceKm = Math.max(0, Math.round((meters / 1000) * 100) / 100); // two decimals
-      
-      // Extract duration text from Google Maps response
-      durationText = elem.duration?.text ?? null;
-
-      // Distance-based pricing - use min-max interval
-      const perKmPrice = pricing.pricePerKm?.[category];
-      const minPerKm = perKmPrice?.min ?? 0;
-      const maxPerKm = perKmPrice?.max ?? 0;
-      priceMin = Math.round(distanceKm * minPerKm * 100) / 100;
-      priceMax = Math.round(distanceKm * maxPerKm * 100) / 100;
-      pricingSource = 'distance';
     }
 
     // For debugging, include pricingSource and pricing snapshot (dev only)

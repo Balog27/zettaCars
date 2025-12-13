@@ -849,6 +849,18 @@
       "sending": "Se trimite...",
       "sendButton": "Trimite Comandă Specială"
     },
+    "confirmation": {
+      "title": "Cerere de Transfer Trimisă",
+      "subtitle": "Mulțumim pentru cererea dvs. de transfer. Am primit detaliile rezervării.",
+      "transferDetails": "Detalii Transfer",
+      "personalInfo": "Informații Personale",
+      "name": "Nume",
+      "email": "Email",
+      "phone": "Telefon",
+      "nextSteps": "Vom revizui cererea de transfer și vă vom contacta cât mai curând posibil în maximum 6 ore pentru a confirma disponibilitatea și a finaliza prețul. Un email de confirmare a fost trimis la adresa pe care ati furnizat-o.",
+      "backButton": "Înapoi la Transferuri",
+      "homeButton": "Înapoi la Pagina Principală"
+    },
     "contactForm": {
       "title": "Contactează-ne",
       "description": "Ai întrebări? Suntem aici să te ajutăm.",

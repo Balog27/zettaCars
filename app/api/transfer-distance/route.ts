@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { geocodeAddress, getDistance } from '@/lib/mapbox';
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,45 +11,42 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Missing origin or destination' }), { status: 400, headers: { 'content-type': 'application/json' } });
     }
 
-    const key = process.env.GOOGLE_MAPS_API_KEY;
-    if (!key) {
-      return new Response(JSON.stringify({ error: 'Server missing GOOGLE_MAPS_API_KEY' }), { status: 500, headers: { 'content-type': 'application/json' } });
+    try {
+      // Geocode the addresses to get coordinates
+      const originGeo = await geocodeAddress(origin);
+      const destinationGeo = await geocodeAddress(destination);
+
+      if (!originGeo || !destinationGeo) {
+        return new Response(
+          JSON.stringify({ error: 'Could not geocode one or both locations' }),
+          { status: 400, headers: { 'content-type': 'application/json' } }
+        );
+      }
+
+      // Get distance using Mapbox
+      const distance = await getDistance(
+        originGeo.coordinates.lat,
+        originGeo.coordinates.lon,
+        destinationGeo.coordinates.lat,
+        destinationGeo.coordinates.lon
+      );
+
+      return new Response(
+        JSON.stringify({
+          distanceMeters: distance.distanceKm * 1000,
+          distanceText: `${distance.distanceKm} km`,
+          distanceKm: distance.distanceKm,
+          durationSeconds: distance.durationSeconds,
+          durationText: distance.durationText,
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      );
+    } catch (error) {
+      return new Response(
+        JSON.stringify({ error: 'Distance calculation error', details: String(error) }),
+        { status: 502, headers: { 'content-type': 'application/json' } }
+      );
     }
-
-    const params = new URLSearchParams({
-      origins: origin,
-      destinations: destination,
-      units: 'metric',
-      key,
-    });
-
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?${params.toString()}`;
-    const res = await fetch(url, { method: 'GET' });
-    const data = await res.json();
-
-    // Basic validation
-    if (data.status !== 'OK' || !data.rows || !data.rows[0] || !data.rows[0].elements) {
-      return new Response(JSON.stringify({ error: 'Distance Matrix API error', details: data }), { status: 502, headers: { 'content-type': 'application/json' } });
-    }
-
-    const element = data.rows[0].elements[0];
-    if (!element || element.status !== 'OK') {
-      return new Response(JSON.stringify({ error: 'No route found', details: element }), { status: 400, headers: { 'content-type': 'application/json' } });
-    }
-
-    const distanceMeters = element.distance?.value ?? null;
-    const durationSeconds = element.duration?.value ?? null;
-
-    return new Response(
-      JSON.stringify({
-        distanceMeters,
-        distanceText: element.distance?.text ?? null,
-        distanceKm: distanceMeters != null ? Math.round((distanceMeters / 1000) * 100) / 100 : null,
-        durationSeconds,
-        durationText: element.duration?.text ?? null,
-      }),
-      { status: 200, headers: { 'content-type': 'application/json' } },
-    );
   } catch (err: any) {
     return new Response(JSON.stringify({ error: 'Server error', details: String(err) }), { status: 500, headers: { 'content-type': 'application/json' } });
   }
