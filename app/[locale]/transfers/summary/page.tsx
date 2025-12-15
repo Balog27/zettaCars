@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DateTimePicker } from "@/components/date-time-picker";
+import { LocationAutocomplete } from "@/components/transfer/location-autocomplete";
 import { Logo } from "@/components/ui/logo";
 import { Send } from "lucide-react";
 import Link from "next/link";
@@ -350,12 +351,10 @@ export default function TransferSummaryPage() {
                     <Label className="text-sm font-medium">
                       Pick-up Location
                     </Label>
-                    <Input
+                    <LocationAutocomplete
                       value={pickupLocationState}
-                      onChange={(e) => {
-                        setPickupLocationState(
-                          (e.target as HTMLInputElement).value,
-                        );
+                      onChange={(value) => {
+                        setPickupLocationState(value);
                         setFormErrorsState(prev => ({
                           ...prev,
                           locations: {
@@ -364,7 +363,7 @@ export default function TransferSummaryPage() {
                           }
                         }));
                       }}
-                      className={formErrorsState.locations?.pickup ? "border-red-500" : ""}
+                      placeholder="Enter pickup location..."
                     />
                     {formErrorsState.locations?.pickup && (
                       <p className="text-sm text-red-500 mt-1 flex items-center">
@@ -377,12 +376,10 @@ export default function TransferSummaryPage() {
                     <Label className="text-sm font-medium">
                       Dropoff Location
                     </Label>
-                    <Input
+                    <LocationAutocomplete
                       value={dropoffLocationState}
-                      onChange={(e) => {
-                        setDropoffLocationState(
-                          (e.target as HTMLInputElement).value,
-                        );
+                      onChange={(value) => {
+                        setDropoffLocationState(value);
                         setFormErrorsState(prev => ({
                           ...prev,
                           locations: {
@@ -391,7 +388,7 @@ export default function TransferSummaryPage() {
                           }
                         }));
                       }}
-                      className={formErrorsState.locations?.dropoff ? "border-red-500" : ""}
+                      placeholder="Enter dropoff location..."
                     />
                     {formErrorsState.locations?.dropoff && (
                       <p className="text-sm text-red-500 mt-1 flex items-center">
