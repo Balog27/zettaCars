@@ -850,6 +850,9 @@
       "name": "Name",
       "email": "Email",
       "phone": "Phone",
+      "price": "Price",
+      "flightNumber": "Flight Number",
+      "message": "Message",
       "nextSteps": "We will review your transfer request and contact you as soon as possible within 6 hours to confirm availability and finalize the price. A confirmation email has been sent to the address you provided.",
       "backButton": "Back to Transfers",
       "homeButton": "Back to Home"

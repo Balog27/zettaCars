@@ -19,6 +19,7 @@ interface EmailData {
     email: string;
     phone: string;
     message?: string;
+    flightNumber?: string;
   };
   transferDetails: {
     pickupLocation: string;
@@ -74,6 +75,8 @@ const TransferRequestUserEmail: React.FC<TransferRequestUserEmailProps> = ({ dat
     category: isRo ? 'Categorie:' : 'Category:',
     persons: isRo ? 'Persoane:' : 'Persons:',
     distance: isRo ? 'Distanță:' : 'Distance:',
+    flightNumber: isRo ? 'Numărul Zborului:' : 'Flight Number:',
+    message: isRo ? 'Mesaj:' : 'Message:',
     pricing: isRo ? 'Estimare Preț' : 'Price Estimate',
     basePrice: isRo ? 'Preț de Bază:' : 'Base Price:',
     pricingNote: isRo
@@ -125,6 +128,12 @@ const TransferRequestUserEmail: React.FC<TransferRequestUserEmailProps> = ({ dat
               )}
               {transferDetails.distance && (
                 <DetailRow label={t.distance} value={`${transferDetails.distance} km`} />
+              )}
+              {personalInfo.flightNumber && (
+                <DetailRow label={t.flightNumber} value={personalInfo.flightNumber} />
+              )}
+              {personalInfo.message && (
+                <DetailRow label={t.message} value={personalInfo.message} />
               )}
             </Section>
 

@@ -133,14 +133,6 @@ export default function TransferConfirmationPage() {
                           {confirmationData.transferDetails?.category}
                         </dd>
                       </div>
-                      <div>
-                        <dt className="font-medium">{t("summary.price") ?? "Price:"}</dt>
-                        <dd className="mt-1 text-slate-600 dark:text-slate-300 font-semibold">
-                          {confirmationData.pricing?.isSingle
-                            ? formatCurrency(confirmationData.pricing?.price || 0, confirmationData.pricing?.currency)
-                            : `${formatCurrency(confirmationData.pricing?.min || 0, confirmationData.pricing?.currency)} - ${formatCurrency(confirmationData.pricing?.max || 0, confirmationData.pricing?.currency)}`}
-                        </dd>
-                      </div>
                     </dl>
                   </div>
 
@@ -167,6 +159,22 @@ export default function TransferConfirmationPage() {
                           {confirmationData.personalInfo?.phone}
                         </dd>
                       </div>
+                      {confirmationData.personalInfo?.flightNumber && (
+                        <div>
+                          <dt className="font-medium">{t("confirmation.flightNumber") ?? "Flight Number:"}</dt>
+                          <dd className="mt-1 text-slate-600 dark:text-slate-300">
+                            {confirmationData.personalInfo?.flightNumber}
+                          </dd>
+                        </div>
+                      )}
+                      {confirmationData.personalInfo?.message && (
+                        <div className="md:col-span-2">
+                          <dt className="font-medium">{t("confirmation.message") ?? "Message:"}</dt>
+                          <dd className="mt-1 text-slate-600 dark:text-slate-300">
+                            {confirmationData.personalInfo?.message}
+                          </dd>
+                        </div>
+                      )}
                     </dl>
                   </div>
 

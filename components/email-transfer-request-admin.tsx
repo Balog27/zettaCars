@@ -19,6 +19,7 @@ interface EmailData {
     email: string;
     phone: string;
     message?: string;
+    flightNumber?: string;
   };
   transferDetails: {
     pickupLocation: string;
@@ -67,6 +68,7 @@ const TransferRequestAdminEmail: React.FC<TransferRequestAdminEmailProps> = ({ d
     email: isRo ? 'Email:' : 'Email:',
     phone: isRo ? 'Telefon:' : 'Phone:',
     message: isRo ? 'Mesaj:' : 'Message:',
+    flightNumber: isRo ? 'Numărul Zborului:' : 'Flight Number:',
     transferDetails: isRo ? 'Detalii Transfer' : 'Transfer Details',
     pickupLocation: isRo ? 'Locație Ridicare:' : 'Pickup Location:',
     dropoffLocation: isRo ? 'Locație Destinație:' : 'Dropoff Location:',
@@ -104,6 +106,9 @@ const TransferRequestAdminEmail: React.FC<TransferRequestAdminEmailProps> = ({ d
               <DetailRow label={t.name} value={personalInfo.name} />
               <DetailRow label={t.email} value={personalInfo.email} />
               <DetailRow label={t.phone} value={personalInfo.phone} />
+              {personalInfo.flightNumber && (
+                <DetailRow label={t.flightNumber} value={personalInfo.flightNumber} />
+              )}
               {personalInfo.message && (
                 <DetailRow label={t.message} value={personalInfo.message} />
               )}
@@ -126,6 +131,12 @@ const TransferRequestAdminEmail: React.FC<TransferRequestAdminEmailProps> = ({ d
               )}
               {transferDetails.distance && (
                 <DetailRow label={t.distance} value={`${transferDetails.distance} km`} />
+              )}
+              {personalInfo.flightNumber && (
+                <DetailRow label={t.flightNumber} value={personalInfo.flightNumber} />
+              )}
+              {personalInfo.message && (
+                <DetailRow label={t.message} value={personalInfo.message} />
               )}
             </Section>
 

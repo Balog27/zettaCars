@@ -57,6 +57,8 @@ export async function POST(request: Request) {
       name: isRo ? 'Nume' : 'Name',
       email: isRo ? 'Email' : 'Email',
       phone: isRo ? 'Telefon' : 'Phone',
+      flightNumber: isRo ? 'Numărul Zborului' : 'Flight Number',
+      message: isRo ? 'Mesaj' : 'Message',
       transferDetails: isRo ? 'Detalii Transfer' : 'Transfer Details',
       pickupLocation: isRo ? 'Locație Ridicare' : 'Pickup Location',
       dropoffLocation: isRo ? 'Locație Destinație' : 'Dropoff Location',
@@ -84,6 +86,8 @@ export async function POST(request: Request) {
       category: isRo ? 'Categorie' : 'Category',
       persons: isRo ? 'Persoane' : 'Persons',
       distance: isRo ? 'Distanță' : 'Distance',
+      flightNumber: isRo ? 'Numărul Zborului' : 'Flight Number',
+      message: isRo ? 'Mesaj' : 'Message',
       pricing: isRo ? 'Estimare Preț' : 'Price Estimate',
       basePrice: isRo ? 'Preț de Bază' : 'Base Price',
       nextSteps: isRo
@@ -111,6 +115,14 @@ export async function POST(request: Request) {
             <td style="padding: 8px; color: #666;">${adminT.phone}:</td>
             <td style="padding: 8px;">${personalInfo.phone}</td>
           </tr>
+          ${personalInfo.flightNumber ? `<tr style="background-color: #f9fafb;">
+            <td style="padding: 8px; color: #666;">${adminT.flightNumber}:</td>
+            <td style="padding: 8px;">${personalInfo.flightNumber}</td>
+          </tr>` : ''}
+          ${personalInfo.message ? `<tr>
+            <td style="padding: 8px; color: #666;">${adminT.message}:</td>
+            <td style="padding: 8px;">${personalInfo.message}</td>
+          </tr>` : ''}
         </table>
 
         <h2 style="color: #374151; font-size: 18px; margin-top: 20px;">${adminT.transferDetails}</h2>
@@ -138,6 +150,14 @@ export async function POST(request: Request) {
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${adminT.distance}:</td>
             <td style="padding: 8px;">${transferDetails.distance} km</td>
+          </tr>` : ''}
+          ${personalInfo.flightNumber ? `<tr>
+            <td style="padding: 8px; color: #666;">${adminT.flightNumber}:</td>
+            <td style="padding: 8px;">${personalInfo.flightNumber}</td>
+          </tr>` : ''}
+          ${personalInfo.message ? `<tr style="background-color: #f9fafb;">
+            <td style="padding: 8px; color: #666;">${adminT.message}:</td>
+            <td style="padding: 8px;">${personalInfo.message}</td>
           </tr>` : ''}
         </table>
 
@@ -190,6 +210,14 @@ export async function POST(request: Request) {
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${userT.distance}:</td>
             <td style="padding: 8px;">${transferDetails.distance} km</td>
+          </tr>` : ''}
+          ${personalInfo.flightNumber ? `<tr>
+            <td style="padding: 8px; color: #666;">${userT.flightNumber}:</td>
+            <td style="padding: 8px;">${personalInfo.flightNumber}</td>
+          </tr>` : ''}
+          ${personalInfo.message ? `<tr style="background-color: #f9fafb;">
+            <td style="padding: 8px; color: #666;">${userT.message}:</td>
+            <td style="padding: 8px;">${personalInfo.message}</td>
           </tr>` : ''}
         </table>
 

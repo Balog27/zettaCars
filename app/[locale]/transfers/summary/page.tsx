@@ -355,7 +355,7 @@ export default function TransferSummaryPage() {
                       value={pickupLocationState}
                       onChange={(value) => {
                         setPickupLocationState(value);
-                        setFormErrorsState(prev => ({
+                        setFormErrorsState((prev: any) => ({
                           ...prev,
                           locations: {
                             ...prev.locations,
@@ -380,7 +380,7 @@ export default function TransferSummaryPage() {
                       value={dropoffLocationState}
                       onChange={(value) => {
                         setDropoffLocationState(value);
-                        setFormErrorsState(prev => ({
+                        setFormErrorsState((prev: any) => ({
                           ...prev,
                           locations: {
                             ...prev.locations,
@@ -404,7 +404,7 @@ export default function TransferSummaryPage() {
                       dateState={transferDateState}
                       setDateState={(date) => {
                         setTransferDateState(date);
-                        setFormErrorsState(prev => ({
+                        setFormErrorsState((prev: any) => ({
                           ...prev,
                           datetime: {
                             ...prev.datetime,
@@ -415,7 +415,7 @@ export default function TransferSummaryPage() {
                       timeState={pickupTimeState}
                       setTimeState={(time) => {
                         setPickupTimeState(time);
-                        setFormErrorsState(prev => ({
+                        setFormErrorsState((prev: any) => ({
                           ...prev,
                           datetime: {
                             ...prev.datetime,
