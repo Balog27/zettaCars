@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
@@ -40,7 +40,7 @@ function formatCurrency(value: number, currency?: string) {
   }
 }
 
-export default function TransferConfirmationPage() {
+function TransferConfirmationPageContent() {
   const search = useSearchParams();
   const router = useRouter();
   const t = useTranslations("transfersPage");
@@ -227,5 +227,22 @@ export default function TransferConfirmationPage() {
       </main>
       <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
     </div>
+  );
+}
+export default function TransferConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="relative flex flex-col min-h-screen">
+        <Header logo={<Logo alt="Zetta Cars Logo" />} />
+        <main className="flex-grow bg-background py-12">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">Loading confirmation…</div>
+          </div>
+        </main>
+        <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
+      </div>
+    }>
+      <TransferConfirmationPageContent />
+    </Suspense>
   );
 }

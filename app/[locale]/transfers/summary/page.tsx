@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
@@ -37,7 +37,7 @@ function safeDecode(data?: string) {
   }
 }
 
-export default function TransferSummaryPage() {
+function TransferSummaryPageContent() {
   const search = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -753,5 +753,22 @@ export default function TransferSummaryPage() {
       </main>
       <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
     </div>
+  );
+}
+export default function TransferSummaryPage() {
+  return (
+    <Suspense fallback={
+      <div className="relative flex flex-col min-h-screen">
+        <Header logo={<Logo alt="Zetta Cars Logo" />} />
+        <main className="flex-grow bg-background py-12">
+          <div className="container mx-auto">
+            <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">Loading transfer details…</div>
+          </div>
+        </main>
+        <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
+      </div>
+    }>
+      <TransferSummaryPageContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLocale } from 'next-intl'
@@ -10,7 +10,7 @@ const languages = {
   en: { name: 'English', flag: '🇺🇸' }
 }
 
-export function LanguageSelector() {
+function LanguageSelectorContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -58,4 +58,12 @@ export function LanguageSelector() {
       </SelectContent>
     </Select>
   )
-} 
+}
+
+export function LanguageSelector() {
+  return (
+    <Suspense fallback={<div className="w-[70px]" />}>
+      <LanguageSelectorContent />
+    </Suspense>
+  )
+}
