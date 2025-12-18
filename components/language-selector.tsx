@@ -1,7 +1,7 @@
 "use client"
 
-import React from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import React, { Suspense } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLocale } from 'next-intl'
 
@@ -10,9 +10,10 @@ const languages = {
   en: { name: 'English', flag: '🇺🇸' }
 }
 
-export function LanguageSelector() {
+function LanguageSelectorContent() {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const locale = useLocale()
   const [mounted, setMounted] = React.useState(false)
 
@@ -26,8 +27,12 @@ export function LanguageSelector() {
     
     // Both Romanian and English will have explicit prefixes
     const newPath = `/${newLocale}${pathnameWithoutLocale}`
-    
-    router.push(newPath)
+
+    const q = searchParams?.toString()
+    const search = q ? `?${q}` : ''
+    const hash = typeof window !== 'undefined' ? window.location.hash : ''
+
+    router.push(`${newPath}${search}${hash}`)
   }
   
   return (
@@ -53,4 +58,12 @@ export function LanguageSelector() {
       </SelectContent>
     </Select>
   )
-} 
+}
+
+export function LanguageSelector() {
+  return (
+    <Suspense fallback={<div className="w-[70px]" />}>
+      <LanguageSelectorContent />
+    </Suspense>
+  )
+}

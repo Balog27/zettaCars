@@ -16,6 +16,7 @@ import type * as migrations_migrateVehicleClasses from "../migrations_migrateVeh
 import type * as reservations from "../reservations.js";
 import type * as reviews from "../reviews.js";
 import type * as seasons from "../seasons.js";
+import type * as transfers from "../transfers.js";
 import type * as users from "../users.js";
 import type * as vehicleClasses from "../vehicleClasses.js";
 import type * as vehicles from "../vehicles.js";
@@ -43,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   reservations: typeof reservations;
   reviews: typeof reviews;
   seasons: typeof seasons;
+  transfers: typeof transfers;
   users: typeof users;
   vehicleClasses: typeof vehicleClasses;
   vehicles: typeof vehicles;

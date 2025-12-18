@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { Header } from '@/components/ui/header';
 import { Footer } from '@/components/ui/footer';
@@ -86,7 +87,8 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="relative flex flex-col min-h-screen overflow-x-hidden">
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="relative flex flex-col min-h-screen overflow-x-hidden">
       <Head>
         <title>Despre Zetta Cars - Masini de Inchiriat Cluj-Napoca</title>
         <meta name="description" content="Află mai multe despre Zetta Cars, lider în masini de inchiriat Cluj-Napoca. Servicii profesionale de închiriere auto în Cluj cu experiență de peste 5 ani." />
@@ -308,6 +310,7 @@ const AboutPage = () => {
         brandName=""
       />
     </div>
+    </Suspense>
   );
 };
 

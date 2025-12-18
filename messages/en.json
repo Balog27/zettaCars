@@ -246,6 +246,10 @@
     }
   },
   "reservationPage": {
+    "common": {
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy"
+    },
     "backToVehicleDetails": "Back to Vehicle Details",
     "formProgress": "Form Progress",
     "reservation": {
@@ -336,6 +340,8 @@
     "reservationSummary": {
       "title": "Reservation Summary",
       "vehicle": "Vehicle",
+      "category": "Category",
+      "numberOfPersons": "Number of Persons",
       "pickup": "Pick-up",
       "pickupDate": "Pick-up Date",
       "return": "Return",
@@ -736,8 +742,121 @@
     }
   },
   "transfersPage": {
-    "title": "Coming Soon",
-    "subtitle": "Our transfers page is under construction. Stay tuned!"
+    "title": "Transfers",
+    "subtitle": "Book airport and city transfers",
+    "paymentMethod": {
+      "title": "Payment Method"
+    },
+    "additionalFeatures": {
+      "title": "Additional Features",
+      "childSeats": "Child Seats",
+      "age1to4": "1-4 years",
+      "age5to12": "5-12 years"
+    },
+    "booking": {
+      "transferDate": "Transfer Date",
+      "pickupTime": "Pickup Time",
+      "persons": "Persons",
+      "pickupLocation": "Pickup Location",
+      "dropoffLocation": "Dropoff Location",
+      "category": "Category",
+      "recommended": "Recommended",
+      "calculateButton": "Calculate Price",
+      "contactPrompt": "If you need transport for more than 8 people please {contactLink} us for a special request.",
+      "contactLink": "contact",
+      "standard": "Standard",
+      "van": "Van"
+    },
+    "payment": {
+      "cashOnDelivery": "Cash on delivery",
+      "cardOnDelivery": "Card on delivery",
+      "termsAcceptance": "I accept the Terms and Conditions and Privacy Policy"
+    },
+    "personal": {
+      "title": "Personal Information",
+      "signInPrefill": "Sign in to prefill details",
+      "signIn": "Sign in",
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message"
+    },
+    "sendButton": "Send Transfer Request",
+    "recalculateButton": "Recalculate Price",
+    "summary": {
+      "title": "Reservation Summary",
+      "pickup": "Pickup",
+      "dropoff": "Dropoff",
+      "date": "Date",
+      "duration": "Duration",
+      "priceBreakdown": "Price breakdown",
+      "pickupTime": "Pickup time",
+      "persons": "Persons",
+      "numberOfPersons": "Number of Persons",
+      "category": "Category",
+      "basePrice": "Base price",
+      "backToTransfers": "Back to Transfers",
+      "childSeatsLabel": "Add Child Seats (per seat: {price} {currency})",
+      "childSeatsNote": "Maximum 2 child seats",
+      "childSeats": "Child seats",
+      "total": "Total",
+      "addChildSeats": "Add Child Seats (per seat: {price} {currency})",
+      "proceed": "Proceed to Reservation",
+      "distance": "Distance",
+      "pricingNote": {
+        "title": "Pricing Note",
+        "message": "For distance-based transfers, the price shown is an estimated range. The final price will be confirmed after we review and accept your order. You will be contacted on email with the exact amount."
+      }
+    },
+    "specialOrders": {
+      "title": "Special Orders",
+      "sectionTitle": "Special Transfer Orders",
+      "sectionDescription": "Have a unique transfer need? Contact us for custom requests and special arrangements.",
+      "signInPrompt": "Sign in to submit a special order request",
+      "signIn": "Sign In",
+      "nameLabel": "Your Name",
+      "namePlaceholder": "Enter your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+40 750 250 121",
+      "messageLabel": "Special Order Details",
+      "messagePlaceholder": "Describe your special transfer request, group size, specific requirements, and if you need station time, how long will the stationing take?...",
+      "pleaseSignIn": "Please sign in to send a special order request.",
+      "messageTooShort": "Please enter a longer message (at least 10 characters).",
+      "notAuthenticated": "You must be signed in to send a request.",
+      "sendFailed": "Failed to send request.",
+      "sendSuccess": "Special order request sent — we will reply shortly.",
+      "sending": "Sending...",
+      "sendButton": "Send Special Order"
+    },
+    "contactForm": {
+      "title": "Get in Touch",
+      "description": "Have any questions? We are here to help.",
+      "nameLabel": "Your name",
+      "namePlaceholder": "Optional",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Tell us about your transportation needs...",
+      "signInButton": "Sign in to send",
+      "signInNote": "You must be signed in to submit this form.",
+      "send": "Send",
+      "sending": "Sending..."
+    },
+    "confirmation": {
+      "title": "Transfer Request Submitted",
+      "subtitle": "Thank you for your transfer request. We have received your booking details.",
+      "transferDetails": "Transfer Details",
+      "personalInfo": "Personal Information",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "price": "Price",
+      "flightNumber": "Flight Number",
+      "message": "Message",
+      "nextSteps": "We will review your transfer request and contact you as soon as possible within 6 hours to confirm availability and finalize the price. A confirmation email has been sent to the address you provided.",
+      "backButton": "Back to Transfers",
+      "homeButton": "Back to Home"
+    }
   },
   "email": {
     "companyName": "Zetta Cars",
