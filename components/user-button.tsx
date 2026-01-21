@@ -4,10 +4,11 @@ import { useState, useEffect } from "react"
 import {
   LogOut,
   User,
+  Clock,
 } from "lucide-react"
 import { useUser, useClerk } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 import {
   Avatar,
@@ -31,6 +32,7 @@ export function UserButton() {
   const { user } = useUser()
   const { signOut } = useClerk()
   const router = useRouter()
+  const locale = useLocale()
   const t = useTranslations('navigation')
   const [mounted, setMounted] = useState(false)
 
@@ -51,7 +53,11 @@ export function UserButton() {
   }
 
   const handleProfileClick = () => {
-    router.push('/profile')
+    router.push(`/${locale}/profile`)
+  }
+
+  const handleReservationsClick = () => {
+    router.push(`/${locale}/reservations`)
   }
 
   return (
@@ -81,6 +87,10 @@ export function UserButton() {
         <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
           <span>{t('profile')}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleReservationsClick} className="cursor-pointer">
+          <Clock className="mr-2 h-4 w-4" />
+          <span>{t('reservations')}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">

@@ -3,6 +3,8 @@ import React, { useMemo, useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -43,6 +45,9 @@ function TransferSummaryPageContent() {
   const pathname = usePathname();
   const localePath = pathname ? pathname.split("/")[1] : undefined;
   const t = useTranslations("transfersPage");
+  
+  // Convex mutation
+  const createTransferRequest = useMutation(api.transferRequests.createTransferRequest);
 
   const dataParam = search?.get("data") || undefined;
   const payload = useMemo(() => safeDecode(dataParam), [dataParam]) as any;
@@ -736,6 +741,32 @@ function TransferSummaryPageContent() {
                   } catch (emailError) {
                     console.error('Error sending transfer request email:', emailError);
                     // Don't prevent navigation even if email fails
+                  }
+
+                  // Save transfer request to database
+                  try {
+                    await createTransferRequest({
+                      transferDate: transferDateState!.toISOString().split('T')[0],
+                      transferTime: pickupTimeState!,
+                      pickupLocation: pickupLocationState,
+                      dropoffLocation: dropoffLocationState,
+                      numberOfPassengers: payload?.persons || 1,
+                      category: payload?.category || 'standard',
+                      customerInfo: {
+                        name: personalInfoState.name,
+                        email: personalInfoState.email,
+                        phone: personalInfoState.phone,
+                        message: personalInfoState.message,
+                        flightNumber: personalInfoState.flightNumber,
+                      },
+                      estimatedPrice: priceData.isSingle ? priceData.price : priceData.min,
+                      currency: payload?.pricing?.currency || 'EUR',
+                      distanceKm: distanceKmState || undefined,
+                      specialRequests: personalInfoState.message,
+                    });
+                  } catch (dbError) {
+                    console.error('Error saving transfer request to database:', dbError);
+                    // Don't prevent navigation even if database save fails
                   }
                   
                   // Navigate to confirmation page with encoded data

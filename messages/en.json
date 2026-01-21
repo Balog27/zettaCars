@@ -521,6 +521,7 @@
     "signUp": "Sign Up",
     "language": "Language",
     "profile": "Profile",
+    "reservations": "Reservations",
     "logout": "Logout"
   },
   "profile": {
@@ -559,6 +560,68 @@
       "locations": "Pickup & Return",
       "totalPrice": "Total Price",
       "status": "Status"
+    }
+  },
+  "reservations": {
+    "title": "My Reservations",
+    "subtitle": "View and manage all your vehicle rentals and transfer requests",
+    "pleaseSignIn": "Please sign in to view your reservations",
+    "signInButton": "Sign In",
+    "noReservations": "No reservations found",
+    "noReservationsDescription": "You haven't made any reservations yet. Start by browsing our available cars or booking a transfer.",
+    "loading": "Loading reservations...",
+    "tabs": {
+      "vehicle": "Vehicle Rentals",
+      "transfer": "Transfers"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
+    },
+    "table": {
+      "vehicle": "Vehicle",
+      "dates": "Rental Period",
+      "locations": "Locations",
+      "pickup": "Pickup",
+      "return": "Return",
+      "totalPrice": "Total Price",
+      "status": "Status",
+      "promo": "Promo",
+      "scdw": "SCDW (Zero deductible)",
+      "warranty": "Standard Warranty"
+    },
+    "filters": {
+      "status": "Filter by Status",
+      "allStatuses": "All Statuses",
+      "location": "Filter by Location",
+      "locationPlaceholder": "Search locations...",
+      "clear": "Clear Filters"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "reservations": "reservations"
+    },
+    "transfer": {
+      "title": "Transfer Requests",
+      "description": "View and manage your transfer service requests",
+      "note": "Transfer requests are processed by our team. You'll receive confirmation details via email within 6 hours.",
+      "details": "Transfer requests are submitted to our team for custom quotes. Once submitted, our team will review your request and contact you with pricing and availability.",
+      "whatYouNeed": "What You'll Need",
+      "need1": "Pickup and dropoff locations",
+      "need2": "Number of passengers",
+      "need3": "Preferred transfer date and time",
+      "need4": "Special requirements or requests",
+      "howItWorks": "How It Works",
+      "step1": "Fill out the transfer request form with your details",
+      "step2": "Submit your request for a custom quote",
+      "step3": "Our team will review and contact you within 6 hours",
+      "step4": "Confirm and complete your booking",
+      "bookButton": "Book a Transfer",
+      "contactButton": "Contact Us"
     }
   },
   "footer": {

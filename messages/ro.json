@@ -536,6 +536,7 @@
     "signUp": "Înregistrare",
     "language": "Limba",
     "profile": "Profil",
+    "reservations": "Rezervări",
     "logout": "Deconectare"
   },
   "profile": {
@@ -574,6 +575,68 @@
       "locations": "Ridicare și Returnare",
       "totalPrice": "Preț Total",
       "status": "Status"
+    }
+  },
+  "reservations": {
+    "title": "Rezervările Mele",
+    "subtitle": "Vezi și gestionează toate închirierile auto și cererile de transfer",
+    "pleaseSignIn": "Te rugăm să te conectezi pentru a-ți vedea rezervările",
+    "signInButton": "Conectează-te",
+    "noReservations": "Nu s-au găsit rezervări",
+    "noReservationsDescription": "Nu ai făcut încă nicio rezervare. Începe prin a răsfoi mașinile noastre sau prin a rezerva un transfer.",
+    "loading": "Se încarcă rezervările...",
+    "tabs": {
+      "vehicle": "Închirieri Auto",
+      "transfer": "Transferuri"
+    },
+    "status": {
+      "pending": "În Așteptare",
+      "confirmed": "Confirmată",
+      "cancelled": "Anulată",
+      "completed": "Finalizată"
+    },
+    "table": {
+      "vehicle": "Vehicul",
+      "dates": "Perioada Închirierii",
+      "locations": "Locații",
+      "pickup": "Ridicare",
+      "return": "Returnare",
+      "totalPrice": "Preț Total",
+      "status": "Status",
+      "promo": "Promocie",
+      "scdw": "SCDW (Zero deductibil)",
+      "warranty": "Garanție Standard"
+    },
+    "filters": {
+      "status": "Filtru după Status",
+      "allStatuses": "Toate Statusurile",
+      "location": "Filtru după Locație",
+      "locationPlaceholder": "Caută locații...",
+      "clear": "Șterge Filtrele"
+    },
+    "pagination": {
+      "showing": "Afișaj",
+      "to": "la",
+      "of": "din",
+      "reservations": "rezervări"
+    },
+    "transfer": {
+      "title": "Cereri de Transfer",
+      "description": "Vezi și gestionează cererile tale de servicii de transfer",
+      "note": "Cererile de transfer sunt procesate de echipa noastră. Vei primi detalii de confirmare prin email în maximum 6 ore.",
+      "details": "Cererile de transfer sunt trimise echipei noastre pentru oferte personalizate. După trimitere, echipa noastră va revizui cererea și te va contacta cu prețuri și disponibilitate.",
+      "whatYouNeed": "Ce ai nevoie",
+      "need1": "Locații de ridicare și destinație",
+      "need2": "Numărul de pasageri",
+      "need3": "Data și ora preferată a transferului",
+      "need4": "Cerințe speciale sau solicitări",
+      "howItWorks": "Cum Funcționează",
+      "step1": "Completează formularul de cerere de transfer cu detaliile tale",
+      "step2": "Trimite cererea pentru o ofertă personalizată",
+      "step3": "Echipa noastră va revizui și te va contacta în maximum 6 ore",
+      "step4": "Confirmă și finalizează rezervarea",
+      "bookButton": "Rezervă un Transfer",
+      "contactButton": "Contactează-ne"
     }
   },
   "footer": {
