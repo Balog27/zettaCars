@@ -38,22 +38,33 @@ export function LocationSearchInput({
   const [predictions, setPredictions] = React.useState<PlaceAutocompleteResult[]>([])
   const [loading, setLoading] = React.useState(false)
   const [showDropdown, setShowDropdown] = React.useState(false)
-  const [hasInteracted, setHasInteracted] = React.useState(false)
+  const [userTypedValue, setUserTypedValue] = React.useState('')
 
-  // Update search value when external value changes
+  // Update search value when external value changes (from parent/props)
   React.useEffect(() => {
     setSearchValue(value)
+    // Reset user typed value to prevent showing dropdown with initial data
+    setUserTypedValue('')
+    setPredictions([])
+    setShowDropdown(false)
   }, [value])
 
-  // Debounced search effect
+  // Debounced search effect - only runs when user has actually typed
   React.useEffect(() => {
-    if (searchValue.length >= 3) {
+    // Only search if user has typed something (userTypedValue is non-empty)
+    if (userTypedValue.length === 0) {
+      setPredictions([])
+      setShowDropdown(false)
+      return
+    }
+
+    if (userTypedValue.length >= 3) {
       setLoading(true)
-      setShowDropdown(hasInteracted)
+      setShowDropdown(true)
 
       const timer = setTimeout(async () => {
         try {
-          const results = await autocomplete(searchValue)
+          const results = await autocomplete(userTypedValue)
           setPredictions(results || [])
         } catch (error) {
           console.error("Error fetching predictions:", error)
@@ -67,15 +78,15 @@ export function LocationSearchInput({
     } else {
       setPredictions([])
       setLoading(false)
-      setShowDropdown(hasInteracted && searchValue.length > 0)
+      setShowDropdown(false)
     }
-  }, [searchValue])
+  }, [userTypedValue])
 
   const handleInputChange = (newValue: string) => {
     setSearchValue(newValue)
     onValueChange(newValue)
-    setHasInteracted(true)
-    setShowDropdown(newValue.length > 0)
+    // Track what the user has typed to distinguish from initial data
+    setUserTypedValue(newValue)
   }
 
   const handleSelect = (selectedValue: string) => {
@@ -86,9 +97,7 @@ export function LocationSearchInput({
   }
 
   const handleInputFocus = () => {
-    if (hasInteracted && searchValue.length > 0) {
-      setShowDropdown(true)
-    }
+    // Don't open dropdown on focus - wait for user to type at least 3 characters
   }
 
   const handleInputBlur = () => {
@@ -119,7 +128,7 @@ export function LocationSearchInput({
           </div>
 
           {showDropdown && (
-            <div className="absolute top-full left-0 right-0 z-50 bg-popover dark:bg-card-darker border border-t-0 rounded-b-lg shadow-lg w-full">
+            <div className="absolute top-full left-0 right-0 z-50 bg-white dark:bg-[#000000] border border-t-0 rounded-b-lg shadow-lg w-full">
               <CommandList className="max-h-60">
                 {loading && searchValue.length >= 3 && (
                   <div className="py-6 text-center text-sm text-muted-foreground">

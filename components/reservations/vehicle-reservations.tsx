@@ -43,9 +43,9 @@ export function VehicleReservations() {
     status: null,
     location: null,
   });
-  
+
   const t = useTranslations('reservations');
-  
+
   const reservations = useQuery(api.reservations.getCurrentUserReservations);
 
   const getStatusBadge = (status: string) => {
@@ -55,9 +55,9 @@ export function VehicleReservations() {
       cancelled: { color: "bg-red-100 text-red-800 border-red-200", label: t('status.cancelled') },
       completed: { color: "bg-blue-100 text-blue-800 border-blue-200", label: t('status.completed') },
     };
-    
+
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
-    
+
     return (
       <Badge variant="secondary" className={config.color}>
         {config.label}
@@ -75,7 +75,7 @@ export function VehicleReservations() {
 
   const VehicleInfo = ({ vehicleId }: { vehicleId: Id<"vehicles"> }) => {
     const vehicle = useQuery(api.vehicles.getById, { id: vehicleId });
-    
+
     if (!vehicle) {
       return <span className="text-muted-foreground">Loading...</span>;
     }
@@ -113,7 +113,7 @@ export function VehicleReservations() {
     }
 
     if (filters.location) {
-      filtered = filtered.filter(r => 
+      filtered = filtered.filter(r =>
         r.pickupLocation.toLowerCase().includes(filters.location!.toLowerCase()) ||
         r.restitutionLocation.toLowerCase().includes(filters.location!.toLowerCase())
       );
@@ -167,9 +167,9 @@ export function VehicleReservations() {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 p-4 bg-gray-100 rounded-lg border border-gray-200">
+      <div className="flex flex-col sm:flex-row gap-4 p-4 bg-gray-100 dark:bg-card-darker rounded-lg border border-gray-200 dark:border-gray-700">
         <div className="flex-1">
-          <label className="text-sm font-semibold text-gray-700 mb-2 block">
+          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
             {t('filters.status')}
           </label>
           <Select
@@ -179,7 +179,7 @@ export function VehicleReservations() {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="bg-white">
+            <SelectTrigger className="bg-white dark:bg-gray-800">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -193,7 +193,7 @@ export function VehicleReservations() {
         </div>
 
         <div className="flex-1">
-          <label className="text-sm font-semibold text-gray-700 mb-2 block">
+          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
             {t('filters.location')}
           </label>
           <div className="flex gap-2">
@@ -205,7 +205,7 @@ export function VehicleReservations() {
                 setFilters(prev => ({ ...prev, location: e.target.value || null }));
                 setCurrentPage(1);
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 text-sm ring-offset-background placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-card-darker text-gray-900 dark:text-gray-100 text-sm ring-offset-background placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
             {(filters.status || filters.location) && (
               <Button
@@ -224,12 +224,12 @@ export function VehicleReservations() {
       </div>
 
       {/* Table */}
-      <div className="rounded-md border overflow-x-auto">
+      <div className="rounded-md border border-gray-200 dark:border-gray-700 overflow-x-auto bg-card dark:bg-card-darker">
         <Table className="w-full">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[200px]">{t('table.vehicle')}</TableHead>
-              <TableHead 
+              <TableHead
                 className="w-[200px] cursor-pointer hover:bg-muted"
                 onClick={() => handleSort('date')}
               >
@@ -239,7 +239,7 @@ export function VehicleReservations() {
                 </div>
               </TableHead>
               <TableHead className="min-w-[200px]">{t('table.locations')}</TableHead>
-              <TableHead 
+              <TableHead
                 className="w-[130px] cursor-pointer hover:bg-muted"
                 onClick={() => handleSort('price')}
               >
@@ -248,7 +248,7 @@ export function VehicleReservations() {
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
               </TableHead>
-              <TableHead 
+              <TableHead
                 className="w-[130px] cursor-pointer hover:bg-muted"
                 onClick={() => handleSort('status')}
               >
@@ -313,7 +313,7 @@ export function VehicleReservations() {
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious 
+                <PaginationPrevious
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                 />
@@ -324,7 +324,7 @@ export function VehicleReservations() {
                 </PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationNext 
+                <PaginationNext
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                 />

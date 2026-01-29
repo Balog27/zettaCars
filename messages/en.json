@@ -812,9 +812,12 @@
     },
     "additionalFeatures": {
       "title": "Additional Features",
+      "childSeatsTitle": "Additional Features - Child Seats",
       "childSeats": "Child Seats",
-      "age1to4": "1-4 years",
-      "age5to12": "5-12 years"
+      "age1to4": "Child Seat (1-4 years)",
+      "age5to12": "Child Seat (5-12 years)",
+      "freeMaxSeats": "FREE (max 2 seats)",
+      "free": "FREE"
     },
     "booking": {
       "transferDate": "Transfer Date",

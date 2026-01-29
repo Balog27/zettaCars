@@ -45,7 +45,7 @@ function TransferSummaryPageContent() {
   const pathname = usePathname();
   const localePath = pathname ? pathname.split("/")[1] : undefined;
   const t = useTranslations("transfersPage");
-  
+
   // Convex mutation
   const createTransferRequest = useMutation(api.transferRequests.createTransferRequest);
 
@@ -113,14 +113,14 @@ function TransferSummaryPageContent() {
       if (res.ok) {
         const result = await res.json();
         console.log("Recalculate result:", result);
-        
+
         if (result.calculated) {
           // CRITICAL: Update state in the correct order
           // 1. First update the pricing source
           if (result.calculated.pricingSource != null) {
             setPricingSourceState(result.calculated.pricingSource);
           }
-          
+
           // 2. Then update distance based on pricing source
           if (result.calculated.pricingSource === "fixed") {
             // For fixed pricing (in-city), distance is not applicable
@@ -131,12 +131,12 @@ function TransferSummaryPageContent() {
               setDistanceKmState(result.calculated.distanceKm);
             }
           }
-          
+
           // 3. Update duration text
           if (result.calculated.durationText) {
             setDurationTextState(result.calculated.durationText);
           }
-          
+
           // 4. Update payload for fallback references
           if (payload) {
             payload.calculated = result.calculated;
@@ -193,13 +193,13 @@ function TransferSummaryPageContent() {
     async function fetchDistance() {
       // Only fetch if we have addresses and haven't already fetched distance
       if (!payload?.pickup?.address || !payload?.dropoff?.address) return;
-      
+
       // If pricingSource is fixed (both in Cluj), we don't need distance
       if (pricingSourceState === "fixed") return;
-      
+
       // If we already have distance, don't fetch again
       if (distanceKmState != null) return;
-      
+
       setDistanceLoading(true);
       try {
         const res = await fetch('/api/transfer-distance', {
@@ -226,20 +226,20 @@ function TransferSummaryPageContent() {
   // Get price - single for fixed, range for distance
   const priceData = React.useMemo(() => {
     if (!payload || !selectedCategory) return { isSingle: true, price: 0, min: 0, max: 0 };
-    
+
     const pricing = payload.pricing || {};
-    
+
     // Always use state values if available (they get updated on recalculate)
     const pricingSource = pricingSourceState ?? payload.calculated?.pricingSource ?? "fixed";
     const distanceKm = distanceKmState ?? payload.calculated?.distanceKm ?? null;
-    
+
     // Calculate based on pricing source
     if (pricingSource === "fixed") {
       // Use fixed single price for in-city transfers
       const fixedPrice = pricing.fixedPrices?.[selectedCategory] ?? 0;
       return { isSingle: true, price: fixedPrice, min: 0, max: 0 };
     }
-    
+
     if (pricingSource === "distance") {
       // Calculate range based on distance with min-max
       const perKmPrice = pricing.pricePerKm?.[selectedCategory];
@@ -249,7 +249,7 @@ function TransferSummaryPageContent() {
         return { isSingle: false, price: 0, min: minPrice, max: maxPrice };
       }
     }
-    
+
     // Fallback
     if (payload.calculated?.totalPrice != null) {
       return { isSingle: true, price: payload.calculated.totalPrice, min: 0, max: 0 };
@@ -257,7 +257,7 @@ function TransferSummaryPageContent() {
     if (payload.calculated?.priceMin != null || payload.calculated?.priceMax != null) {
       return { isSingle: false, price: 0, min: payload.calculated.priceMin ?? 0, max: payload.calculated.priceMax ?? 0 };
     }
-    
+
     return { isSingle: true, price: 0, min: 0, max: 0 };
   }, [payload, selectedCategory, distanceKmState, pricingSourceState]);
 
@@ -271,24 +271,25 @@ function TransferSummaryPageContent() {
 
   if (!mounted) {
     return (
-      <div className="relative flex flex-col min-h-screen">
-        <Header logo={<Logo alt="Zetta Cars Logo" />} />
-        <main className="flex-grow bg-background py-12">
+      <div className="relative flex flex-col min-h-screen" suppressHydrationWarning>
+        <div suppressHydrationWarning style={{ display: 'contents' }} />
+        <main className="flex-grow bg-background py-12" suppressHydrationWarning>
           <div className="container mx-auto">
             <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">Loading transfer details…</div>
           </div>
         </main>
-        <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
+        <div suppressHydrationWarning style={{ display: 'contents' }} />
       </div>
     );
   }
 
-  const childSeatPrice = payload.pricing?.childSeatPrice ?? 0;
-  const addons = (childSeats1to4 + childSeats5to12) * childSeatPrice;
+  // Child seats are FREE for transfers
+  const childSeatPrice = 0;
+  const addons = 0;
   const finalTotalMin = Math.round((priceData.min + addons) * 100) / 100;
   const finalTotalMax = Math.round((priceData.max + addons) * 100) / 100;
   const finalTotal = Math.round((priceData.price + addons) * 100) / 100;
- 
+
 
   function formatCurrency(value: number, currency?: string) {
     if (!currency) return `${value}`;
@@ -343,6 +344,71 @@ function TransferSummaryPageContent() {
             </div>
           </div>
 
+          <div className="max-w-4xl mx-auto mb-6">
+            <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
+              <CardHeader><CardTitle>{t('summary.title') ?? 'Reservation Summary'}</CardTitle></CardHeader>
+              <CardContent>
+                <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm">
+                  <div>
+                    <dt className="font-medium">{t('summary.pickup') ?? 'Pick-up:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{pickupLocationState || payload.pickup?.address || '—'}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium">{t('summary.dropoff') ?? 'Dropoff:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{dropoffLocationState || payload.dropoff?.address || '—'}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium">{t('summary.date') ?? 'Date:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{transferDateState ? `${transferDateState.toLocaleDateString()} at ${pickupTimeState ?? payload.meta?.pickupTime ?? '—'}` : (payload.meta?.transferDate ?? '—')}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium">{t('summary.distance') ?? 'Distance:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{distanceLoading ? 'Calculating…' : (distanceKmState != null ? `${distanceKmState} km` : (payload.calculated?.distanceKm != null ? `${payload.calculated.distanceKm} km` : '-'))}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium">{t('summary.numberOfPersons') ?? 'Number of Persons:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{payload?.persons ?? '-'}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium">{t('summary.category') ?? 'Category:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{payload?.category ?? '-'}</dd>
+                  </div>
+                </dl>
+
+                <div className="mt-4">
+                  <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">{t('summary.priceBreakdown') ?? 'Price breakdown'}</div>
+                  <div className="flex items-center justify-between text-base font-semibold">
+                    <div>{t('summary.basePrice') ?? 'Base price'}</div>
+                    <div>
+                      {priceData.isSingle
+                        ? formatCurrency(priceData.price, payload.pricing?.currency)
+                        : `${formatCurrency(priceData.min, payload.pricing?.currency)} - ${formatCurrency(priceData.max, payload.pricing?.currency)}`
+                      }
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300 mt-2"><div>{t('summary.childSeats') ?? 'Child seats'}</div><div>{(childSeats1to4 + childSeats5to12) > 0 ? `${childSeats1to4 + childSeats5to12} × ${formatCurrency(childSeatPrice ?? 0, payload.pricing?.currency)}` : '-'}</div></div>
+                  <div className="border-t mt-4 pt-4 flex items-center justify-between">
+                    <div className="text-sm font-medium">{t('summary.total') ?? 'Total'}</div>
+                    <div className="text-lg font-bold">
+                      {priceData.isSingle
+                        ? formatCurrency(finalTotal, payload.pricing?.currency)
+                        : `${formatCurrency(finalTotalMin, payload.pricing?.currency)} - ${formatCurrency(finalTotalMax, payload.pricing?.currency)}`
+                      }
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {!priceData.isSingle && (
+              <div className="mt-6 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md text-sm text-blue-800 dark:text-blue-300">
+                <p className="font-medium mb-1">{t('summary.pricingNote.title') ?? 'Pricing Note'}</p>
+                <p>{t('summary.pricingNote.message') ?? 'The final price will be confirmed after we review and accept your order. You will be contacted on email with the exact amount.'}</p>
+              </div>
+            )}
+          </div>
+
+          {/* RECALCULATE PRICE SECTION COMMENTED OUT
           <div className="max-w-4xl mx-auto mb-6">
             <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
               <CardHeader>
@@ -460,25 +526,29 @@ function TransferSummaryPageContent() {
               </CardContent>
             </Card>
           </div>
+          END RECALCULATE PRICE SECTION COMMENTED OUT */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="space-y-6">
-                <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
-                  <CardHeader>
-                    <CardTitle>
-                      {t("additionalFeatures.title") ?? "Additional Features"}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
+              <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
+                <CardHeader>
+                  <CardTitle>
+                    {t("additionalFeatures.childSeatsTitle") ?? "Additional Features - Child Seats"}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="space-y-4">
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <div className="text-sm font-medium">
+                          <div className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
                             {t("additionalFeatures.age1to4") ?? "Child Seat (1-4 years)"}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            3 EUR per seat per day (max 2 seats)
+                          <div className="text-sm font-semibold text-slate-400 dark:text-slate-300 mt-1">
+                            {t("additionalFeatures.freeMaxSeats") ?? "FREE (max 2 seats)"}
                           </div>
                         </div>
                         <div className="text-right">
@@ -502,8 +572,8 @@ function TransferSummaryPageContent() {
                               +
                             </button>
                           </div>
-                          <div className="text-sm font-medium">
-                            {childSeats1to4 > 0 ? `${childSeats1to4 * 3} EUR` : '0 EUR'}
+                          <div className="text-sm font-bold text-slate-400 dark:text-slate-300">
+                            {t("additionalFeatures.free") ?? "FREE"}
                           </div>
                         </div>
                       </div>
@@ -512,11 +582,14 @@ function TransferSummaryPageContent() {
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <div className="text-sm font-medium">
+                          <div className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
                             {t("additionalFeatures.age5to12") ?? "Child Seat (5-12 years)"}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            3 EUR per seat per day (max 2 seats)
+                          <div className="text-sm font-semibold text-slate-400 dark:text-slate-300 mt-1">
+                            {t("additionalFeatures.freeMaxSeats") ?? "FREE (max 2 seats)"}
                           </div>
                         </div>
                         <div className="text-right">
@@ -540,8 +613,8 @@ function TransferSummaryPageContent() {
                               +
                             </button>
                           </div>
-                          <div className="text-sm font-medium">
-                            {childSeats5to12 > 0 ? `${childSeats5to12 * 3} EUR` : '0 EUR'}
+                          <div className="text-sm font-bold text-slate-400 dark:text-slate-300">
+                            {t("additionalFeatures.free") ?? "FREE"}
                           </div>
                         </div>
                       </div>
@@ -569,70 +642,9 @@ function TransferSummaryPageContent() {
             </div>
           </div>
 
-          <div className="max-w-3xl mx-auto mt-8">
-            <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
-              <CardHeader><CardTitle>{t('summary.title') ?? 'Reservation Summary'}</CardTitle></CardHeader>
-              <CardContent>
-                <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm">
-                  <div>
-                    <dt className="font-medium">{t('summary.pickup') ?? 'Pick-up:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{pickupLocationState || payload.pickup?.address || '—'}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.dropoff') ?? 'Dropoff:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{dropoffLocationState || payload.dropoff?.address || '—'}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.date') ?? 'Date:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{transferDateState ? `${transferDateState.toLocaleDateString()} at ${pickupTimeState ?? payload.meta?.pickupTime ?? '—'}` : (payload.meta?.transferDate ?? '—')}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.distance') ?? 'Distance:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{distanceLoading ? 'Calculating…' : (distanceKmState != null ? `${distanceKmState} km` : (payload.calculated?.distanceKm != null ? `${payload.calculated.distanceKm} km` : '-'))}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.numberOfPersons') ?? 'Number of Persons:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{payload?.persons ?? '-'}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.category') ?? 'Category:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{payload?.category ?? '-'}</dd>
-                  </div>
-                </dl>
-
-                <div className="mt-4">
-                  <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">{t('summary.priceBreakdown') ?? 'Price breakdown'}</div>
-                  <div className="flex items-center justify-between text-base font-semibold">
-                    <div>{t('summary.basePrice') ?? 'Base price'}</div>
-                    <div>
-                      {priceData.isSingle 
-                        ? formatCurrency(priceData.price, payload.pricing?.currency)
-                        : `${formatCurrency(priceData.min, payload.pricing?.currency)} - ${formatCurrency(priceData.max, payload.pricing?.currency)}`
-                      }
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300 mt-2"><div>{t('summary.childSeats') ?? 'Child seats'}</div><div>{(childSeats1to4 + childSeats5to12) > 0 ? `${childSeats1to4 + childSeats5to12} × ${formatCurrency(childSeatPrice ?? 0, payload.pricing?.currency)}` : '-'}</div></div>
-                  <div className="border-t mt-4 pt-4 flex items-center justify-between">
-                    <div className="text-sm font-medium">{t('summary.total') ?? 'Total'}</div>
-                    <div className="text-lg font-bold">
-                      {priceData.isSingle 
-                        ? formatCurrency(finalTotal, payload.pricing?.currency)
-                        : `${formatCurrency(finalTotalMin, payload.pricing?.currency)} - ${formatCurrency(finalTotalMax, payload.pricing?.currency)}`
-                      }
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {!priceData.isSingle && (
-              <div className="mt-6 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md text-sm text-blue-800 dark:text-blue-300">
-                <p className="font-medium mb-1">{t('summary.pricingNote.title') ?? 'Pricing Note'}</p>
-                <p>{t('summary.pricingNote.message') ?? 'The final price will be confirmed after we review and accept your order. You will be contacted on email with the exact amount.'}</p>
-              </div>
-            )}
-
+          <div className="max-w-4xl mx-auto mb-6">
             <div className="mt-4">
+
               <button
                 type="button"
                 onClick={async () => {
@@ -643,7 +655,7 @@ function TransferSummaryPageContent() {
                     locations: {},
                     datetime: {},
                   };
-                  
+
                   // Validate personal info
                   if (!personalInfoState.name?.trim()) {
                     errors.personalInfo.name = 'Name is required';
@@ -654,7 +666,7 @@ function TransferSummaryPageContent() {
                   if (!personalInfoState.phone?.trim()) {
                     errors.personalInfo.phone = 'Phone is required';
                   }
-                  
+
                   // Validate locations
                   if (!pickupLocationState?.trim()) {
                     errors.locations.pickup = 'Pick-up location is required';
@@ -662,7 +674,7 @@ function TransferSummaryPageContent() {
                   if (!dropoffLocationState?.trim()) {
                     errors.locations.dropoff = 'Dropoff location is required';
                   }
-                  
+
                   // Validate datetime
                   if (!transferDateState) {
                     errors.datetime.transferDate = 'Transfer date is required';
@@ -670,20 +682,20 @@ function TransferSummaryPageContent() {
                   if (!pickupTimeState) {
                     errors.datetime.pickupTime = 'Pickup time is required';
                   }
-                  
+
                   // Validate payment method and terms
                   if (!termsAccepted) {
                     errors.payment.termsAccepted = 'You must accept the terms and conditions';
                   }
-                  
+
                   // Check if there are any errors
                   const hasErrors = Object.values(errors).some((errObj: any) => Object.keys(errObj).length > 0);
-                  
+
                   if (hasErrors) {
                     setFormErrorsState(errors);
                     return;
                   }
-                  
+
                   // Clear errors if validation passes
                   setFormErrorsState({
                     personalInfo: {},
@@ -691,7 +703,7 @@ function TransferSummaryPageContent() {
                     locations: {},
                     datetime: {},
                   });
-                  
+
                   // All validation passed - prepare confirmation data
                   const confirmationData = {
                     personalInfo: personalInfoState,
@@ -709,7 +721,7 @@ function TransferSummaryPageContent() {
                       currency: payload?.pricing?.currency,
                     },
                   };
-                  
+
                   // Send transfer request email
                   try {
                     const emailResponse = await fetch('/api/send/transfer-request', {
@@ -768,7 +780,7 @@ function TransferSummaryPageContent() {
                     console.error('Error saving transfer request to database:', dbError);
                     // Don't prevent navigation even if database save fails
                   }
-                  
+
                   // Navigate to confirmation page with encoded data
                   const encoded = encodeURIComponent(Buffer.from(JSON.stringify(confirmationData)).toString('base64'));
                   router.push(`${localePath ? `/${localePath}` : ''}/transfers/confirmation?data=${encoded}`);

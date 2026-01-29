@@ -689,8 +689,8 @@
     "allTransmissions": "Toate Transmisiile",
     "type": "Tip",
     "selectType": "Selectează Tipul",
-  "allTypes": "Toate Tipurile",
-  "refineSearch": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
+    "allTypes": "Toate Tipurile",
+    "refineSearch": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
   },
   "features": {
     "wideVehicleSelection": {
@@ -828,9 +828,12 @@
     },
     "additionalFeatures": {
       "title": "Caracteristici Suplimentare",
+      "childSeatsTitle": "Caracteristici Suplimentare - Scaune de Copii",
       "childSeats": "Scaune copii",
-      "age1to4": "1-4 ani",
-      "age5to12": "5-12 ani"
+      "age1to4": "Scaun Copil (1-4 ani)",
+      "age5to12": "Scaun Copil (5-12 ani)",
+      "freeMaxSeats": "GRATUIT (max 2 scaune)",
+      "free": "GRATUIT"
     },
     "booking": {
       "transferDate": "Data Transferului",

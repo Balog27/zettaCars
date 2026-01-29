@@ -33,7 +33,7 @@ export default function ReservationsPage() {
         <Header logo={<Logo alt="Zetta Cars Logo" />} />
         <main className="flex-grow">
           <div className="container mx-auto py-16">
-            <Card>
+            <Card className="bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
                   <p className="text-lg font-medium">{t('pleaseSignIn')}</p>
@@ -55,7 +55,7 @@ export default function ReservationsPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header logo={<Logo alt="Zetta Cars Logo" />} />
-      <main className="flex-grow bg-white">
+      <main className="flex-grow bg-background">
         <div className="container mx-auto py-8 px-4">
           {/* Page Header */}
           <div className="mb-8">
@@ -65,9 +65,9 @@ export default function ReservationsPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="vehicle" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-200">
-              <TabsTrigger value="vehicle" className="text-gray-900 data-[state=inactive]:text-gray-700">{t('tabs.vehicle')}</TabsTrigger>
-              <TabsTrigger value="transfer" className="text-gray-900 data-[state=inactive]:text-gray-700">{t('tabs.transfer')}</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-200 dark:bg-card-darker">
+              <TabsTrigger value="vehicle" className="text-gray-900 dark:text-gray-100 data-[state=inactive]:text-gray-700 dark:data-[state=inactive]:text-gray-400">{t('tabs.vehicle')}</TabsTrigger>
+              <TabsTrigger value="transfer" className="text-gray-900 dark:text-gray-100 data-[state=inactive]:text-gray-700 dark:data-[state=inactive]:text-gray-400">{t('tabs.transfer')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="vehicle" className="space-y-4">
