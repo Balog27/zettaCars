@@ -38,21 +38,33 @@ export function LocationSearchInput({
   const [predictions, setPredictions] = React.useState<PlaceAutocompleteResult[]>([])
   const [loading, setLoading] = React.useState(false)
   const [showDropdown, setShowDropdown] = React.useState(false)
+  const [userTypedValue, setUserTypedValue] = React.useState('')
 
-  // Update search value when external value changes
+  // Update search value when external value changes (from parent/props)
   React.useEffect(() => {
     setSearchValue(value)
+    // Reset user typed value to prevent showing dropdown with initial data
+    setUserTypedValue('')
+    setPredictions([])
+    setShowDropdown(false)
   }, [value])
 
-  // Debounced search effect
+  // Debounced search effect - only runs when user has actually typed
   React.useEffect(() => {
-    if (searchValue.length >= 3) {
+    // Only search if user has typed something (userTypedValue is non-empty)
+    if (userTypedValue.length === 0) {
+      setPredictions([])
+      setShowDropdown(false)
+      return
+    }
+
+    if (userTypedValue.length >= 3) {
       setLoading(true)
       setShowDropdown(true)
-      
+
       const timer = setTimeout(async () => {
         try {
-          const results = await autocomplete(searchValue)
+          const results = await autocomplete(userTypedValue)
           setPredictions(results || [])
         } catch (error) {
           console.error("Error fetching predictions:", error)
@@ -66,14 +78,15 @@ export function LocationSearchInput({
     } else {
       setPredictions([])
       setLoading(false)
-      setShowDropdown(searchValue.length > 0)
+      setShowDropdown(false)
     }
-  }, [searchValue])
+  }, [userTypedValue])
 
   const handleInputChange = (newValue: string) => {
     setSearchValue(newValue)
     onValueChange(newValue)
-    setShowDropdown(newValue.length > 0)
+    // Track what the user has typed to distinguish from initial data
+    setUserTypedValue(newValue)
   }
 
   const handleSelect = (selectedValue: string) => {
@@ -84,9 +97,7 @@ export function LocationSearchInput({
   }
 
   const handleInputFocus = () => {
-    if (searchValue.length > 0) {
-      setShowDropdown(true)
-    }
+    // Don't open dropdown on focus - wait for user to type at least 3 characters
   }
 
   const handleInputBlur = () => {
@@ -101,7 +112,7 @@ export function LocationSearchInput({
       <Label htmlFor={id} className="text-sm font-medium mb-1.5 block">
         {label}
       </Label>
-      
+
       <div className="relative w-full">
         <Command className="rounded-lg border shadow-md overflow-visible w-full">
           <div className="flex items-center border-b px-3 w-full">
@@ -115,24 +126,24 @@ export function LocationSearchInput({
               className="h-12 text-base w-full flex-1 min-w-0 px-0"
             />
           </div>
-          
+
           {showDropdown && (
-            <div className="absolute top-full left-0 right-0 z-50 bg-popover border border-t-0 rounded-b-lg shadow-lg w-full">
+            <div className="absolute top-full left-0 right-0 z-50 bg-white dark:bg-[#000000] border border-t-0 rounded-b-lg shadow-lg w-full">
               <CommandList className="max-h-60">
                 {loading && searchValue.length >= 3 && (
                   <div className="py-6 text-center text-sm text-muted-foreground">
                     Searching locations...
                   </div>
                 )}
-                
+
                 {!loading && searchValue.length >= 3 && predictions.length === 0 && (
                   <CommandEmpty>No locations found.</CommandEmpty>
                 )}
-                
+
                 {!loading && searchValue.length > 0 && searchValue.length < 3 && (
                   <CommandEmpty>Type at least 3 characters to search...</CommandEmpty>
                 )}
-                
+
                 {!loading && predictions.length > 0 && (
                   <CommandGroup>
                     {predictions.map((prediction) => (

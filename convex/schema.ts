@@ -286,4 +286,43 @@ export default defineSchema({
     .index("by_slug", ["slug"])
     .index("by_status", ["status"])
     .index("by_published_at", ["publishedAt"]),
+
+  // Transfer requests table - stores transfer service requests
+  transferRequests: defineTable({
+    userId: v.optional(v.id("users")), // User ID if authenticated
+    status: v.union(
+      v.literal("pending"),
+      v.literal("confirmed"),
+      v.literal("cancelled"),
+      v.literal("completed")
+    ),
+    transferDate: v.string(), // ISO date string "2025-03-15"
+    transferTime: v.string(), // Time in "HH:MM" format
+    pickupLocation: v.string(), // Pickup address
+    dropoffLocation: v.string(), // Dropoff address
+    numberOfPassengers: v.number(), // Number of people
+    category: v.union(
+      v.literal("standard"),
+      v.literal("van")
+    ), // Vehicle category
+    // Customer information (for non-authenticated or guest bookings)
+    customerInfo: v.object({
+      name: v.string(),
+      email: v.string(),
+      phone: v.string(),
+      message: v.optional(v.string()),
+      flightNumber: v.optional(v.string()),
+    }),
+    // Pricing details
+    estimatedPrice: v.optional(v.number()),
+    finalPrice: v.optional(v.number()),
+    currency: v.optional(v.string()),
+    distanceKm: v.optional(v.number()),
+    // Additional info
+    specialRequests: v.optional(v.string()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_transfer_date", ["transferDate"])
+    .index("by_pickup_location", ["pickupLocation"]),
 });

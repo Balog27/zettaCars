@@ -28,7 +28,7 @@ import { getBasePricePerDay } from "@/types/vehicle";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
- 
+
 import { Progress } from "@/components/ui/progress";
 import { useSeasonalPricing } from "@/hooks/useSeasonalPricing";
 import { useTranslations, useLocale } from 'next-intl';
@@ -44,7 +44,7 @@ const createReservationSchema = (t: any) => z.object({
     .refine((val) => isValidInternationalPhoneNumber(val), t('validation.phoneFormatInvalid')),
   flightNumber: z.string().optional(),
   message: z.string().optional(),
-  
+
   // Rental details
   deliveryLocation: z.string().min(1, t('validation.pickupLocationRequired')),
   pickupDate: z.date({ required_error: t('validation.pickupDateRequired') }),
@@ -56,7 +56,7 @@ const createReservationSchema = (t: any) => z.object({
   returnTime: z.string().refine((val) => val.trim().length > 0, {
     message: t('validation.returnTimeRequired')
   }),
-  
+
   // Payment
   paymentMethod: z.union([
     z.enum(["cash_on_delivery", "card_on_delivery", "card_online"]),
@@ -95,20 +95,20 @@ function ReservationPageContent() {
   const { user } = useUser();
   const t = useTranslations('reservationPage');
   const locale = useLocale();
-  
+
   // Payment method options - now using translations
   const paymentMethods = [
     { id: "cash_on_delivery", label: t('payment.methods.cashOnDelivery.label'), description: t('payment.methods.cashOnDelivery.description'), disabled: false },
     { id: "card_on_delivery", label: t('payment.methods.cardOnDelivery.label'), description: t('payment.methods.cardOnDelivery.description'), disabled: false },
     { id: "card_online", label: t('payment.methods.cardOnline.label'), description: t('payment.methods.cardOnline.description'), disabled: true }
   ];
-  
+
   // Only get vehicleId from URL - all form data comes from localStorage
   const vehicleId = searchParams.get("vehicleId");
-  
+
   // Add seasonal pricing
   const { multiplier: seasonalMultiplier, currentSeason } = useSeasonalPricing();
-  
+
   // Rental details state - initialize with default locations
   const [deliveryLocation, setDeliveryLocation] = React.useState<string>(searchStorage.getDefaultLocation());
   const [pickupDate, setPickupDate] = React.useState<Date | undefined>(undefined);
@@ -116,7 +116,7 @@ function ReservationPageContent() {
   const [restitutionLocation, setRestitutionLocation] = React.useState<string>(searchStorage.getDefaultLocation());
   const [returnDate, setReturnDate] = React.useState<Date | undefined>(undefined);
   const [returnTime, setReturnTime] = React.useState<string | null>(null);
-  
+
   // Personal information state
   const [personalInfo, setPersonalInfo] = React.useState({
     name: "",
@@ -125,20 +125,20 @@ function ReservationPageContent() {
     message: "",
     flightNumber: ""
   });
-  
+
   // Payment state
   const [paymentMethod, setPaymentMethod] = React.useState<string>("");
   const [termsAccepted, setTermsAccepted] = React.useState(false);
-  
+
   // Protection state (SCDW vs Standard warranty)
   const [isSCDWSelected, setIsSCDWSelected] = React.useState(false); // Default to standard warranty
-  
+
   // Additional features state
   const [snowChainsSelected, setSnowChainsSelected] = React.useState(false);
   const [childSeat1to4Count, setChildSeat1to4Count] = React.useState(0);
   const [childSeat5to12Count, setChildSeat5to12Count] = React.useState(0);
   const [extraKilometersCount, setExtraKilometersCount] = React.useState(0);
-  
+
   // Form state
   const [isHydrated, setIsHydrated] = React.useState(false);
   const [errors, setErrors] = React.useState<FormErrors>({});
@@ -151,11 +151,11 @@ function ReservationPageContent() {
   // Load data from localStorage after hydration
   React.useEffect(() => {
     const storedData = searchStorage.load();
-    
+
     // Apply stored data with defaults (searchStorage.load() already handles defaults and validation)
     setDeliveryLocation(storedData.deliveryLocation || searchStorage.getDefaultLocation());
     setRestitutionLocation(storedData.restitutionLocation || searchStorage.getDefaultLocation());
-    
+
     if (storedData.pickupDate) {
       setPickupDate(storedData.pickupDate);
     }
@@ -168,7 +168,7 @@ function ReservationPageContent() {
     if (storedData.returnTime) {
       setReturnTime(storedData.returnTime);
     }
-    
+
     setIsHydrated(true);
   }, []);
 
@@ -188,7 +188,7 @@ function ReservationPageContent() {
   // Save changes to localStorage when form data changes (only after hydration)
   React.useEffect(() => {
     if (!isHydrated) return;
-    
+
     searchStorage.save({
       deliveryLocation: deliveryLocation || undefined,
       pickupDate: pickupDate,
@@ -199,11 +199,11 @@ function ReservationPageContent() {
     });
   }, [deliveryLocation, pickupDate, pickupTime, restitutionLocation, returnDate, returnTime, isHydrated]);
 
-  const vehicle = useQuery(api.vehicles.getById, 
+  const vehicle = useQuery(api.vehicles.getById,
     vehicleId ? { id: vehicleId as Id<"vehicles"> } : "skip"
   );
 
-  const imageUrl = useQuery(api.vehicles.getImageUrl, 
+  const imageUrl = useQuery(api.vehicles.getImageUrl,
     vehicle?.mainImageId ? { imageId: vehicle.mainImageId } : "skip"
   );
 
@@ -226,7 +226,7 @@ function ReservationPageContent() {
     if (vehicle?.warranty) {
       return vehicle.warranty;
     }
-    
+
     // Fallback to type-based calculation for backward compatibility
     const vehicleType = vehicle?.type || 'standard';
     switch (vehicleType.toLowerCase()) {
@@ -264,16 +264,16 @@ function ReservationPageContent() {
         pickupTime,
         returnTime
       );
-      
+
       const { basePrice, days, deliveryFee, returnFee, totalLocationFees, seasonalAdjustment, basePriceBeforeSeason } = vehiclePricing;
-      
+
       if (basePrice === null || days === null) {
-        return { 
-          basePrice: null, 
-          totalPrice: null, 
-          days: null, 
-          deliveryFee: 0, 
-          returnFee: 0, 
+        return {
+          basePrice: null,
+          totalPrice: null,
+          days: null,
+          deliveryFee: 0,
+          returnFee: 0,
           totalLocationFees: 0,
           scdwPrice: 0,
           snowChainsPrice: 0,
@@ -285,26 +285,26 @@ function ReservationPageContent() {
           basePriceBeforeSeason: null,
         };
       }
-      
+
       // Calculate protection costs (warranty or SCDW) using seasonal-adjusted price
       const warrantyAmount = calculateWarranty(vehicle);
       const currentPricePerDay = getPriceForDurationWithSeason(vehicle, days, seasonalMultiplier);
       const scdwPrice = calculateSCDW(days, currentPricePerDay);
-      
+
       // Calculate protection cost and deductible based on selection
       const protectionCost = isSCDWSelected ? scdwPrice : 0;
       const deductibleAmount = isSCDWSelected ? 0 : (warrantyAmount || 0);
-      
+
       // Add additional features
       const snowChainsPrice = snowChainsSelected ? days * 3 : 0;
       const childSeat1to4Price = childSeat1to4Count * days * 3;
       const childSeat5to12Price = childSeat5to12Count * days * 3;
       const extraKilometersPrice = calculateExtraKilometersPrice(extraKilometersCount * 50);
       const totalAdditionalFeatures = snowChainsPrice + childSeat1to4Price + childSeat5to12Price + extraKilometersPrice;
-      
-      return { 
+
+      return {
         basePrice,
-        totalPrice: basePrice + totalLocationFees + protectionCost + totalAdditionalFeatures, 
+        totalPrice: basePrice + totalLocationFees + protectionCost + totalAdditionalFeatures,
         days,
         deliveryFee,
         returnFee,
@@ -323,12 +323,12 @@ function ReservationPageContent() {
         basePriceBeforeSeason,
       };
     }
-    return { 
-      basePrice: null, 
-      totalPrice: null, 
-      days: null, 
-      deliveryFee: 0, 
-      returnFee: 0, 
+    return {
+      basePrice: null,
+      totalPrice: null,
+      days: null,
+      deliveryFee: 0,
+      returnFee: 0,
       totalLocationFees: 0,
       warrantyAmount: 0,
       scdwPrice: 0,
@@ -345,18 +345,18 @@ function ReservationPageContent() {
     };
   };
 
-  const { 
-    basePrice, 
-    totalPrice, 
-    days, 
-    deliveryFee, 
-    returnFee, 
-    totalLocationFees, 
-    warrantyAmount, 
-    scdwPrice, 
-    snowChainsPrice, 
-    childSeat1to4Price, 
-    childSeat5to12Price, 
+  const {
+    basePrice,
+    totalPrice,
+    days,
+    deliveryFee,
+    returnFee,
+    totalLocationFees,
+    warrantyAmount,
+    scdwPrice,
+    snowChainsPrice,
+    childSeat1to4Price,
+    childSeat5to12Price,
     extraKilometersPrice,
     totalAdditionalFeatures
   } = calculateTotalPrice();
@@ -369,7 +369,7 @@ function ReservationPageContent() {
       personalInfo.email.trim(),
       personalInfo.phone.trim(),
       personalInfo.email.trim() && /\S+@\S+\.\S+/.test(personalInfo.email), // Valid email
-      
+
       // Rental details (6 required fields)
       deliveryLocation,
       pickupDate,
@@ -377,15 +377,15 @@ function ReservationPageContent() {
       restitutionLocation,
       returnDate,
       returnTime,
-      
+
       // Payment (2 required fields)
       paymentMethod,
       termsAccepted
     ];
-    
+
     const completedFields = requiredFields.filter(field => Boolean(field)).length;
     const totalRequiredFields = requiredFields.length;
-    
+
     return Math.round((completedFields / totalRequiredFields) * 100);
   };
 
@@ -415,7 +415,7 @@ function ReservationPageContent() {
     if (!result.success) {
       result.error.errors.forEach((error) => {
         const path = error.path[0] as string;
-        
+
         // Map field names to error structure
         if (['name', 'email', 'phone', 'flightNumber'].includes(path)) {
           newErrors.personalInfo = { ...newErrors.personalInfo, [path]: error.message };
@@ -432,17 +432,17 @@ function ReservationPageContent() {
     // Additional validation for same-day time logic
     if (pickupDate && returnDate && pickupTime && returnTime) {
       const isSameDay = pickupDate.getFullYear() === returnDate.getFullYear() &&
-                       pickupDate.getMonth() === returnDate.getMonth() &&
-                       pickupDate.getDate() === returnDate.getDate();
+        pickupDate.getMonth() === returnDate.getMonth() &&
+        pickupDate.getDate() === returnDate.getDate();
 
       if (isSameDay) {
         const [pickupHour, pickupMinute] = pickupTime.split(':').map(Number);
         const [returnHour, returnMinute] = returnTime.split(':').map(Number);
-        
+
         if (returnHour < pickupHour || (returnHour === pickupHour && returnMinute <= pickupMinute)) {
-          newErrors.rentalDetails = { 
-            ...newErrors.rentalDetails, 
-            returnTime: t('validation.returnTimeSameDay') 
+          newErrors.rentalDetails = {
+            ...newErrors.rentalDetails,
+            returnTime: t('validation.returnTimeSameDay')
           };
         }
       }
@@ -457,7 +457,7 @@ function ReservationPageContent() {
     setErrors(formErrors);
 
     // Check if there are any errors
-    const hasErrors = Object.keys(formErrors).some(key => 
+    const hasErrors = Object.keys(formErrors).some(key =>
       Object.keys(formErrors[key as keyof FormErrors] || {}).length > 0
     );
 
@@ -472,10 +472,10 @@ function ReservationPageContent() {
 
     setIsSubmitting(true);
 
-    try {      
+    try {
       // Prepare additional charges for location fees and SCDW (core info is now in dedicated fields)
       const additionalCharges = [];
-      
+
       // Add location fees as charges if they exist
       if (deliveryFee > 0) {
         additionalCharges.push({
@@ -483,14 +483,14 @@ function ReservationPageContent() {
           amount: deliveryFee,
         });
       }
-      
+
       if (returnFee > 0) {
         additionalCharges.push({
           description: t('payment.additionalCharges.returnLocationFee', { location: restitutionLocation }),
           amount: returnFee,
         });
       }
-      
+
       // Protection cost is now handled via dedicated fields, no need to add as additional charge
       // Note: Warranty is now handled via deductibleAmount field, not as additional charge
 
@@ -630,7 +630,7 @@ function ReservationPageContent() {
         },
       });
       console.log("Reservation created successfully!");
-        
+
       // Clear localStorage and redirect
       searchStorage.clear();
       router.push(`/reservation/confirmation?reservationId=${reservationId}`);
@@ -701,7 +701,7 @@ function ReservationPageContent() {
     <div className="relative flex flex-col min-h-screen">
       <Header logo={<Image src="/logo.png" alt="ZettaCars Logo" width={150} height={50} />} />
 
-      <main className="flex-grow p-4 md:p-8">
+      <main className="flex-grow bg-background p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <Link href={`/cars/${vehicleId}`}>
@@ -710,7 +710,7 @@ function ReservationPageContent() {
                 {t('backToVehicleDetails')}
               </Button>
             </Link>
-            
+
             <div className="flex items-center space-x-3">
               <div className="text-sm text-foreground/85 font-medium">
                 {t('formProgress')}: {formProgress}%
@@ -720,7 +720,7 @@ function ReservationPageContent() {
           </div>
 
           {/* Interactive Rental Details */}
-          <Card className="mb-8">
+          <Card className="mb-8 bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Calendar className="h-5 w-5" />
@@ -854,7 +854,7 @@ function ReservationPageContent() {
             {/* Left Column */}
             <div className="space-y-6">
               {/* Vehicle Summary */}
-              <Card>
+              <Card className="bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
                 <CardHeader>
                   <CardTitle>{t('vehicleDetails.title')}</CardTitle>
                 </CardHeader>
@@ -896,7 +896,7 @@ function ReservationPageContent() {
               </Card>
 
               {/* Additional Features Card */}
-              <Card>
+              <Card className="bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
                 <CardHeader>
                   <CardTitle>{t('additionalFeatures.title')}</CardTitle>
                 </CardHeader>
@@ -1041,9 +1041,9 @@ function ReservationPageContent() {
                             {t('additionalFeatures.extraKmDescription')}
                             {days && (
                               <div className="mt-1">
-                                {t('additionalFeatures.baseKilometersIncluded', { 
-                                  km: calculateIncludedKilometers(days), 
-                                  days: days 
+                                {t('additionalFeatures.baseKilometersIncluded', {
+                                  km: calculateIncludedKilometers(days),
+                                  days: days
                                 })}
                               </div>
                             )}
@@ -1059,7 +1059,7 @@ function ReservationPageContent() {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Personal Information Card */}
-              <Card>
+              <Card className="bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <User className="h-5 w-5" />
@@ -1080,7 +1080,7 @@ function ReservationPageContent() {
                         </SignInButton>
                       </div>
                     )}
-                    
+
                     <div className="space-y-4">
                       <div>
                         <Label htmlFor="customer-name" className="pb-2">{t('personalInfo.fullName')}</Label>
@@ -1099,7 +1099,7 @@ function ReservationPageContent() {
                           </p>
                         )}
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="customer-email" className="pb-2">{t('personalInfo.emailAddress')}</Label>
                         <Input
@@ -1117,7 +1117,7 @@ function ReservationPageContent() {
                           </p>
                         )}
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="customer-phone" className="pb-2">{t('personalInfo.phoneNumber')}</Label>
                         <Input
@@ -1138,7 +1138,7 @@ function ReservationPageContent() {
                           {t('personalInfo.phoneFormat')}
                         </p>
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="customer-flight" className="pb-2">{t('personalInfo.flightNumber')}</Label>
                         <Input
@@ -1157,9 +1157,9 @@ function ReservationPageContent() {
                             {errors.personalInfo.flightNumber}
                           </p>
                         )}
-                        
+
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="customer-message" className="pb-2">{t('personalInfo.additionalMessage')}</Label>
                         <Textarea
@@ -1176,7 +1176,7 @@ function ReservationPageContent() {
               </Card>
 
               {/* Payment Method Card */}
-              <Card>
+              <Card className="bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <CreditCard className="h-5 w-5" />
@@ -1192,10 +1192,10 @@ function ReservationPageContent() {
                     >
                       {paymentMethods.map((method) => (
                         <div key={method.id} className={`flex items-start space-x-3 ${method.disabled ? 'opacity-50' : ''}`}>
-                          <RadioGroupItem 
-                            value={method.id} 
-                            id={method.id} 
-                            className="mt-1" 
+                          <RadioGroupItem
+                            value={method.id}
+                            id={method.id}
+                            className="mt-1"
                             disabled={method.disabled}
                           />
                           <div className="flex-1">
@@ -1207,14 +1207,14 @@ function ReservationPageContent() {
                         </div>
                       ))}
                     </RadioGroup>
-                    
+
                     {errors.payment?.method && (
                       <p className="text-sm text-red-500 flex items-center">
                         <AlertCircle className="h-4 w-4 mr-1" />
                         {errors.payment.method}
                       </p>
                     )}
-                    
+
                     <div className="pt-4 border-t">
                       <div className="flex items-start space-x-2">
                         <Checkbox
@@ -1226,18 +1226,18 @@ function ReservationPageContent() {
                           {locale === 'ro' ? (
                             <>
                               Accept{' '}
-                              <Link 
-                                href="/terms" 
-                                target="_blank" 
+                              <Link
+                                href="/terms"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary hover:text-primary/80 underline"
                               >
                                 Termenii și Condițiile
                               </Link>
                               {' '}și{' '}
-                              <Link 
-                                href="/privacy" 
-                                target="_blank" 
+                              <Link
+                                href="/privacy"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary hover:text-primary/80 underline"
                               >
@@ -1247,18 +1247,18 @@ function ReservationPageContent() {
                           ) : (
                             <>
                               I accept the{' '}
-                              <Link 
-                                href="/terms" 
-                                target="_blank" 
+                              <Link
+                                href="/terms"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary hover:text-primary/80 underline"
                               >
                                 Terms and Conditions
                               </Link>
                               {' '}and{' '}
-                              <Link 
-                                href="/privacy" 
-                                target="_blank" 
+                              <Link
+                                href="/privacy"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary hover:text-primary/80 underline"
                               >
@@ -1282,7 +1282,7 @@ function ReservationPageContent() {
           </div>
 
           {/* Reservation Summary Card - Full Width */}
-          <Card className="mt-8">
+          <Card className="mt-8 bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Send className="h-5 w-5" />
@@ -1297,53 +1297,53 @@ function ReservationPageContent() {
                     <span className="font-medium text-foreground/85">{t('reservationSummary.vehicle')}:</span>
                     <span>{vehicle.make} {vehicle.model} ({vehicle.year})</span>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium text-foreground/85">{t('reservationSummary.category')}:</span>
                     <span className="capitalize">{vehicle.type}</span>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium text-foreground/85">{t('reservationSummary.numberOfPersons')}:</span>
                     <span>{vehicle.seats}</span>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium text-foreground/85">{t('reservationSummary.pickup')}:</span>
                     <span>{deliveryLocation || t('reservationSummary.notSelected')}</span>
                   </div>
-                  
+
                   {pickupDate && pickupTime && (
                     <div className="grid grid-cols-2 gap-2">
                       <span className="font-medium text-foreground/85">{t('reservationSummary.pickupDate')}:</span>
                       <span>{pickupDate.toLocaleDateString(locale)} at {pickupTime}</span>
                     </div>
                   )}
-                  
+
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium text-foreground/85">{t('reservationSummary.return')}:</span>
                     <span>{restitutionLocation || t('reservationSummary.notSelected')}</span>
                   </div>
-                  
+
                   {returnDate && returnTime && (
                     <div className="grid grid-cols-2 gap-2">
                       <span className="font-medium text-foreground/85">{t('reservationSummary.returnDate')}:</span>
                       <span>{returnDate.toLocaleDateString(locale)} at {returnTime}</span>
                     </div>
                   )}
-                  
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="font-medium text-foreground/85">{t('reservationSummary.duration')}:</span>
-                      <span>{days ? t('reservationSummary.daysCount', { days, plural: locale === 'ro' ? ((days === 1) ? "" : "le") : ((days === 1) ? "" : "s") }) : t('reservationSummary.notCalculated')}</span>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <span className="font-medium text-foreground/85">{t('reservationSummary.duration')}:</span>
+                    <span>{days ? t('reservationSummary.daysCount', { days, plural: locale === 'ro' ? ((days === 1) ? "" : "le") : ((days === 1) ? "" : "s") }) : t('reservationSummary.notCalculated')}</span>
                   </div>
-                  
+
                   {days && (
                     <div className="grid grid-cols-2 gap-2">
                       <span className="font-medium text-foreground/85">{t('reservationSummary.totalKilometers')}:</span>
                       <span>{calculateIncludedKilometers(days) + (extraKilometersCount * 50)} km</span>
                     </div>
                   )}
-                  
+
                   {personalInfo.flightNumber && (
                     <div className="grid grid-cols-2 gap-2">
                       <span className="font-medium text-foreground/85">{t('reservationSummary.flight')}:</span>
@@ -1389,12 +1389,12 @@ function ReservationPageContent() {
                           </HoverCard>
                         </div>
                         <p className="text-sm font-medium">
-                          {isSCDWSelected 
-                            ? `${scdwPrice || 0} EUR ` 
+                          {isSCDWSelected
+                            ? `${scdwPrice || 0} EUR `
                             : `${warrantyAmount || 0} EUR `}
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center justify-center space-x-4">
                         <Label className={`text-sm font-medium ${!isSCDWSelected ? 'text-foreground' : 'text-foreground/85'}`}>
                           {t('protectionOptions.standardWarranty')}
@@ -1408,10 +1408,10 @@ function ReservationPageContent() {
                           {t('protectionOptions.scdw')}
                         </Label>
                       </div>
-                      
+
                       <p className="text-xs text-center text-foreground/70">
-                        {isSCDWSelected 
-                          ? t('protectionOptions.nonRefundableInsurance') 
+                        {isSCDWSelected
+                          ? t('protectionOptions.nonRefundableInsurance')
                           : t('protectionOptions.refundableIfNoDamages')}
                       </p>
                     </div>
@@ -1421,8 +1421,8 @@ function ReservationPageContent() {
                 {/* Pricing Summary */}
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>{t('reservationSummary.basePrice', { 
-                      days: days || 0, 
+                    <span>{t('reservationSummary.basePrice', {
+                      days: days || 0,
                       plural: locale === 'ro' ? ((days === 1) ? "" : "le") : ((days === 1) ? "" : "s")
                     })}:</span>
                     <span>{basePrice || 0} EUR</span>
@@ -1434,63 +1434,63 @@ function ReservationPageContent() {
                       <span>{deliveryFee} EUR</span>
                     </div>
                   )}
-                  
+
                   {returnFee > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>{t('reservationSummary.returnLocationFee')}:</span>
                       <span>{returnFee} EUR</span>
                     </div>
                   )}
-                  
+
                   {totalLocationFees > 0 && (
                     <div className="flex justify-between text-sm text-foreground/70">
                       <span>{t('reservationSummary.totalLocationFees')}:</span>
                       <span>{totalLocationFees} EUR</span>
                     </div>
                   )}
-                  
+
                   {isSCDWSelected && scdwPrice > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>{t('protectionOptions.scdwInsurance')}:</span>
                       <span>{scdwPrice} EUR</span>
                     </div>
                   )}
-                  
+
                   {snowChainsSelected && snowChainsPrice > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>{t('additionalFeatures.snowChains')}:</span>
                       <span>{snowChainsPrice} EUR</span>
                     </div>
                   )}
-                  
+
                   {childSeat1to4Count > 0 && childSeat1to4Price > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>{t('additionalFeatures.childSeat1to4')}:</span>
                       <span>{childSeat1to4Price} EUR</span>
                     </div>
                   )}
-                  
+
                   {childSeat5to12Count > 0 && childSeat5to12Price > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>{t('additionalFeatures.childSeat5to12')}:</span>
                       <span>{childSeat5to12Price} EUR</span>
                     </div>
                   )}
-                  
+
                   {extraKilometersCount > 0 && (extraKilometersPrice || 0) > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>{t('additionalFeatures.extraKilometers')}:</span>
                       <span>{extraKilometersPrice || 0} EUR</span>
                     </div>
                   )}
-                  
+
                   {totalAdditionalFeatures > 0 && (
                     <div className="flex justify-between text-sm text-foreground/70">
                       <span>{t('reservationSummary.totalAdditionalFeatures')}:</span>
                       <span>{totalAdditionalFeatures} EUR</span>
                     </div>
                   )}
-                  
+
                   <div className="border-t pt-2">
                     <div className="flex justify-between font-semibold">
                       <span>{t('reservationSummary.totalPrice')}:</span>
@@ -1532,9 +1532,9 @@ function ReservationPageContent() {
                   </div>
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleSendReservation}
-                  size="lg" 
+                  size="lg"
                   className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 text-lg"
                   disabled={isSubmitting}
                 >

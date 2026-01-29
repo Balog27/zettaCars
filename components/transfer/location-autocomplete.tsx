@@ -32,14 +32,22 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [userInput, setUserInput] = useState('');
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Debounce search
+  // Debounce search - only run when user has typed something
   useEffect(() => {
+    // Only search if the user has actually typed (userInput is not empty)
+    if (userInput.trim().length === 0) {
+      setSuggestions([]);
+      setIsOpen(false);
+      return;
+    }
+
     const timer = setTimeout(() => {
-      if (value.trim().length >= 2) {
-        searchLocations(value);
+      if (userInput.trim().length >= 2) {
+        searchLocations(userInput);
       } else {
         setSuggestions([]);
         setIsOpen(false);
@@ -47,7 +55,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [value]);
+  }, [userInput]);
 
   const searchLocations = async (query: string) => {
     setIsLoading(true);
@@ -139,9 +147,11 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
           ref={inputRef}
           type="text"
           value={value}
-          onChange={e => onChange(e.target.value)}
+          onChange={e => {
+            onChange(e.target.value);
+            setUserInput(e.target.value);
+          }}
           onKeyDown={handleKeyDown}
-          onFocus={() => value.trim().length >= 2 && suggestions.length > 0 && setIsOpen(true)}
           placeholder={placeholder}
           className="bg-white dark:bg-input/30 dark:text-white dark:border-input pl-10"
           autoComplete="off"
@@ -150,7 +160,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
       </div>
 
       {isLoading && (
-        <div className="absolute top-full left-0 right-0 mt-1 p-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 z-50">
+        <div className="absolute top-full left-0 right-0 mt-1 p-2 bg-white dark:bg-[#000000] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 z-50">
           Searching...
         </div>
       )}
@@ -158,7 +168,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
       {isOpen && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#000000] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
         >
           {suggestions.map((location, index) => (
             <button
@@ -184,8 +194,8 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
         </div>
       )}
 
-      {isOpen && value.trim().length >= 2 && suggestions.length === 0 && !isLoading && (
-        <div className="absolute top-full left-0 right-0 mt-1 p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 z-50">
+      {isOpen && userInput.trim().length >= 2 && suggestions.length === 0 && !isLoading && (
+        <div className="absolute top-full left-0 right-0 mt-1 p-3 bg-white dark:bg-[#000000] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 z-50">
           No locations found
         </div>
       )}

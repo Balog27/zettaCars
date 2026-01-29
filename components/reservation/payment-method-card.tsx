@@ -34,7 +34,7 @@ export function PaymentMethodCard({
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
           <CreditCard className="h-5 w-5" />
-          <span className="text-slate-900">{t('paymentMethod.title')}</span>
+          <span className="text-slate-900 dark:text-slate-100">{t('paymentMethod.title')}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -51,15 +51,15 @@ export function PaymentMethodCard({
                 : method.id;
               const disabled = disabledOptions.includes(method.id);
               return (
-               <div key={method.id} className={`flex items-start space-x-3 ${disabled ? 'opacity-60' : ''}`}>
-                 <RadioGroupItem value={method.id} id={method.id} className="mt-1" disabled={disabled} />
-                 <div className="flex-1">
-                   <Label htmlFor={method.id} className={`cursor-pointer ${disabled ? 'cursor-not-allowed' : ''}`}>
-                     <div className="font-medium text-slate-900">{t(`payment.methods.${messageKey}.label`)}</div>
-                     <div className={`text-sm ${disabled ? 'text-slate-400' : 'text-slate-600'}`}>{t(`payment.methods.${messageKey}.description`)}</div>
-                   </Label>
-                 </div>
-               </div>
+                <div key={method.id} className={`flex items-start space-x-3 ${disabled ? 'opacity-60' : ''}`}>
+                  <RadioGroupItem value={method.id} id={method.id} className="mt-1" disabled={disabled} />
+                  <div className="flex-1">
+                    <Label htmlFor={method.id} className={`cursor-pointer ${disabled ? 'cursor-not-allowed' : ''}`}>
+                      <div className="font-medium text-slate-900 dark:text-slate-100">{t(`payment.methods.${messageKey}.label`)}</div>
+                      <div className={`text-sm ${disabled ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-300'}`}>{t(`payment.methods.${messageKey}.description`)}</div>
+                    </Label>
+                  </div>
+                </div>
               );
             })}
           </RadioGroup>
@@ -78,7 +78,7 @@ export function PaymentMethodCard({
                 checked={termsAccepted}
                 onCheckedChange={(checked) => setTermsAccepted(checked === true)}
               />
-              <Label htmlFor="terms-conditions" className="text-sm cursor-pointer">
+              <Label htmlFor="terms-conditions" className="text-sm cursor-pointer text-slate-900 dark:text-slate-100">
                 {t('paymentMethod.termsAcceptance')}{' '}
                 <a href="/terms" className="text-pink-600 underline ml-1">{t('common.terms') ?? 'Termeni și Condițiile'}</a>
                 {' '}
