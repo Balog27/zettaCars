@@ -5,27 +5,26 @@
 export type VehicleCategory = 'standard' | 'van';
 export type RideType = 'one-way' | 'round-trip';
 
-export const WAITING_HOUR_PRICE = 15; // EUR/hour
+export const WAITING_HOUR_PRICE = 20; // EUR/hour
 
 export const RATES = {
   standard: [
-    { maxDist: 50, rate: 1.50 },
-    { maxDist: 150, rate: 1.35 },
-    { maxDist: 300, rate: 1.20 },
-    { maxDist: Infinity, rate: 1.10 }
+    { min: 0, max: 50, rate: 1.50 },
+    { min: 51, max: 150, rate: 1.35 },
+    { min: 151, max: 300, rate: 1.20 },
+    { min: 301, max: Infinity, rate: 1.10 },
   ],
   van: [
-    { maxDist: 50, rate: 2.00 },
-    { maxDist: 150, rate: 1.85 },
-    { maxDist: 300, rate: 1.70 },
-    { maxDist: Infinity, rate: 1.60 }
-  ]
+    { min: 0, max: 50, rate: 2.00 },
+    { min: 51, max: 150, rate: 1.85 },
+    { min: 151, max: 300, rate: 1.70 },
+    { min: 301, max: Infinity, rate: 1.60 },
+  ],
 };
 
 export function getRatePerKm(totalDistanceKm: number, category: VehicleCategory): number {
-  const categoryRates = RATES[category];
-  const rateObj = categoryRates.find(r => totalDistanceKm <= r.maxDist) || categoryRates[categoryRates.length - 1];
-  return rateObj.rate;
+  const tier = RATES[category].find(r => totalDistanceKm >= r.min && totalDistanceKm <= r.max);
+  return tier ? tier.rate : RATES[category][RATES[category].length - 1].rate;
 }
 
 export function calculateTransferPrice(

@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ro_RO",
     alternateLocale: ["en_US"],
-    url: "https://rngo.ro",
+    url: "https://www.zettacarrental.com",
     siteName: "Zetta Cars Cluj-Napoca",
     title: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
     description:

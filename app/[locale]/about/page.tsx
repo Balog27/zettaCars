@@ -101,8 +101,8 @@ const AboutPage = () => {
               "@type": "Organization",
               "name": "Zetta Cars",
               "alternateName": "Zetta Cars Cluj-Napoca",
-              "url": "https://rngo.com",
-              "logo": "https://rngo.com/logo.png",
+              "url": "https://zettacarrental.com",
+              "logo": "https://zettacarrental.com/logo.png",
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+40750250121",

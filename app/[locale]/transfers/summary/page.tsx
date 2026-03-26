@@ -813,12 +813,27 @@ function TransferSummaryPageContent() {
                   // Save to Convex
                   try {
                     await createTransferRequest({
+                      // New fields
+                      rideType: "one-way",
+                      segments: [
+                        {
+                          from: pickupLocationState,
+                          to: dropoffLocationState,
+                          distanceKm: distanceKmState || 0,
+                          durationText: durationTextState || undefined,
+                        },
+                      ],
+                      totalDistanceKm: distanceKmState || 0,
+                      passengers: payload?.persons || 1,
+                      category: payload?.category || "standard",
+                      // Legacy fields
                       transferDate: transferDateState.toISOString().split('T')[0],
                       transferTime: pickupTimeState,
                       pickupLocation: pickupLocationState,
                       dropoffLocation: dropoffLocationState,
                       numberOfPassengers: payload?.persons || 1,
-                      category: payload?.category || "standard",
+                      distanceKm: distanceKmState || undefined,
+                      // Common fields
                       customerInfo: {
                         name: personalInfoState.name,
                         email: personalInfoState.email,
@@ -828,7 +843,6 @@ function TransferSummaryPageContent() {
                       },
                       estimatedPrice: Math.max(0, finalTotal - discountAmount),
                       currency: payload?.pricing?.currency || "EUR",
-                      distanceKm: distanceKmState || undefined,
                       voucherId: appliedVoucher?.id,
                       voucherCode: appliedVoucher?.code,
                       discountAmount: discountAmount > 0 ? discountAmount : undefined,

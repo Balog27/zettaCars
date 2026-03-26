@@ -6,22 +6,27 @@ import { getCurrentUser, getCurrentUserOrThrow } from "./users";
 export const createTransferRequest = mutation({
   args: {
     userId: v.optional(v.id("users")),
-    rideType: v.union(v.literal("one-way"), v.literal("round-trip")),
-    segments: v.array(
-      v.object({
-        from: v.string(),
-        to: v.string(),
-        distanceKm: v.number(),
-        durationText: v.optional(v.string()),
-        waitingTime: v.optional(v.number()),
-      })
+    rideType: v.optional(v.union(v.literal("one-way"), v.literal("round-trip"))),
+    segments: v.optional(
+      v.array(
+        v.object({
+          from: v.string(),
+          to: v.string(),
+          distanceKm: v.number(),
+          durationText: v.optional(v.string()),
+          waitingTime: v.optional(v.number()),
+        })
+      )
     ),
-    waitingTotalHours: v.number(),
-    totalDistanceKm: v.number(),
-    passengers: v.number(),
-    category: v.union(
-      v.literal("standard"),
-      v.literal("van")
+    waitingTotalHours: v.optional(v.number()),
+    totalDistanceKm: v.optional(v.number()),
+    passengers: v.optional(v.number()),
+    category: v.optional(
+      v.union(
+        v.literal("standard"),
+        v.literal("van"),
+        v.literal("premium")
+      )
     ),
     customerInfo: v.object({
       name: v.string(),
@@ -35,6 +40,13 @@ export const createTransferRequest = mutation({
     voucherId: v.optional(v.id("vouchers")),
     voucherCode: v.optional(v.string()),
     discountAmount: v.optional(v.number()),
+    // Legacy fields to support existing frontend
+    pickupLocation: v.optional(v.string()),
+    dropoffLocation: v.optional(v.string()),
+    transferDate: v.optional(v.string()),
+    transferTime: v.optional(v.string()),
+    numberOfPassengers: v.optional(v.number()),
+    distanceKm: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const currentUser = await getCurrentUser(ctx);
@@ -55,6 +67,13 @@ export const createTransferRequest = mutation({
       voucherId: args.voucherId,
       voucherCode: args.voucherCode,
       discountAmount: args.discountAmount,
+      // Legacy fields
+      pickupLocation: args.pickupLocation,
+      dropoffLocation: args.dropoffLocation,
+      transferDate: args.transferDate,
+      transferTime: args.transferTime,
+      numberOfPassengers: args.numberOfPassengers,
+      distanceKm: args.distanceKm,
     };
 
     const transferRequestId = await ctx.db.insert("transferRequests", (newTransferRequest as any));

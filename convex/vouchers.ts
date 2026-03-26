@@ -110,7 +110,7 @@ export const getVoucherByCode = query({
     const now = Date.now();
 
     // Check dates
-    if (now < voucher.startDate) {
+    if (voucher.startDate && now < voucher.startDate) {
       return { success: false, message: "Voucher is not yet active" };
     }
     if (voucher.expiryDate && now > voucher.expiryDate) {
@@ -118,12 +118,12 @@ export const getVoucherByCode = query({
     }
 
     // Check usage
-    if (voucher.maxUsage !== undefined && voucher.usageCount >= voucher.maxUsage) {
+    if (voucher.maxUsage !== undefined && (voucher.usageCount ?? 0) >= voucher.maxUsage) {
       return { success: false, message: "Voucher usage limit reached" };
     }
 
     // Check eligibility
-    if (!voucher.eligibleServices.includes(args.serviceType)) {
+    if (!voucher.eligibleServices?.includes(args.serviceType)) {
       return { success: false, message: `Voucher is not eligible for ${args.serviceType}` };
     }
 
@@ -138,9 +138,9 @@ export const getVoucherByCode = query({
     // Calculate discount
     let discountAmount = 0;
     if (voucher.type === "percentage") {
-      discountAmount = (args.orderPrice * voucher.value) / 100;
+      discountAmount = (args.orderPrice * (voucher.value ?? 0)) / 100;
     } else {
-      discountAmount = voucher.value;
+      discountAmount = voucher.value ?? 0;
     }
 
     // Ensure discount doesn't exceed order price
@@ -176,7 +176,7 @@ export const checkVoucher = mutation({
     const now = Date.now();
 
     // Check dates
-    if (now < voucher.startDate) {
+    if (voucher.startDate && now < voucher.startDate) {
       return { success: false, message: "Voucher is not yet active" };
     }
     if (voucher.expiryDate && now > voucher.expiryDate) {
@@ -184,12 +184,12 @@ export const checkVoucher = mutation({
     }
 
     // Check usage
-    if (voucher.maxUsage !== undefined && voucher.usageCount >= voucher.maxUsage) {
+    if (voucher.maxUsage !== undefined && (voucher.usageCount ?? 0) >= voucher.maxUsage) {
       return { success: false, message: "Voucher usage limit reached" };
     }
 
     // Check eligibility
-    if (!voucher.eligibleServices.includes(args.serviceType)) {
+    if (!voucher.eligibleServices?.includes(args.serviceType)) {
       return { success: false, message: `Voucher is not eligible for ${args.serviceType}` };
     }
 
@@ -204,9 +204,9 @@ export const checkVoucher = mutation({
     // Calculate discount
     let discountAmount = 0;
     if (voucher.type === "percentage") {
-      discountAmount = (args.orderPrice * voucher.value) / 100;
+      discountAmount = (args.orderPrice * (voucher.value ?? 0)) / 100;
     } else {
-      discountAmount = voucher.value;
+      discountAmount = voucher.value ?? 0;
     }
 
     // Ensure discount doesn't exceed order price

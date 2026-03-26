@@ -3,23 +3,29 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { TransferFormData } from '../transfer-wizard';
 import { calculateTransferPrice } from '@/lib/transfer-pricing';
-import { CheckCircle2, ArrowLeft, Mail, Phone, Calendar, Clock, MapPin, Loader2 } from 'lucide-react';
+import { CheckCircle2, ArrowLeft, Mail, Phone, Calendar, Clock, MapPin, Loader2, Ticket, Trash2, Users, User } from 'lucide-react';
+import { toast } from 'sonner';
 
 type SummaryStepProps = {
   data: TransferFormData;
+  onUpdate: (data: Partial<TransferFormData>) => void;
   onBack: () => void;
 };
 
-export function SummaryStep({ data, onBack }: SummaryStepProps) {
+export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [voucherCode, setVoucherCode] = useState("");
+  const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
 
   const createRequest = useMutation(api.transferRequests.createTransferRequest);
+  const checkVoucher = useMutation(api.vouchers.checkVoucher);
 
   const totalDistance = data.segments.reduce((acc, s) => acc + s.distanceKm, 0);
   const totalWaitingHours = data.segments.reduce((acc, s, i) => {
@@ -33,6 +39,51 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
     data.rideType,
     totalWaitingHours
   );
+
+  // Apply voucher discount if present
+  let finalTotal = pricing.total;
+  let voucherDiscount = 0;
+  if (data.appliedVoucher) {
+    voucherDiscount = data.appliedVoucher.discountAmount;
+    finalTotal = Math.max(0, finalTotal - voucherDiscount);
+  }
+
+  const handleApplyVoucher = async () => {
+    if (!voucherCode.trim()) return;
+    setIsApplyingVoucher(true);
+    try {
+      const result = await checkVoucher({
+        code: voucherCode.trim().toUpperCase(),
+        serviceType: "transfers",
+        orderPrice: pricing.total
+      });
+
+      if (result.success && result.voucherId) {
+        onUpdate({
+          appliedVoucher: {
+            id: result.voucherId,
+            code: voucherCode.trim().toUpperCase(),
+            discountAmount: result.discountAmount!,
+            type: result.type!,
+            value: result.value!
+          }
+        });
+        toast.success("Voucher aplicat cu succes!");
+        setVoucherCode("");
+      } else {
+        toast.error(result.message || "Voucher invalid");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Eroare la aplicarea voucherului");
+    } finally {
+      setIsApplyingVoucher(false);
+    }
+  };
+
+  const removeVoucher = () => {
+    onUpdate({ appliedVoucher: null });
+    toast.success("Voucher eliminat");
+  };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -57,9 +108,55 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
           phone: data.customerInfo.phone,
           message: data.customerInfo.message,
         },
-        estimatedPrice: pricing.total,
+        estimatedPrice: finalTotal,
         currency: 'EUR',
+        voucherId: data.appliedVoucher?.id,
+        voucherCode: data.appliedVoucher?.code,
+        discountAmount: data.appliedVoucher?.discountAmount,
+        // Legacy fields for email consistency
+        pickupLocation: data.segments[0]?.from,
+        dropoffLocation: data.segments[data.segments.length - 1]?.to,
+        transferDate: data.date?.toISOString().split('T')[0],
+        transferTime: data.time,
+        numberOfPassengers: data.passengers,
+        distanceKm: totalDistance,
       });
+
+      // Send email notification
+      try {
+        await fetch('/api/send/transfer-request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            personalInfo: {
+              name: `${data.customerInfo.firstName} ${data.customerInfo.lastName}`,
+              email: data.customerInfo.email,
+              phone: data.customerInfo.phone,
+              message: data.customerInfo.message,
+            },
+            transferDetails: {
+              pickupLocation: data.segments[0]?.from,
+              dropoffLocation: data.segments[data.segments.length - 1]?.to,
+              transferDate: data.date,
+              pickupTime: data.time,
+              category: data.category,
+              persons: data.passengers,
+              distance: totalDistance,
+            },
+            pricing: {
+              isSingle: true, // Wizard uses calculated fixed total
+              price: pricing.total,
+              currency: 'EUR',
+              discountAmount: voucherDiscount,
+              voucherCode: data.appliedVoucher?.code,
+            },
+            locale: 'ro', // Wizard seems to be in Romanian currently
+          }),
+        });
+      } catch (emailError) {
+        console.error('Email sending error:', emailError);
+      }
+
       setIsSuccess(true);
     } catch (err) {
       console.error('Submission error:', err);
@@ -128,7 +225,7 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
                       </div>
                    </div>
                    <div className="pt-2 border-t border-gray-50 dark:border-gray-800 space-y-3">
-                      <p className="text-xs text-gray-500 uppercase font-medium">Segmente Rutiere</p>
+                      <p className="text-xs text-gray-500 uppercase font-medium">Segmente Rutiere (Staționări incluse)</p>
                       {data.segments.map((s, i) => (
                         <div key={i} className="flex gap-2">
                           <div className="flex flex-col items-center pt-1 mt-1">
@@ -136,8 +233,17 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
                             {i < data.segments.length - 1 && <div className="w-0.5 flex-grow bg-gray-200 my-1" />}
                           </div>
                           <div className="flex-1">
-                             <p className="text-sm font-semibold">{s.from} → {s.to}</p>
-                             <p className="text-xs text-gray-500">{s.distanceKm} km {s.durationText ? `• ${s.durationText}` : ''}</p>
+                             <div className="flex justify-between items-start">
+                               <div>
+                                 <p className="text-sm font-semibold">{s.from} → {s.to}</p>
+                                 <p className="text-xs text-gray-500">{s.distanceKm} km {s.durationText ? `• ${s.durationText}` : ''}</p>
+                               </div>
+                               {s.waitingTime > 0 && (
+                                 <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold border border-amber-100">
+                                   Așteptare: {s.waitingTime}h
+                                 </span>
+                               )}
+                             </div>
                           </div>
                         </div>
                       ))}
@@ -152,7 +258,7 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
                 <div className="p-5 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl space-y-4 shadow-sm">
                    <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center text-gray-600 dark:text-gray-400">
-                        <Users className="w-5 h-5" />
+                        <User className="w-5 h-5" />
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 uppercase font-medium">Nume Complet</p>
@@ -185,6 +291,44 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
                    )}
                 </div>
              </div>
+
+             {/* Voucher Section */}
+             <div className="space-y-4">
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Cod Voucher</h3>
+                <div className="p-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm">
+                   {data.appliedVoucher ? (
+                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-800">
+                        <div className="flex items-center gap-3">
+                           <Ticket className="w-5 h-5 text-green-600" />
+                           <div>
+                              <p className="text-sm font-bold text-green-800 dark:text-green-300">{data.appliedVoucher.code}</p>
+                              <p className="text-xs text-green-600">Reducere aplicată: -{data.appliedVoucher.discountAmount} €</p>
+                           </div>
+                        </div>
+                        <button onClick={removeVoucher} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                           <Trash2 className="w-4 h-4" />
+                        </button>
+                     </div>
+                   ) : (
+                     <div className="flex gap-2">
+                        <Input 
+                          placeholder="Introdu codul voucher"
+                          value={voucherCode}
+                          onChange={(e) => setVoucherCode(e.target.value)}
+                          className="rounded-xl border-gray-100"
+                        />
+                        <Button 
+                          onClick={handleApplyVoucher}
+                          disabled={isApplyingVoucher || !voucherCode}
+                          variant="outline"
+                          className="rounded-xl font-bold"
+                        >
+                          {isApplyingVoucher ? <Loader2 className="w-4 h-4 animate-spin" /> : "Aplică"}
+                        </Button>
+                     </div>
+                   )}
+                </div>
+             </div>
           </div>
         </div>
 
@@ -199,7 +343,10 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
                 <p className="text-xs text-white/60 dark:text-black/60 italic">Include TVA și taxe de drum</p>
              </div>
              <div className="text-right">
-                <span className="text-5xl font-black">{Math.round(pricing.total)}</span>
+                {data.appliedVoucher && (
+                  <p className="text-sm line-through text-white/50 dark:text-black/50 mb-1">{Math.round(pricing.total)}€</p>
+                )}
+                <span className="text-5xl font-black">{Math.round(finalTotal)}</span>
                 <span className="text-2xl font-bold ml-1">€</span>
              </div>
           </div>
@@ -238,3 +385,4 @@ export function SummaryStep({ data, onBack }: SummaryStepProps) {
     </Card>
   );
 }
+

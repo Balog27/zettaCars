@@ -157,7 +157,7 @@ export default defineSchema({
     reservationId: v.id("reservations"),
     stripePaymentId: v.string(),
     amount: v.number(),
-    currency: v.literal("RON"),
+    currency: v.string(),
     status: v.union(
       v.literal("pending"),
       v.literal("completed"),
@@ -172,16 +172,16 @@ export default defineSchema({
 
   // Vouchers table - stores discount codes and gift cards
   vouchers: defineTable({
-    name: v.string(),
-    code: v.string(), // Unique code to enter
-    startDate: v.number(), // Unix timestamp
+    name: v.optional(v.string()),
+    code: v.optional(v.string()), // Unique code to enter
+    startDate: v.optional(v.number()), // Unix timestamp
     expiryDate: v.optional(v.number()), // Unix timestamp (nullable)
-    type: v.union(v.literal("percentage"), v.literal("fixed")),
-    value: v.number(), // 10 (for 10%) or 10 (for 10 EUR)
+    type: v.optional(v.union(v.literal("percentage"), v.literal("fixed"))),
+    value: v.optional(v.number()), // 10 (for 10%) or 10 (for 10 EUR)
     minOrderPrice: v.optional(v.number()), // Optional
-    eligibleServices: v.array(v.union(v.literal("rents"), v.literal("transfers"))),
-    active: v.boolean(),
-    usageCount: v.number(),
+    eligibleServices: v.optional(v.array(v.union(v.literal("rents"), v.literal("transfers")))),
+    active: v.optional(v.boolean()),
+    usageCount: v.optional(v.number()),
     maxUsage: v.optional(v.number()),
   })
     .index("by_code", ["code"])
@@ -265,12 +265,12 @@ export default defineSchema({
     key: v.string(), // single doc key, e.g. 'default'
     fixedPrices: v.object({
       standard: v.number(),
-      premium: v.number(),
+      premium: v.optional(v.number()),
       van: v.number(),
     }),
     pricePerKm: v.object({
       standard: v.object({ min: v.number(), max: v.number() }),
-      premium: v.object({ min: v.number(), max: v.number() }),
+      premium: v.optional(v.object({ min: v.number(), max: v.number() })),
       van: v.object({ min: v.number(), max: v.number() }),
     }),
     childSeatPrice: v.optional(v.number()),
@@ -297,49 +297,7 @@ export default defineSchema({
     .index("by_published_at", ["publishedAt"]),
 
   // Transfer requests table - stores transfer service requests
-  transferRequests: defineTable({
-    userId: v.optional(v.id("users")), // User ID if authenticated
-    status: v.union(
-      v.literal("pending"),
-      v.literal("confirmed"),
-      v.literal("cancelled"),
-      v.literal("completed")
-    ),
-    rideType: v.union(v.literal("one-way"), v.literal("round-trip")),
-    segments: v.array(
-      v.object({
-        from: v.string(),
-        to: v.string(),
-        distanceKm: v.number(),
-        durationText: v.optional(v.string()),
-        waitingTime: v.optional(v.number()), // in hours
-      })
-    ),
-    waitingTotalHours: v.number(),
-    totalDistanceKm: v.number(),
-    passengers: v.number(),
-    // Vehicle category
-    category: v.union(
-      v.literal("standard"),
-      v.literal("van")
-    ),
-    // Customer information (for non-authenticated or guest bookings)
-    customerInfo: v.object({
-      name: v.string(),
-      email: v.string(),
-      phone: v.string(),
-      message: v.optional(v.string()),
-      flightNumber: v.optional(v.string()),
-    }),
-    // Pricing details
-    estimatedPrice: v.optional(v.number()),
-    finalPrice: v.optional(v.number()),
-    currency: v.optional(v.string()),
-    // Voucher fields
-    voucherId: v.optional(v.id("vouchers")),
-    voucherCode: v.optional(v.string()),
-    discountAmount: v.optional(v.number()),
-  })
+  transferRequests: defineTable(v.any())
     .index("by_user", ["userId"])
     .index("by_status", ["status"])
     .index("by_voucher", ["voucherId"]),

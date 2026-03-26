@@ -20,8 +20,8 @@ export default function TransfersPage() {
     "provider": {
       "@type": "Organization",
       "name": "Zetta Cars",
-      "url": "https://rngo.com",
-      "logo": "https://rngo.com/logo.png",
+      "url": "https://zettacarrental.com",
+      "logo": "https://zettacarrental.com/logo.png",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+40750250121",
@@ -53,7 +53,7 @@ export default function TransfersPage() {
     ],
     "availableChannel": {
       "@type": "ServiceChannel",
-      "serviceUrl": "https://rngo.com/transfers",
+      "serviceUrl": "https://zettacarrental.com/transfers",
       "serviceSmsNumber": "+40750250121",
       "servicePhone": "+40750250121"
     },
@@ -87,7 +87,7 @@ export default function TransfersPage() {
         }
       ]
     },
-    "url": "https://rngo.com/transfers"
+    "url": "https://zettacarrental.com/transfers"
   });
 
   const transferSchema = generateTransferServiceSchema();
@@ -99,7 +99,7 @@ export default function TransfersPage() {
         <meta name="description" content="Servicii transfer Cluj-Napoca cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate." />
         <meta name="keywords" content="transfer cluj-napoca, transfer aeroport cluj, transport privat cluj, servicii transfer romania" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://rngo.com/transfers" />
+        <link rel="canonical" href="https://zettacarrental.com/transfers" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

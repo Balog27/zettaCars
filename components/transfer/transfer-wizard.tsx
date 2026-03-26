@@ -5,6 +5,7 @@ import { ConfigStep } from '@/components/transfer/steps/config-step';
 import { ContactStep } from '@/components/transfer/steps/contact-step';
 import { SummaryStep } from '@/components/transfer/steps/summary-step';
 import { VehicleCategory, RideType } from '@/lib/transfer-pricing';
+import { Id } from '@/convex/_generated/dataModel';
 
 export type TransferFormData = {
   rideType: RideType;
@@ -26,6 +27,13 @@ export type TransferFormData = {
     phone: string;
     message?: string;
   };
+  appliedVoucher?: {
+    id: Id<"vouchers">;
+    code: string;
+    discountAmount: number;
+    type: "percentage" | "fixed";
+    value: number;
+  } | null;
 };
 
 export function TransferWizard() {
@@ -43,6 +51,7 @@ export function TransferWizard() {
       phone: '',
       message: '',
     },
+    appliedVoucher: null,
   });
 
   const nextStep = () => setStep((s) => Math.min(s + 1, 3));
@@ -72,6 +81,7 @@ export function TransferWizard() {
       {step === 3 && (
         <SummaryStep 
           data={formData} 
+          onUpdate={updateFormData} 
           onBack={prevStep} 
         />
       )}

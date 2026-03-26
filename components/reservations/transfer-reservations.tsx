@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from 'next-intl';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -99,7 +99,9 @@ export function TransferReservations() {
       let compareValue = 0;
 
       if (sortField === 'date') {
-        compareValue = new Date(a.transferDate).getTime() - new Date(b.transferDate).getTime();
+        const aDist = a.totalDistanceKm || 0;
+        const bDist = b.totalDistanceKm || 0;
+        compareValue = aDist - bDist;
       } else if (sortField === 'price') {
         const aPrice = a.estimatedPrice || 0;
         const bPrice = b.estimatedPrice || 0;
@@ -132,18 +134,6 @@ export function TransferReservations() {
 
   return (
     <div className="space-y-4">
-      {/* Info Card */}
-      <Card className="border-blue-200 bg-blue-50">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-            <p className="text-blue-800 text-sm">
-              {t('transfer.note')}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Filter */}
       <div className="flex flex-col sm:flex-row gap-4 p-4 bg-gray-100 rounded-lg border border-gray-200">
         <div className="flex-1">
@@ -186,58 +176,28 @@ export function TransferReservations() {
         )}
       </div>
 
-      {/* Empty State */}
       {transferRequests.length === 0 ? (
         <Card>
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <p className="text-muted-foreground">{t('transfer.title')} - {t('noReservations')}</p>
-              <p className="text-sm text-muted-foreground">
-                {t('transfer.details')}
-              </p>
-              <div className="flex gap-3 justify-center">
-                <Button 
-                  onClick={() => router.push('/transfers/book')}
-                  className="bg-primary hover:bg-primary/90"
-                >
-                  {t('transfer.bookButton')}
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => router.push('/contact')}
-                >
-                  {t('transfer.contactButton')}
-                </Button>
-              </div>
-            </div>
+          <CardContent className="pt-6 text-center">
+            <p className="text-muted-foreground">{t('noReservations')}</p>
           </CardContent>
         </Card>
       ) : (
         <>
-          {/* Table */}
           <div className="rounded-md border overflow-x-auto">
             <Table className="w-full">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[180px]">{t('transfer.title')}</TableHead>
-                  <TableHead 
-                    className="w-[180px] cursor-pointer hover:bg-muted"
-                    onClick={() => handleSort('date')}
-                  >
-                    <div className="flex items-center gap-2">
-                      {t('table.dates')}
-                      <ArrowUpDown className="h-4 w-4" />
-                    </div>
-                  </TableHead>
-                  <TableHead className="min-w-[200px]">Locations</TableHead>
-                  <TableHead className="w-[100px]">Passengers</TableHead>
+                  <TableHead className="min-w-[250px]">Traseu & Staționări</TableHead>
+                  <TableHead className="w-[100px]">Pasageri</TableHead>
                   <TableHead 
                     className="w-[130px] cursor-pointer hover:bg-muted"
                     onClick={() => handleSort('price')}
                   >
                     <div className="flex items-center gap-2">
-                      {t('table.totalPrice')}
-                      <ArrowUpDown className="h-4 w-4" />
+                       {t('table.totalPrice')}
+                       <ArrowUpDown className="h-4 w-4" />
                     </div>
                   </TableHead>
                   <TableHead 
@@ -245,8 +205,8 @@ export function TransferReservations() {
                     onClick={() => handleSort('status')}
                   >
                     <div className="flex items-center gap-2">
-                      {t('table.status')}
-                      <ArrowUpDown className="h-4 w-4" />
+                       {t('table.status')}
+                       <ArrowUpDown className="h-4 w-4" />
                     </div>
                   </TableHead>
                 </TableRow>
@@ -256,32 +216,38 @@ export function TransferReservations() {
                   <TableRow key={request._id}>
                     <TableCell>
                       <div className="font-medium capitalize">{request.category}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {request.customerInfo.name}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="text-sm font-medium">{formatDate(request.transferDate)}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {request.transferTime}
-                        </div>
+                      <div className="text-xs text-muted-foreground">
+                        {request.rideType === 'one-way' ? 'Un sens' : 'Dus-întors'}
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="text-sm space-y-1">
-                        <div><span className="font-medium">From:</span> {request.pickupLocation}</div>
-                        <div><span className="font-medium">To:</span> {request.dropoffLocation}</div>
+                        {request.segments.map((s, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                             <span>{s.from} → {s.to}</span>
+                             {s.waitingTime ? (
+                               <span className="text-[10px] bg-amber-50 text-amber-700 px-1.5 rounded-full border border-amber-100">
+                                 Wait: {s.waitingTime}h
+                               </span>
+                             ) : null}
+                          </div>
+                        ))}
                       </div>
                     </TableCell>
                     <TableCell className="text-center">
-                      {request.numberOfPassengers}
+                      {request.passengers}
                     </TableCell>
                     <TableCell>
                       <div className="font-semibold">{formatPrice(request.estimatedPrice)}</div>
-                      {request.distanceKm && (
+                      {request.totalDistanceKm && (
                         <div className="text-xs text-muted-foreground">
-                          {request.distanceKm} km
+                          {request.totalDistanceKm} km
+                        </div>
+                      )}
+                      {request.discountAmount && (
+                        <div className="text-[10px] text-green-600 font-bold">
+                          Disc: -{request.discountAmount}€
                         </div>
                       )}
                     </TableCell>
@@ -292,9 +258,8 @@ export function TransferReservations() {
             </Table>
           </div>
 
-          {/* Pagination */}
           {sortedData.length > ITEMS_PER_PAGE && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mt-4">
               <div className="text-sm text-muted-foreground">
                 {t('pagination.showing')} {startIndex + 1} {t('pagination.to')} {Math.min(endIndex, sortedData.length)} {t('pagination.of')} {sortedData.length}
               </div>
@@ -325,7 +290,7 @@ export function TransferReservations() {
       )}
 
       {/* Action Cards */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 mt-8">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">{t('transfer.whatYouNeed')}</CardTitle>

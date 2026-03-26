@@ -7,10 +7,29 @@ import {
   BreadcrumbStructuredData,
 } from "@/components/blog/blog-structured-data";
 import { notFound } from "next/navigation";
-// import { getTranslations } from "next-intl/server";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { BlogImage } from "@/components/blog/blog-image";
+
+export const revalidate = 3600; // revalidate every hour
 
 interface BlogDetailPageProps {
   params: Promise<{ locale: string; slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const blogs = await fetchQuery(api.blogs.getAll);
+  const locales = ['en', 'ro'];
+  
+  return blogs.flatMap((blog) => 
+    locales.map((locale) => ({
+      locale,
+      slug: blog.slug,
+    }))
+  );
 }
 
 export async function generateMetadata({
@@ -21,7 +40,7 @@ export async function generateMetadata({
 
   if (!blog) {
     return {
-      title: "Blog Post Not Found | Rent'n Go Cluj",
+      title: "Blog Post Not Found | Zetta Cars Cluj",
     };
   }
 
@@ -29,13 +48,15 @@ export async function generateMetadata({
     ? await fetchQuery(api.blogs.getImageUrl, { imageId: blog.coverImage })
     : null;
 
+  const baseUrl = "https://www.zettacarrental.com";
+
   return {
-    title: `${blog.title} | Rent'n Go Blog`,
+    title: `${blog.title} | Zetta Cars Blog`,
     description: blog.description,
     authors: [{ name: blog.author }],
     keywords: blog.tags?.join(", "),
     alternates: {
-      canonical: `https://rngo.com/${locale}/blog/${slug}`,
+      canonical: `${baseUrl}/${locale}/blog/${slug}`,
       languages: {
         en: `/en/blog/${slug}`,
         ro: `/ro/blog/${slug}`,
@@ -45,7 +66,7 @@ export async function generateMetadata({
       title: blog.title,
       description: blog.description,
       type: "article",
-      url: `https://rngo.com/${locale}/blog/${slug}`,
+      url: `${baseUrl}/${locale}/blog/${slug}`,
       publishedTime: blog.publishedAt
         ? new Date(blog.publishedAt).toISOString()
         : undefined,
@@ -61,7 +82,7 @@ export async function generateMetadata({
             },
           ]
         : [],
-      siteName: "Rent'n Go Cluj",
+      siteName: "Zetta Cars Cluj-Napoca",
       locale: locale,
     },
     twitter: {
@@ -85,6 +106,19 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     ? await fetchQuery(api.blogs.getImageUrl, { imageId: blog.coverImage })
     : null;
 
+  const mdxComponents = {
+    BlogImage: (props: any) => <BlogImage {...props} />,
+  };
+
+  const mdxOptions = {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [
+      rehypeHighlight,
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: "wrap" }],
+    ],
+  };
+
   return (
     <>
       <BlogStructuredData
@@ -99,7 +133,15 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         coverImageUrl={coverImageUrl}
         locale={locale}
         slug={slug}
-      />
+      >
+        <article className="prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-20">
+          <MDXRemote 
+            source={blog.content} 
+            components={mdxComponents}
+            options={{ mdxOptions }}
+          />
+        </article>
+      </BlogDetailClient>
     </>
   );
-}
+}

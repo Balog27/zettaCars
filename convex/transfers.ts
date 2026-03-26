@@ -9,12 +9,12 @@ const pricingValidator = v.object({
   key: v.string(),
   fixedPrices: v.object({
     standard: v.number(),
-    premium: v.number(),
+    premium: v.optional(v.number()),
     van: v.number(),
   }),
   pricePerKm: v.object({
     standard: v.object({ min: v.number(), max: v.number() }),
-    premium: v.object({ min: v.number(), max: v.number() }),
+    premium: v.optional(v.object({ min: v.number(), max: v.number() })),
     van: v.object({ min: v.number(), max: v.number() }),
   }),
   childSeatPrice: v.optional(v.number()),
