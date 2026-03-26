@@ -96,7 +96,7 @@ export function EditVoucherDialog({ id, open, onOpenChange }: EditVoucherDialogP
       form.reset({
         name: voucher.name,
         code: voucher.code,
-        startDate: new Date(voucher.startDate),
+        startDate: voucher.startDate ? new Date(voucher.startDate) : new Date(),
         expiryDate: voucher.expiryDate ? new Date(voucher.expiryDate) : null,
         type: voucher.type,
         value: voucher.value,

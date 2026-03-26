@@ -13,6 +13,9 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { BlogImage } from "@/components/blog/blog-image";
+import { Header } from "@/components/ui/header";
+import { Footer } from "@/components/ui/footer";
+import { Logo } from "@/components/ui/logo";
 
 export const revalidate = 3600; // revalidate every hour
 
@@ -120,7 +123,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   };
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <BlogStructuredData
         blog={blog}
         locale={locale}
@@ -128,20 +131,30 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         coverImageUrl={coverImageUrl}
       />
       <BreadcrumbStructuredData blog={blog} locale={locale} slug={slug} />
-      <BlogDetailClient
-        blog={blog}
-        coverImageUrl={coverImageUrl}
-        locale={locale}
-        slug={slug}
-      >
-        <article className="prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-20">
-          <MDXRemote 
-            source={blog.content} 
-            components={mdxComponents}
-            options={{ mdxOptions }}
-          />
-        </article>
-      </BlogDetailClient>
-    </>
+      
+      <Header logo={<Logo alt="ZettaCars Logo" />} brandName="ZettaCars" />
+      
+      <main className="flex-grow">
+        <BlogDetailClient
+          blog={blog}
+          coverImageUrl={coverImageUrl}
+          locale={locale}
+          slug={slug}
+        >
+          <article className="prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-20">
+            <MDXRemote 
+              source={blog.content} 
+              components={mdxComponents}
+              options={{ mdxOptions: mdxOptions as any }}
+            />
+          </article>
+        </BlogDetailClient>
+      </main>
+
+      <Footer
+        logo={<Logo alt="ZettaCars Logo" />}
+        brandName="Zetta Cars"
+      />
+    </div>
   );
 }

@@ -1,5 +1,5 @@
-import { Footer } from "@/components/ui/header-footer-root/footer";
-import { Header } from "@/components/ui/header-footer-root/header";
+import { Footer } from "@/components/ui/footer";
+import { Header } from "@/components/ui/header";
 import { Logo } from "@/components/ui/logo";
 import { getTranslations } from 'next-intl/server';
 import { fetchQuery } from 'convex/nextjs';

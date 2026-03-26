@@ -110,7 +110,7 @@ function TransferSummaryPageContent() {
           category: payload?.category || "standard",
           pricing: payload?.pricing,
           meta: {
-            transferDate: transferDateState.toISOString().split("T")[0],
+            transferDate: transferDateState!.toISOString().split("T")[0],
             pickupTime: pickupTimeState,
             persons: payload?.persons || 1,
           },
@@ -149,7 +149,7 @@ function TransferSummaryPageContent() {
             payload.calculated = result.calculated;
             payload.pickupLocation = pickupLocationState;
             payload.dropoffLocation = dropoffLocationState;
-            payload.transferDate = transferDateState.toISOString().split("T")[0];
+            payload.transferDate = transferDateState!.toISOString().split("T")[0];
             payload.pickupTime = pickupTimeState;
           }
         }
@@ -827,8 +827,8 @@ function TransferSummaryPageContent() {
                       passengers: payload?.persons || 1,
                       category: payload?.category || "standard",
                       // Legacy fields
-                      transferDate: transferDateState.toISOString().split('T')[0],
-                      transferTime: pickupTimeState,
+                      transferDate: transferDateState!.toISOString().split('T')[0],
+                      transferTime: pickupTimeState ?? undefined,
                       pickupLocation: pickupLocationState,
                       dropoffLocation: dropoffLocationState,
                       numberOfPassengers: payload?.persons || 1,

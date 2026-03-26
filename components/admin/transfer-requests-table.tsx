@@ -32,11 +32,11 @@ export function AdminTransferTable() {
   
   const transferRequests = useQuery(api.transferRequests.getAllTransferRequests);
   const updateStatus = useMutation(api.transferRequests.updateTransferRequestStatus);
-  const deleteRequest = useMutation(api.transferRequests.deleteTransferRequest);
+  const deleteRequest = useMutation(api.transferRequests.deleteTransferRequestPermanently);
 
   const handleStatusUpdate = async (requestId: Id<"transferRequests">, newStatus: "pending" | "confirmed" | "cancelled" | "completed") => {
     try {
-      await updateStatus({ requestId, status: newStatus });
+      await updateStatus({ transferRequestId: requestId, newStatus: newStatus });
       toast.success("Transfer status updated", {
         description: `Status changed to ${newStatus}`,
         position: "bottom-right",
@@ -50,7 +50,7 @@ export function AdminTransferTable() {
   const handleDelete = async (requestId: Id<"transferRequests">, customerName: string) => {
     if (confirm(`Are you sure you want to delete the transfer request from ${customerName}?`)) {
       try {
-        await deleteRequest({ requestId });
+        await deleteRequest({ transferRequestId: requestId });
         toast.success("Transfer request deleted");
       } catch (error) {
         toast.error("Failed to delete request");
@@ -123,7 +123,7 @@ export function AdminTransferTable() {
                   </TableCell>
                   <TableCell>
                     <div className="text-xs space-y-1 max-w-md">
-                      {request.segments.map((s, idx) => (
+                      {request.segments?.map((s: any, idx: number) => (
                         <div key={idx} className="flex items-center gap-2">
                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                            <span>{s.from} → {s.to}</span>

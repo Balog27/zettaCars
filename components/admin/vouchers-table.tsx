@@ -101,7 +101,7 @@ export function VouchersTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {voucher.eligibleServices.map(s => (
+                      {voucher.eligibleServices?.map(s => (
                         <Badge key={s} variant="outline" className="text-[10px] capitalize">
                           {s}
                         </Badge>
@@ -109,10 +109,10 @@ export function VouchersTable() {
                     </div>
                   </TableCell>
                   <TableCell className="text-xs">
-                    <div>From: {format(voucher.startDate, "dd MMM yyyy")}</div>
+                    <div>From: {format(voucher.startDate || Date.now(), "dd MMM yyyy")}</div>
                     {voucher.expiryDate && (
                       <div className="text-muted-foreground">
-                        To: {format(voucher.expiryDate, "dd MMM yyyy")}
+                        To: {format(voucher.expiryDate!, "dd MMM yyyy")}
                       </div>
                     )}
                   </TableCell>
@@ -140,7 +140,7 @@ export function VouchersTable() {
                           <Edit className="h-4 w-4 mr-2" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => handleDelete(voucher._id, voucher.name)}
+                          onClick={() => handleDelete(voucher._id, voucher.name || "")}
                           className="text-red-600"
                         >
                           <Trash2 className="h-4 w-4 mr-2" /> Delete

@@ -222,7 +222,7 @@ export function TransferReservations() {
                     </TableCell>
                     <TableCell>
                       <div className="text-sm space-y-1">
-                        {request.segments.map((s, idx) => (
+                        {request.segments?.map((s: any, idx: number) => (
                           <div key={idx} className="flex items-center gap-2">
                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                              <span>{s.from} → {s.to}</span>
