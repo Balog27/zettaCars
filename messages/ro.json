@@ -376,7 +376,11 @@
       "warranty": "garanție",
       "warrantyRefundable": "Garanția este restituibilă dacă nu sunt daune",
       "sendReservationRequest": "Trimite Cererea de Rezervare",
-      "processing": "Se procesează..."
+      "processing": "Se procesează...",
+      "voucherTitle": "Voucher",
+      "enterVoucherCode": "Introduceți codul voucherului",
+      "applyVoucher": "Aplică",
+      "discount": "Reducere"
     },
     "payment": {
       "methods": {

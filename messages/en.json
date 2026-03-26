@@ -361,7 +361,11 @@
       "warranty": "warranty",
       "warrantyRefundable": "Warranty is refundable if no damages",
       "sendReservationRequest": "Send Reservation Request",
-      "processing": "Processing..."
+      "processing": "Processing...",
+      "voucherTitle": "Voucher",
+      "enterVoucherCode": "Enter voucher code",
+      "applyVoucher": "Apply",
+      "discount": "Discount"
     },
     "payment": {
       "methods": {

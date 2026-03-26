@@ -19,7 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Calendar, Send, User, CreditCard, AlertCircle, Info } from "lucide-react";
+import { ArrowLeft, Calendar, Send, User, CreditCard, AlertCircle, Info, X } from "lucide-react";
 import { LocationPicker } from "@/components/location-picker";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { searchStorage } from "@/lib/searchStorage";
@@ -288,7 +288,9 @@ function ReservationPageContent() {
           snowChainsPrice: 0,
           childSeat1to4Price: 0,
           childSeat5to12Price: 0,
+          extraKilometersPrice: 0,
           totalAdditionalFeatures: 0,
+          discountAmount: 0,
           seasonalMultiplier,
           seasonalAdjustment: 0,
           basePriceBeforeSeason: null,
@@ -362,6 +364,7 @@ function ReservationPageContent() {
       childSeat5to12Price: 0,
       extraKilometersPrice: 0,
       totalAdditionalFeatures: 0,
+      discountAmount: 0,
       seasonalMultiplier: 1.0,
       seasonalAdjustment: 0,
       basePriceBeforeSeason: null,
@@ -372,7 +375,19 @@ function ReservationPageContent() {
     childSeat5to12Price,
     extraKilometersPrice,
     totalAdditionalFeatures,
-    discountAmount
+    discountAmount,
+    days,
+    basePrice,
+    totalPrice,
+    deliveryFee,
+    returnFee,
+    totalLocationFees,
+    warrantyAmount,
+    scdwPrice,
+    protectionCost,
+    deductibleAmount,
+    snowChainsPrice,
+    childSeat1to4Price
   } = calculateTotalPrice();
 
   // Validate voucher
@@ -1487,14 +1502,14 @@ function ReservationPageContent() {
                      {t('reservationSummary.voucherTitle') || 'Voucher'}
                    </h4>
                    {appliedVoucher ? (
-                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                     <div className="flex items-center justify-between p-3 bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 rounded-lg">
                        <div>
-                         <span className="font-bold text-green-700 dark:text-green-400">{appliedVoucher.code}</span>
-                         <span className="ml-2 text-sm text-green-600 dark:text-green-500">
+                         <span className="font-bold text-pink-700 dark:text-pink-400">{appliedVoucher.code}</span>
+                         <span className="ml-2 text-sm text-pink-600 dark:text-pink-500">
                            (-{appliedVoucher.type === 'percentage' ? `${appliedVoucher.value}%` : `${appliedVoucher.value} EUR`})
                          </span>
                        </div>
-                       <Button variant="ghost" size="sm" onClick={removeVoucher} className="h-8 w-8 p-0 text-green-700 hover:text-red-600">
+                       <Button variant="ghost" size="sm" onClick={removeVoucher} className="h-8 w-8 p-0 text-pink-700 hover:text-red-600">
                          <X className="h-4 w-4" />
                        </Button>
                      </div>
@@ -1585,8 +1600,8 @@ function ReservationPageContent() {
                   )}
 
                   {discountAmount > 0 && (
-                    <div className="flex justify-between text-sm text-green-600 font-medium">
-                      <span>{t('reservationSummary.discount') || 'Discount'}:</span>
+                    <div className="flex justify-between text-sm text-pink-600 font-medium">
+                      <span>{t('reservationSummary.discount')}:</span>
                       <span>-{discountAmount} EUR</span>
                     </div>
                   )}
