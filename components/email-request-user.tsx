@@ -58,6 +58,7 @@ const UserReservationEmail: React.FC<UserReservationEmailProps> = ({ data }) => 
       paymentMethod: isRo ? 'Metoda de Plată:' : 'Payment Method:',
       scdwText: isRo ? 'SCDW (nerestituibilă)' : 'SCDW (zero deductible)',
       warrantyText: isRo ? 'Garanție (restituibilă)' : 'Warranty (deductible)',
+      voucher: isRo ? 'Voucher Aplicat:' : 'Voucher Applied:',
     },
     footerMessage: isRo
       ? "Am primit cererea ta. Echipa noastră te va contacta în curând pentru confirmare."
@@ -120,6 +121,7 @@ const UserReservationEmail: React.FC<UserReservationEmailProps> = ({ data }) => 
               additionalCharges: t.pricing.additionalCharges,
               totalAmount: t.pricing.totalAmount,
               paymentMethod: t.pricing.paymentMethod,
+              voucher: t.pricing.voucher,
             }}
           />
 

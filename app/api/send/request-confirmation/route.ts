@@ -9,7 +9,7 @@ import { calculateRentalDays } from '@/lib/vehicleUtils';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
-    const { reservationId, reservationNumber, startDate, endDate, startDateString, endDateString, pickupTime, restitutionTime, pickupLocation, restitutionLocation, paymentMethod, totalPrice, vehicle, customerInfo, promoCode, additionalCharges, pricePerDayUsed, locale, isSCDWSelected, deductibleAmount, protectionCost } = await request.json();
+    const { reservationId, reservationNumber, startDate, endDate, startDateString, endDateString, pickupTime, restitutionTime, pickupLocation, restitutionLocation, paymentMethod, totalPrice, vehicle, customerInfo, promoCode, additionalCharges, pricePerDayUsed, locale, isSCDWSelected, deductibleAmount, protectionCost, voucherCode, discountAmount } = await request.json();
 
     // Transform the API data into the email component's expected format
     // Calculate derived values using date+time aware logic
@@ -61,6 +61,8 @@ export async function POST(request: Request) {
             totalPrice,
             paymentMethod,
             promoCode,
+            voucherCode,
+            discountAmount,
             additionalCharges: additionalCharges || [],
             isSCDWSelected,
             deductibleAmount,

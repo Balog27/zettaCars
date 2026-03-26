@@ -15,6 +15,7 @@ interface PricingSectionProps {
     paymentMethod?: string;
     scdwText?: string; // e.g., "SCDW (zero deductible)"
     warrantyText?: string; // e.g., "Warranty (deductible)"
+    voucher?: string;
   };
 }
 
@@ -57,6 +58,17 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           </Column>
           <Column className="w-1/3 text-right">
             <Text className="text-[16px] text-green-600 m-0">{pricingDetails.promoCode}</Text>
+          </Column>
+        </Row>
+      )}
+      
+      {pricingDetails.voucherCode && (
+        <Row className="mb-[8px]">
+          <Column className="w-2/3">
+            <Text className="text-[16px] text-green-600 m-0">{labels?.voucher ?? 'Voucher Applied:'} ({pricingDetails.voucherCode})</Text>
+          </Column>
+          <Column className="w-1/3 text-right">
+            <Text className="text-[16px] text-green-600 m-0">-{formatCurrency(pricingDetails.discountAmount || 0)}</Text>
           </Column>
         </Row>
       )}

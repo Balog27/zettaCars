@@ -57,6 +57,11 @@ const navItems = [
     url: "/admin/transfers",
     icon: ArrowRightLeft,
   },
+  {
+    title: "Vouchers",
+    url: "/admin/vouchers",
+    icon: Calendar,
+  },
   // {
   //   title: "Settings",
   //   url: "/admin/settings",

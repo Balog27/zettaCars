@@ -69,6 +69,9 @@ export async function POST(request: Request) {
       distance: isRo ? 'Distanță' : 'Distance',
       pricing: isRo ? 'Estimare Preț' : 'Price Estimate',
       basePrice: isRo ? 'Preț de Bază' : 'Base Price',
+      discount: isRo ? 'Reducere' : 'Discount',
+      voucher: isRo ? 'Voucher' : 'Voucher',
+      total: isRo ? 'Total Final' : 'Final Total',
       action: isRo ? 'Acțiune necesară: Revizuiți cererea și contactați clientul pentru confirmare.' : 'Action Required: Review the request and contact the customer for confirmation.',
     };
 
@@ -90,6 +93,9 @@ export async function POST(request: Request) {
       message: isRo ? 'Mesaj' : 'Message',
       pricing: isRo ? 'Estimare Preț' : 'Price Estimate',
       basePrice: isRo ? 'Preț de Bază' : 'Base Price',
+      discount: isRo ? 'Reducere' : 'Discount',
+      voucher: isRo ? 'Voucher' : 'Voucher',
+      total: isRo ? 'Total Final' : 'Final Total',
       nextSteps: isRo
         ? 'Vom revizui cererea ta și te vom contacta cât mai curând posibil în maximum 6 ore pentru a confirma disponibilitatea și a finaliza prețul.'
         : 'We will review your request and contact you as soon as possible within 6 hours to confirm availability and finalize the price.',
@@ -167,6 +173,12 @@ export async function POST(request: Request) {
             <td style="padding: 8px; color: #666;">${adminT.basePrice}:</td>
             <td style="padding: 8px; font-weight: bold; font-size: 16px;">${priceDisplay}</td>
           </tr>
+          ${pricing?.voucherCode ? `
+          <tr style="background-color: #f0fdf4;">
+            <td style="padding: 8px; color: #166534;">${adminT.voucher} (${pricing.voucherCode}):</td>
+            <td style="padding: 8px; font-weight: bold; color: #166534;">-${formatPrice(pricing.discountAmount)}</td>
+          </tr>
+          ` : ''}
         </table>
 
         <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-top: 20px;">
@@ -227,6 +239,12 @@ export async function POST(request: Request) {
             <td style="padding: 8px; color: #666;">${userT.basePrice}:</td>
             <td style="padding: 8px; font-weight: bold; font-size: 16px;">${priceDisplay}</td>
           </tr>
+          ${pricing?.voucherCode ? `
+          <tr style="background-color: #f0fdf4;">
+            <td style="padding: 8px; color: #166534;">${userT.voucher} (${pricing.voucherCode}):</td>
+            <td style="padding: 8px; font-weight: bold; color: #166534;">-${formatPrice(pricing.discountAmount)}</td>
+          </tr>
+          ` : ''}
         </table>
 
         <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-top: 20px;">

@@ -139,13 +139,18 @@ export default defineSchema({
     seasonId: v.optional(v.id("seasons")),
     // Store the multiplier that was applied (for historical accuracy even if season changes)
     seasonalMultiplier: v.optional(v.number()),
+    // Voucher fields
+    voucherId: v.optional(v.id("vouchers")),
+    voucherCode: v.optional(v.string()),
+    discountAmount: v.optional(v.number()),
   })
     .index("by_user", ["userId"])
     .index("by_vehicle", ["vehicleId"])
     .index("by_dates", ["startDate", "endDate"])
     .index("by_pickup_location", ["pickupLocation"])
     .index("by_restitution_location", ["restitutionLocation"])
-    .index("by_payment_method", ["paymentMethod"]),
+    .index("by_payment_method", ["paymentMethod"])
+    .index("by_voucher", ["voucherId"]),
 
   // Payments table - stores payment records
   payments: defineTable({
@@ -165,15 +170,19 @@ export default defineSchema({
     .index("by_reservation", ["reservationId"])
     .index("by_status", ["status"]),
 
-  // Promotions table - stores discount codes
-  promotions: defineTable({
-    code: v.string(),
+  // Vouchers table - stores discount codes and gift cards
+  vouchers: defineTable({
+    name: v.string(),
+    code: v.string(), // Unique code to enter
+    startDate: v.number(), // Unix timestamp
+    expiryDate: v.optional(v.number()), // Unix timestamp (nullable)
     type: v.union(v.literal("percentage"), v.literal("fixed")),
-    value: v.number(), // percentage or fixed amount
-    expiryDate: v.number(), // Unix timestamp
+    value: v.number(), // 10 (for 10%) or 10 (for 10 EUR)
+    minOrderPrice: v.optional(v.number()), // Optional
+    eligibleServices: v.array(v.union(v.literal("rents"), v.literal("transfers"))),
+    active: v.boolean(),
     usageCount: v.number(),
     maxUsage: v.optional(v.number()),
-    active: v.boolean(),
   })
     .index("by_code", ["code"])
     .index("by_active", ["active"]),
@@ -296,15 +305,24 @@ export default defineSchema({
       v.literal("cancelled"),
       v.literal("completed")
     ),
-    transferDate: v.string(), // ISO date string "2025-03-15"
-    transferTime: v.string(), // Time in "HH:MM" format
-    pickupLocation: v.string(), // Pickup address
-    dropoffLocation: v.string(), // Dropoff address
-    numberOfPassengers: v.number(), // Number of people
+    rideType: v.union(v.literal("one-way"), v.literal("round-trip")),
+    segments: v.array(
+      v.object({
+        from: v.string(),
+        to: v.string(),
+        distanceKm: v.number(),
+        durationText: v.optional(v.string()),
+        waitingTime: v.optional(v.number()), // in hours
+      })
+    ),
+    waitingTotalHours: v.number(),
+    totalDistanceKm: v.number(),
+    passengers: v.number(),
+    // Vehicle category
     category: v.union(
       v.literal("standard"),
       v.literal("van")
-    ), // Vehicle category
+    ),
     // Customer information (for non-authenticated or guest bookings)
     customerInfo: v.object({
       name: v.string(),
@@ -317,12 +335,12 @@ export default defineSchema({
     estimatedPrice: v.optional(v.number()),
     finalPrice: v.optional(v.number()),
     currency: v.optional(v.string()),
-    distanceKm: v.optional(v.number()),
-    // Additional info
-    specialRequests: v.optional(v.string()),
+    // Voucher fields
+    voucherId: v.optional(v.id("vouchers")),
+    voucherCode: v.optional(v.string()),
+    discountAmount: v.optional(v.number()),
   })
     .index("by_user", ["userId"])
     .index("by_status", ["status"])
-    .index("by_transfer_date", ["transferDate"])
-    .index("by_pickup_location", ["pickupLocation"]),
+    .index("by_voucher", ["voucherId"]),
 });

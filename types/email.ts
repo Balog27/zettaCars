@@ -35,6 +35,8 @@ export interface PricingDetails {
   totalPrice: number;
   paymentMethod: "cash_on_delivery" | "card_on_delivery" | "card_online";
   promoCode?: string;
+  voucherCode?: string;
+  discountAmount?: number;
   additionalCharges?: Array<{
     description: string;
     amount: number;

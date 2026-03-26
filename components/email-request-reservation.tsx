@@ -63,6 +63,7 @@ const CarRentalReservationEmail: React.FC<CarRentalReservationEmailProps> = ({ d
       paymentMethod: isRo ? 'Metoda de Plată:' : 'Payment Method:',
       scdwText: isRo ? 'SCDW (nerestituibilă)' : 'SCDW (zero deductible)',
       warrantyText: isRo ? 'Garanție (restituibilă)' : 'Warranty (deductible)',
+      voucher: isRo ? 'Voucher Aplicat:' : 'Voucher Applied:',
     },
     footerMessage: isRo
       ? 'Aceasta este o notificare automată din sistemul de rezervări Zetta Cars.'
@@ -126,6 +127,7 @@ const CarRentalReservationEmail: React.FC<CarRentalReservationEmailProps> = ({ d
               additionalCharges: t.pricing.additionalCharges,
               totalAmount: t.pricing.totalAmount,
               paymentMethod: t.pricing.paymentMethod,
+              voucher: t.pricing.voucher,
             }}
           />
 

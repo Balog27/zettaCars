@@ -6,11 +6,19 @@ import { getCurrentUser, getCurrentUserOrThrow } from "./users";
 export const createTransferRequest = mutation({
   args: {
     userId: v.optional(v.id("users")),
-    transferDate: v.string(), // ISO date string "2025-03-15"
-    transferTime: v.string(), // Time in "HH:MM" format
-    pickupLocation: v.string(),
-    dropoffLocation: v.string(),
-    numberOfPassengers: v.number(),
+    rideType: v.union(v.literal("one-way"), v.literal("round-trip")),
+    segments: v.array(
+      v.object({
+        from: v.string(),
+        to: v.string(),
+        distanceKm: v.number(),
+        durationText: v.optional(v.string()),
+        waitingTime: v.optional(v.number()),
+      })
+    ),
+    waitingTotalHours: v.number(),
+    totalDistanceKm: v.number(),
+    passengers: v.number(),
     category: v.union(
       v.literal("standard"),
       v.literal("van")
@@ -24,8 +32,9 @@ export const createTransferRequest = mutation({
     }),
     estimatedPrice: v.optional(v.number()),
     currency: v.optional(v.string()),
-    distanceKm: v.optional(v.number()),
-    specialRequests: v.optional(v.string()),
+    voucherId: v.optional(v.id("vouchers")),
+    voucherCode: v.optional(v.string()),
+    discountAmount: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const currentUser = await getCurrentUser(ctx);
@@ -33,21 +42,32 @@ export const createTransferRequest = mutation({
     const newTransferRequest = {
       userId: currentUser?._id || undefined,
       status: "pending" as const,
-      transferDate: args.transferDate,
-      transferTime: args.transferTime,
-      pickupLocation: args.pickupLocation,
-      dropoffLocation: args.dropoffLocation,
-      numberOfPassengers: args.numberOfPassengers,
+      rideType: args.rideType,
+      segments: args.segments,
+      waitingTotalHours: args.waitingTotalHours,
+      totalDistanceKm: args.totalDistanceKm,
+      passengers: args.passengers,
       category: args.category,
       customerInfo: args.customerInfo,
       estimatedPrice: args.estimatedPrice,
       finalPrice: undefined,
       currency: args.currency || "EUR",
-      distanceKm: args.distanceKm,
-      specialRequests: args.specialRequests,
+      voucherId: args.voucherId,
+      voucherCode: args.voucherCode,
+      discountAmount: args.discountAmount,
     };
 
-    const transferRequestId = await ctx.db.insert("transferRequests", newTransferRequest);
+    const transferRequestId = await ctx.db.insert("transferRequests", (newTransferRequest as any));
+
+    // Update voucher usage count if applicable
+    if (args.voucherId) {
+      const voucher = await ctx.db.get(args.voucherId);
+      if (voucher) {
+        await ctx.db.patch(args.voucherId, {
+          usageCount: (voucher.usageCount || 0) + 1,
+        });
+      }
+    }
 
     return { transferRequestId };
   },
@@ -194,5 +214,34 @@ export const deleteTransferRequestPermanently = mutation({
     await ctx.db.delete(args.transferRequestId);
 
     return { success: true, message: "Transfer request permanently deleted." };
+  },
+});
+
+export const updateTransferRequestVoucher = mutation({
+  args: {
+    transferRequestId: v.id("transferRequests"),
+    voucherId: v.id("vouchers"),
+    voucherCode: v.string(),
+    discountAmount: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUserOrThrow(ctx);
+    
+    const request = await ctx.db.get(args.transferRequestId);
+    if (!request) throw new Error("Transfer request not found");
+
+    if (user.role !== "admin" && request.userId !== user._id) {
+       throw new Error("Unauthorized");
+    }
+
+    await ctx.db.patch(args.transferRequestId, {
+      voucherId: args.voucherId,
+      voucherCode: args.voucherCode,
+      discountAmount: args.discountAmount,
+      // If finalPrice is already set, we might need to adjust it, 
+      // but usually voucher is applied before final confirmation.
+    });
+
+    return { success: true };
   },
 });
