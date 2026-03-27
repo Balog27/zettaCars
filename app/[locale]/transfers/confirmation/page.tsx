@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const Header = dynamic(
@@ -22,8 +22,10 @@ const Footer = dynamic(
 function safeDecode(data?: string) {
   if (!data) return null;
   try {
-    return JSON.parse(Buffer.from(decodeURIComponent(data), 'base64').toString('utf-8'));
-  } catch {
+    const base64 = decodeURIComponent(data);
+    return JSON.parse(decodeURIComponent(escape(atob(base64))));
+  } catch (e) {
+    console.error("Decode error:", e);
     return null;
   }
 }
@@ -105,32 +107,44 @@ function TransferConfirmationPageContent() {
                 <div className="space-y-6 mb-8 border-t border-b py-6">
                   <div>
                     <h3 className="text-sm font-medium text-muted-foreground mb-3">
-                      {t("confirmation.transferDetails") ?? "Transfer Details"}
+                      {t("confirmation.transferDetails") ?? "Detalii Transfer"}
                     </h3>
-                    <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm">
+                    <div className="space-y-4 mb-4">
+                      {confirmationData.transferDetails?.segments?.map((s: any, i: number) => (
+                        <div key={i} className="text-sm">
+                          <div className="font-bold text-pink-500 uppercase text-[10px] tracking-[0.1em] mb-1">Segment {i+1}</div>
+                          <div className="flex items-start gap-2">
+                             <div className="text-slate-900 dark:text-slate-100 font-medium">{s.from}</div>
+                             <ArrowRight className="w-3 h-3 mt-1 shrink-0 text-slate-400" />
+                             <div className="text-slate-900 dark:text-slate-100 font-medium">{s.to}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm border-t pt-4">
                       <div>
-                        <dt className="font-medium">{t("summary.pickup") ?? "Pick-up:"}</dt>
+                        <dt className="font-medium">{t("summary.date") ?? "Data & Ora:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
-                          {confirmationData.transferDetails?.pickupLocation}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="font-medium">{t("summary.dropoff") ?? "Dropoff:"}</dt>
-                        <dd className="mt-1 text-slate-600 dark:text-slate-300">
-                          {confirmationData.transferDetails?.dropoffLocation}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="font-medium">{t("summary.date") ?? "Date & Time:"}</dt>
-                        <dd className="mt-1 text-slate-600 dark:text-slate-300">
-                          {new Date(confirmationData.transferDetails?.transferDate).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })} at{" "}
+                          {new Date(confirmationData.transferDetails?.transferDate).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })} la{" "}
                           {confirmationData.transferDetails?.pickupTime}
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium">{t("summary.category") ?? "Category:"}</dt>
+                        <dt className="font-medium">{t("summary.category") ?? "Categorie:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">
                           {confirmationData.transferDetails?.category}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="font-medium">Distanță totală:</dt>
+                        <dd className="mt-1 text-slate-600 dark:text-slate-300">
+                          {confirmationData.transferDetails?.distance} km
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="font-medium">Nr. persoane:</dt>
+                        <dd className="mt-1 text-slate-600 dark:text-slate-300">
+                          {confirmationData.transferDetails?.persons}
                         </dd>
                       </div>
                     </dl>

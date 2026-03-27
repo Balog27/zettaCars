@@ -1,4 +1,4 @@
-"use server";
+
 
 /**
  * Mapbox API utilities for geocoding and distance calculations

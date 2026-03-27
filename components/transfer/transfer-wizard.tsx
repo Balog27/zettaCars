@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { ConfigStep } from '@/components/transfer/steps/config-step';
-import { ContactStep } from '@/components/transfer/steps/contact-step';
-import { SummaryStep } from '@/components/transfer/steps/summary-step';
 import { VehicleCategory, RideType } from '@/lib/transfer-pricing';
 import { Id } from '@/convex/_generated/dataModel';
 
@@ -37,7 +36,10 @@ export type TransferFormData = {
 };
 
 export function TransferWizard() {
-  const [step, setStep] = useState(1);
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname?.split('/')[1] || 'en';
+  
   const [formData, setFormData] = useState<TransferFormData>({
     rideType: 'one-way',
     category: 'standard',
@@ -54,37 +56,24 @@ export function TransferWizard() {
     appliedVoucher: null,
   });
 
-  const nextStep = () => setStep((s) => Math.min(s + 1, 3));
-  const prevStep = () => setStep((s) => Math.max(s - 1, 1));
-
   const updateFormData = (data: Partial<TransferFormData>) => {
     setFormData((prev) => ({ ...prev, ...data }));
   };
 
+  const handleNext = () => {
+    // Encode data and redirect to summary page
+    const dataString = JSON.stringify(formData);
+    const encodedData = btoa(unescape(encodeURIComponent(dataString)));
+    router.push(`/${locale}/transfers/summary?data=${encodedData}`);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {step === 1 && (
-        <ConfigStep 
-          data={formData} 
-          onUpdate={updateFormData} 
-          onNext={nextStep} 
-        />
-      )}
-      {step === 2 && (
-        <ContactStep 
-          data={formData} 
-          onUpdate={updateFormData} 
-          onNext={nextStep} 
-          onBack={prevStep} 
-        />
-      )}
-      {step === 3 && (
-        <SummaryStep 
-          data={formData} 
-          onUpdate={updateFormData} 
-          onBack={prevStep} 
-        />
-      )}
+      <ConfigStep 
+        data={formData} 
+        onUpdate={updateFormData} 
+        onNext={handleNext} 
+      />
     </div>
   );
 }

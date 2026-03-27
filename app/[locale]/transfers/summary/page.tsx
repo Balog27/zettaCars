@@ -13,7 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { LocationAutocomplete } from "@/components/transfer/location-autocomplete";
 import { Logo } from "@/components/ui/logo";
-import { Send, X } from "lucide-react";
+import { Send, X, Trash2, Plus, ArrowRight, Calendar, Clock, Users, MapPin, CreditCard, Tag, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { PersonalInfoCard } from "@/components/reservation/personal-info-card";
 import { PaymentMethodCard } from "@/components/reservation/payment-method-card";
+import { TransferFormData } from "@/components/transfer/transfer-wizard";
+import { calculateTransferPrice } from "@/lib/transfer-pricing";
 
 const Header = dynamic(
   () => import("@/components/ui/header").then((m) => m.Header),
@@ -34,8 +36,10 @@ const Footer = dynamic(
 function safeDecode(data?: string) {
   if (!data) return null;
   try {
-    return JSON.parse(atob(decodeURIComponent(data)));
-  } catch {
+    const base64 = decodeURIComponent(data);
+    return JSON.parse(decodeURIComponent(escape(atob(base64))));
+  } catch (e) {
+    console.error("Decode error:", e);
     return null;
   }
 }
@@ -48,36 +52,57 @@ function TransferSummaryPageContent() {
   const t = useTranslations("transfersPage");
 
   const dataParam = search?.get("data") || undefined;
-  const payload = useMemo(() => safeDecode(dataParam), [dataParam]) as any;
+  const payload = useMemo(() => {
+    const decoded = safeDecode(dataParam);
+    if (!decoded) return null;
+    
+    // Support both old payload and new TransferFormData
+    if (decoded.segments) return decoded as TransferFormData;
+    
+    // Legacy mapping
+    return {
+      rideType: 'one-way',
+      category: decoded.category || 'standard',
+      segments: [{
+        from: decoded.pickupLocation || decoded.pickup?.address || "",
+        to: decoded.dropoffLocation || decoded.dropoff?.address || "",
+        distanceKm: decoded.calculated?.distanceKm || 0,
+        waitingTime: 0
+      }],
+      date: decoded.meta?.transferDate ? new Date(decoded.meta.transferDate) : (decoded.transferDate ? new Date(decoded.transferDate) : undefined),
+      time: decoded.meta?.pickupTime || decoded.pickupTime || "12:00",
+      passengers: decoded.persons || decoded.numberOfPassengers || 1,
+      customerInfo: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+      }
+    } as TransferFormData;
+  }, [dataParam]);
 
   // Editable states
-  const [pickupLocationState, setPickupLocationState] = useState<string>(
-    payload?.pickupLocation || payload?.pickup?.address || "",
+  const [segmentsState, setSegmentsState] = useState<TransferFormData['segments']>(
+    payload?.segments || [{ from: '', to: '', distanceKm: 0, waitingTime: 0 }]
   );
-  const [dropoffLocationState, setDropoffLocationState] = useState<string>(
-    payload?.dropoffLocation || payload?.dropoff?.address || "",
-  );
+  
   const [transferDateState, setTransferDateState] = useState<Date | undefined>(
-    () =>
-      payload?.meta?.transferDate
-        ? new Date(payload.meta.transferDate)
-        : payload?.transferDate
-          ? new Date(payload.transferDate)
-          : undefined,
+    payload?.date ? new Date(payload.date) : undefined
   );
-  const [pickupTimeState, setPickupTimeState] = useState<string | null>(
-    payload?.meta?.pickupTime || payload?.pickupTime || null,
+  const [pickupTimeState, setPickupTimeState] = useState<string>(
+    payload?.time || "12:00"
+  );
+  
+  const [passengersState, setPassengersState] = useState<number>(
+    payload?.passengers || 1
   );
 
-  // Distance / duration state (km, text) - declare early before handleRecalculate uses them
-  const [distanceKmState, setDistanceKmState] = useState<number | null>(
-    payload?.calculated?.distanceKm ?? null,
+  const [rideTypeState, setRideTypeState] = useState<string>(
+    payload?.rideType || 'one-way'
   );
-  const [durationTextState, setDurationTextState] = useState<string | null>(
-    payload?.calculated?.durationText ?? payload?.duration ?? null,
-  );
-  const [pricingSourceState, setPricingSourceState] = useState<string>(
-    payload?.calculated?.pricingSource ?? "fixed",
+  
+  const [categoryState, setCategoryState] = useState<string>(
+    payload?.category || 'standard'
   );
 
   const [childSeats1to4, setChildSeats1to4] = useState<number>(0);
@@ -94,72 +119,32 @@ function TransferSummaryPageContent() {
   const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
 
   const handleRecalculate = async () => {
-    if (!pickupLocationState || !dropoffLocationState || !transferDateState || !pickupTimeState) {
-      alert("Please fill in all required fields");
+    const hasEmpty = segmentsState.some(s => !s.from || !s.to);
+    if (hasEmpty || !transferDateState || !pickupTimeState) {
+      toast.error("Please fill in all required fields");
       return;
     }
 
     setIsRecalculating(true);
     try {
-      const res = await fetch("/api/transfer-price", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pickup: { address: pickupLocationState },
-          dropoff: { address: dropoffLocationState },
-          category: payload?.category || "standard",
-          pricing: payload?.pricing,
-          meta: {
-            transferDate: transferDateState!.toISOString().split("T")[0],
-            pickupTime: pickupTimeState,
-            persons: payload?.persons || 1,
-          },
-        }),
-      });
-
-      if (res.ok) {
-        const result = await res.json();
-        console.log("Recalculate result:", result);
-        
-        if (result.calculated) {
-          // CRITICAL: Update state in the correct order
-          // 1. First update the pricing source
-          if (result.calculated.pricingSource != null) {
-            setPricingSourceState(result.calculated.pricingSource);
-          }
-          
-          // 2. Then update distance based on pricing source
-          if (result.calculated.pricingSource === "fixed") {
-            // For fixed pricing (in-city), distance is not applicable
-            setDistanceKmState(null);
-          } else if (result.calculated.pricingSource === "distance") {
-            // For distance-based pricing, set the distance from API
-            if (result.calculated.distanceKm != null) {
-              setDistanceKmState(result.calculated.distanceKm);
-            }
-          }
-          
-          // 3. Update duration text
-          if (result.calculated.durationText) {
-            setDurationTextState(result.calculated.durationText);
-          }
-          
-          // 4. Update payload for fallback references
-          if (payload) {
-            payload.calculated = result.calculated;
-            payload.pickupLocation = pickupLocationState;
-            payload.dropoffLocation = dropoffLocationState;
-            payload.transferDate = transferDateState!.toISOString().split("T")[0];
-            payload.pickupTime = pickupTimeState;
-          }
+      const newSegments = [...segmentsState];
+      for (let i = 0; i < newSegments.length; i++) {
+        const res = await fetch('/api/transfer-distance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ origin: newSegments[i].from, destination: newSegments[i].to }),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.distanceKm != null) newSegments[i].distanceKm = json.distanceKm;
+          if (json.durationText) newSegments[i].durationText = json.durationText;
         }
-      } else {
-        console.error("API error response:", res.status, res.statusText);
-        alert("Failed to recalculate price. Server error.");
       }
+      setSegmentsState(newSegments);
+      toast.success("Prices and distances updated!");
     } catch (error) {
       console.error("Error recalculating price:", error);
-      alert("Failed to recalculate price. Please try again.");
+      toast.error("Failed to recalculate distances.");
     } finally {
       setIsRecalculating(false);
     }
@@ -186,8 +171,7 @@ function TransferSummaryPageContent() {
     datetime: {},
   });
 
-  const [distanceLoading, setDistanceLoading] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const user = useUser();
 
   const [mounted, setMounted] = useState(false);
@@ -196,77 +180,22 @@ function TransferSummaryPageContent() {
   }, []);
 
   // If payload doesn't include calculated distance/duration, call server API to fetch it
-  useEffect(() => {
-    async function fetchDistance() {
-      // Only fetch if we have addresses and haven't already fetched distance
-      if (!payload?.pickup?.address || !payload?.dropoff?.address) return;
-      
-      // If pricingSource is fixed (both in Cluj), we don't need distance
-      if (pricingSourceState === "fixed") return;
-      
-      // If we already have distance, don't fetch again
-      if (distanceKmState != null) return;
-      
-      setDistanceLoading(true);
-      try {
-        const res = await fetch('/api/transfer-distance', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ origin: payload.pickup.address, destination: payload.dropoff.address }),
-        });
-        if (res.ok) {
-          const json = await res.json();
-          if (json.distanceKm != null) setDistanceKmState(json.distanceKm);
-          if (json.durationText) setDurationTextState(json.durationText);
-        }
-      } catch (e) {
-        // ignore network errors for now
-      } finally {
-        setDistanceLoading(false);
-      }
-    }
-    fetchDistance();
-  }, [payload?.pickup?.address, payload?.dropoff?.address, pricingSourceState, distanceKmState]);
+  const segments = segmentsState;
+  const totalDistance = segments.reduce((acc, s) => acc + s.distanceKm, 0);
+  const totalWaitingHours = segments.reduce((acc, s, i) => {
+    if (i === segments.length - 1) return acc;
+    return acc + s.waitingTime;
+  }, 0);
 
-  const selectedCategory = payload?.category ?? null;
-
-  // Get price - single for fixed, range for distance
-  const priceData = React.useMemo(() => {
-    if (!payload || !selectedCategory) return { isSingle: true, price: 0, min: 0, max: 0 };
-    
-    const pricing = payload.pricing || {};
-    
-    // Always use state values if available (they get updated on recalculate)
-    const pricingSource = pricingSourceState ?? payload.calculated?.pricingSource ?? "fixed";
-    const distanceKm = distanceKmState ?? payload.calculated?.distanceKm ?? null;
-    
-    // Calculate based on pricing source
-    if (pricingSource === "fixed") {
-      // Use fixed single price for in-city transfers
-      const fixedPrice = pricing.fixedPrices?.[selectedCategory] ?? 0;
-      return { isSingle: true, price: fixedPrice, min: 0, max: 0 };
-    }
-    
-    if (pricingSource === "distance") {
-      // Calculate range based on distance with min-max
-      const perKmPrice = pricing.pricePerKm?.[selectedCategory];
-      if (distanceKm != null && perKmPrice?.min && perKmPrice?.max) {
-        const minPrice = Math.round(distanceKm * perKmPrice.min * 100) / 100;
-        const maxPrice = Math.round(distanceKm * perKmPrice.max * 100) / 100;
-        return { isSingle: false, price: 0, min: minPrice, max: maxPrice };
-      }
-    }
-    
-    // Fallback
-    if (payload.calculated?.totalPrice != null) {
-      return { isSingle: true, price: payload.calculated.totalPrice, min: 0, max: 0 };
-    }
-    if (payload.calculated?.priceMin != null || payload.calculated?.priceMax != null) {
-      return { isSingle: false, price: 0, min: payload.calculated.priceMin ?? 0, max: payload.calculated.priceMax ?? 0 };
-    }
-    
-    return { isSingle: true, price: 0, min: 0, max: 0 };
-  }, [payload, selectedCategory, distanceKmState, pricingSourceState]);
+  const priceData = useMemo(() => {
+    const pricing = calculateTransferPrice(
+      totalDistance,
+      categoryState as any,
+      rideTypeState as any,
+      totalWaitingHours
+    );
+    return { isSingle: true, price: pricing.total, min: 0, max: 0 };
+  }, [totalDistance, categoryState, rideTypeState, totalWaitingHours]);
 
   // Handle voucher
   const checkVoucher = useMutation(api.vouchers.checkVoucher);
@@ -407,115 +336,128 @@ function TransferSummaryPageContent() {
             <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
               <CardHeader>
                 <CardTitle>
-                  {t("booking.transferDate") ?? "Rental Details"}
+                  {t("booking.transferDate") ?? "Traseu și Detalii"}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label className="text-sm font-medium">
-                      Pick-up Location
-                    </Label>
-                    <LocationAutocomplete
-                      value={pickupLocationState}
-                      onChange={(value) => {
-                        setPickupLocationState(value);
-                        setFormErrorsState((prev: any) => ({
-                          ...prev,
-                          locations: {
-                            ...prev.locations,
-                            pickup: undefined,
-                          }
-                        }));
-                      }}
-                      placeholder="Enter pickup location..."
-                    />
-                    {formErrorsState.locations?.pickup && (
-                      <p className="text-sm text-red-500 mt-1 flex items-center">
-                        <span className="inline-block mr-1">⚠️</span>
-                        {formErrorsState.locations.pickup}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <Label className="text-sm font-medium">
-                      Dropoff Location
-                    </Label>
-                    <LocationAutocomplete
-                      value={dropoffLocationState}
-                      onChange={(value) => {
-                        setDropoffLocationState(value);
-                        setFormErrorsState((prev: any) => ({
-                          ...prev,
-                          locations: {
-                            ...prev.locations,
-                            dropoff: undefined,
-                          }
-                        }));
-                      }}
-                      placeholder="Enter dropoff location..."
-                    />
-                    {formErrorsState.locations?.dropoff && (
-                      <p className="text-sm text-red-500 mt-1 flex items-center">
-                        <span className="inline-block mr-1">⚠️</span>
-                        {formErrorsState.locations.dropoff}
-                      </p>
-                    )}
-                  </div>
-                  <div className="md:col-span-2">
-                    <DateTimePicker
-                      id="ts-transfer-datetime"
-                      label={t("booking.transferDate") ?? "Transfer Date"}
-                      dateState={transferDateState}
-                      setDateState={(date) => {
-                        setTransferDateState(date);
-                        setFormErrorsState((prev: any) => ({
-                          ...prev,
-                          datetime: {
-                            ...prev.datetime,
-                            transferDate: undefined,
-                          }
-                        }));
-                      }}
-                      timeState={pickupTimeState}
-                      setTimeState={(time) => {
-                        setPickupTimeState(time);
-                        setFormErrorsState((prev: any) => ({
-                          ...prev,
-                          datetime: {
-                            ...prev.datetime,
-                            pickupTime: undefined,
-                          }
-                        }));
-                      }}
-                      minDate={new Date()}
-                    />
-                    {(formErrorsState.datetime?.transferDate || formErrorsState.datetime?.pickupTime) && (
-                      <div className="mt-2 space-y-1">
-                        {formErrorsState.datetime?.transferDate && (
-                          <p className="text-sm text-red-500 flex items-center">
-                            <span className="inline-block mr-1">⚠️</span>
-                            {formErrorsState.datetime.transferDate}
-                          </p>
-                        )}
-                        {formErrorsState.datetime?.pickupTime && (
-                          <p className="text-sm text-red-500 flex items-center">
-                            <span className="inline-block mr-1">⚠️</span>
-                            {formErrorsState.datetime.pickupTime}
-                          </p>
-                        )}
+              <CardContent className="space-y-6">
+                {segmentsState.map((segment, index) => (
+                  <div key={index} className="relative pl-6 space-y-4 pb-6 border-b border-gray-100 dark:border-zinc-800 last:border-0 last:pb-0">
+                    <div className="absolute left-0 top-2 bottom-6 w-0.5 bg-pink-500/30">
+                      <div className="absolute top-0 left-[-3px] w-2 h-2 rounded-full bg-pink-500" />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-bold text-pink-500 uppercase tracking-wider">
+                        Segment {index + 1}
+                      </h4>
+                      {segmentsState.length > 1 && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => setSegmentsState(prev => prev.filter((_, i) => i !== index))}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="w-4 h-4 mr-1" /> Elimina
+                        </Button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-medium text-gray-400">PORNIRE</Label>
+                        <LocationAutocomplete
+                          value={segment.from}
+                          onChange={(val) => {
+                             const newSegments = [...segmentsState];
+                             newSegments[index].from = val;
+                             setSegmentsState(newSegments);
+                          }}
+                          placeholder="Adresa pornire..."
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-gray-400">DESTINAȚIE</Label>
+                        <LocationAutocomplete
+                          value={segment.to}
+                          onChange={(val) => {
+                             const newSegments = [...segmentsState];
+                             newSegments[index].to = val;
+                             setSegmentsState(newSegments);
+                          }}
+                          placeholder="Adresa destinație..."
+                        />
+                      </div>
+                    </div>
+
+                    {index < segmentsState.length - 1 && (
+                      <div className="flex items-center gap-4 pt-2">
+                         <span className="text-sm font-medium text-gray-500">Staționare la destinație:</span>
+                         <div className="flex items-center gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-8 w-8 p-0"
+                              onClick={() => {
+                                 const newSegments = [...segmentsState];
+                                 newSegments[index].waitingTime = Math.max(0, newSegments[index].waitingTime - 0.5);
+                                 setSegmentsState(newSegments);
+                              }}
+                            >-</Button>
+                            <span className="font-bold text-sm min-w-[30px] text-center">{segment.waitingTime}h</span>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-8 w-8 p-0"
+                              onClick={() => {
+                                 const newSegments = [...segmentsState];
+                                 newSegments[index].waitingTime += 0.5;
+                                 setSegmentsState(newSegments);
+                              }}
+                            >+</Button>
+                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="md:col-span-2">
-                    <Button
-                      onClick={handleRecalculate}
-                      disabled={isRecalculating}
-                      className="w-full !bg-pink-500 hover:!bg-pink-600 !text-white"
-                    >
-                      {isRecalculating ? "Recalculating..." : t("recalculateButton") ?? "Recalculate Price"}
-                    </Button>
+                ))}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                  <DateTimePicker
+                    id="ts-transfer-datetime"
+                    label={t("booking.transferDate") ?? "Data și Ora"}
+                    dateState={transferDateState}
+                    setDateState={setTransferDateState}
+                    timeState={pickupTimeState}
+                    setTimeState={setPickupTimeState}
+                    minDate={new Date()}
+                  />
+                  <div>
+                    <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">PASAGERI</Label>
+                    <Input 
+                      type="number" 
+                      min={1} 
+                      max={8} 
+                      value={passengersState}
+                      onChange={(e) => setPassengersState(parseInt(e.target.value) || 1)}
+                      className="mt-1"
+                    />
                   </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                   <Button
+                    variant="outline"
+                    onClick={() => setSegmentsState([...segmentsState, { from: segmentsState[segmentsState.length-1].to, to: '', distanceKm: 0, waitingTime: 0 }])}
+                    className="flex-1 border-dashed"
+                   >
+                     <Plus className="w-4 h-4 mr-2" /> Adaugă destinație
+                   </Button>
+                   <Button
+                    onClick={handleRecalculate}
+                    disabled={isRecalculating}
+                    className="flex-1 !bg-pink-500 hover:!bg-pink-600 !text-white"
+                   >
+                    {isRecalculating ? "Se calculează..." : "Recalculează preț"}
+                   </Button>
                 </div>
               </CardContent>
             </Card>
@@ -633,46 +575,60 @@ function TransferSummaryPageContent() {
             <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
               <CardHeader><CardTitle>{t('summary.title') ?? 'Reservation Summary'}</CardTitle></CardHeader>
               <CardContent>
-                <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm">
+              <CardHeader><CardTitle>{t('summary.title') ?? 'Rezumat Rezervare'}</CardTitle></CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  {segmentsState.map((s, i) => (
+                    <div key={i} className="text-sm">
+                      <div className="font-bold text-pink-500 uppercase text-[10px] tracking-[0.1em] mb-1">Segment {i+1}</div>
+                      <div className="flex items-start gap-2">
+                         <div className="text-slate-900 dark:text-slate-100 font-medium">{s.from}</div>
+                         <ArrowRight className="w-3 h-3 mt-1 shrink-0 text-slate-400" />
+                         <div className="text-slate-900 dark:text-slate-100 font-medium">{s.to}</div>
+                      </div>
+                      <div className="flex gap-3 mt-1 text-xs text-slate-500">
+                         <span>{s.distanceKm} km</span>
+                         {i < segmentsState.length - 1 && s.waitingTime > 0 && (
+                           <span className="text-pink-600 font-medium">Staționare: {s.waitingTime}h</span>
+                         )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm border-t pt-4">
                   <div>
-                    <dt className="font-medium">{t('summary.pickup') ?? 'Pick-up:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{pickupLocationState || payload.pickup?.address || '—'}</dd>
+                    <dt className="font-medium">{t('summary.date') ?? 'Data:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{transferDateState ? `${transferDateState.toLocaleDateString()} la ${pickupTimeState}` : '—'}</dd>
                   </div>
                   <div>
-                    <dt className="font-medium">{t('summary.dropoff') ?? 'Dropoff:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{dropoffLocationState || payload.dropoff?.address || '—'}</dd>
+                    <dt className="font-medium">{t('summary.numberOfPersons') ?? 'Nr. persoane:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{passengersState}</dd>
                   </div>
                   <div>
-                    <dt className="font-medium">{t('summary.date') ?? 'Date:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{transferDateState ? `${transferDateState.toLocaleDateString()} at ${pickupTimeState ?? payload.meta?.pickupTime ?? '—'}` : (payload.meta?.transferDate ?? '—')}</dd>
+                    <dt className="font-medium">{t('summary.category') ?? 'Categorie:'}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{categoryState}</dd>
                   </div>
                   <div>
-                    <dt className="font-medium">{t('summary.distance') ?? 'Distance:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{distanceLoading ? 'Calculating…' : (distanceKmState != null ? `${distanceKmState} km` : (payload.calculated?.distanceKm != null ? `${payload.calculated.distanceKm} km` : '-'))}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.numberOfPersons') ?? 'Number of Persons:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{payload?.persons ?? '-'}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium">{t('summary.category') ?? 'Category:'}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{payload?.category ?? '-'}</dd>
+                    <dt className="font-medium">Distanță totală:</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{totalDistance} km</dd>
                   </div>
                 </dl>
 
-                <div className="mt-4">
-                  <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">{t('summary.priceBreakdown') ?? 'Price breakdown'}</div>
+                <div className="mt-4 border-t pt-4">
+                  <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">{t('summary.priceBreakdown') ?? 'Defalcarea prețului'}</div>
                   <div className="flex items-center justify-between text-base font-semibold">
-                    <div>{t('summary.basePrice') ?? 'Base price'}</div>
+                    <div>{t('summary.basePrice') ?? 'Preț transport'}</div>
                     <div>
-                      {priceData.isSingle 
-                        ? formatCurrency(priceData.price, payload.pricing?.currency)
-                        : `${formatCurrency(priceData.min, payload.pricing?.currency)} - ${formatCurrency(priceData.max, payload.pricing?.currency)}`
-                      }
+                      {formatCurrency(priceData.price, 'EUR')}
                     </div>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300 mt-2"><div>{t('summary.childSeats') ?? 'Child seats'}</div><div>{(childSeats1to4 + childSeats5to12) > 0 ? `${childSeats1to4 + childSeats5to12} × ${formatCurrency(childSeatPrice ?? 0, payload.pricing?.currency)}` : '-'}</div></div>
-                  <div className="border-t mt-4 pt-4 space-y-3">
+                  <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300 mt-2">
+                    <div>{t('summary.childSeats') ?? 'Scaune copii'}</div>
+                    <div>{(childSeats1to4 + childSeats5to12) > 0 ? `${childSeats1to4 + childSeats5to12} × ${formatCurrency(childSeatPrice ?? 0, 'EUR')}` : '-'}</div>
+                  </div>
+                  
+                  <div className="mt-4 pt-4 border-t space-y-3">
                     <div className="text-sm font-medium">Voucher</div>
                     {appliedVoucher ? (
                       <div className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
@@ -687,35 +643,33 @@ function TransferSummaryPageContent() {
                     ) : (
                       <div className="flex gap-2">
                         <Input 
-                          placeholder="Voucher code" 
+                          placeholder="Cod voucher" 
                           value={voucherCode} 
                           onChange={(e) => setVoucherCode(e.target.value)} 
                           className="h-9"
                         />
                         <Button variant="outline" size="sm" onClick={handleApplyVoucher} disabled={isApplyingVoucher || !voucherCode.trim()}>
-                           {isApplyingVoucher ? "..." : "Apply"}
+                           {isApplyingVoucher ? "..." : "Aplică"}
                         </Button>
                       </div>
                     )}
 
                     {discountAmount > 0 && (
                       <div className="flex items-center justify-between text-sm text-green-600 font-medium">
-                        <div>Discount</div>
+                        <div>Reducere</div>
                         <div>-{discountAmount} EUR</div>
                       </div>
                     )}
 
                     <div className="flex items-center justify-between pt-2 border-t">
-                      <div className="text-sm font-medium">{t('summary.total') ?? 'Total'}</div>
-                      <div className="text-lg font-bold">
-                        {priceData.isSingle 
-                          ? formatCurrency(Math.max(0, finalTotal - discountAmount), payload.pricing?.currency)
-                          : `${formatCurrency(Math.max(0, finalTotalMin - discountAmount), payload.pricing?.currency)} - ${formatCurrency(Math.max(0, finalTotalMax - discountAmount), payload.pricing?.currency)}`
-                        }
+                      <div className="text-sm font-medium">{t('summary.total') ?? 'Total Estimativ'}</div>
+                      <div className="text-lg font-bold text-pink-500">
+                        {formatCurrency(Math.max(0, finalTotal - discountAmount), 'EUR')}
                       </div>
                     </div>
                   </div>
                 </div>
+              </CardContent>
               </CardContent>
             </Card>
 
@@ -790,18 +744,17 @@ function TransferSummaryPageContent() {
                   const confirmationData = {
                     personalInfo: personalInfoState,
                     transferDetails: {
-                      pickupLocation: pickupLocationState,
-                      dropoffLocation: dropoffLocationState,
+                      segments: segmentsState,
                       transferDate: transferDateState,
                       pickupTime: pickupTimeState,
-                      category: payload?.category,
-                      persons: payload?.persons,
-                      distance: distanceKmState,
+                      category: categoryState,
+                      persons: passengersState,
+                      distance: totalDistance,
                     },
                     pricing: {
                       ...priceData,
                       finalTotal: Math.max(0, finalTotal - discountAmount),
-                      currency: payload?.pricing?.currency,
+                      currency: "EUR",
                       discountAmount: discountAmount,
                     },
                     voucher: appliedVoucher ? {
@@ -811,29 +764,15 @@ function TransferSummaryPageContent() {
                   };
                   
                   // Save to Convex
+                  setIsSubmitting(true);
                   try {
                     await createTransferRequest({
-                      // New fields
-                      rideType: "one-way",
-                      segments: [
-                        {
-                          from: pickupLocationState,
-                          to: dropoffLocationState,
-                          distanceKm: distanceKmState || 0,
-                          durationText: durationTextState || undefined,
-                        },
-                      ],
-                      totalDistanceKm: distanceKmState || 0,
-                      passengers: payload?.persons || 1,
-                      category: payload?.category || "standard",
-                      // Legacy fields
-                      transferDate: transferDateState!.toISOString().split('T')[0],
-                      transferTime: pickupTimeState ?? undefined,
-                      pickupLocation: pickupLocationState,
-                      dropoffLocation: dropoffLocationState,
-                      numberOfPassengers: payload?.persons || 1,
-                      distanceKm: distanceKmState || undefined,
-                      // Common fields
+                      rideType: rideTypeState as any,
+                      segments: segmentsState,
+                      waitingTotalHours: totalWaitingHours,
+                      totalDistanceKm: totalDistance,
+                      passengers: passengersState,
+                      category: categoryState as any,
                       customerInfo: {
                         name: personalInfoState.name,
                         email: personalInfoState.email,
@@ -842,54 +781,59 @@ function TransferSummaryPageContent() {
                         flightNumber: personalInfoState.flightNumber || undefined,
                       },
                       estimatedPrice: Math.max(0, finalTotal - discountAmount),
-                      currency: payload?.pricing?.currency || "EUR",
+                      currency: "EUR",
                       voucherId: appliedVoucher?.id,
                       voucherCode: appliedVoucher?.code,
                       discountAmount: discountAmount > 0 ? discountAmount : undefined,
+                      // Legacy fields for compat
+                      transferDate: transferDateState!.toISOString().split('T')[0],
+                      transferTime: pickupTimeState,
+                      pickupLocation: segmentsState[0].from,
+                      dropoffLocation: segmentsState[segmentsState.length-1].to,
+                      numberOfPassengers: passengersState,
+                      distanceKm: totalDistance,
                     });
-                  } catch (convexError) {
-                    console.error('Error saving transfer request to Convex:', convexError);
-                    // Continue to email/confirmation even if DB save fails (best effort)
-                  }
 
-                  // Send transfer request email
-                  try {
-                    await fetch('/api/send/transfer-request', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        personalInfo: personalInfoState,
-                        transferDetails: {
-                          pickupLocation: pickupLocationState,
-                          dropoffLocation: dropoffLocationState,
-                          transferDate: transferDateState,
-                          pickupTime: pickupTimeState,
-                          category: payload?.category,
-                          persons: payload?.persons,
-                          distance: distanceKmState,
-                        },
-                        pricing: {
-                          ...priceData,
-                          finalTotal: Math.max(0, finalTotal - discountAmount),
-                          currency: payload?.pricing?.currency,
-                          discountAmount: discountAmount,
-                          voucherCode: appliedVoucher?.code,
-                        },
-                        locale: localePath || 'en',
-                      }),
-                    });
-                  } catch (emailError) {
-                    console.error('Error sending transfer request email:', emailError);
+                    toast.success("Cererea a fost trimisă cu succes!");
+                    
+                    // Send transfer request email (Best effort)
+                    try {
+                      await fetch('/api/send/transfer-request', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          personalInfo: personalInfoState,
+                          transferDetails: {
+                             ...confirmationData.transferDetails,
+                             pickupLocation: segmentsState[0].from,
+                             dropoffLocation: segmentsState[segmentsState.length-1].to,
+                          },
+                          pricing: {
+                            ...confirmationData.pricing,
+                            voucherCode: appliedVoucher?.code,
+                          },
+                          locale: localePath || 'en',
+                        }),
+                      });
+                    } catch (e) { console.error(e); }
+
+                    // Navigate to confirmation page
+                    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(confirmationData)))));
+                    router.push(`${localePath ? `/${localePath}` : ''}/transfers/confirmation?data=${encoded}`);
+                  } catch (convexError) {
+                    console.error('Error saving transfer request:', convexError);
+                    toast.error("A apărut o eroare la salvarea cererii.");
+                  } finally {
+                    setIsSubmitting(false);
                   }
-                  
-                  // Navigate to confirmation page with encoded data
-                  const encoded = encodeURIComponent(Buffer.from(JSON.stringify(confirmationData)).toString('base64'));
-                  router.push(`${localePath ? `/${localePath}` : ''}/transfers/confirmation?data=${encoded}`);
                 }}
-                className="w-full inline-flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSubmitting}
+                className="w-full inline-flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-pink-500/20"
               >
-                <Send className="h-4 w-4" />
-                {t("sendButton") ?? "Send Transfer Request"}
+                {isSubmitting ? (
+                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : <Send className="h-4 w-4" />}
+                {isSubmitting ? "Se trimite..." : (t("sendButton") ?? "Trimite Cerere Transfer")}
               </button>
             </div>
           </div>

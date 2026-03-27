@@ -68,8 +68,10 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
   };
 
   const totalDistance = data.segments.reduce((acc, s) => acc + s.distanceKm, 0);
+  // For round-trips, include the last segment's waiting time too
+  // (the driver waits at the destination before returning)
   const totalWaitingHours = data.segments.reduce((acc, s, i) => {
-    if (i === data.segments.length - 1) return acc;
+    if (data.rideType === 'one-way' && i === data.segments.length - 1) return acc;
     return acc + s.waitingTime;
   }, 0);
 
@@ -98,8 +100,8 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               suppressHydrationWarning
               className={`group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
                 data.category === 'standard'
-                  ? 'border-pink-500 shadow-lg shadow-pink-500/20 scale-[1.02]'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700'
+                   ? 'border-pink-500 bg-white dark:bg-black scale-[1.02]'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700 bg-white dark:bg-black'
               }`}
             >
               <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-black">
@@ -108,14 +110,11 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                   alt="Standard - Mercedes E-Class" 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                 />
-                {data.category === 'standard' && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-pink-500/30 to-transparent" />
-                )}
               </div>
               <div className={`px-4 py-3 text-center font-semibold transition-colors ${
                 data.category === 'standard'
-                  ? 'bg-pink-500 text-white'
-                  : 'bg-white dark:bg-black text-gray-700 dark:text-gray-300'
+                  ? 'text-pink-500'
+                  : 'text-gray-700 dark:text-gray-300'
               }`}>
                 Standard
                 <span className="block text-xs font-normal opacity-80 mt-0.5">1–3 pasageri</span>
@@ -127,8 +126,8 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               suppressHydrationWarning
               className={`group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
                 data.category === 'van'
-                  ? 'border-pink-500 shadow-lg shadow-pink-500/20 scale-[1.02]'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700'
+                  ? 'border-pink-500 bg-white dark:bg-black scale-[1.02]'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700 bg-white dark:bg-black'
               }`}
             >
               <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-black">
@@ -137,14 +136,11 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                   alt="VAN - Mercedes V-Class" 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                 />
-                {data.category === 'van' && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-pink-500/30 to-transparent" />
-                )}
               </div>
               <div className={`px-4 py-3 text-center font-semibold transition-colors ${
                 data.category === 'van'
-                  ? 'bg-pink-500 text-white'
-                  : 'bg-white dark:bg-black text-gray-700 dark:text-gray-300'
+                  ? 'text-pink-500'
+                  : 'text-gray-700 dark:text-gray-300'
               }`}>
                 VAN
                 <span className="block text-xs font-normal opacity-80 mt-0.5">4–8 pasageri</span>
@@ -185,7 +181,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
             <div key={index} className="relative pl-8 space-y-3">
               {/* Vertical line indicator */}
               <div className="absolute left-3 top-2 bottom-0 w-0.5 bg-gradient-to-b from-pink-400 to-pink-200 dark:from-pink-500 dark:to-pink-800">
-                <div className="absolute top-0 left-1/2 -ml-1.5 w-3 h-3 rounded-full border-2 border-pink-500 bg-white dark:bg-gray-900 shadow-sm" />
+                <div className="absolute top-0 left-1/2 -ml-1.5 w-3 h-3 rounded-full border-2 border-pink-500 bg-white dark:bg-black shadow-sm" />
               </div>
               
               <div className="flex items-center justify-between">
@@ -232,9 +228,11 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                   </div>
                 </div>
 
-                {/* Waiting time - except for the last segment */}
-                {index < data.segments.length - 1 && (
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700/50">
+                {/* Waiting time:
+                    - For one-way: all segments except the last
+                    - For round-trip: ALL segments (driver waits at destination before returning) */}
+                {(data.rideType === 'round-trip' || index < data.segments.length - 1) && (
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-zinc-800/50">
                     <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Staționare la destinație</span>
                     <div className="flex items-center gap-3">
                       <button 
@@ -276,7 +274,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         </div>
 
         {/* Date, Time, Passengers */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-gray-100 dark:border-zinc-800">
           <DateTimePicker
             id="transfer-pickup-datetime"
             label="DATA ȘI ORA CURSEI"
@@ -304,7 +302,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         </div>
 
         {/* Pricing Summary Box */}
-        <div className="p-6 bg-gradient-to-br from-pink-50 to-white dark:bg-black rounded-3xl border border-pink-100 dark:border-zinc-800 space-y-3">
+        <div className="p-6 bg-gradient-to-br from-pink-50 to-white dark:from-black dark:to-black rounded-3xl border border-pink-100 dark:border-zinc-800 space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400">Distanță totală</span>
             <span className="font-bold text-gray-900 dark:text-white">{totalDistance} km</span>
@@ -321,7 +319,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
             <span className="text-gray-500 dark:text-gray-400">Staționări</span>
             <span className="font-bold text-gray-900 dark:text-white">{pricing.waitingCost.toFixed(2)} €</span>
           </div>
-          <div className="pt-4 border-t border-pink-200 dark:border-gray-700 flex justify-between items-end">
+          <div className="pt-4 border-t border-pink-200 dark:border-zinc-800 flex justify-between items-end">
             <span className="text-lg font-bold text-gray-900 dark:text-white">Total estimat</span>
             <div className="text-right">
               <span className="text-3xl font-black text-pink-500">{Math.round(pricing.total)}</span>

@@ -29,7 +29,8 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
 
   const totalDistance = data.segments.reduce((acc, s) => acc + s.distanceKm, 0);
   const totalWaitingHours = data.segments.reduce((acc, s, i) => {
-    if (i === data.segments.length - 1) return acc;
+    // For round-trips, include last segment (driver waits at destination before returning)
+    if (data.rideType === 'one-way' && i === data.segments.length - 1) return acc;
     return acc + s.waitingTime;
   }, 0);
 
@@ -205,7 +206,7 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
           <div className="space-y-6">
              <div className="space-y-4">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Traseu și Vehicul</h3>
-                <div className="p-5 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl space-y-4 shadow-sm">
+                <div className="p-5 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-2xl space-y-4 shadow-sm">
                    <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-blue-600">
                         <Calendar className="w-5 h-5" />
@@ -255,7 +256,7 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
           <div className="space-y-6">
              <div className="space-y-4">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Date Client</h3>
-                <div className="p-5 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl space-y-4 shadow-sm">
+                <div className="p-5 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-2xl space-y-4 shadow-sm">
                    <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center text-gray-600 dark:text-gray-400">
                         <User className="w-5 h-5" />
@@ -295,7 +296,7 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
              {/* Voucher Section */}
              <div className="space-y-4">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Cod Voucher</h3>
-                <div className="p-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm">
+                <div className="p-4 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-2xl shadow-sm">
                    {data.appliedVoucher ? (
                      <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-800">
                         <div className="flex items-center gap-3">
@@ -333,18 +334,18 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
         </div>
 
         {/* Pricing Summary Box */}
-        <div className="p-8 bg-black text-white dark:bg-white dark:text-black rounded-3xl space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="p-8 bg-black text-white dark:bg-black dark:text-white rounded-3xl space-y-6 shadow-2xl relative overflow-hidden">
           {/* Decorative element */}
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 dark:bg-black/5 rounded-full blur-2xl" />
           
           <div className="flex justify-between items-end border-b border-white/20 dark:border-black/10 pb-4">
              <div>
                 <h4 className="text-lg font-bold">Total Final</h4>
-                <p className="text-xs text-white/60 dark:text-black/60 italic">Include TVA și taxe de drum</p>
+                <p className="text-xs text-white/60 italic">Include TVA și taxe de drum</p>
              </div>
              <div className="text-right">
                 {data.appliedVoucher && (
-                  <p className="text-sm line-through text-white/50 dark:text-black/50 mb-1">{Math.round(pricing.total)}€</p>
+                  <p className="text-sm line-through text-white/50 mb-1">{Math.round(pricing.total)}€</p>
                 )}
                 <span className="text-5xl font-black">{Math.round(finalTotal)}</span>
                 <span className="text-2xl font-bold ml-1">€</span>
@@ -353,11 +354,11 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
 
           <div className="grid grid-cols-2 gap-4 text-sm font-medium">
              <div className="flex flex-col">
-                <span className="text-white/60 dark:text-black/60 text-[10px] uppercase tracking-wider mb-1">Distanță</span>
+                <span className="text-white/60 text-[10px] uppercase tracking-wider mb-1">Distanță</span>
                 <span>{totalDistance} km</span>
              </div>
              <div className="flex flex-col">
-                <span className="text-white/60 dark:text-black/60 text-[10px] uppercase tracking-wider mb-1">Tip Cursă</span>
+                <span className="text-white/60 text-[10px] uppercase tracking-wider mb-1">Tip Cursă</span>
                 <span>{data.rideType === 'one-way' ? 'Un sens' : 'Dus-întors'}</span>
              </div>
           </div>
@@ -365,7 +366,7 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
           <Button 
             onClick={handleSubmit} 
             disabled={isSubmitting}
-            className="w-full py-8 text-xl font-black bg-white text-black hover:bg-gray-100 dark:bg-black dark:text-white dark:hover:bg-gray-900 rounded-2xl transition-all h-auto"
+            className="w-full py-8 text-xl font-black bg-white text-black hover:bg-gray-100 dark:bg-black dark:text-white dark:hover:bg-zinc-900 rounded-2xl transition-all h-auto"
           >
             {isSubmitting ? (
               <div className="flex items-center gap-2">

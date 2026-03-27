@@ -34,20 +34,31 @@ export function calculateTransferPrice(
   waitingTotalHours: number
 ) {
   const ratePerKm = getRatePerKm(totalDistanceKm, category);
-  
-  let transportCost = totalDistanceKm * ratePerKm;
+  const oneWayCost = totalDistanceKm * ratePerKm;
+
+  let transportCost: number;
+  let waitingCost: number;
+
   if (rideType === 'round-trip') {
-    transportCost *= 2;
+    if (waitingTotalHours >= 4) {
+      // Driver waits >= 4h at destination → charge full round trip, no waiting surcharge
+      transportCost = oneWayCost * 2;
+      waitingCost = 0;
+    } else {
+      // Driver waits < 4h (or not at all) → one-way fare + hourly waiting cost
+      transportCost = oneWayCost;
+      waitingCost = waitingTotalHours * WAITING_HOUR_PRICE;
+    }
+  } else {
+    // One-way trip
+    transportCost = oneWayCost;
+    waitingCost = waitingTotalHours * WAITING_HOUR_PRICE;
   }
-  
-  const waitingCost = waitingTotalHours * WAITING_HOUR_PRICE;
-  
-  const total = transportCost + waitingCost;
-  
+
   return {
     ratePerKm,
     transportCost,
     waitingCost,
-    total: Math.round(total * 100) / 100
+    total: Math.round((transportCost + waitingCost) * 100) / 100,
   };
 }

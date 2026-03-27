@@ -51,7 +51,7 @@ export function ContactStep({ data, onUpdate, onNext, onBack }: ContactStepProps
               placeholder="Ex: Ion" 
               value={data.customerInfo.firstName}
               onChange={(e) => handleChange('firstName', e.target.value)}
-              className="rounded-xl border-gray-200 dark:border-gray-800"
+              className="rounded-xl border-gray-200 dark:border-zinc-800"
             />
           </div>
           <div className="space-y-2">
@@ -61,7 +61,7 @@ export function ContactStep({ data, onUpdate, onNext, onBack }: ContactStepProps
               placeholder="Ex: Popescu" 
               value={data.customerInfo.lastName}
               onChange={(e) => handleChange('lastName', e.target.value)}
-              className="rounded-xl border-gray-200 dark:border-gray-800"
+              className="rounded-xl border-gray-200 dark:border-zinc-800"
             />
           </div>
         </div>
@@ -74,7 +74,7 @@ export function ContactStep({ data, onUpdate, onNext, onBack }: ContactStepProps
             placeholder="Ex: ion.popescu@gmail.com" 
             value={data.customerInfo.email}
             onChange={(e) => handleChange('email', e.target.value)}
-            className="rounded-xl border-gray-200 dark:border-gray-800"
+            className="rounded-xl border-gray-200 dark:border-zinc-800"
           />
         </div>
 
@@ -86,7 +86,7 @@ export function ContactStep({ data, onUpdate, onNext, onBack }: ContactStepProps
             placeholder="Ex: +40 7xx xxx xxx" 
             value={data.customerInfo.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
-            className="rounded-xl border-gray-200 dark:border-gray-800"
+            className="rounded-xl border-gray-200 dark:border-zinc-800"
           />
         </div>
 
@@ -97,7 +97,7 @@ export function ContactStep({ data, onUpdate, onNext, onBack }: ContactStepProps
             placeholder="Ex: număr zbor, bagaje speciale, etc." 
             value={data.customerInfo.message}
             onChange={(e) => handleChange('message', e.target.value)}
-            className="rounded-xl border-gray-200 dark:border-gray-800 min-h-[120px]"
+            className="rounded-xl border-gray-200 dark:border-zinc-800 min-h-[120px]"
           />
         </div>
 
