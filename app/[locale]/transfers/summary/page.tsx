@@ -704,10 +704,10 @@ function TransferSummaryPageContent() {
                   }
                   
                   // Validate locations
-                  if (!pickupLocationState?.trim()) {
+                  if (!segmentsState[0]?.from?.trim()) {
                     errors.locations.pickup = 'Pick-up location is required';
                   }
-                  if (!dropoffLocationState?.trim()) {
+                  if (!segmentsState[segmentsState.length - 1]?.to?.trim()) {
                     errors.locations.dropoff = 'Dropoff location is required';
                   }
                   
