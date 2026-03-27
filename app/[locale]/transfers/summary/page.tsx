@@ -260,7 +260,7 @@ function TransferSummaryPageContent() {
     );
   }
 
-  const childSeatPrice = payload.pricing?.childSeatPrice ?? 0;
+  const childSeatPrice = 3; // EUR per seat (matches UI display)
   const addons = (childSeats1to4 + childSeats5to12) * childSeatPrice;
   const finalTotalMin = Math.round((priceData.min + addons) * 100) / 100;
   const finalTotalMax = Math.round((priceData.max + addons) * 100) / 100;
