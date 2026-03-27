@@ -95,13 +95,14 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => onUpdate({ category: 'standard' })}
+              suppressHydrationWarning
               className={`group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
                 data.category === 'standard'
                   ? 'border-pink-500 shadow-lg shadow-pink-500/20 scale-[1.02]'
                   : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700'
               }`}
             >
-              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-gray-800">
+              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-black">
                 <img 
                   src="/eclass.jpg" 
                   alt="Standard - Mercedes E-Class" 
@@ -114,7 +115,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               <div className={`px-4 py-3 text-center font-semibold transition-colors ${
                 data.category === 'standard'
                   ? 'bg-pink-500 text-white'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                  : 'bg-white dark:bg-black text-gray-700 dark:text-gray-300'
               }`}>
                 Standard
                 <span className="block text-xs font-normal opacity-80 mt-0.5">1–3 pasageri</span>
@@ -123,13 +124,14 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
 
             <button
               onClick={() => onUpdate({ category: 'van' })}
+              suppressHydrationWarning
               className={`group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
                 data.category === 'van'
                   ? 'border-pink-500 shadow-lg shadow-pink-500/20 scale-[1.02]'
                   : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700'
               }`}
             >
-              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-gray-800">
+              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-black">
                 <img 
                   src="/van.jpg" 
                   alt="VAN - Mercedes V-Class" 
@@ -142,7 +144,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               <div className={`px-4 py-3 text-center font-semibold transition-colors ${
                 data.category === 'van'
                   ? 'bg-pink-500 text-white'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                  : 'bg-white dark:bg-black text-gray-700 dark:text-gray-300'
               }`}>
                 VAN
                 <span className="block text-xs font-normal opacity-80 mt-0.5">4–8 pasageri</span>
@@ -155,20 +157,22 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         <div className="flex gap-3">
            <button 
             onClick={() => onUpdate({ rideType: 'one-way' })}
+            suppressHydrationWarning
             className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
               data.rideType === 'one-way'
                 ? 'bg-pink-500 text-white shadow-md shadow-pink-500/30'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                : 'bg-gray-100 dark:bg-black text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900'
             }`}
            >
              Un sens
            </button>
            <button 
             onClick={() => onUpdate({ rideType: 'round-trip' })}
+            suppressHydrationWarning
             className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
               data.rideType === 'round-trip'
                 ? 'bg-pink-500 text-white shadow-md shadow-pink-500/30'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                : 'bg-gray-100 dark:bg-black text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900'
             }`}
            >
              Dus-întors
@@ -196,7 +200,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 gap-4 p-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="grid grid-cols-1 gap-4 p-5 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                 <LocationAutocomplete
                   value={segment.from}
                   onChange={(val) => updateSegment(index, 'from', val)}
@@ -264,6 +268,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           <Button 
             variant="outline" 
             onClick={addSegment} 
+            suppressHydrationWarning
             className="w-full py-6 border-dashed border-2 rounded-2xl text-gray-400 hover:text-pink-500 hover:border-pink-400 hover:bg-pink-50/50 dark:hover:bg-pink-900/10 transition-all font-semibold"
           >
             <Plus className="w-4 h-4 mr-2" /> Adaugă destinație
@@ -284,7 +289,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           
           <div className="space-y-2">
             <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">NUMĂR PASAGERI (1–8)</Label>
-            <div className="flex items-center p-2 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 rounded-xl">
+            <div className="flex items-center p-2 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-xl">
               <Users className="w-4 h-4 text-pink-400 mx-2" />
               <input 
                 type="number" 
@@ -299,7 +304,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         </div>
 
         {/* Pricing Summary Box */}
-        <div className="p-6 bg-gradient-to-br from-pink-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-3xl border border-pink-100 dark:border-gray-700/50 space-y-3">
+        <div className="p-6 bg-gradient-to-br from-pink-50 to-white dark:bg-black rounded-3xl border border-pink-100 dark:border-zinc-800 space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400">Distanță totală</span>
             <span className="font-bold text-gray-900 dark:text-white">{totalDistance} km</span>
@@ -328,6 +333,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         <Button 
           onClick={onNext} 
           disabled={!canContinue}
+          suppressHydrationWarning
           className="w-full py-8 text-lg font-bold !bg-pink-500 hover:!bg-pink-600 !text-white rounded-2xl transition-all shadow-xl shadow-pink-500/20 hover:shadow-pink-500/30 group"
         >
           Continuă cu datele personale
