@@ -1147,12 +1147,12 @@ function ReservationPageContent() {
                 <CardContent>
                   <div className="space-y-4">
                     {!user && (
-                      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-800 mb-3">
+                      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 rounded-lg">
+                        <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
                           {t('personalInfo.signInPrompt')}
                         </p>
                         <SignInButton mode="modal">
-                          <Button variant="outline" size="sm" className="w-full">
+                          <Button variant="outline" size="sm" className="w-full dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-100 dark:hover:bg-blue-800/60">
                             {t('personalInfo.signInButton')}
                           </Button>
                         </SignInButton>

@@ -127,7 +127,7 @@ export default function TransfersPage() {
           {/* Transfer Wizard */}
           <section className="py-12 bg-[#faf9f6] dark:bg-background min-h-[50vh]">
             <div className="container mx-auto px-4">
-              <div className="max-w-4xl mx-auto -mt-12 relative z-20">
+              <div className="max-w-4xl mx-auto mt-4 sm:mt-8 relative z-20">
                 <div className="bg-card dark:bg-card-darker rounded-2xl shadow-2xl p-6 sm:p-10 border border-gray-100 dark:border-zinc-800">
                   <TransferWizard />
                 </div>

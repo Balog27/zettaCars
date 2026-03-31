@@ -49,6 +49,13 @@ const intlMiddleware = createMiddleware({
 export default clerkMiddleware(async (auth, req) => {
   const pathname = req.nextUrl.pathname;
   
+  // If user tries to access a localized admin route, redirect to the unlocalized /admin
+  if (pathname.match(/^\/(ro|en)\/admin(\/.*)?$/)) {
+    const url = new URL(req.url);
+    url.pathname = pathname.replace(/^\/(ro|en)/, '');
+    return NextResponse.redirect(url);
+  }
+
   // Skip internationalization for admin routes, API routes, and static files
   if (isAdminRoute(req) || 
       pathname.startsWith('/api/') || 
