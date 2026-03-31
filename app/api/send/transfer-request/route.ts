@@ -72,6 +72,7 @@ export async function POST(request: Request) {
       discount: isRo ? 'Reducere' : 'Discount',
       voucher: isRo ? 'Voucher' : 'Voucher',
       total: isRo ? 'Total Final' : 'Final Total',
+      childSeats: isRo ? 'Scaune Copii' : 'Child Seats',
       action: isRo ? 'Acțiune necesară: Revizuiți cererea și contactați clientul pentru confirmare.' : 'Action Required: Review the request and contact the customer for confirmation.',
     };
 
@@ -96,6 +97,7 @@ export async function POST(request: Request) {
       discount: isRo ? 'Reducere' : 'Discount',
       voucher: isRo ? 'Voucher' : 'Voucher',
       total: isRo ? 'Total Final' : 'Final Total',
+      childSeats: isRo ? 'Scaune Copii' : 'Child Seats',
       nextSteps: isRo
         ? 'Vom revizui cererea ta și te vom contacta cât mai curând posibil în maximum 6 ore pentru a confirma disponibilitatea și a finaliza prețul.'
         : 'We will review your request and contact you as soon as possible within 6 hours to confirm availability and finalize the price.',
@@ -156,6 +158,13 @@ export async function POST(request: Request) {
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${adminT.distance}:</td>
             <td style="padding: 8px;">${transferDetails.distance} km</td>
+          </tr>` : ''}
+          ${(transferDetails.childSeats1to4 || transferDetails.childSeats5to12) ? `<tr>
+            <td style="padding: 8px; color: #666;">${adminT.childSeats}:</td>
+            <td style="padding: 8px;">${[
+              transferDetails.childSeats1to4 ? `${transferDetails.childSeats1to4}x (1-4y)` : '',
+              transferDetails.childSeats5to12 ? `${transferDetails.childSeats5to12}x (5-12y)` : ''
+            ].filter(Boolean).join(', ')}</td>
           </tr>` : ''}
           ${personalInfo.flightNumber ? `<tr>
             <td style="padding: 8px; color: #666;">${adminT.flightNumber}:</td>
@@ -222,6 +231,13 @@ export async function POST(request: Request) {
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${userT.distance}:</td>
             <td style="padding: 8px;">${transferDetails.distance} km</td>
+          </tr>` : ''}
+          ${(transferDetails.childSeats1to4 || transferDetails.childSeats5to12) ? `<tr>
+            <td style="padding: 8px; color: #666;">${userT.childSeats}:</td>
+            <td style="padding: 8px;">${[
+              transferDetails.childSeats1to4 ? `${transferDetails.childSeats1to4}x (1-4y)` : '',
+              transferDetails.childSeats5to12 ? `${transferDetails.childSeats5to12}x (5-12y)` : ''
+            ].filter(Boolean).join(', ')}</td>
           </tr>` : ''}
           ${personalInfo.flightNumber ? `<tr>
             <td style="padding: 8px; color: #666;">${userT.flightNumber}:</td>

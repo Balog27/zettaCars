@@ -37,7 +37,7 @@ export function BlogStructuredData({
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://zettacarrental.com/${locale}/blog/${slug}`,
+      "@id": `https://zettacarrental.com/${locale}/blogs/${slug}`,
     },
     keywords: blog.tags?.join(", "),
     articleBody: blog.description,
@@ -78,14 +78,14 @@ export function BreadcrumbStructuredData({
       {
         "@type": "ListItem",
         position: 2,
-        name: "Blog",
-        item: `https://zettacarrental.com/${locale}/blog`,
+        name: "Blogs",
+        item: `https://zettacarrental.com/${locale}/blogs`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: blog.title,
-        item: `https://zettacarrental.com/${locale}/blog/${slug}`,
+        item: `https://zettacarrental.com/${locale}/blogs/${slug}`,
       },
     ],
   };

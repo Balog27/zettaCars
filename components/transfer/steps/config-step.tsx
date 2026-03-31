@@ -100,11 +100,11 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               suppressHydrationWarning
               className={`group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
                 data.category === 'standard'
-                   ? 'border-pink-500 bg-white dark:bg-black scale-[1.02]'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700 bg-white dark:bg-black'
+                   ? 'border-pink-500 bg-white dark:bg-zinc-950/60 scale-[1.02]'
+                  : 'border-gray-200 dark:border-zinc-800 hover:border-pink-300 dark:hover:border-pink-700 bg-white dark:bg-zinc-950/30'
               }`}
             >
-              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-black">
+              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-zinc-900/30">
                 <img 
                   src="/eclass.jpg" 
                   alt="Standard - Mercedes E-Class" 
@@ -157,7 +157,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
             className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
               data.rideType === 'one-way'
                 ? 'bg-pink-500 text-white shadow-md shadow-pink-500/30'
-                : 'bg-gray-100 dark:bg-black text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900'
+                : 'bg-gray-100 dark:bg-zinc-950/60 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900/80 shadow-inner'
             }`}
            >
              Un sens
@@ -168,7 +168,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
             className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
               data.rideType === 'round-trip'
                 ? 'bg-pink-500 text-white shadow-md shadow-pink-500/30'
-                : 'bg-gray-100 dark:bg-black text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900'
+                : 'bg-gray-100 dark:bg-zinc-950/60 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900/80 shadow-inner'
             }`}
            >
              Dus-întors
@@ -196,7 +196,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 gap-4 p-5 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="grid grid-cols-1 gap-4 p-5 bg-white dark:bg-zinc-950/40 border border-gray-100 dark:border-zinc-800/80 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                 <LocationAutocomplete
                   value={segment.from}
                   onChange={(val) => updateSegment(index, 'from', val)}
@@ -287,7 +287,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           
           <div className="space-y-2">
             <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">NUMĂR PASAGERI (1–8)</Label>
-            <div className="flex items-center p-2 bg-white dark:bg-black border border-gray-100 dark:border-zinc-800 rounded-xl">
+            <div className="flex items-center p-2 bg-white dark:bg-zinc-950/60 border border-gray-100 dark:border-zinc-800 rounded-xl shadow-inner">
               <Users className="w-4 h-4 text-pink-400 mx-2" />
               <input 
                 type="number" 
@@ -302,7 +302,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         </div>
 
         {/* Pricing Summary Box */}
-        <div className="p-6 bg-gradient-to-br from-pink-50 to-white dark:from-black dark:to-black rounded-3xl border border-pink-100 dark:border-zinc-800 space-y-3">
+        <div className="p-6 bg-gradient-to-br from-pink-50/50 to-white dark:from-zinc-950/80 dark:to-zinc-900/40 rounded-3xl border border-pink-100 dark:border-zinc-800 shadow-xl shadow-gray-200/50 dark:shadow-none space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400">Distanță totală</span>
             <span className="font-bold text-gray-900 dark:text-white">{totalDistance} km</span>

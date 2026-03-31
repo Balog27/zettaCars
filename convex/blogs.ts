@@ -14,6 +14,7 @@ export const getAll = query({
       author: v.string(),
       description: v.string(),
       coverImage: v.optional(v.id("_storage")),
+      coverImageUrl: v.optional(v.string()),
       tags: v.optional(v.array(v.string())),
       publishedAt: v.optional(v.number()),
       status: v.union(v.literal("draft"), v.literal("published")),
@@ -32,7 +33,7 @@ export const getAll = query({
       .filter((blog) => blog.status === "published")
       .sort((a, b) => b._creationTime - a._creationTime);
 
-    return publishedBlogs.map((blog) => ({
+    return Promise.all(publishedBlogs.map(async (blog) => ({
       _id: blog._id,
       _creationTime: blog._creationTime,
       title: blog.title,
@@ -40,12 +41,13 @@ export const getAll = query({
       author: blog.author,
       description: blog.description,
       coverImage: blog.coverImage,
+      coverImageUrl: blog.coverImage ? (await ctx.storage.getUrl(blog.coverImage)) ?? undefined : undefined,
       tags: blog.tags,
       publishedAt: blog.publishedAt,
       status: blog.status,
       readingTime: blog.readingTime,
       views: blog.views,
-    }));
+    })));
   },
 });
 
@@ -99,6 +101,7 @@ export const getBySlug = query({
       description: v.string(),
       content: v.string(),
       coverImage: v.optional(v.id("_storage")),
+      coverImageUrl: v.optional(v.string()),
       images: v.optional(v.array(v.id("_storage"))),
       tags: v.optional(v.array(v.string())),
       publishedAt: v.optional(v.number()),
@@ -114,7 +117,12 @@ export const getBySlug = query({
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .first();
 
-    return blog;
+    if (!blog) return null;
+
+    return {
+      ...blog,
+      coverImageUrl: blog.coverImage ? (await ctx.storage.getUrl(blog.coverImage)) ?? undefined : undefined,
+    };
   },
 });
 

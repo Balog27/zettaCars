@@ -4,8 +4,9 @@ import { Footer } from "@/components/ui/footer";
 import { Header } from "@/components/ui/header";
 import { Logo } from '@/components/ui/logo';
 import { TransferWizard } from '@/components/transfer/transfer-wizard';
+import SpecialOrdersForm from '@/components/transfer/special-orders-form';
 import { useTranslations } from 'next-intl';
-import Head from 'next/head';
+
 
 export default function TransfersPage() {
   const t = useTranslations('transfersPage');
@@ -93,23 +94,14 @@ export default function TransfersPage() {
   const transferSchema = generateTransferServiceSchema();
 
   return (
-    <>
-      <Head>
-        <title>Transfer Services Cluj-Napoca | Zetta Cars</title>
-        <meta name="description" content="Servicii transfer Cluj-Napoca cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate." />
-        <meta name="keywords" content="transfer cluj-napoca, transfer aeroport cluj, transport privat cluj, servicii transfer romania" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://zettacarrental.com/transfers" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(transferSchema)
-          }}
-        />
-      </Head>
-
-      <div className="flex flex-col min-h-screen">
-        <Header logo={<Logo alt="Zetta Cars Logo" />} />
+    <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(transferSchema)
+        }}
+      />
+      <Header logo={<Logo alt="Zetta Cars Logo" />} />
 
         <main className="flex-grow">
           {/* Hero with background image */}
@@ -133,19 +125,25 @@ export default function TransfersPage() {
           </section>
 
           {/* Transfer Wizard */}
-          <section className="py-12 bg-[#faf9f6] dark:bg-background min-h-screen">
+          <section className="py-12 bg-[#faf9f6] dark:bg-background min-h-[50vh]">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto -mt-12 relative z-20">
-                <div className="bg-white dark:bg-black rounded-[2.5rem] shadow-2xl p-6 sm:p-10 border border-gray-100 dark:border-zinc-800">
+                <div className="bg-card dark:bg-card-darker rounded-2xl shadow-2xl p-6 sm:p-10 border border-gray-100 dark:border-zinc-800">
                   <TransferWizard />
                 </div>
               </div>
             </div>
           </section>
+
+          {/* Special Orders Section */}
+          <section className="pb-24 bg-[#faf9f6] dark:bg-background">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <SpecialOrdersForm />
+            </div>
+          </section>
         </main>
 
-        <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
-      </div>
-    </>
+      <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
+    </div>
   );
 }

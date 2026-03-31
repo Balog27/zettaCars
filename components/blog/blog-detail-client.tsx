@@ -39,7 +39,7 @@ export function BlogDetailClient({
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Link href={`/${locale}/blog`}>
+        <Link href={`/${locale}/blogs`}>
           <Button variant="ghost" className="mb-8">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("backToBlogs")}

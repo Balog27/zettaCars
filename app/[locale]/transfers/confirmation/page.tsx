@@ -52,10 +52,15 @@ function TransferConfirmationPageContent() {
 
   const calculateFinalPrice = () => {
     if (!confirmationData?.pricing) return 0;
-    const childSeatPrice = 3; // EUR per seat
-    const childSeats = (confirmationData.transferDetails?.persons || 1) - 1;
-    const addon = Math.max(0, childSeats) * childSeatPrice;
+    const childSeatPrice = 0; // FREE for transfers as per user request
+    const childSeats = (confirmationData.transferDetails?.childSeats1to4 || 0) + (confirmationData.transferDetails?.childSeats5to12 || 0);
+    const addon = 0; // Child seats are free for transfers
     
+    // finalTotal already includes addons from summary page, but let's be safe
+    if (confirmationData.pricing.finalTotal !== undefined) {
+      return confirmationData.pricing.finalTotal;
+    }
+
     if (confirmationData.pricing.isSingle) {
       return confirmationData.pricing.price + addon;
     } else {
@@ -147,6 +152,17 @@ function TransferConfirmationPageContent() {
                           {confirmationData.transferDetails?.persons}
                         </dd>
                       </div>
+                      {(confirmationData.transferDetails?.childSeats1to4 > 0 || confirmationData.transferDetails?.childSeats5to12 > 0) && (
+                        <div>
+                          <dt className="font-medium">Scaune copii:</dt>
+                          <dd className="mt-1 text-slate-600 dark:text-slate-300">
+                            {[
+                              confirmationData.transferDetails.childSeats1to4 > 0 ? `${confirmationData.transferDetails.childSeats1to4}x (1-4 ani)` : null,
+                              confirmationData.transferDetails.childSeats5to12 > 0 ? `${confirmationData.transferDetails.childSeats5to12}x (5-12 ani)` : null
+                            ].filter(Boolean).join(", ")}
+                          </dd>
+                        </div>
+                      )}
                     </dl>
                   </div>
 

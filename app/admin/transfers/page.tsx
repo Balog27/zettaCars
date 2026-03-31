@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AdminTransferTable } from "@/components/admin/transfer-requests-table";
+import { DollarSign, TrendingUp } from "lucide-react";
 
 export default function AdminTransfersPage() {
   const pricing = useQuery(api.transfers.getTransferPricing);
@@ -245,7 +246,4 @@ export default function AdminTransfersPage() {
     </div>
   );
 }
-
-// Helper icons (re-importing from lucide if needed, but they should be in the file scope if used)
-import { DollarSign, TrendingUp } from "lucide-react";
  

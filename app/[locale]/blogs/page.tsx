@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     title: `${t('title')} | Zetta Cars Cluj-Napoca`,
     description: t('subtitle'),
     alternates: {
-      canonical: `https://www.zettacarrental.com/${locale}/blog`,
+      canonical: `https://www.zettacarrental.com/${locale}/blogs`,
     },
     openGraph: {
       title: t('title'),
       description: t('subtitle'),
-      url: `https://www.zettacarrental.com/${locale}/blog`,
+      url: `https://www.zettacarrental.com/${locale}/blogs`,
       siteName: 'Zetta Cars Cluj-Napoca',
       locale: locale,
       type: 'website',
@@ -87,7 +87,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       <main className="flex-grow container mx-auto py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 pb-2 text-black dark:text-white">
               {t('title')}
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -118,4 +118,3 @@ export default async function BlogPage({ params }: BlogPageProps) {
     </div>
   );
 }
-

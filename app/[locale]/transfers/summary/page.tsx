@@ -183,7 +183,7 @@ function TransferSummaryPageContent() {
   const segments = segmentsState;
   const totalDistance = segments.reduce((acc, s) => acc + s.distanceKm, 0);
   const totalWaitingHours = segments.reduce((acc, s, i) => {
-    if (i === segments.length - 1) return acc;
+    if (rideTypeState === 'one-way' && i === segments.length - 1) return acc;
     return acc + s.waitingTime;
   }, 0);
 
@@ -260,7 +260,7 @@ function TransferSummaryPageContent() {
     );
   }
 
-  const childSeatPrice = 3; // EUR per seat (matches UI display)
+  const childSeatPrice = 0; // FREE for transfers as requested by user
   const addons = (childSeats1to4 + childSeats5to12) * childSeatPrice;
   const finalTotalMin = Math.round((priceData.min + addons) * 100) / 100;
   const finalTotalMax = Math.round((priceData.max + addons) * 100) / 100;
@@ -479,8 +479,8 @@ function TransferSummaryPageContent() {
                           <div className="text-sm font-medium">
                             {t("additionalFeatures.age1to4") ?? "Child Seat (1-4 years)"}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            3 EUR per seat per day (max 2 seats)
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+                             Gratuit (max 2 scaune)
                           </div>
                         </div>
                         <div className="text-right">
@@ -504,8 +504,8 @@ function TransferSummaryPageContent() {
                               +
                             </button>
                           </div>
-                          <div className="text-sm font-medium">
-                            {childSeats1to4 > 0 ? `${childSeats1to4 * 3} EUR` : '0 EUR'}
+                          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                             Gratuit
                           </div>
                         </div>
                       </div>
@@ -517,8 +517,8 @@ function TransferSummaryPageContent() {
                           <div className="text-sm font-medium">
                             {t("additionalFeatures.age5to12") ?? "Child Seat (5-12 years)"}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            3 EUR per seat per day (max 2 seats)
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+                             Gratuit (max 2 scaune)
                           </div>
                         </div>
                         <div className="text-right">
@@ -542,8 +542,8 @@ function TransferSummaryPageContent() {
                               +
                             </button>
                           </div>
-                          <div className="text-sm font-medium">
-                            {childSeats5to12 > 0 ? `${childSeats5to12 * 3} EUR` : '0 EUR'}
+                          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                             Gratuit
                           </div>
                         </div>
                       </div>
@@ -573,10 +573,13 @@ function TransferSummaryPageContent() {
 
           <div className="max-w-3xl mx-auto mt-8">
             <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
-              <CardHeader><CardTitle>{t('summary.title') ?? 'Reservation Summary'}</CardTitle></CardHeader>
-              <CardContent>
-              <CardHeader><CardTitle>{t('summary.title') ?? 'Rezumat Rezervare'}</CardTitle></CardHeader>
-              <CardContent className="space-y-6">
+              <CardHeader className="border-b border-gray-50 dark:border-zinc-800 pb-6">
+                <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                   <div className="w-1.5 h-8 bg-pink-500 rounded-full" />
+                   {t('summary.title') ?? 'Rezumat Rezervare'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-8 p-8">
                 <div className="space-y-4">
                   {segmentsState.map((s, i) => (
                     <div key={i} className="text-sm">
@@ -629,37 +632,53 @@ function TransferSummaryPageContent() {
                   </div>
                   
                   <div className="mt-4 pt-4 border-t space-y-3">
-                    <div className="text-sm font-medium">Voucher</div>
-                    {appliedVoucher ? (
-                      <div className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
-                        <div className="text-sm">
-                          <span className="font-bold text-green-700 dark:text-green-400">{appliedVoucher.code}</span>
-                          <span className="ml-2 text-green-600">(-{appliedVoucher.type === 'percentage' ? `${appliedVoucher.value}%` : `${appliedVoucher.value} EUR`})</span>
-                        </div>
-                        <Button variant="ghost" size="sm" onClick={removeVoucher} className="h-6 w-6 p-0 hover:text-red-600">
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="flex gap-2">
-                        <Input 
-                          placeholder="Cod voucher" 
-                          value={voucherCode} 
-                          onChange={(e) => setVoucherCode(e.target.value)} 
-                          className="h-9"
-                        />
-                        <Button variant="outline" size="sm" onClick={handleApplyVoucher} disabled={isApplyingVoucher || !voucherCode.trim()}>
-                           {isApplyingVoucher ? "..." : "Aplică"}
-                        </Button>
-                      </div>
-                    )}
+                   <div className="flex items-center justify-between mb-4">
+                     <div className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">{t('summary.voucherTitle') ?? "Voucher"}</div>
+                   </div>
+                   
+                   {!appliedVoucher ? (
+                     <div className="flex gap-2">
+                       <div className="relative flex-grow">
+                         <input
+                           type="text"
+                           value={voucherCode}
+                           onChange={(e) => setVoucherCode(e.target.value)}
+                           placeholder={t('summary.enterVoucherCode') ?? "Cod voucher"}
+                           className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 transition-all text-sm"
+                         />
+                       </div>
+                       <Button 
+                         variant="default" 
+                         onClick={handleApplyVoucher} 
+                         disabled={isApplyingVoucher || !voucherCode.trim()}
+                         className="bg-pink-500 hover:bg-pink-600 text-white rounded-xl px-6"
+                       >
+                          {isApplyingVoucher ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : (t('summary.applyVoucher') ?? "Aplică")}
+                       </Button>
+                     </div>
+                   ) : (
+                     <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-800/30 rounded-2xl">
+                       <div className="flex items-center gap-3">
+                         <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-xs">%</div>
+                         <div>
+                           <div className="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-tighter">Voucher Aplicat</div>
+                           <div className="text-sm font-bold text-gray-900 dark:text-white">{appliedVoucher.code}</div>
+                         </div>
+                       </div>
+                       <button onClick={() => setAppliedVoucher(null)} className="text-gray-400 hover:text-red-500 transition-colors p-2 hover:bg-white dark:hover:bg-zinc-900 rounded-xl">
+                         <Trash2 className="w-4 h-4" />
+                       </button>
+                     </div>
+                   )}
 
-                    {discountAmount > 0 && (
-                      <div className="flex items-center justify-between text-sm text-green-600 font-medium">
-                        <div>Reducere</div>
-                        <div>-{discountAmount} EUR</div>
-                      </div>
-                    )}
+                   {appliedVoucher && (
+                     <div className="mt-4 pt-4 border-t border-dashed border-gray-200 dark:border-zinc-800 space-y-2">
+                       <div className="flex justify-between text-sm">
+                         <span className="text-gray-500 dark:text-gray-400">{t('summary.discount') ?? "Reducere"}</span>
+                         <span className="font-bold text-green-600">-{discountAmount.toFixed(2)} €</span>
+                       </div>
+                     </div>
+                   )}
 
                     <div className="flex items-center justify-between pt-2 border-t">
                       <div className="text-sm font-medium">{t('summary.total') ?? 'Total Estimativ'}</div>
@@ -669,7 +688,6 @@ function TransferSummaryPageContent() {
                     </div>
                   </div>
                 </div>
-              </CardContent>
               </CardContent>
             </Card>
 
@@ -750,6 +768,8 @@ function TransferSummaryPageContent() {
                       category: categoryState,
                       persons: passengersState,
                       distance: totalDistance,
+                      childSeats1to4,
+                      childSeats5to12,
                     },
                     pricing: {
                       ...priceData,
@@ -785,7 +805,9 @@ function TransferSummaryPageContent() {
                       voucherId: appliedVoucher?.id,
                       voucherCode: appliedVoucher?.code,
                       discountAmount: discountAmount > 0 ? discountAmount : undefined,
-                      // Legacy fields for compat
+                      childSeats1to4,
+                      childSeats5to12,
+                      // Legacy fields for backward compat
                       transferDate: transferDateState!.toISOString().split('T')[0],
                       transferTime: pickupTimeState,
                       pickupLocation: segmentsState[0].from,

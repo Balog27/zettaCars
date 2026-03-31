@@ -11,6 +11,7 @@ export interface Blog {
   description: string;
   content: string;
   coverImage?: Id<"_storage">;
+  coverImageUrl?: string;
   images?: Id<"_storage">[];
   tags?: string[];
   publishedAt?: number;
@@ -27,6 +28,7 @@ export interface BlogListItem {
   author: string;
   description: string;
   coverImage?: Id<"_storage">;
+  coverImageUrl?: string;
   tags?: string[];
   publishedAt?: number;
   status: BlogStatus;

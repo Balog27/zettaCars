@@ -1,8 +1,8 @@
-
+"use client";
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import Link from "next/link"
 import { useTranslations } from 'next-intl'
-
+import Link from "next/link"
+import React from "react"
 
 interface FooterProps {
   logo: React.ReactNode

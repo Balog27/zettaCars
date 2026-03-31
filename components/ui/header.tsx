@@ -43,7 +43,7 @@ export function Header({ logo, brandName }: HeaderProps) {
     { name: t('transfers'), href: `/${locale}/transfers` },
     { name: t('about'), href: `/${locale}/about` },
     { name: t('contact'), href: `/${locale}/contact` },
-    { name: t('blog'), href: `/${locale}/blog` },
+    { name: t('blogs'), href: `/${locale}/blogs` },
   ];
 
   // Left navigation items for desktop
@@ -51,7 +51,7 @@ export function Header({ logo, brandName }: HeaderProps) {
     { name: t('home'), href: `/${locale}` },
     { name: t('cars'), href: `/${locale}/cars` },
     { name: t('transfers'), href: `/${locale}/transfers` },
-    { name: t('blog'), href: `/${locale}/blog` },
+    { name: t('blogs'), href: `/${locale}/blogs` },
   ];
 
   // Right navigation items for desktop

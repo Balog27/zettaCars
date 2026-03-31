@@ -40,6 +40,8 @@ export const createTransferRequest = mutation({
     voucherId: v.optional(v.id("vouchers")),
     voucherCode: v.optional(v.string()),
     discountAmount: v.optional(v.number()),
+    childSeats1to4: v.optional(v.number()),
+    childSeats5to12: v.optional(v.number()),
     // Legacy fields to support existing frontend
     pickupLocation: v.optional(v.string()),
     dropoffLocation: v.optional(v.string()),
@@ -67,6 +69,8 @@ export const createTransferRequest = mutation({
       voucherId: args.voucherId,
       voucherCode: args.voucherCode,
       discountAmount: args.discountAmount,
+      childSeats1to4: args.childSeats1to4,
+      childSeats5to12: args.childSeats5to12,
       // Legacy fields
       pickupLocation: args.pickupLocation,
       dropoffLocation: args.dropoffLocation,

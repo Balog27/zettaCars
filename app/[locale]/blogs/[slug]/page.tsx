@@ -47,9 +47,7 @@ export async function generateMetadata({
     };
   }
 
-  const coverImageUrl = blog.coverImage
-    ? await fetchQuery(api.blogs.getImageUrl, { imageId: blog.coverImage })
-    : null;
+  const coverImageUrl = blog.coverImageUrl || null;
 
   const baseUrl = "https://www.zettacarrental.com";
 
@@ -59,17 +57,17 @@ export async function generateMetadata({
     authors: [{ name: blog.author }],
     keywords: blog.tags?.join(", "),
     alternates: {
-      canonical: `${baseUrl}/${locale}/blog/${slug}`,
+      canonical: `${baseUrl}/${locale}/blogs/${slug}`,
       languages: {
-        en: `/en/blog/${slug}`,
-        ro: `/ro/blog/${slug}`,
+        en: `/en/blogs/${slug}`,
+        ro: `/ro/blogs/${slug}`,
       },
     },
     openGraph: {
       title: blog.title,
       description: blog.description,
       type: "article",
-      url: `${baseUrl}/${locale}/blog/${slug}`,
+      url: `${baseUrl}/${locale}/blogs/${slug}`,
       publishedTime: blog.publishedAt
         ? new Date(blog.publishedAt).toISOString()
         : undefined,
@@ -105,9 +103,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     notFound();
   }
 
-  const coverImageUrl = blog.coverImage
-    ? await fetchQuery(api.blogs.getImageUrl, { imageId: blog.coverImage })
-    : null;
+  const coverImageUrl = blog.coverImageUrl || null;
 
   const mdxComponents = {
     BlogImage: (props: any) => <BlogImage {...props} />,
