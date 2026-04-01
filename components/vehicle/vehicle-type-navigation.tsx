@@ -38,7 +38,7 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
   return (
     // Use a flex row so buttons can stretch horizontally across the full width.
     // Each button is given `flex-1` so the set fills the container left-to-right.
-    <div className="flex gap-3 w-full">
+    <div className="flex gap-3 w-full overflow-x-auto overflow-y-hidden pb-4 -mb-4 scrollbar-hide touch-pan-x">
       {vehicleTypes.map((type) => (
         <Button
           key={type.key || 'all'}
@@ -46,8 +46,8 @@ export function VehicleTypeNavigation({ selectedType, onTypeChange }: VehicleTyp
           size="lg"
           onClick={() => onTypeChange(type.key)}
           className={`
-            transition-all duration-200 font-medium py-3 px-4 h-auto whitespace-nowrap
-            flex-1 flex items-center justify-center
+            transition-all duration-200 font-medium py-3 px-6 h-auto whitespace-nowrap
+            flex-shrink-0 flex items-center justify-center min-w-[120px] sm:flex-1
             ${selectedType === type.key 
                 ? 'bg-primary text-white border-primary shadow-sm' 
                 : 'bg-white text-muted-foreground border-border hover:border-primary hover:text-primary hover:bg-primary/5 dark:bg-card'

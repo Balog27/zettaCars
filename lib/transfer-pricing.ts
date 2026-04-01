@@ -31,34 +31,49 @@ export function calculateTransferPrice(
   totalDistanceKm: number,
   category: VehicleCategory,
   rideType: RideType,
-  waitingTotalHours: number
+  waitingTotalHours: number,
+  options?: {
+    isCluj?: boolean;
+    fixedPrices?: {
+      standard: number;
+      van: number;
+      premium?: number;
+    };
+  }
 ) {
-  const ratePerKm = getRatePerKm(totalDistanceKm, category);
-  const oneWayCost = totalDistanceKm * ratePerKm;
-
   let transportCost: number;
+  let ratePerKm = getRatePerKm(totalDistanceKm, category);
+
+  if (options?.isCluj && options.fixedPrices) {
+    transportCost = options.fixedPrices[category] || 0;
+  } else {
+    transportCost = totalDistanceKm * ratePerKm;
+  }
+
+  const oneWayCost = transportCost;
+  let finalTransportCost: number;
   let waitingCost: number;
 
   if (rideType === 'round-trip') {
     if (waitingTotalHours >= 4) {
       // Driver waits >= 4h at destination → charge full round trip, no waiting surcharge
-      transportCost = oneWayCost * 2;
+      finalTransportCost = oneWayCost * 2;
       waitingCost = 0;
     } else {
       // Driver waits < 4h (or not at all) → one-way fare + hourly waiting cost
-      transportCost = oneWayCost;
+      finalTransportCost = oneWayCost;
       waitingCost = waitingTotalHours * WAITING_HOUR_PRICE;
     }
   } else {
     // One-way trip
-    transportCost = oneWayCost;
+    finalTransportCost = oneWayCost;
     waitingCost = waitingTotalHours * WAITING_HOUR_PRICE;
   }
 
   return {
-    ratePerKm,
-    transportCost,
+    ratePerKm: options?.isCluj ? 0 : ratePerKm,
+    transportCost: finalTransportCost,
     waitingCost,
-    total: Math.round((transportCost + waitingCost) * 100) / 100,
+    total: Math.round((finalTransportCost + waitingCost) * 100) / 100,
   };
 }

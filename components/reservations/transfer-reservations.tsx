@@ -242,7 +242,7 @@ export function TransferReservations() {
                       <div className="font-semibold">{formatPrice(request.estimatedPrice)}</div>
                       {request.totalDistanceKm && (
                         <div className="text-xs text-muted-foreground">
-                          {request.totalDistanceKm} km
+                          {Number(request.totalDistanceKm).toFixed(2)} km
                         </div>
                       )}
                       {request.discountAmount && (

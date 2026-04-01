@@ -141,7 +141,7 @@ export function AdminTransferTable() {
                     <div className="font-semibold">€{(request.estimatedPrice || 0).toFixed(2)}</div>
                     {request.totalDistanceKm && (
                       <div className="text-[10px] text-muted-foreground">
-                        {request.totalDistanceKm} km
+                        {Number(request.totalDistanceKm).toFixed(2)} km
                       </div>
                     )}
                     {request.discountAmount && (

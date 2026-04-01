@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -9,6 +9,8 @@ import { LocationAutocomplete } from '../location-autocomplete';
 import { VehicleCategory, RideType, calculateTransferPrice } from '@/lib/transfer-pricing';
 import { DateTimePicker } from '@/components/date-time-picker';
 import { TransferFormData } from '../transfer-wizard';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 type ConfigStepProps = {
   data: TransferFormData;
@@ -18,6 +20,7 @@ type ConfigStepProps = {
 
 export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
   const [loading, setLoading] = useState<Record<number, boolean>>({});
+  const transferPricing = useQuery(api.transfers.getTransferPricing);
 
   const addSegment = () => {
     const lastSegment = data.segments[data.segments.length - 1];
@@ -75,51 +78,79 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
     return acc + s.waitingTime;
   }, 0);
 
-  const pricing = calculateTransferPrice(
-    totalDistance,
-    data.category,
-    data.rideType,
-    totalWaitingHours
-  );
+  const pricing = useMemo(() => {
+    if (!transferPricing) return calculateTransferPrice(totalDistance, data.category, data.rideType, totalWaitingHours);
+
+    const CLUJ_KEYWORDS = ["cluj-napoca", "napoca", "clj airport", "aeroport cluj", "cluj airport"];
+    const isWithinCluj = data.segments.every(s => {
+      const from = s.from.toLowerCase();
+      const to = s.to.toLowerCase();
+      const fromInCluj = CLUJ_KEYWORDS.some(k => from.includes(k));
+      const toInCluj = CLUJ_KEYWORDS.some(k => to.includes(k));
+      return fromInCluj && toInCluj;
+    });
+
+    return calculateTransferPrice(
+      totalDistance,
+      data.category,
+      data.rideType,
+      totalWaitingHours,
+      {
+        isCluj: isWithinCluj,
+        fixedPrices: transferPricing.fixedPrices as any
+      }
+    );
+  }, [totalDistance, data.category, data.rideType, totalWaitingHours, transferPricing, data.segments]);
 
   const canContinue = data.segments.every(s => s.from && s.to && s.distanceKm > 0) && data.date;
 
   return (
-    <Card className="border-none shadow-none bg-transparent">
-      <CardHeader className="px-0 pt-0 pb-6 text-center sm:text-left">
+    <div className="bg-transparent">
+      <div className="pt-0 pb-6 text-center sm:text-left">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Configurează transferul</h2>
-      </CardHeader>
-      <CardContent className="px-0 space-y-8">
+      </div>
+      <div className="space-y-8">
 
         {/* Vehicle Category Selection with Photos */}
         <div>
           <Label className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 block">Categorie vehicul</Label>
           <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={() => onUpdate({ category: 'standard' })}
-              suppressHydrationWarning
-              className={`group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
-                data.category === 'standard'
-                   ? 'border-pink-500 bg-white dark:bg-zinc-950/60 scale-[1.02]'
-                  : 'border-gray-200 dark:border-zinc-800 hover:border-pink-300 dark:hover:border-pink-700 bg-white dark:bg-zinc-950/30'
-              }`}
-            >
-              <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-zinc-900/30">
-                <img 
-                  src="/eclass.jpg" 
-                  alt="Standard - Mercedes E-Class" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                />
-              </div>
-              <div className={`px-4 py-3 text-center font-semibold transition-colors ${
-                data.category === 'standard'
-                  ? 'text-pink-500'
-                  : 'text-gray-700 dark:text-gray-300'
-              }`}>
-                Standard
-                <span className="block text-xs font-normal opacity-80 mt-0.5">1–3 pasageri</span>
-              </div>
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => onUpdate({ category: 'standard' })}
+                disabled={data.passengers >= 4}
+                suppressHydrationWarning
+                className={`group relative w-full overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
+                  data.category === 'standard'
+                     ? 'border-pink-500 bg-white dark:bg-zinc-950/60 scale-[1.02]'
+                    : 'border-gray-200 dark:border-zinc-800 hover:border-pink-300 dark:hover:border-pink-700 bg-white dark:bg-zinc-950/30'
+                } ${data.passengers >= 4 ? 'opacity-40 grayscale cursor-not-allowed' : ''}`}
+              >
+                <div className="relative h-32 sm:h-40 overflow-hidden bg-gray-100 dark:bg-zinc-900/30">
+                  <img 
+                    src="/eclass.jpg" 
+                    alt="Standard - Mercedes E-Class" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  />
+                </div>
+                <div className={`px-4 py-3 text-center font-semibold transition-colors ${
+                  data.category === 'standard'
+                    ? 'text-pink-500'
+                    : 'text-gray-700 dark:text-gray-300'
+                }`}>
+                  Standard
+                  <span className="block text-xs font-normal opacity-80 mt-0.5">1–3 pasageri</span>
+                </div>
+              </button>
+              {data.passengers >= 4 && (
+                <div className="absolute -top-2 -right-2 z-10">
+                  <div className="bg-zinc-800 text-white text-[10px] px-2 py-1 rounded-full shadow-lg flex items-center gap-1 border border-zinc-700">
+                    <Info className="w-3 h-3 text-pink-400" />
+                    Necesită VAN
+                  </div>
+                </div>
+              )}
+            </div>
 
             <button
               onClick={() => onUpdate({ category: 'van' })}
@@ -220,7 +251,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                     ) : segment.distanceKm > 0 ? (
                       <div className="flex items-baseline gap-2">
                          <span className="px-3 py-1 bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 rounded-full text-sm font-bold">
-                           {segment.distanceKm} km
+                           {Number(segment.distanceKm).toFixed(2)} km
                          </span>
                          <span className="text-sm text-gray-500">{segment.durationText}</span>
                       </div>
@@ -294,7 +325,14 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                 min={1} 
                 max={8} 
                 value={data.passengers}
-                onChange={(e) => onUpdate({ passengers: parseInt(e.target.value) || 1 })}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || 1;
+                  const updates: Partial<TransferFormData> = { passengers: val };
+                  if (val >= 4 && data.category === 'standard') {
+                    updates.category = 'van';
+                  }
+                  onUpdate(updates);
+                }}
                 className="w-full bg-transparent border-none focus:ring-0 text-sm font-semibold"
               />
             </div>
@@ -305,7 +343,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         <div className="p-6 bg-gradient-to-br from-pink-50/50 to-white dark:from-zinc-950/80 dark:to-zinc-900/40 rounded-3xl border border-pink-100 dark:border-zinc-800 shadow-xl shadow-gray-200/50 dark:shadow-none space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400">Distanță totală</span>
-            <span className="font-bold text-gray-900 dark:text-white">{totalDistance} km</span>
+            <span className="font-bold text-gray-900 dark:text-white">{Number(totalDistance).toFixed(2)} km</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400">Tarif/km ({data.category === 'standard' ? 'Standard' : 'VAN'})</span>
@@ -337,7 +375,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           Continuă cu datele personale
           <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

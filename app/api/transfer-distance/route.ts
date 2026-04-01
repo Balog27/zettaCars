@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       return new Response(
         JSON.stringify({
           distanceMeters: distance.distanceKm * 1000,
-          distanceText: `${distance.distanceKm} km`,
+          distanceText: `${Number(distance.distanceKm).toFixed(2)} km`,
           distanceKm: distance.distanceKm,
           durationSeconds: distance.durationSeconds,
           durationText: distance.durationText,

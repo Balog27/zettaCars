@@ -157,7 +157,7 @@ export async function POST(request: Request) {
           </tr>` : ''}
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${adminT.distance}:</td>
-            <td style="padding: 8px;">${transferDetails.distance} km</td>
+            <td style="padding: 8px;">${Number(transferDetails.distance).toFixed(2)} km</td>
           </tr>` : ''}
           ${(transferDetails.childSeats1to4 || transferDetails.childSeats5to12) ? `<tr>
             <td style="padding: 8px; color: #666;">${adminT.childSeats}:</td>
@@ -230,7 +230,7 @@ export async function POST(request: Request) {
           </tr>` : ''}
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${userT.distance}:</td>
-            <td style="padding: 8px;">${transferDetails.distance} km</td>
+            <td style="padding: 8px;">${Number(transferDetails.distance).toFixed(2)} km</td>
           </tr>` : ''}
           ${(transferDetails.childSeats1to4 || transferDetails.childSeats5to12) ? `<tr>
             <td style="padding: 8px; color: #666;">${userT.childSeats}:</td>

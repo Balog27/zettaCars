@@ -63,6 +63,7 @@
     },
     "clientTestimonials": {
       "title": "What Our Clients Say",
+      "subtitle": "Discover what our customers have to say about their experience with Zetta Cars in Cluj-Napoca.",
       "reviews": []
     },
     "loadingFeaturedCars": "Loading featured cars...",
@@ -880,10 +881,10 @@
       }
     },
     "specialOrders": {
-      "title": "Special Orders",
-      "sectionTitle": "Special Transfer Orders",
+      "title": "Special Requests",
+      "sectionTitle": "Special Transfer Requests",
       "sectionDescription": "Have a unique transfer need? Contact us for custom requests and special arrangements.",
-      "signInPrompt": "Sign in to submit a special order request",
+      "signInPrompt": "Sign in to submit a special request",
       "signIn": "Sign In",
       "nameLabel": "Your Name",
       "namePlaceholder": "Enter your name",
@@ -891,15 +892,15 @@
       "emailPlaceholder": "your@email.com",
       "phoneLabel": "Phone",
       "phonePlaceholder": "+40 750 250 121",
-      "messageLabel": "Special Order Details",
+      "messageLabel": "Special Request Details",
       "messagePlaceholder": "Describe your special transfer request, group size, specific requirements, and if you need station time, how long will the stationing take?...",
-      "pleaseSignIn": "Please sign in to send a special order request.",
+      "pleaseSignIn": "Please sign in to send a special request.",
       "messageTooShort": "Please enter a longer message (at least 10 characters).",
       "notAuthenticated": "You must be signed in to send a request.",
       "sendFailed": "Failed to send request.",
-      "sendSuccess": "Special order request sent — we will reply shortly.",
+      "sendSuccess": "Special request sent — we will reply shortly.",
       "sending": "Sending...",
-      "sendButton": "Send Special Order"
+      "sendButton": "Send Special Request"
     },
     "contactForm": {
       "title": "Get in Touch",

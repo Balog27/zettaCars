@@ -143,7 +143,7 @@ function TransferConfirmationPageContent() {
                       <div>
                         <dt className="font-medium">Distanță totală:</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
-                          {confirmationData.transferDetails?.distance} km
+                          {Number(confirmationData.transferDetails?.distance).toFixed(2)} km
                         </dd>
                       </div>
                       <div>

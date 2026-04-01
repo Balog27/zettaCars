@@ -169,8 +169,8 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
 
   if (isSuccess) {
     return (
-      <Card className="border-none shadow-none bg-transparent py-12 text-center">
-        <CardContent className="space-y-6">
+      <div className="bg-transparent py-12 text-center">
+        <div className="space-y-6">
           <div className="flex justify-center">
             <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">
               <CheckCircle2 className="w-12 h-12" />
@@ -183,14 +183,14 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
           <Button onClick={() => window.location.reload()} className="mt-8 px-8 py-6 rounded-2xl font-bold bg-black text-white hover:bg-gray-800 transition-all shadow-xl">
             Închide
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="border-none shadow-none bg-transparent">
-      <CardHeader className="px-0 pt-0 pb-6">
+    <div className="bg-transparent">
+      <div className="pt-0 pb-6">
         <div className="flex items-center gap-4 mb-2">
           {!isSubmitting && (
             <button onClick={onBack} className="p-2 -ml-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
@@ -199,8 +199,8 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
           )}
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Rezumat Rezervare</h2>
         </div>
-      </CardHeader>
-      <CardContent className="px-0 space-y-8">
+      </div>
+      <div className="space-y-8">
         {/* Details Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
@@ -237,7 +237,7 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
                              <div className="flex justify-between items-start">
                                <div>
                                  <p className="text-sm font-semibold">{s.from} → {s.to}</p>
-                                 <p className="text-xs text-gray-500">{s.distanceKm} km {s.durationText ? `• ${s.durationText}` : ''}</p>
+                                 <p className="text-xs text-gray-500">{Number(s.distanceKm).toFixed(2)} km {s.durationText ? `• ${s.durationText}` : ''}</p>
                                </div>
                                {s.waitingTime > 0 && (
                                  <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold border border-amber-100">
@@ -355,7 +355,7 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
           <div className="grid grid-cols-2 gap-4 text-sm font-medium">
              <div className="flex flex-col">
                 <span className="text-white/60 text-[10px] uppercase tracking-wider mb-1">Distanță</span>
-                <span>{totalDistance} km</span>
+                <span>{Number(totalDistance).toFixed(2)} km</span>
              </div>
              <div className="flex flex-col">
                 <span className="text-white/60 text-[10px] uppercase tracking-wider mb-1">Tip Cursă</span>
@@ -382,8 +382,8 @@ export function SummaryStep({ data, onUpdate, onBack }: SummaryStepProps) {
             <p className="text-center text-red-400 text-sm font-bold">{error}</p>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

@@ -102,7 +102,7 @@ export function HomepageVehicleCard({
   return (
     <div
       onClick={handleClick}
-      className="relative bg-card-darker dark:bg-card-darker rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl group cursor-pointer sm:cursor-auto"
+      className="relative bg-card-darker dark:bg-card-darker rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group cursor-pointer sm:cursor-auto"
     >
       {/* Car Image */}
       <div className="aspect-[4/3] relative w-full bg-gray-100 overflow-hidden">
