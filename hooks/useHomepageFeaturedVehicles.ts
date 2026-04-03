@@ -1,7 +1,7 @@
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Vehicle } from "@/types/vehicle";
-import { useTranslations } from "next-intl";
+import { useTranslations } from 'next-intl';
 
 export interface UseHomepageFeaturedVehiclesReturn {
   vehiclesToDisplay: Vehicle[];
@@ -12,6 +12,7 @@ export interface UseHomepageFeaturedVehiclesReturn {
 
 export function useHomepageFeaturedVehicles(): UseHomepageFeaturedVehiclesReturn {
   const t = useTranslations('common');
+
   // Try to get featured cars from backend first
   const featuredVehicles = useQuery(api.featuredCars.getFeaturedVehicles);
   
