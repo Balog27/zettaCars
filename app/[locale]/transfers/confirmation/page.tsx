@@ -80,7 +80,7 @@ function TransferConfirmationPageContent() {
         <main className="flex-grow bg-background py-12">
           <div className="container mx-auto">
             <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">
-              Invalid confirmation data.
+              {t("summary.invalidData") ?? "Invalid confirmation data."}
             </div>
           </div>
         </main>
@@ -117,7 +117,7 @@ function TransferConfirmationPageContent() {
                     <div className="space-y-4 mb-4">
                       {confirmationData.transferDetails?.segments?.map((s: any, i: number) => (
                         <div key={i} className="text-sm">
-                          <div className="font-bold text-pink-500 uppercase text-[10px] tracking-[0.1em] mb-1">Segment {i+1}</div>
+                          <div className="font-bold text-pink-500 uppercase text-[10px] tracking-[0.1em] mb-1">{t("summary.segment") ?? "Segment"} {i+1}</div>
                           <div className="flex items-start gap-2">
                              <div className="text-slate-900 dark:text-slate-100 font-medium">{s.from}</div>
                              <ArrowRight className="w-3 h-3 mt-1 shrink-0 text-slate-400" />
@@ -141,24 +141,24 @@ function TransferConfirmationPageContent() {
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium">Distanță totală:</dt>
+                        <dt className="font-medium">{t("summary.totalDistance") ?? "Distanță totală:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
-                          {Number(confirmationData.transferDetails?.distance).toFixed(2)} km
+                          {Number(confirmationData.transferDetails?.distance).toFixed(2)} {t("summary.km") ?? "km"}
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium">Nr. persoane:</dt>
+                        <dt className="font-medium">{t("summary.numberOfPersons") ?? "Nr. persoane:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
                           {confirmationData.transferDetails?.persons}
                         </dd>
                       </div>
                       {(confirmationData.transferDetails?.childSeats1to4 > 0 || confirmationData.transferDetails?.childSeats5to12 > 0) && (
                         <div>
-                          <dt className="font-medium">Scaune copii:</dt>
+                          <dt className="font-medium">{t("summary.childSeats") ?? "Scaune copii:"}</dt>
                           <dd className="mt-1 text-slate-600 dark:text-slate-300">
                             {[
-                              confirmationData.transferDetails.childSeats1to4 > 0 ? `${confirmationData.transferDetails.childSeats1to4}x (1-4 ani)` : null,
-                              confirmationData.transferDetails.childSeats5to12 > 0 ? `${confirmationData.transferDetails.childSeats5to12}x (5-12 ani)` : null
+                              confirmationData.transferDetails.childSeats1to4 > 0 ? `${confirmationData.transferDetails.childSeats1to4}x (${t("additionalFeatures.age1to4") ?? "1-4 ani"})` : null,
+                              confirmationData.transferDetails.childSeats5to12 > 0 ? `${confirmationData.transferDetails.childSeats5to12}x (${t("additionalFeatures.age5to12") ?? "5-12 ani"})` : null
                             ].filter(Boolean).join(", ")}
                           </dd>
                         </div>
@@ -230,7 +230,7 @@ function TransferConfirmationPageContent() {
                 <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md p-4 mb-8">
                   <p className="text-sm text-blue-800 dark:text-blue-300">
                     {confirmationData.pricing?.isSingle ? (
-                      "We will review your transfer request and contact you as soon as possible within 6 hours to confirm availability. A confirmation email has been sent to the address you provided."
+                      t("confirmation.nextSteps") ?? "We will review your transfer request and contact you as soon as possible within 6 hours to confirm availability. A confirmation email has been sent to the address you provided."
                     ) : (
                       t("confirmation.nextSteps") ??
                       "We will review your transfer request and contact you as soon as possible within 6 hours to confirm availability and finalize the price. A confirmation email has been sent to the address you provided."
@@ -260,13 +260,14 @@ function TransferConfirmationPageContent() {
   );
 }
 export default function TransferConfirmationPage() {
+  const t = useTranslations("transfersPage");
   return (
     <Suspense fallback={
       <div className="relative flex flex-col min-h-screen">
         <Header logo={<Logo alt="Zetta Cars Logo" />} />
         <main className="flex-grow bg-background py-12">
           <div className="container mx-auto">
-            <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">Loading confirmation…</div>
+            <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">{t("confirmation.loading") ?? "Loading confirmation…"}</div>
           </div>
         </main>
         <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />

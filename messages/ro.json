@@ -5,6 +5,8 @@
     "viewAllCars": "Vezi Toate Mașinile",
     "hero": {
       "headline": "Închirieri Auto Premium cu Zetta Cars în Cluj-Napoca",
+      "carRentalsAndTransfers": "Închirieri Auto și Transferuri",
+      "clujNapoca": "Cluj-Napoca",
       "subheadline": "Descoperă Cluj-Napoca și împrejurimile cu flota noastră premium de vehicule. Servicii profesionale, prețuri competitive și experiență excepțională pentru clienți.",
       "cta": "Vezi Flota Noastră"
     },
@@ -43,6 +45,18 @@
       ]
     },
     "bookingProcess": {
+      "cashOnDelivery": {
+        "label": "Plată cash la șofer",
+        "description": "Plătești cash direct la șofer"
+      },
+      "cardOnDelivery": {
+        "label": "Plata cu cardul la șofer",
+        "description": "Plătești cu cardul către șofer"
+      },
+      "cardOnline": {
+        "label": "Transfer bancar",
+        "description": "Plătește prin transfer bancar"
+      },
       "title": "Cum Funcționează",
       "subtitle": "Procese rapide, drumuri fără griji",
       "steps": [
@@ -263,8 +277,9 @@
   },
   "reservationPage": {
     "common": {
-      "terms": "Termeni și Condițiile",
-      "privacy": "Politica de Confidențialitate"
+      "terms": "Termenii și Condițiile",
+      "privacy": "Politica de Confidențialitate",
+      "and": "și"
     },
     "backToVehicleDetails": "Înapoi la Detaliile Vehiculului",
     "formProgress": "Progresul Formularului",
@@ -335,7 +350,7 @@
     },
     "paymentMethod": {
       "title": "Metoda de Plată",
-      "termsAcceptance": "Accept Termenii și Condițiile și Politica de Confidențialitate"
+      "termsAcceptance": "Accept"
     },
     "protectionOptions": {
       "title": "Opțiuni de Protecție",
@@ -488,10 +503,20 @@
       "pending": "În Așteptare",
       "cancelled": "Anulată"
     },
-    "paymentMethods": {
-      "cashOnDelivery": "Cash la Livrare",
-      "cardOnDelivery": "Plată cu Cardul la Livrare",
-      "cardOnline": "Plată cu Cardul Online"
+    "payment": {
+      "cashOnDelivery": {
+        "label": "Plată cash la șofer",
+        "description": "Plătești cash direct la șofer"
+      },
+      "cardOnDelivery": {
+        "label": "Plată cu cardul la șofer",
+        "description": "Plătești cu cardul către șofer"
+      },
+      "cardOnline": {
+        "label": "Transfer bancar",
+        "description": "Plătește prin transfer bancar"
+      },
+      "termsAcceptance": "Accept"
     }
   },
   "blogPage": {
@@ -654,7 +679,11 @@
     "terms": "Termeni",
     "copyright": "© 2025 Zetta Cars Cluj",
     "allRightsReserved": "Toate drepturile rezervate",
-    "builtBy": "Creat de"
+    "builtBy": "Creat de",
+    "goToHomepage": "Mergi la pagina principală",
+    "followOnTikTok": "Urmărește-ne pe TikTok",
+    "followOnInstagram": "Urmărește-ne pe Instagram",
+    "followOnFacebook": "Urmărește-ne pe Facebook"
   },
   "search": {
     "pickupLocation": "Locația de Ridicare",
@@ -694,8 +723,8 @@
     "allTransmissions": "Toate Transmisiile",
     "type": "Tip",
     "selectType": "Selectează Tipul",
-  "allTypes": "Toate Tipurile",
-  "refineSearch": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
+    "allTypes": "Toate Tipurile",
+    "refineSearch": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
   },
   "features": {
     "wideVehicleSelection": {
@@ -828,6 +857,11 @@
   "transfersPage": {
     "title": "Transferuri",
     "subtitle": "Rezervă transferuri spre aeroport sau în oraș",
+    "common": {
+      "terms": "Termenii și Condițiile",
+      "privacy": "Politica de Confidențialitate",
+      "and": "și"
+    },
     "paymentMethod": {
       "title": "Metoda de Plată"
     },
@@ -852,9 +886,21 @@
       "van": "Van"
     },
     "payment": {
-      "cashOnDelivery": "Plată la livrare",
-      "cardOnDelivery": "Plată cu cardul la livrare",
-      "termsAcceptance": "Accept Termenii și Condițiile și Politica de Confidențialitate"
+      "methods": {
+        "cashOnDelivery": {
+          "label": "Plată cash la șofer",
+          "description": "Plătești cash direct la șofer"
+        },
+        "cardOnDelivery": {
+          "label": "Plata cu cardul la șofer",
+          "description": "Plătești cu cardul către șofer"
+        },
+        "cardOnline": {
+          "label": "Transfer bancar",
+          "description": "Plătește prin transfer bancar"
+        }
+      },
+      "termsAcceptance": "Accept"
     },
     "personal": {
       "title": "Informații Personale",
@@ -897,6 +943,34 @@
       "pricingNote": {
         "title": "Notă privind Prețul",
         "message": "Pentru transferurile pe bază de distanță, prețul afișat este o estimare. Prețul final va fi confirmat după ce analizez și accept comanda ta. Te vom contacta pe email cu suma exactă."
+      },
+      "totalEstimative": "Total Estimativ",
+      "apply": "Aplică",
+      "sending": "Se trimite...",
+      "sendTransferRequest": "Trimite Cerere Transfer",
+      "freeMax2Seats": "Gratuit (max 2 scaune)",
+      "free": "Gratuit",
+      "routeDetailsTitle": "Traseu și Detalii",
+      "remove": "Elimină",
+      "pickupPlaceholder": "Adresa pornire...",
+      "dropoffPlaceholder": "Adresa destinație...",
+      "passengers": "Pasageri",
+      "addDestination": "Adaugă destinație",
+      "recalculatePrice": "Recalculează preț",
+      "recalculating": "Se calculează...",
+      "loading": "Se încarcă detaliile transferului...",
+      "invalidData": "Date de rezervare nevalide sau lipsă.",
+      "totalDistance": "Distanță totală",
+      "km": "km",
+      "waitingTime": "Staționare:",
+      "appliedVoucher": "Voucher Aplicat",
+      "segment": "Segment",
+      "errors": {
+        "requiredFields": "Vă rugăm să completați toate câmpurile obligatorii.",
+        "saveFailed": "A apărut o eroare la salvarea cererii."
+      },
+      "success": {
+        "sent": "Cererea a fost trimisă cu succes!"
       }
     },
     "specialOrders": {
@@ -934,7 +1008,8 @@
       "message": "Mesaj",
       "nextSteps": "Vom revizui cererea de transfer și vă vom contacta cât mai curând posibil în maximum 6 ore pentru a confirma disponibilitatea și a finaliza prețul. Un email de confirmare a fost trimis la adresa pe care ati furnizat-o.",
       "backButton": "Înapoi la Transferuri",
-      "homeButton": "Înapoi la Pagina Principală"
+      "homeButton": "Înapoi la Pagina Principală",
+      "loading": "Se încarcă confirmarea..."
     },
     "contactForm": {
       "title": "Contactează-ne",

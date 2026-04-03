@@ -58,6 +58,7 @@ const voucherSchema = z.object({
   eligibleServices: z.array(z.enum(["rents", "transfers"])).min(1, "Select at least one service"),
   active: z.boolean(),
   maxUsage: z.coerce.number().optional().nullable(),
+  usesPerAccount: z.coerce.number().optional().nullable(),
 });
 
 type VoucherFormData = z.infer<typeof voucherSchema>;
@@ -88,6 +89,7 @@ export function EditVoucherDialog({ id, open, onOpenChange }: EditVoucherDialogP
       eligibleServices: ["rents", "transfers"],
       active: true,
       maxUsage: null,
+      usesPerAccount: null,
     },
   });
 
@@ -104,6 +106,7 @@ export function EditVoucherDialog({ id, open, onOpenChange }: EditVoucherDialogP
         eligibleServices: voucher.eligibleServices as ("rents" | "transfers")[],
         active: voucher.active,
         maxUsage: voucher.maxUsage || null,
+        usesPerAccount: voucher.usesPerAccount || null,
       });
     }
   }, [voucher, form]);
@@ -118,6 +121,7 @@ export function EditVoucherDialog({ id, open, onOpenChange }: EditVoucherDialogP
         expiryDate: values.expiryDate?.getTime(),
         minOrderPrice: values.minOrderPrice || undefined,
         maxUsage: values.maxUsage || undefined,
+        usesPerAccount: values.usesPerAccount || undefined,
       });
       toast.success("Voucher updated successfully");
       onOpenChange(false);
@@ -302,10 +306,29 @@ export function EditVoucherDialog({ id, open, onOpenChange }: EditVoucherDialogP
                 name="maxUsage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Max Uses</FormLabel>
+                    <FormLabel>Max Uses (Total)</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="Optional" {...field} value={field.value || ""} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="usesPerAccount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Uses Per Account</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Optional" {...field} value={field.value || ""} />
+                    </FormControl>
+                    <FormDescription>
+                      Limit uses per user account (leave empty for unlimited).
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

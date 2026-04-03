@@ -360,16 +360,16 @@ function TransferSummaryPageContent() {
                 <div className="space-y-4">
                   {segmentsState.map((s, i) => (
                     <div key={i} className="text-sm">
-                      <div className="font-bold text-pink-500 uppercase text-[10px] tracking-[0.1em] mb-1">Segment {i+1}</div>
+                      <div className="font-bold text-pink-500 uppercase text-[10px] tracking-[0.1em] mb-1">{t("summary.segment") ?? "Segment"} {i+1}</div>
                       <div className="flex items-start gap-2">
                          <div className="text-slate-900 dark:text-slate-100 font-medium">{s.from}</div>
                          <ArrowRight className="w-3 h-3 mt-1 shrink-0 text-slate-400" />
                          <div className="text-slate-900 dark:text-slate-100 font-medium">{s.to}</div>
                       </div>
                       <div className="flex gap-3 mt-1 text-xs text-slate-500">
-                         <span>{Number(s.distanceKm).toFixed(2)} km</span>
+                         <span>{Number(s.distanceKm).toFixed(2)} {t("summary.km") ?? "km"}</span>
                          {i < segmentsState.length - 1 && s.waitingTime > 0 && (
-                           <span className="text-pink-600 font-medium">Staționare: {s.waitingTime}h</span>
+                           <span className="text-pink-600 font-medium">{t("summary.waitingTime") ?? "Staționare:"} {s.waitingTime}h</span>
                          )}
                       </div>
                     </div>
@@ -390,8 +390,8 @@ function TransferSummaryPageContent() {
                     <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{categoryState}</dd>
                   </div>
                   <div>
-                    <dt className="font-medium">Distanță totală:</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{Number(totalDistance).toFixed(2)} km</dd>
+                    <dt className="font-medium">{t("summary.totalDistance") ?? "Distanță totală:"}</dt>
+                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{Number(totalDistance).toFixed(2)} {t("summary.km") ?? "km"}</dd>
                   </div>
                 </dl>
 
@@ -438,7 +438,7 @@ function TransferSummaryPageContent() {
                        <div className="flex items-center gap-3">
                          <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-xs">%</div>
                          <div>
-                           <div className="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-tighter">Voucher Aplicat</div>
+                           <div className="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-tighter">{t("summary.appliedVoucher") ?? "Voucher Aplicat"}</div>
                            <div className="text-sm font-bold text-gray-900 dark:text-white">{appliedVoucher.code}</div>
                          </div>
                        </div>
@@ -492,7 +492,7 @@ function TransferSummaryPageContent() {
                   
                   if (Object.values(errors).some((errObj: any) => Object.keys(errObj).length > 0)) {
                     setFormErrorsState(errors);
-                    toast.error("Vă rugăm să completați toate câmpurile obligatorii.");
+                    toast.error(t("summary.errors.requiredFields") ?? "Vă rugăm să completați toate câmpurile obligatorii.");
                     return;
                   }
                   
@@ -680,6 +680,7 @@ function TransferSummaryPageContent() {
                 setTermsAccepted={setTermsAccepted}
                 errors={formErrorsState}
                 disabledOptions={["card_online"]}
+                serviceType="transfers"
               />
             </div>
 
@@ -708,7 +709,7 @@ function TransferSummaryPageContent() {
                     
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-bold text-pink-500 uppercase tracking-wider">
-                        Segment {index + 1}
+                        {t("summary.segment") ?? "Segment"} {index + 1}
                       </h4>
                       {segmentsState.length > 1 && (
                         <Button 
@@ -751,7 +752,7 @@ function TransferSummaryPageContent() {
 
                     {index < segmentsState.length - 1 && (
                       <div className="flex items-center gap-4 pt-2">
-                         <span className="text-sm font-medium text-gray-500">Staționare la destinație:</span>
+                         <span className="text-sm font-medium text-gray-500">{t("summary.waitingTime") ?? "Staționare la destinație"}:</span>
                          <div className="flex items-center gap-2">
                             <Button 
                               variant="outline" 
@@ -791,7 +792,7 @@ function TransferSummaryPageContent() {
                     minDate={new Date()}
                   />
                   <div>
-                    <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">PASAGERI</Label>
+                    <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t("summary.numberOfPersons") ?? "PASAGERI"}</Label>
                     <Input 
                       type="number" 
                       min={1} 

@@ -147,8 +147,8 @@ export default function Home() {
             <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
                 <span className="block text-primary uppercase tracking-tight">ZETTA CARS</span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">Inchirieri auto si Transferuri</span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Cluj-Napoca</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">{t('hero.carRentalsAndTransfers')}</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{t('hero.clujNapoca')}</span>
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
                 {t('hero.subheadline')}
@@ -454,7 +454,7 @@ export default function Home() {
                     asChild
                     className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
-                    <Link href="/cars">
+                    <Link href={`/${locale}/cars`}>
                       {t('bookingProcess.cta')}
                     </Link>
                   </Button>
@@ -468,7 +468,7 @@ export default function Home() {
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
           <TestimonialsAnimatedSection 
             title={t('clientTestimonials.title')}
-            subtitle={t('clientTestimonials.subtitle') || "Descoperă ce spun clienții noștri despre experiența cu Zetta Cars."}
+            subtitle={t('clientTestimonials.subtitle')}
             reviews={homepageReviews}
           />
         </AnimatedGroup>

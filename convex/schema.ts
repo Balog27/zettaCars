@@ -183,6 +183,7 @@ export default defineSchema({
     active: v.optional(v.boolean()),
     usageCount: v.optional(v.number()),
     maxUsage: v.optional(v.number()),
+    usesPerAccount: v.optional(v.number()),
   })
     .index("by_code", ["code"])
     .index("by_active", ["active"]),

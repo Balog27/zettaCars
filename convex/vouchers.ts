@@ -1,6 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { getCurrentUserOrThrow } from "./users";
+import { getCurrentUser, getCurrentUserOrThrow } from "./users";
 
 // --- ADMIN CRUD ---
 
@@ -16,6 +16,7 @@ export const createVoucher = mutation({
     eligibleServices: v.array(v.union(v.literal("rents"), v.literal("transfers"))),
     active: v.boolean(),
     maxUsage: v.optional(v.number()),
+    usesPerAccount: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserOrThrow(ctx);
@@ -53,6 +54,7 @@ export const updateVoucher = mutation({
     eligibleServices: v.optional(v.array(v.union(v.literal("rents"), v.literal("transfers")))),
     active: v.optional(v.boolean()),
     maxUsage: v.optional(v.number()),
+    usesPerAccount: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserOrThrow(ctx);
@@ -135,6 +137,35 @@ export const getVoucherByCode = query({
       };
     }
 
+    // Check per-account usage
+    if (voucher.usesPerAccount !== undefined) {
+      const currentUser = await getCurrentUser(ctx);
+      if (!currentUser) {
+        return { success: false, message: "This voucher requires a user account. Please log in." };
+      }
+
+      const prevReservations = await ctx.db
+        .query("reservations")
+        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+        .collect();
+
+      const prevTransfers = await ctx.db
+        .query("transferRequests")
+        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+        .collect();
+
+      const userUsageCount = prevReservations.length + prevTransfers.length;
+
+      if (userUsageCount >= voucher.usesPerAccount) {
+        return { 
+          success: false, 
+          message: `You have already used this voucher ${userUsageCount} time(s) on your account.` 
+        };
+      }
+    }
+
     // Calculate discount
     let discountAmount = 0;
     if (voucher.type === "percentage") {
@@ -199,6 +230,35 @@ export const checkVoucher = mutation({
         success: false, 
         message: `Minimum order price for this voucher is ${voucher.minOrderPrice}` 
       };
+    }
+
+    // Check per-account usage
+    if (voucher.usesPerAccount !== undefined) {
+      const currentUser = await getCurrentUser(ctx);
+      if (!currentUser) {
+        return { success: false, message: "This voucher requires a user account. Please log in." };
+      }
+
+      const prevReservations = await ctx.db
+        .query("reservations")
+        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+        .collect();
+
+      const prevTransfers = await ctx.db
+        .query("transferRequests")
+        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+        .collect();
+
+      const userUsageCount = prevReservations.length + prevTransfers.length;
+
+      if (userUsageCount >= voucher.usesPerAccount) {
+        return { 
+          success: false, 
+          message: `You have already used this voucher ${userUsageCount} time(s) on your account.` 
+        };
+      }
     }
 
     // Calculate discount

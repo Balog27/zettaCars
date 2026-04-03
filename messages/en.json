@@ -5,6 +5,8 @@
     "viewAllCars": "View All Cars",
     "hero": {
       "headline": "Premium Car Rentals with Zetta Cars in Cluj-Napoca",
+      "carRentalsAndTransfers": "Car Rentals and Transfers",
+      "clujNapoca": "Cluj-Napoca",
       "subheadline": "Discover Cluj-Napoca and beyond with our premium fleet of vehicles. Professional service, competitive prices, and exceptional customer experience.",
       "cta": "Browse Our Fleet"
     },
@@ -249,7 +251,8 @@
   "reservationPage": {
     "common": {
       "terms": "Terms & Conditions",
-      "privacy": "Privacy Policy"
+      "privacy": "Privacy Policy",
+      "and": "and"
     },
     "backToVehicleDetails": "Back to Vehicle Details",
     "formProgress": "Form Progress",
@@ -320,7 +323,7 @@
     },
     "paymentMethod": {
       "title": "Payment Method",
-      "termsAcceptance": "I accept the Terms and Conditions and Privacy Policy"
+      "termsAcceptance": "I accept"
     },
     "protectionOptions": {
       "title": "Protection Options",
@@ -639,7 +642,11 @@
     "terms": "Terms",
     "copyright": "© 2025 Zetta Cars Cluj",
     "allRightsReserved": "All rights reserved",
-    "builtBy": "Built by"
+    "builtBy": "Built by",
+    "goToHomepage": "Go to homepage",
+    "followOnTikTok": "Follow us on TikTok",
+    "followOnInstagram": "Follow us on Instagram",
+    "followOnFacebook": "Follow us on Facebook"
   },
   "search": {
     "pickupLocation": "Pick-up Location",
@@ -812,6 +819,11 @@
   "transfersPage": {
     "title": "Transfers",
     "subtitle": "Book airport and city transfers",
+    "common": {
+      "terms": "Terms and Conditions",
+      "privacy": "Privacy Policy",
+      "and": "and"
+    },
     "paymentMethod": {
       "title": "Payment Method"
     },
@@ -836,9 +848,21 @@
       "van": "Van"
     },
     "payment": {
-      "cashOnDelivery": "Cash on delivery",
-      "cardOnDelivery": "Card on delivery",
-      "termsAcceptance": "I accept the Terms and Conditions and Privacy Policy"
+      "methods": {
+        "cashOnDelivery": {
+          "label": "Cash payment to driver",
+          "description": "Pay cash directly to the driver"
+        },
+        "cardOnDelivery": {
+          "label": "Card payment to driver",
+          "description": "Pay by card to the driver"
+        },
+        "cardOnline": {
+          "label": "Bank transfer",
+          "description": "Pay via bank transfer"
+        }
+      },
+      "termsAcceptance": "I accept"
     },
     "personal": {
       "title": "Personal Information",
@@ -878,6 +902,34 @@
       "pricingNote": {
         "title": "Pricing Note",
         "message": "For distance-based transfers, the price shown is an estimated range. The final price will be confirmed after we review and accept your order. You will be contacted on email with the exact amount."
+      },
+      "totalEstimative": "Estimated Total",
+      "apply": "Apply",
+      "sending": "Sending...",
+      "sendTransferRequest": "Send Transfer Request",
+      "freeMax2Seats": "Free (max 2 seats)",
+      "free": "Free",
+      "routeDetailsTitle": "Route & Details",
+      "remove": "Remove",
+      "pickupPlaceholder": "Pickup address...",
+      "dropoffPlaceholder": "Dropoff address...",
+      "passengers": "Passengers",
+      "addDestination": "Add destination",
+      "recalculatePrice": "Recalculate price",
+      "recalculating": "Recalculating...",
+      "loading": "Loading transfer details...",
+      "invalidData": "Invalid or missing booking data.",
+      "totalDistance": "Total Distance:",
+      "km": "km",
+      "waitingTime": "Waiting:",
+      "appliedVoucher": "Voucher Applied",
+      "segment": "Segment",
+      "errors": {
+        "requiredFields": "Please fill in all required fields.",
+        "saveFailed": "An error occurred while saving the request."
+      },
+      "success": {
+        "sent": "Request sent successfully!"
       }
     },
     "specialOrders": {
@@ -927,7 +979,8 @@
       "message": "Message",
       "nextSteps": "We will review your transfer request and contact you as soon as possible within 6 hours to confirm availability and finalize the price. A confirmation email has been sent to the address you provided.",
       "backButton": "Back to Transfers",
-      "homeButton": "Back to Home"
+      "homeButton": "Back to Home",
+      "loading": "Loading confirmation..."
     }
   },
   "email": {

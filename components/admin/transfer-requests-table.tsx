@@ -24,23 +24,73 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useLocale } from "next-intl";
 
 const ITEMS_PER_PAGE = 10;
 
 export function AdminTransferTable() {
   const [currentPage, setCurrentPage] = useState(1);
+  const locale = useLocale();
   
   const transferRequests = useQuery(api.transferRequests.getAllTransferRequests);
   const updateStatus = useMutation(api.transferRequests.updateTransferRequestStatus);
   const deleteRequest = useMutation(api.transferRequests.deleteTransferRequestPermanently);
 
   const handleStatusUpdate = async (requestId: Id<"transferRequests">, newStatus: "pending" | "confirmed" | "cancelled" | "completed") => {
+    const request = transferRequests?.find(r => r._id === requestId);
+    if (!request) return;
+
     try {
       await updateStatus({ transferRequestId: requestId, newStatus: newStatus });
-      toast.success("Transfer status updated", {
-        description: `Status changed to ${newStatus}`,
-        position: "bottom-right",
-      });
+      
+      // Trigger email if confirmed or cancelled
+      if (newStatus === "confirmed" || newStatus === "cancelled") {
+        const emailPromise = (async () => {
+          const response = await fetch("/api/send/transfer-request", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              personalInfo: request.customerInfo,
+              transferDetails: {
+                pickupLocation: request.segments?.[0]?.from || request.pickupLocation,
+                dropoffLocation: request.segments?.[request.segments.length - 1]?.to || request.dropoffLocation,
+                transferDate: request.transferDate || new Date().toISOString(),
+                pickupTime: request.transferTime || "10:00",
+                category: request.category,
+                persons: request.passengers,
+                distance: request.totalDistanceKm,
+                childSeats1to4: request.childSeats1to4,
+                childSeats5to12: request.childSeats5to12,
+              },
+              pricing: {
+                price: request.finalPrice || request.estimatedPrice,
+                isSingle: true,
+                currency: request.currency,
+                voucherCode: request.voucherCode,
+                discountAmount: request.discountAmount,
+              },
+              locale: locale,
+              emailType: newStatus === "confirmed" ? "accepted" : "rejected",
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error("Failed to send email");
+          }
+          return response.json();
+        })();
+
+        toast.promise(emailPromise, {
+          loading: locale === 'ro' ? "Se trimite notificarea prin email..." : "Sending email notification...",
+          success: locale === 'ro' ? "Notificarea a fost trimisă cu succes!" : "Email notification sent successfully!",
+          error: locale === 'ro' ? "Eroare la trimiterea notificării." : "Failed to send email notification.",
+        });
+      } else {
+        toast.success("Transfer status updated", {
+          description: `Status changed to ${newStatus}`,
+          position: "bottom-right",
+        });
+      }
     } catch (error) {
       toast.error("Failed to update status");
       console.error(error);

@@ -14,9 +14,11 @@ interface PaymentMethodCardProps {
   setPaymentMethod: (method: string) => void;
   termsAccepted: boolean;
   setTermsAccepted: (accepted: boolean) => void;
-  errors: FormErrors;
+  errors: any; // Allow for dynamic error shapes
   /** list of method ids to render but keep disabled (greyed) */
   disabledOptions?: string[];
+  /** either 'reservations' or 'transfers' */
+  serviceType?: "reservations" | "transfers";
 }
 
 export function PaymentMethodCard({
@@ -25,9 +27,10 @@ export function PaymentMethodCard({
   termsAccepted,
   setTermsAccepted,
   errors,
-  disabledOptions = []
+  disabledOptions = [],
+  serviceType = "reservations"
 }: PaymentMethodCardProps) {
-  const t = useTranslations('reservationPage');
+  const t = useTranslations(serviceType === "transfers" ? 'transfersPage' : 'reservationPage');
 
   return (
     <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
@@ -50,13 +53,19 @@ export function PaymentMethodCard({
                 ? method.id.split("_").map((w, i) => i === 0 ? w : w[0].toUpperCase() + w.slice(1)).join("")
                 : method.id;
               const disabled = disabledOptions.includes(method.id);
+              
+              const label = t(`payment.methods.${messageKey}.label`);
+              const description = t(`payment.methods.${messageKey}.description`);
+
               return (
-                <div key={method.id} className={`flex items-start space-x-3 ${disabled ? 'opacity-60' : ''}`}>
-                  <RadioGroupItem value={method.id} id={method.id} className="mt-1" disabled={disabled} />
+                <div key={method.id} className={`flex items-center space-x-3 ${disabled ? 'opacity-60' : ''}`}>
+                  <RadioGroupItem value={method.id} id={method.id} disabled={disabled} />
                   <div className="flex-1">
-                    <Label htmlFor={method.id} className={`cursor-pointer ${disabled ? 'cursor-not-allowed' : ''}`}>
-                      <div className="font-medium text-slate-900 dark:text-slate-100">{t(`payment.methods.${messageKey}.label`)}</div>
-                      <div className={`text-sm ${disabled ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-300'}`}>{t(`payment.methods.${messageKey}.description`)}</div>
+                    <Label htmlFor={method.id} className={`cursor-pointer flex items-center justify-between gap-2 w-full ${disabled ? 'cursor-not-allowed' : ''}`}>
+                      <span className="font-medium text-slate-900 dark:text-slate-100 whitespace-nowrap">{label}</span>
+                      {description && (
+                        <span className={`text-sm text-right ${disabled ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-300'}`}>{description}</span>
+                      )}
                     </Label>
                   </div>
                 </div>
@@ -78,11 +87,15 @@ export function PaymentMethodCard({
                 checked={termsAccepted}
                 onCheckedChange={(checked) => setTermsAccepted(checked === true)}
               />
-              <Label htmlFor="terms-conditions" className="text-sm cursor-pointer text-slate-900 dark:text-slate-100">
-                {t('paymentMethod.termsAcceptance')}{' '}
-                <a href="/terms" className="text-pink-600 underline ml-1">{t('common.terms') ?? 'Termeni și Condițiile'}</a>
-                {' '}
-                <a href="/privacy" className="text-pink-600 underline ml-1">{t('common.privacy') ?? 'Politica de Confidențialitate'}</a>
+              <Label htmlFor="terms-conditions" className="text-sm cursor-pointer text-slate-900 dark:text-slate-100 !inline !items-baseline !gap-0 leading-relaxed pt-0.5">
+                {serviceType === "transfers" ? t('payment.termsAcceptance') : t('paymentMethod.termsAcceptance')}{' '}
+                <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-500 underline decoration-pink-600/30 underline-offset-4 font-medium transition-colors">
+                  {t('common.terms')}
+                </a>{' '}
+                {t('common.and')}{' '}
+                <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-500 underline decoration-pink-600/30 underline-offset-4 font-medium transition-colors">
+                  {t('common.privacy')}
+                </a>
               </Label>
             </div>
             {errors.payment?.termsAccepted && (
@@ -96,4 +109,4 @@ export function PaymentMethodCard({
       </CardContent>
     </Card>
   );
-} 
+}

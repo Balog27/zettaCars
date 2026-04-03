@@ -1,6 +1,7 @@
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Vehicle } from "@/types/vehicle";
+import { useTranslations } from "next-intl";
 
 export interface UseHomepageFeaturedVehiclesReturn {
   vehiclesToDisplay: Vehicle[];
@@ -10,6 +11,7 @@ export interface UseHomepageFeaturedVehiclesReturn {
 }
 
 export function useHomepageFeaturedVehicles(): UseHomepageFeaturedVehiclesReturn {
+  const t = useTranslations('common');
   // Try to get featured cars from backend first
   const featuredVehicles = useQuery(api.featuredCars.getFeaturedVehicles);
   
@@ -24,13 +26,13 @@ export function useHomepageFeaturedVehicles(): UseHomepageFeaturedVehiclesReturn
   
   // Determine vehicles to display
   let vehiclesToDisplay: Vehicle[] = [];
-  let currentTitle = "Loading...";
+  let currentTitle = t('loading');
 
   if (!isLoading && !error) {
     if (featuredVehicles && featuredVehicles.length > 0) {
       // Use featured cars from backend
       vehiclesToDisplay = featuredVehicles;
-      currentTitle = "Featured Cars";
+      currentTitle = t('featuredCars');
     } else if (fallbackVehiclesQuery) {
       // Fallback may return either an array or a paginated object with `.page`.
       if (Array.isArray(fallbackVehiclesQuery)) {
@@ -38,10 +40,10 @@ export function useHomepageFeaturedVehicles(): UseHomepageFeaturedVehiclesReturn
       } else if ((fallbackVehiclesQuery as any).page) {
         vehiclesToDisplay = (fallbackVehiclesQuery as any).page as Vehicle[];
       }
-      currentTitle = vehiclesToDisplay.length > 0 ? "Our Latest Cars" : "No Cars Available";
+      currentTitle = vehiclesToDisplay.length > 0 ? t('latestCars') : t('noFeaturedCarsAvailable');
     } else {
       vehiclesToDisplay = [];
-      currentTitle = "No Cars Available";
+      currentTitle = t('noFeaturedCarsAvailable');
     }
   }
 

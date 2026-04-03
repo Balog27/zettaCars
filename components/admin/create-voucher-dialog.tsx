@@ -57,6 +57,7 @@ const voucherSchema = z.object({
   eligibleServices: z.array(z.enum(["rents", "transfers"])).min(1, "Select at least one service"),
   active: z.boolean(),
   maxUsage: z.coerce.number().optional().nullable(),
+  usesPerAccount: z.coerce.number().optional().nullable(),
 });
 
 type VoucherFormData = z.infer<typeof voucherSchema>;
@@ -83,6 +84,7 @@ export function CreateVoucherDialog({ open, onOpenChange }: CreateVoucherDialogP
       eligibleServices: ["rents", "transfers"],
       active: true,
       maxUsage: null,
+      usesPerAccount: null,
     },
   });
 
@@ -95,6 +97,7 @@ export function CreateVoucherDialog({ open, onOpenChange }: CreateVoucherDialogP
         expiryDate: values.expiryDate?.getTime(),
         minOrderPrice: values.minOrderPrice || undefined,
         maxUsage: values.maxUsage || undefined,
+        usesPerAccount: values.usesPerAccount || undefined,
       });
       toast.success("Voucher created successfully");
       form.reset();
@@ -278,10 +281,29 @@ export function CreateVoucherDialog({ open, onOpenChange }: CreateVoucherDialogP
                 name="maxUsage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Max Uses</FormLabel>
+                    <FormLabel>Max Uses (Total)</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="Optional" {...field} value={field.value || ""} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="usesPerAccount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Uses Per Account</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Optional" {...field} value={field.value || ""} />
+                    </FormControl>
+                    <FormDescription>
+                      Limit uses per user account (leave empty for unlimited).
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

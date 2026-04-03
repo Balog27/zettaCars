@@ -36,6 +36,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { toast } from "sonner";
+import { useLocale } from "next-intl";
+import { useConvex } from "convex/react";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSeasonalPricing } from "@/hooks/useSeasonalPricing";
@@ -118,6 +120,8 @@ export function EditReservationDialog({
   const reservation = useQuery(api.reservations.getReservationById, reservationId ? { reservationId } : "skip");
   const vehicles = useQuery(api.vehicles.getAllVehicles);
   const updateReservation = useMutation(api.reservations.updateReservationDetails);
+  const locale = useLocale();
+  const convex = useConvex();
   
   // Get current seasonal pricing (for new calculations) or use historical data from reservation
   const { multiplier: currentSeasonalMultiplier, currentSeason } = useSeasonalPricing();
@@ -364,6 +368,62 @@ export function EditReservationDialog({
         seasonId: currentSeason?.seasonId,
         seasonalMultiplier: currentSeasonalMultiplier,
       });
+
+      // Trigger email if status changed to confirmed or cancelled
+      if (values.status !== reservation.status && (values.status === "confirmed" || values.status === "cancelled")) {
+        const emailPromise = (async () => {
+          // Need vehicle details for the email
+          const vehicle = vehicles?.find(v => v._id === values.vehicleId) || 
+                          await convex.query(api.vehicles.getById, { id: values.vehicleId as Id<"vehicles"> });
+          
+          if (!vehicle) throw new Error("Vehicle not found");
+
+          const isRo = locale === 'ro';
+          const emailType = values.status === "confirmed" ? "confirmation" : "cancellation";
+          
+          const startDateStr = new Date(startDate).toLocaleDateString(isRo ? 'ro-RO' : 'en-US');
+          const endDateStr = new Date(endDate).toLocaleDateString(isRo ? 'ro-RO' : 'en-US');
+
+          const response = await fetch("/api/send/reservation-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              to: values.customerEmail,
+              subject: values.status === "confirmed" 
+                ? (isRo ? `Rezervare Confirmată - #${reservation.reservationNumber}` : `Reservation Confirmed - #${reservation.reservationNumber}`)
+                : (isRo ? `Rezervare Anulată - #${reservation.reservationNumber}` : `Reservation Cancelled - #${reservation.reservationNumber}`),
+              message: values.status === "confirmed"
+                ? (isRo 
+                    ? `Bună ${values.customerName},\n\nVești bune! Rezervarea ta pentru ${vehicle.make} ${vehicle.model} a fost CONFIRMATĂ.\n\nTe așteptăm pe data de ${startDateStr} la ora ${values.pickupTime} în locația ${values.pickupLocation}.`
+                    : `Hello ${values.customerName},\n\nGood news! Your reservation for ${vehicle.make} ${vehicle.model} has been CONFIRMED.\n\nWe look forward to seeing you on ${startDateStr} at ${values.pickupTime} at ${values.pickupLocation}.`)
+                : (isRo
+                    ? `Bună ${values.customerName},\n\nNe pare rău să te informăm că rezervarea ta pentru ${vehicle.make} ${vehicle.model} a fost ANULATĂ.\n\nTe rugăm să ne contactezi dacă ai întrebări sau dorești să programezi o altă rezervare.`
+                    : `Hello ${values.customerName},\n\nWe are sorry to inform you that your reservation for ${vehicle.make} ${vehicle.model} has been CANCELLED.\n\nPlease contact us if you have any questions or would like to schedule another reservation.`),
+              emailType: emailType,
+              reservationData: {
+                id: reservation.reservationNumber?.toString() || reservation._id.substring(0, 8),
+                vehicle: `${vehicle.make} ${vehicle.model} (${vehicle.year})`,
+                dates: `${startDateStr} - ${endDateStr}`,
+                pickup: `${values.pickupLocation} (${values.pickupTime})`,
+                return: `${values.restitutionLocation} (${values.restitutionTime})`,
+                totalPrice: values.totalPrice,
+              },
+              locale: locale
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error("Failed to send email");
+          }
+          return response.json();
+        })();
+
+        toast.promise(emailPromise, {
+          loading: locale === 'ro' ? "Se trimite notificarea prin email..." : "Sending email notification...",
+          success: locale === 'ro' ? "Notificarea a fost trimisă cu succes!" : "Email notification sent successfully!",
+          error: locale === 'ro' ? "Eroare la trimiterea notificării." : "Failed to send email notification.",
+        });
+      }
 
       toast.success("Reservation updated successfully");
       onSuccess?.();
