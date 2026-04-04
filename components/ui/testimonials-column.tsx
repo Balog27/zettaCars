@@ -40,25 +40,12 @@ export const TestimonialsColumn = (props: {
                     "{text}"
                   </div>
                   <div className="flex items-center gap-3 mt-6">
-                    {image ? (
-                      <img
-                        width={40}
-                        height={40}
-                        src={image}
-                        alt={name}
-                        className="h-10 w-10 rounded-full object-cover border border-pink-500/20"
-                      />
-                    ) : (
-                      <div className="h-10 w-10 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-500 text-sm font-semibold uppercase">
-                        {name.charAt(0)}
-                      </div>
-                    )}
-                    <div className="flex flex-col">
+                    <div className="h-10 w-10 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-500 text-sm font-semibold uppercase shrink-0">
+                      {name.charAt(0)}
+                    </div>
+                    <div className="flex flex-col justify-center">
                       <div className="font-semibold text-foreground dark:text-white tracking-tight text-sm leading-tight">
                         {name}
-                      </div>
-                      <div className="text-xs text-muted-foreground opacity-80 leading-tight mt-0.5">
-                        {role}
                       </div>
                     </div>
                   </div>

@@ -109,6 +109,7 @@ function TransferSummaryPageContent() {
   const [childSeats1to4, setChildSeats1to4] = useState<number>(0);
   const [childSeats5to12, setChildSeats5to12] = useState<number>(0);
   const [isRecalculating, setIsRecalculating] = useState(false);
+  const [hasRecalculated, setHasRecalculated] = useState(false);
   const [voucherCode, setVoucherCode] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState<{
     id: any;
@@ -142,6 +143,7 @@ function TransferSummaryPageContent() {
         }
       }
       setSegmentsState(newSegments);
+      setHasRecalculated(true);
       toast.success("Prices and distances updated!");
     } catch (error) {
       console.error("Error recalculating price:", error);
@@ -343,7 +345,7 @@ function TransferSummaryPageContent() {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                Back to Transfers
+                {t("summary.backToTransfers") ?? "Back to Transfers"}
               </button>
             </div>
           </div>
@@ -475,113 +477,111 @@ function TransferSummaryPageContent() {
               </div>
             )}
 
-            <div className="mt-4 text-center">
-              <button
-                type="button"
-                onClick={async () => {
-                  // Validation logic
-                  const errors: any = { personalInfo: {}, payment: {}, locations: {}, datetime: {} };
-                  if (!personalInfoState.name?.trim()) errors.personalInfo.name = 'Name is required';
-                  if (!personalInfoState.email?.trim()) errors.personalInfo.email = 'Email is required';
-                  if (!personalInfoState.phone?.trim()) errors.personalInfo.phone = 'Phone is required';
-                  if (!segmentsState[0]?.from?.trim()) errors.locations.pickup = 'Pick-up location is required';
-                  if (!segmentsState[segmentsState.length - 1]?.to?.trim()) errors.locations.dropoff = 'Dropoff location is required';
-                  if (!transferDateState) errors.datetime.transferDate = 'Transfer date is required';
-                  if (!pickupTimeState) errors.datetime.pickupTime = 'Pickup time is required';
-                  if (!termsAccepted) errors.payment.termsAccepted = 'You must accept the terms and conditions';
-                  
-                  if (Object.values(errors).some((errObj: any) => Object.keys(errObj).length > 0)) {
-                    setFormErrorsState(errors);
-                    toast.error(t("summary.errors.requiredFields") ?? "Vă rugăm să completați toate câmpurile obligatorii.");
-                    return;
-                  }
-                  
-                  setFormErrorsState({ personalInfo: {}, payment: {}, locations: {}, datetime: {} });
-                  
-                  const confirmationData = {
-                    personalInfo: personalInfoState,
-                    transferDetails: {
-                      segments: segmentsState,
-                      transferDate: transferDateState,
-                      pickupTime: pickupTimeState,
-                      category: categoryState,
-                      persons: passengersState,
-                      distance: totalDistance,
-                      childSeats1to4,
-                      childSeats5to12,
-                    },
-                    pricing: {
-                      ...priceData,
-                      finalTotal: Math.max(0, finalTotal - discountAmount),
-                      currency: "EUR",
-                      discountAmount: discountAmount,
-                    },
-                    voucher: appliedVoucher ? { code: appliedVoucher.code, discountAmount } : undefined
-                  };
-                  
-                  setIsSubmitting(true);
-                  try {
-                    await createTransferRequest({
-                      rideType: rideTypeState as any,
-                      segments: segmentsState,
-                      waitingTotalHours: totalWaitingHours,
-                      totalDistanceKm: totalDistance,
-                      passengers: passengersState,
-                      category: categoryState as any,
-                      customerInfo: {
-                        name: personalInfoState.name,
-                        email: personalInfoState.email,
-                        phone: personalInfoState.phone,
-                        message: personalInfoState.message || undefined,
-                        flightNumber: personalInfoState.flightNumber || undefined,
+                <button
+                  type="button"
+                  onClick={async () => {
+                    // Validation logic
+                    const errors: any = { personalInfo: {}, payment: {}, locations: {}, datetime: {} };
+                    if (!personalInfoState.name?.trim()) errors.personalInfo.name = 'Name is required';
+                    if (!personalInfoState.email?.trim()) errors.personalInfo.email = 'Email is required';
+                    if (!personalInfoState.phone?.trim()) errors.personalInfo.phone = 'Phone is required';
+                    if (!segmentsState[0]?.from?.trim()) errors.locations.pickup = 'Pick-up location is required';
+                    if (!segmentsState[segmentsState.length - 1]?.to?.trim()) errors.locations.dropoff = 'Dropoff location is required';
+                    if (!transferDateState) errors.datetime.transferDate = t("validation.pickupDateRequired") ?? 'Transfer date is required';
+                    if (!pickupTimeState) errors.datetime.pickupTime = t("validation.pickupTimeRequired") ?? 'Pickup time is required';
+                    if (!termsAccepted) errors.payment.termsAccepted = t("validation.termsAcceptanceRequired") ?? 'You must accept the terms and conditions';
+                    
+                    if (Object.values(errors).some((errObj: any) => Object.keys(errObj).length > 0)) {
+                      setFormErrorsState(errors);
+                      toast.error(t("summary.errors.requiredFields") ?? "Vă rugăm să completați toate câmpurile obligatorii.");
+                      return;
+                    }
+                    
+                    setFormErrorsState({ personalInfo: {}, payment: {}, locations: {}, datetime: {} });
+                    
+                    const confirmationData = {
+                      personalInfo: personalInfoState,
+                      transferDetails: {
+                        segments: segmentsState,
+                        transferDate: transferDateState,
+                        pickupTime: pickupTimeState,
+                        category: categoryState,
+                        persons: passengersState,
+                        distance: totalDistance,
+                        childSeats1to4,
+                        childSeats5to12,
                       },
-                      estimatedPrice: Math.max(0, finalTotal - discountAmount),
-                      currency: "EUR",
-                      voucherId: appliedVoucher?.id,
-                      voucherCode: appliedVoucher?.code,
-                      discountAmount: discountAmount > 0 ? discountAmount : undefined,
-                      childSeats1to4,
-                      childSeats5to12,
-                      transferDate: transferDateState!.toISOString().split('T')[0],
-                      transferTime: pickupTimeState,
-                      pickupLocation: segmentsState[0].from,
-                      dropoffLocation: segmentsState[segmentsState.length-1].to,
-                      numberOfPassengers: passengersState,
-                      distanceKm: totalDistance,
-                    });
-
-                    toast.success("Cererea a fost trimisă cu succes!");
+                      pricing: {
+                        ...priceData,
+                        finalTotal: Math.max(0, finalTotal - discountAmount),
+                        currency: "EUR",
+                        discountAmount: discountAmount,
+                      },
+                      voucher: appliedVoucher ? { code: appliedVoucher.code, discountAmount } : undefined
+                    };
+                    
+                    setIsSubmitting(true);
                     try {
-                      await fetch('/api/send/transfer-request', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          personalInfo: personalInfoState,
-                          transferDetails: { ...confirmationData.transferDetails, pickupLocation: segmentsState[0].from, dropoffLocation: segmentsState[segmentsState.length-1].to },
-                          pricing: { ...confirmationData.pricing, voucherCode: appliedVoucher?.code },
-                          locale: localePath || 'en',
-                        }),
+                      await createTransferRequest({
+                        rideType: rideTypeState as any,
+                        segments: segmentsState,
+                        waitingTotalHours: totalWaitingHours,
+                        totalDistanceKm: totalDistance,
+                        passengers: passengersState,
+                        category: categoryState as any,
+                        customerInfo: {
+                          name: personalInfoState.name,
+                          email: personalInfoState.email,
+                          phone: personalInfoState.phone,
+                          message: personalInfoState.message || undefined,
+                          flightNumber: personalInfoState.flightNumber || undefined,
+                        },
+                        estimatedPrice: Math.max(0, finalTotal - discountAmount),
+                        currency: "EUR",
+                        voucherId: appliedVoucher?.id,
+                        voucherCode: appliedVoucher?.code,
+                        discountAmount: discountAmount > 0 ? discountAmount : undefined,
+                        childSeats1to4,
+                        childSeats5to12,
+                        transferDate: transferDateState!.toISOString().split('T')[0],
+                        transferTime: pickupTimeState,
+                        pickupLocation: segmentsState[0].from,
+                        dropoffLocation: segmentsState[segmentsState.length-1].to,
+                        numberOfPassengers: passengersState,
+                        distanceKm: totalDistance,
                       });
-                    } catch (e) { console.error(e); }
 
-                    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(confirmationData)))));
-                    router.push(`${localePath ? `/${localePath}` : ''}/transfers/confirmation?data=${encoded}`);
-                  } catch (convexError) {
-                    console.error('Error saving transfer request:', convexError);
-                    toast.error("A apărut o eroare la salvarea cererii.");
-                  } finally {
-                    setIsSubmitting(false);
-                  }
-                }}
-                disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-pink-500/20"
-              >
-                {isSubmitting ? (
-                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : <Send className="h-4 w-4" />}
-                {isSubmitting ? "Se trimite..." : (t("sendButton") ?? "Trimite Cerere Transfer")}
-              </button>
-            </div>
+                      toast.success(t("summary.success.sent") ?? "Cererea a fost trimisă cu succes!");
+                      try {
+                        await fetch('/api/send/transfer-request', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            personalInfo: personalInfoState,
+                            transferDetails: { ...confirmationData.transferDetails, pickupLocation: segmentsState[0].from, dropoffLocation: segmentsState[segmentsState.length-1].to },
+                            pricing: { ...confirmationData.pricing, voucherCode: appliedVoucher?.code },
+                            locale: localePath || 'en',
+                          }),
+                        });
+                      } catch (e) { console.error(e); }
+
+                      const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(confirmationData)))));
+                      router.push(`${localePath ? `/${localePath}` : ''}/transfers/confirmation?data=${encoded}`);
+                    } catch (convexError) {
+                      console.error('Error saving transfer request:', convexError);
+                      toast.error(t("summary.errors.saveFailed") ?? "A apărut o eroare la salvarea cererii.");
+                    } finally {
+                      setIsSubmitting(false);
+                    }
+                  }}
+                  disabled={isSubmitting}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-pink-500/20 mt-4 animate-in fade-in"
+                >
+                  {isSubmitting ? (
+                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : <Send className="h-4 w-4" />}
+                  {isSubmitting ? (t("summary.sending") ?? "Se trimite...") : (t("summary.sendTransferRequest") ?? "Trimite Cerere Transfer")}
+                </button>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -601,16 +601,17 @@ function TransferSummaryPageContent() {
                             {t("additionalFeatures.age1to4") ?? "Child Seat (1-4 years)"}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
-                             Gratuit (max 2 scaune)
+                             {t("summary.freeMax2Seats") ?? "Free (max 2 seats)"}
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="flex items-center gap-2 mb-1">
                             <button
                               className="px-3 py-1 border rounded"
-                              onClick={() =>
-                                setChildSeats1to4(Math.max(0, childSeats1to4 - 1))
-                              }
+                              onClick={() => {
+                                setChildSeats1to4(Math.max(0, childSeats1to4 - 1));
+                                setHasRecalculated(false);
+                              }}
                             >
                               -
                             </button>
@@ -618,15 +619,17 @@ function TransferSummaryPageContent() {
                             <button
                               className="px-3 py-1 border rounded"
                               onClick={() => {
-                                if (childSeats1to4 + childSeats5to12 < 2)
+                                if (childSeats1to4 + childSeats5to12 < 2) {
                                   setChildSeats1to4(childSeats1to4 + 1);
+                                  setHasRecalculated(false);
+                                }
                               }}
                             >
                               +
                             </button>
                           </div>
                           <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                             Gratuit
+                             {t("summary.free") ?? "Free"}
                           </div>
                         </div>
                       </div>
@@ -639,16 +642,17 @@ function TransferSummaryPageContent() {
                             {t("additionalFeatures.age5to12") ?? "Child Seat (5-12 years)"}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
-                             Gratuit (max 2 scaune)
+                             {t("summary.freeMax2Seats") ?? "Free (max 2 seats)"}
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="flex items-center gap-2 mb-1">
                             <button
                               className="px-3 py-1 border rounded"
-                              onClick={() =>
-                                setChildSeats5to12(Math.max(0, childSeats5to12 - 1))
-                              }
+                              onClick={() => {
+                                setChildSeats5to12(Math.max(0, childSeats5to12 - 1));
+                                setHasRecalculated(false);
+                              }}
                             >
                               -
                             </button>
@@ -656,15 +660,17 @@ function TransferSummaryPageContent() {
                             <button
                               className="px-3 py-1 border rounded"
                               onClick={() => {
-                                if (childSeats1to4 + childSeats5to12 < 2)
+                                if (childSeats1to4 + childSeats5to12 < 2) {
                                   setChildSeats5to12(childSeats5to12 + 1);
+                                  setHasRecalculated(false);
+                                }
                               }}
                             >
                               +
                             </button>
                           </div>
                           <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                             Gratuit
+                             {t("summary.free") ?? "Free"}
                           </div>
                         </div>
                       </div>
@@ -695,11 +701,10 @@ function TransferSummaryPageContent() {
 
           <div className="max-w-4xl mx-auto mt-10">
             <Card className="rounded-lg bg-card dark:bg-card-darker border border-gray-200 dark:border-gray-700">
-              <CardHeader>
-                <CardTitle>
-                  {t("booking.transferDate") ?? "Traseu și Detalii (Recalculează preț)"}
-                </CardTitle>
-              </CardHeader>
+                   <CardTitle className="text-xl font-bold flex items-center gap-2">
+                     <div className="w-1 h-6 bg-pink-500 rounded-full" />
+                     {t('summary.routeDetailsTitle') ?? 'Traseu și Detalii'}
+                   </CardTitle>
               <CardContent className="space-y-6">
                 {segmentsState.map((segment, index) => (
                   <div key={index} className="relative pl-6 space-y-4 pb-6 border-b border-gray-100 dark:border-zinc-800 last:border-0 last:pb-0">
@@ -715,44 +720,49 @@ function TransferSummaryPageContent() {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          onClick={() => setSegmentsState(prev => prev.filter((_, i) => i !== index))}
+                          onClick={() => {
+                            setSegmentsState(prev => prev.filter((_, i) => i !== index));
+                            setHasRecalculated(false);
+                          }}
                           className="text-red-500 hover:text-red-700 hover:bg-red-50"
                         >
-                          <Trash2 className="w-4 h-4 mr-1" /> Elimina
+                          <Trash2 className="w-4 h-4 mr-1" /> {t("summary.remove") ?? "Elimina"}
                         </Button>
                       )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-xs font-medium text-gray-400">PORNIRE</Label>
+                        <Label className="text-xs font-medium text-gray-400 uppercase tracking-wider">{t("summary.pickupAddress") ?? "PICKUP"}</Label>
                         <LocationAutocomplete
                           value={segment.from}
                           onChange={(val) => {
                              const newSegments = [...segmentsState];
                              newSegments[index].from = val;
                              setSegmentsState(newSegments);
+                             setHasRecalculated(false);
                           }}
-                          placeholder="Adresa pornire..."
+                          placeholder={t("summary.pickupPlaceholder") ?? "Pickup address..."}
                         />
                       </div>
                       <div>
-                        <Label className="text-xs font-medium text-gray-400">DESTINAȚIE</Label>
+                        <Label className="text-xs font-medium text-gray-400 uppercase tracking-wider">{t("summary.dropoffAddress") ?? "DESTINATION"}</Label>
                         <LocationAutocomplete
                           value={segment.to}
                           onChange={(val) => {
                              const newSegments = [...segmentsState];
                              newSegments[index].to = val;
                              setSegmentsState(newSegments);
+                             setHasRecalculated(false);
                           }}
-                          placeholder="Adresa destinație..."
+                          placeholder={t("summary.dropoffPlaceholder") ?? "Destination address..."}
                         />
                       </div>
                     </div>
 
                     {index < segmentsState.length - 1 && (
                       <div className="flex items-center gap-4 pt-2">
-                         <span className="text-sm font-medium text-gray-500">{t("summary.waitingTime") ?? "Staționare la destinație"}:</span>
+                         <span className="text-sm font-medium text-gray-500">{t("summary.waitingTimeAtDestination") ?? "Waiting time at destination"}:</span>
                          <div className="flex items-center gap-2">
                             <Button 
                               variant="outline" 
@@ -762,6 +772,7 @@ function TransferSummaryPageContent() {
                                  const newSegments = [...segmentsState];
                                  newSegments[index].waitingTime = Math.max(0, newSegments[index].waitingTime - 0.5);
                                  setSegmentsState(newSegments);
+                                 setHasRecalculated(false);
                               }}
                             >-</Button>
                             <span className="font-bold text-sm min-w-[30px] text-center">{segment.waitingTime}h</span>
@@ -773,6 +784,7 @@ function TransferSummaryPageContent() {
                                  const newSegments = [...segmentsState];
                                  newSegments[index].waitingTime += 0.5;
                                  setSegmentsState(newSegments);
+                                 setHasRecalculated(false);
                               }}
                             >+</Button>
                          </div>
@@ -782,17 +794,17 @@ function TransferSummaryPageContent() {
                 ))}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-                  <DateTimePicker
+                   <DateTimePicker
                     id="ts-transfer-datetime-recalc"
-                    label={t("booking.transferDate") ?? "Data și Ora"}
+                    label={t("booking.transferDate") ?? "Date and Time"}
                     dateState={transferDateState}
-                    setDateState={setTransferDateState}
+                    setDateState={(d) => { setTransferDateState(d); setHasRecalculated(false); }}
                     timeState={pickupTimeState}
-                    setTimeState={setPickupTimeState}
+                    setTimeState={(t) => { setPickupTimeState(t); setHasRecalculated(false); }}
                     minDate={new Date()}
                   />
                   <div>
-                    <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t("summary.numberOfPersons") ?? "PASAGERI"}</Label>
+                    <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t("summary.numberOfPersons") ?? "PASSENGERS"}</Label>
                     <Input 
                       type="number" 
                       min={1} 
@@ -804,6 +816,7 @@ function TransferSummaryPageContent() {
                         if (val >= 4 && categoryState === 'standard') {
                           setCategoryState('van');
                         }
+                        setHasRecalculated(false);
                       }}
                       className="mt-1"
                     />
@@ -813,19 +826,39 @@ function TransferSummaryPageContent() {
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                    <Button
                     variant="outline"
-                    onClick={() => setSegmentsState([...segmentsState, { from: segmentsState[segmentsState.length-1].to, to: '', distanceKm: 0, waitingTime: 0 }])}
+                    onClick={() => {
+                       setSegmentsState([...segmentsState, { from: segmentsState[segmentsState.length-1].to, to: '', distanceKm: 0, waitingTime: 0 }]);
+                       setHasRecalculated(false);
+                    }}
                     className="flex-1 border-dashed"
                    >
-                     <Plus className="w-4 h-4 mr-2" /> Adaugă destinație
+                     <Plus className="w-4 h-4 mr-2" /> {t("summary.addDestination") ?? "Add destination"}
                    </Button>
                    <Button
                     onClick={handleRecalculate}
                     disabled={isRecalculating}
                     className="flex-1 !bg-pink-500 hover:!bg-pink-600 !text-white"
                    >
-                    {isRecalculating ? "Se calculează..." : "Recalculează preț"}
+                    {isRecalculating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Clock className="w-4 h-4 mr-2" />}
+                    {isRecalculating ? (t("summary.recalculating") ?? "Calculating...") : (t("summary.recalculatePrice") ?? "Recalculate price")}
                    </Button>
                 </div>
+
+                {hasRecalculated && (
+                  <div className="pt-6 border-t border-gray-100 dark:border-zinc-800 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('summary.total') ?? 'New Estimated Price'}</div>
+                        <div className="text-sm text-slate-500 font-medium">{t('summary.pricingNote.recalculated') ?? 'Includes updated distances and rates'}</div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-3xl font-black text-pink-500">
+                          {formatCurrency(Math.max(0, finalTotal - discountAmount), 'EUR')}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
