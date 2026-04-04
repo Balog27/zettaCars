@@ -143,20 +143,31 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
       )}
       
       <div className="relative">
-        <Input
-          ref={inputRef}
-          type="text"
+        <textarea
+          ref={inputRef as any}
+          rows={1}
           value={value}
           onChange={e => {
             onChange(e.target.value);
             setUserInput(e.target.value);
           }}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+            handleKeyDown(e as any);
+          }}
           placeholder={placeholder}
-          className="bg-white dark:bg-input/30 dark:text-white dark:border-input pl-10"
+          className={`flex min-h-[40px] w-full rounded-md border border-input bg-white dark:bg-input/30 px-10 py-2.5 text-[13px] md:text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 hover:border-primary/50 dark:text-white dark:border-input resize-none overflow-hidden ${className}`}
           autoComplete="off"
+          style={{ height: 'auto', minHeight: '40px' }}
+          onInput={(e) => {
+            const target = e.target as HTMLTextAreaElement;
+            target.style.height = 'auto';
+            target.style.height = `${target.scrollHeight}px`;
+          }}
         />
-        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+        <MapPin className="absolute left-3 top-[13px] w-4 h-4 text-gray-400 pointer-events-none" />
       </div>
 
       {isLoading && (
