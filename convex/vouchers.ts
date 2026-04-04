@@ -98,92 +98,105 @@ export const getVoucherByCode = query({
     serviceType: v.union(v.literal("rents"), v.literal("transfers")),
     orderPrice: v.number(),
   },
+  returns: v.object({
+    success: v.boolean(),
+    message: v.optional(v.string()),
+    voucherId: v.optional(v.id("vouchers")),
+    type: v.optional(v.union(v.literal("percentage"), v.literal("fixed"))),
+    value: v.optional(v.number()),
+    discountAmount: v.optional(v.number()),
+  }),
   handler: async (ctx, args) => {
-    const voucher = await ctx.db
-      .query("vouchers")
-      .withIndex("by_code", (q) => q.eq("code", args.code))
-      .filter((q) => q.eq(q.field("active"), true))
-      .first();
+    try {
+      const voucher = await ctx.db
+        .query("vouchers")
+        .withIndex("by_code", (q) => q.eq("code", args.code))
+        .filter((q) => q.eq(q.field("active"), true))
+        .first();
 
-    if (!voucher) {
-      return { success: false, message: "Invalid or inactive voucher code" };
-    }
-
-    const now = Date.now();
-
-    // Check dates
-    if (voucher.startDate && now < voucher.startDate) {
-      return { success: false, message: "Voucher is not yet active" };
-    }
-    if (voucher.expiryDate && now > voucher.expiryDate) {
-      return { success: false, message: "Voucher has expired" };
-    }
-
-    // Check usage
-    if (voucher.maxUsage !== undefined && (voucher.usageCount ?? 0) >= voucher.maxUsage) {
-      return { success: false, message: "Voucher usage limit reached" };
-    }
-
-    // Check eligibility
-    if (!voucher.eligibleServices?.includes(args.serviceType)) {
-      return { success: false, message: `Voucher is not eligible for ${args.serviceType}` };
-    }
-
-    // Check min order price
-    if (voucher.minOrderPrice !== undefined && args.orderPrice < voucher.minOrderPrice) {
-      return { 
-        success: false, 
-        message: `Minimum order price for this voucher is ${voucher.minOrderPrice}` 
-      };
-    }
-
-    // Check per-account usage
-    if (voucher.usesPerAccount !== undefined) {
-      const currentUser = await getCurrentUser(ctx);
-      if (!currentUser) {
-        return { success: false, message: "This voucher requires a user account. Please log in." };
+      if (!voucher) {
+        return { success: false, message: "Invalid or inactive voucher code" };
       }
 
-      const prevReservations = await ctx.db
-        .query("reservations")
-        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
-        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
-        .collect();
+      const now = Date.now();
 
-      const prevTransfers = await ctx.db
-        .query("transferRequests")
-        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
-        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
-        .collect();
+      // Check dates
+      if (voucher.startDate && now < voucher.startDate) {
+        return { success: false, message: "Voucher is not yet active" };
+      }
+      if (voucher.expiryDate && now > voucher.expiryDate) {
+        return { success: false, message: "Voucher has expired" };
+      }
 
-      const userUsageCount = prevReservations.length + prevTransfers.length;
+      // Check usage
+      if (voucher.maxUsage !== undefined && (voucher.usageCount ?? 0) >= voucher.maxUsage) {
+        return { success: false, message: "Voucher usage limit reached" };
+      }
 
-      if (userUsageCount >= voucher.usesPerAccount) {
+      // Check eligibility
+      if (!voucher.eligibleServices?.includes(args.serviceType)) {
+        return { success: false, message: `Voucher is not eligible for ${args.serviceType}` };
+      }
+
+      // Check min order price
+      if (voucher.minOrderPrice !== undefined && args.orderPrice < voucher.minOrderPrice) {
         return { 
           success: false, 
-          message: `You have already used this voucher ${userUsageCount} time(s) on your account.` 
+          message: `Minimum order price for this voucher is ${voucher.minOrderPrice}` 
         };
       }
+
+      // Check per-account usage
+      if (voucher.usesPerAccount !== undefined) {
+        const currentUser = await getCurrentUser(ctx);
+        if (!currentUser) {
+          return { success: false, message: "This voucher requires a user account. Please log in." };
+        }
+
+        const prevReservations = await ctx.db
+          .query("reservations")
+          .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+          .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+          .collect();
+
+        const prevTransfers = await ctx.db
+          .query("transferRequests")
+          .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+          .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+          .collect();
+
+        const userUsageCount = prevReservations.length + prevTransfers.length;
+
+        if (userUsageCount >= voucher.usesPerAccount) {
+          return { 
+            success: false, 
+            message: `You have already used this voucher ${userUsageCount} time(s) on your account.` 
+          };
+        }
+      }
+
+      // Calculate discount
+      let discountAmount = 0;
+      if (voucher.type === "percentage") {
+        discountAmount = (args.orderPrice * (voucher.value ?? 0)) / 100;
+      } else {
+        discountAmount = voucher.value ?? 0;
+      }
+
+      // Ensure discount doesn't exceed order price
+      discountAmount = Math.min(discountAmount, args.orderPrice);
+
+      return {
+        success: true,
+        voucherId: voucher._id,
+        type: voucher.type || "fixed",
+        value: voucher.value || 0,
+        discountAmount: Math.round(discountAmount * 100) / 100,
+      };
+    } catch (error: any) {
+      console.error("Error getting voucher:", error);
+      return { success: false, message: error.message || "An unexpected error occurred" };
     }
-
-    // Calculate discount
-    let discountAmount = 0;
-    if (voucher.type === "percentage") {
-      discountAmount = (args.orderPrice * (voucher.value ?? 0)) / 100;
-    } else {
-      discountAmount = voucher.value ?? 0;
-    }
-
-    // Ensure discount doesn't exceed order price
-    discountAmount = Math.min(discountAmount, args.orderPrice);
-
-    return {
-      success: true,
-      voucherId: voucher._id,
-      type: voucher.type,
-      value: voucher.value,
-      discountAmount: Math.round(discountAmount * 100) / 100,
-    };
   },
 });
 
@@ -193,91 +206,104 @@ export const checkVoucher = mutation({
     serviceType: v.union(v.literal("rents"), v.literal("transfers")),
     orderPrice: v.number(),
   },
+  returns: v.object({
+    success: v.boolean(),
+    message: v.optional(v.string()),
+    voucherId: v.optional(v.id("vouchers")),
+    type: v.optional(v.union(v.literal("percentage"), v.literal("fixed"))),
+    value: v.optional(v.number()),
+    discountAmount: v.optional(v.number()),
+  }),
   handler: async (ctx, args) => {
-    const voucher = await ctx.db
-      .query("vouchers")
-      .withIndex("by_code", (q) => q.eq("code", args.code))
-      .filter((q) => q.eq(q.field("active"), true))
-      .first();
+    try {
+      const voucher = await ctx.db
+        .query("vouchers")
+        .withIndex("by_code", (q) => q.eq("code", args.code))
+        .filter((q) => q.eq(q.field("active"), true))
+        .first();
 
-    if (!voucher) {
-      return { success: false, message: "Invalid or inactive voucher code" };
-    }
-
-    const now = Date.now();
-
-    // Check dates
-    if (voucher.startDate && now < voucher.startDate) {
-      return { success: false, message: "Voucher is not yet active" };
-    }
-    if (voucher.expiryDate && now > voucher.expiryDate) {
-      return { success: false, message: "Voucher has expired" };
-    }
-
-    // Check usage
-    if (voucher.maxUsage !== undefined && (voucher.usageCount ?? 0) >= voucher.maxUsage) {
-      return { success: false, message: "Voucher usage limit reached" };
-    }
-
-    // Check eligibility
-    if (!voucher.eligibleServices?.includes(args.serviceType)) {
-      return { success: false, message: `Voucher is not eligible for ${args.serviceType}` };
-    }
-
-    // Check min order price
-    if (voucher.minOrderPrice !== undefined && args.orderPrice < voucher.minOrderPrice) {
-      return { 
-        success: false, 
-        message: `Minimum order price for this voucher is ${voucher.minOrderPrice}` 
-      };
-    }
-
-    // Check per-account usage
-    if (voucher.usesPerAccount !== undefined) {
-      const currentUser = await getCurrentUser(ctx);
-      if (!currentUser) {
-        return { success: false, message: "This voucher requires a user account. Please log in." };
+      if (!voucher) {
+        return { success: false, message: "Invalid or inactive voucher code" };
       }
 
-      const prevReservations = await ctx.db
-        .query("reservations")
-        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
-        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
-        .collect();
+      const now = Date.now();
 
-      const prevTransfers = await ctx.db
-        .query("transferRequests")
-        .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
-        .filter((q) => q.eq(q.field("voucherId"), voucher._id))
-        .collect();
+      // Check dates
+      if (voucher.startDate && now < voucher.startDate) {
+        return { success: false, message: "Voucher is not yet active" };
+      }
+      if (voucher.expiryDate && now > voucher.expiryDate) {
+        return { success: false, message: "Voucher has expired" };
+      }
 
-      const userUsageCount = prevReservations.length + prevTransfers.length;
+      // Check usage
+      if (voucher.maxUsage !== undefined && (voucher.usageCount ?? 0) >= voucher.maxUsage) {
+        return { success: false, message: "Voucher usage limit reached" };
+      }
 
-      if (userUsageCount >= voucher.usesPerAccount) {
+      // Check eligibility
+      if (!voucher.eligibleServices?.includes(args.serviceType)) {
+        return { success: false, message: `Voucher is not eligible for ${args.serviceType}` };
+      }
+
+      // Check min order price
+      if (voucher.minOrderPrice !== undefined && args.orderPrice < voucher.minOrderPrice) {
         return { 
           success: false, 
-          message: `You have already used this voucher ${userUsageCount} time(s) on your account.` 
+          message: `Minimum order price for this voucher is ${voucher.minOrderPrice}` 
         };
       }
+
+      // Check per-account usage
+      if (voucher.usesPerAccount !== undefined) {
+        const currentUser = await getCurrentUser(ctx);
+        if (!currentUser) {
+          return { success: false, message: "This voucher requires a user account. Please log in." };
+        }
+
+        const prevReservations = await ctx.db
+          .query("reservations")
+          .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+          .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+          .collect();
+
+        const prevTransfers = await ctx.db
+          .query("transferRequests")
+          .withIndex("by_user", (q) => q.eq("userId", currentUser._id))
+          .filter((q) => q.eq(q.field("voucherId"), voucher._id))
+          .collect();
+
+        const userUsageCount = prevReservations.length + prevTransfers.length;
+
+        if (userUsageCount >= voucher.usesPerAccount) {
+          return { 
+            success: false, 
+            message: `You have already used this voucher ${userUsageCount} time(s) on your account.` 
+          };
+        }
+      }
+
+      // Calculate discount
+      let discountAmount = 0;
+      if (voucher.type === "percentage") {
+        discountAmount = (args.orderPrice * (voucher.value ?? 0)) / 100;
+      } else {
+        discountAmount = voucher.value ?? 0;
+      }
+
+      // Ensure discount doesn't exceed order price
+      discountAmount = Math.min(discountAmount, args.orderPrice);
+
+      return {
+        success: true,
+        voucherId: voucher._id,
+        type: voucher.type || "fixed",
+        value: voucher.value || 0,
+        discountAmount: Math.round(discountAmount * 100) / 100,
+      };
+    } catch (error: any) {
+      console.error("Error checking voucher:", error);
+      return { success: false, message: error.message || "An unexpected error occurred" };
     }
-
-    // Calculate discount
-    let discountAmount = 0;
-    if (voucher.type === "percentage") {
-      discountAmount = (args.orderPrice * (voucher.value ?? 0)) / 100;
-    } else {
-      discountAmount = voucher.value ?? 0;
-    }
-
-    // Ensure discount doesn't exceed order price
-    discountAmount = Math.min(discountAmount, args.orderPrice);
-
-    return {
-      success: true,
-      voucherId: voucher._id,
-      type: voucher.type,
-      value: voucher.value,
-      discountAmount: Math.round(discountAmount * 100) / 100,
-    };
   },
 });
