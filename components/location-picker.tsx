@@ -73,14 +73,14 @@ const LocationCombobox = ({ id, value, onValueChange, placeholder, disabled, loc
       disabled={disabled}
     >
       <SelectTrigger
-        className="w-full px-2"
+        className="w-full"
         id={id}
       >
         <div className="flex items-center w-full min-w-0">
           <MapPin className="mr-2 h-5 w-5 text-muted-foreground flex-shrink-0" />
           <SelectValue
             placeholder={placeholder}
-            className={cn("truncate text-base")}
+            className={cn("truncate text-base font-normal", value ? "text-foreground" : "text-muted-foreground")}
             title={selectedLocation ? `${selectedLocation.name} - ${selectedLocation.price} €` : undefined}
           >
             {selectedLocation

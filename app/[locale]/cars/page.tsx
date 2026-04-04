@@ -54,7 +54,7 @@ export default function CarsPage() {
 
     const vehicleItems = displayedVehicles.slice(0, 20).map((vehicle, index) => ({
       "@type": "Vehicle",
-      "@id": `https://rngo.com/cars/${vehicle._id}`,
+      "@id": `https://zettacarrental.com/cars/${vehicle._id}`,
       "name": `${vehicle.make} ${vehicle.model} ${vehicle.year}`,
       "brand": {
         "@type": "Brand",
@@ -85,11 +85,11 @@ export default function CarsPage() {
         "seller": {
           "@type": "Organization",
           "name": "Zetta Cars",
-          "url": "https://rngo.com"
+          "url": "https://zettacarrental.com"
         }
       },
-      "url": `https://rngo.com/cars/${vehicle._id}`,
-      "image": vehicle.images?.[0] ? `https://rngo.com${vehicle.images[0]}` : "https://rngo.com/logo.png"
+      "url": `https://zettacarrental.com/cars/${vehicle._id}`,
+      "image": vehicle.images?.[0] ? `https://zettacarrental.com${vehicle.images[0]}` : "https://zettacarrental.com/logo.png"
     }));
 
     return {
@@ -97,7 +97,7 @@ export default function CarsPage() {
       "@type": "ItemList",
       "name": "Masini de Inchiriat Cluj-Napoca | Car Rentals",
       "description": "Flota completă de masini de inchiriat în Cluj-Napoca cu prețuri competitive. Vehicule moderne pentru toate nevoile tale.",
-      "url": "https://rngo.com/cars",
+      "url": "https://zettacarrental.com/cars",
       "numberOfItems": vehicleItems.length,
       "itemListElement": vehicleItems.map((vehicle, index) => ({
         "@type": "ListItem",
@@ -107,7 +107,7 @@ export default function CarsPage() {
       "provider": {
         "@type": "Organization",
         "name": "Zetta Cars",
-        "url": "https://rngo.com",
+        "url": "https://zettacarrental.com",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Cluj \"Avram Iancu\" International Airport, Strada Traian Vuia 149-151",
@@ -136,7 +136,7 @@ export default function CarsPage() {
         <meta name="description" content="Găsește masini de inchiriat Cluj-Napoca cu Zetta Cars. Flotă largă de vehicule moderne, prețuri competitive, rezervare online rapidă. Car rentals Cluj-Napoca disponibile 24/7." />
         <meta name="keywords" content="masini de inchiriat cluj-napoca, car rentals cluj, închiriere auto cluj, rent car cluj-napoca, vehicule închiriere cluj" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://rngo.com/cars" />
+        <link rel="canonical" href="https://zettacarrental.com/cars" />
         
         {vehicleSchema && (
           <script

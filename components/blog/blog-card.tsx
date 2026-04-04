@@ -24,13 +24,15 @@ interface BlogCardProps {
 export function BlogCard({ blog, locale }: BlogCardProps) {
   const t = useTranslations("blogPage");
 
-  const coverImageUrl = useQuery(
+  const fetchedCoverImageUrl = useQuery(
     api.blogs.getImageUrl,
-    blog.coverImage ? { imageId: blog.coverImage } : "skip",
+    blog.coverImage && !blog.coverImageUrl ? { imageId: blog.coverImage } : "skip",
   );
 
+  const coverImageUrl = blog.coverImageUrl || fetchedCoverImageUrl;
+
   return (
-    <Link href={`/${locale}/blog/${blog.slug}`}>
+    <Link href={`/${locale}/blogs/${blog.slug}`}>
       <Card className="group hover:shadow-lg transition-all duration-300 h-full flex flex-col gap-0 p-3">
         <div className="relative aspect-[16/9] overflow-hidden rounded-lg mb-3">
           {coverImageUrl ? (

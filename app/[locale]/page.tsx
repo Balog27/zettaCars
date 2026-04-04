@@ -14,7 +14,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { TestimonialsSection } from "@/components/blocks/testimonials-with-marquee";
-import { TestimonialCarousel } from "@/components/testimonial-carousel";
+import { TestimonialsAnimatedSection } from "@/components/blocks/testimonials-animated";
 import ErrorBoundary from "@/components/ui/error-boundary";
 import { Header } from "@/components/ui/header";
 import { VehicleSearchFilterForm } from "@/components/vehicle/vehicle-search-filter-form"; // Import the new form
@@ -44,7 +44,7 @@ function VehicleList({
   searchState: SearchData & { isHydrated: boolean };
 }) {
   const t = useTranslations('common');
-  
+
   if (isLoading) {
     return <p className="text-center text-muted-foreground">{t('loadingFeaturedCars')}</p>;
   }
@@ -63,8 +63,8 @@ function VehicleList({
         }
         // Pass search state to homepage vehicle cards for dynamic pricing
         return (
-          <HomepageVehicleCard 
-            key={vehicle._id} 
+          <HomepageVehicleCard
+            key={vehicle._id}
             vehicle={vehicle}
             pickupDate={searchState.pickupDate}
             returnDate={searchState.returnDate}
@@ -95,7 +95,7 @@ export default function Home() {
   const tTestimonials = useTranslations('testimonials');
   const tFaq = useTranslations('faq');
   const { vehiclesToDisplay, currentTitle, isLoading } = useHomepageFeaturedVehicles();
-  
+
   // Add vehicle search hook to get search state
   const { searchState, updateSearchField } = useVehicleSearch();
 
@@ -111,7 +111,7 @@ export default function Home() {
   ];
 
   // Fetch homepage reviews from backend
-  const { reviews: homepageReviews } = useHomepageReviews(6);
+  const { reviews: homepageReviews } = useHomepageReviews(20);
 
 
 
@@ -131,7 +131,7 @@ export default function Home() {
         <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
-            <div 
+            <div
               className="w-full h-full bg-cover bg-center bg-no-repeat"
               style={{
                 backgroundImage: `url('/homepage.jpg')`,
@@ -147,13 +147,13 @@ export default function Home() {
             <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
                 <span className="block text-primary uppercase tracking-tight">ZETTA CARS</span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">Inchirieri auto si Transferuri</span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Cluj-Napoca</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2">{t('hero.carRentalsAndTransfers')}</span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{t('hero.clujNapoca')}</span>
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
                 {t('hero.subheadline')}
               </p>
-              <Button 
+              <Button
                 size="lg"
                 asChild
                 className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
@@ -165,7 +165,7 @@ export default function Home() {
               </Button>
             </AnimatedGroup>
           </div>
-  </section>
+        </section>
 
         {/* Small hero bottom band to improve spacing under the landing hero */}
         <section className="py-2 bg-background">
@@ -199,7 +199,7 @@ export default function Home() {
                         {t('findYour.description')}
                       </p>
 
-                      <VehicleSearchFilterForm 
+                      <VehicleSearchFilterForm
                         searchState={searchState}
                         updateSearchField={updateSearchField}
                       />
@@ -244,7 +244,7 @@ export default function Home() {
                       variant="default"
                       size="lg"
                       className="bg-primary hover:bg-primary/90 text-white"
-                        onClick={() => router.push(`/${locale}/cars`)}
+                      onClick={() => router.push(`/${locale}/cars`)}
                     >
                       {t('viewAllCars')}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -262,7 +262,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-[calc(100vh-64px)]">
               {/* Left Side - Image */}
               <div className="relative overflow-hidden">
-                <div 
+                <div
                   className="w-full h-full bg-cover bg-center bg-no-repeat min-h-[400px] md:min-h-full"
                   style={{
                     backgroundImage: `url('/luxuaryTransfers.png')`
@@ -277,7 +277,7 @@ export default function Home() {
                   <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white dark:text-foreground mb-6 leading-tight">
                     {t('luxuryTransfer.headline')}
                   </h2>
-                  
+
                   <p className="text-base sm:text-lg md:text-xl text-white/90 dark:text-gray-300 mb-8 leading-relaxed">
                     {t('luxuryTransfer.description')}
                   </p>
@@ -293,7 +293,7 @@ export default function Home() {
                   </ul>
 
                   {/* CTA Button */}
-                  <Button 
+                  <Button
                     size="lg"
                     asChild
                     className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
@@ -390,7 +390,7 @@ export default function Home() {
                   <div className="text-center relative">
                     {/* Connection Line - Hidden on mobile, visible on desktop */}
                     <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-primary -z-10" style={{ width: 'calc(100% + 2rem)' }}></div>
-                    
+
                     <div className="relative inline-flex items-center justify-center mb-6">
                       <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white relative z-10">
                         <Calendar className="w-8 h-8" />
@@ -411,7 +411,7 @@ export default function Home() {
                   <div className="text-center relative">
                     {/* Connection Line */}
                     <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-secondary -z-10" style={{ width: 'calc(100% + 2rem)' }}></div>
-                    
+
                     <div className="relative inline-flex items-center justify-center mb-6">
                       <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center text-white relative z-10">
                         <CarFront className="w-8 h-8" />
@@ -449,12 +449,12 @@ export default function Home() {
 
                 {/* CTA Button */}
                 <div className="text-center">
-                  <Button 
+                  <Button
                     size="lg"
                     asChild
                     className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
-                    <Link href="/cars">
+                    <Link href={`/${locale}/cars`}>
                       {t('bookingProcess.cta')}
                     </Link>
                   </Button>
@@ -466,14 +466,11 @@ export default function Home() {
 
         {/* Client Testimonials Section */}
         <AnimatedGroup variants={sectionAnimationVariants} threshold={0.2} triggerOnce={true}>
-          <section className="py-16 bg-section text-white dark:text-foreground">
-            <div className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
-              <TestimonialCarousel 
-                title={t('clientTestimonials.title')}
-                reviews={homepageReviews}
-              />
-            </div>
-          </section>
+          <TestimonialsAnimatedSection 
+            title={t('clientTestimonials.title')}
+            subtitle={t('clientTestimonials.subtitle')}
+            reviews={homepageReviews}
+          />
         </AnimatedGroup>
 
         {/* FAQ Section */}

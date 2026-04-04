@@ -79,10 +79,10 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
 
   return (
     <Card className="mb-6 shadow-lg bg-card rounded-lg">
-      <CardContent className="p-6 md:p-8 min-h-[220px] flex items-center">
+      <CardContent className="p-4 md:p-8 min-h-0 md:min-h-[220px] flex items-center">
         {/* Center the filter controls vertically and horizontally so the panel doesn't look empty */}
         <div className="w-full max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 justify-items-center">
             <div className="w-full max-w-xs">
               <Label htmlFor="brand-filter" className="text-sm font-semibold text-primary">{t('brand')}</Label>
               <Select value={brandFilter} onValueChange={setBrandFilter}>
@@ -132,7 +132,7 @@ export function VehicleFilters({ allVehicles, onFilterChange }: VehicleFiltersPr
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-muted-foreground text-center">Folosește filtrele de mai sus pentru a găsi mai rapid mașina potrivită.</p>
+          <p className="mt-4 md:mt-6 text-sm text-muted-foreground text-center">Folosește filtrele de mai sus pentru a găsi mai rapid mașina potrivită.</p>
         </div>
         {/* Type navigation is handled at page level (upper row); no type buttons here. */}
       </CardContent>

@@ -1,4 +1,4 @@
-"use server";
+
 
 /**
  * Mapbox API utilities for geocoding and distance calculations
@@ -21,7 +21,7 @@ export async function geocodeAddress(address: string) {
   }
 
   const encodedAddress = encodeURIComponent(address.trim());
-  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedAddress}.json?proximity=24.96,46.97&country=ro&limit=5&access_token=${token}`;
+  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedAddress}.json?proximity=23.59,46.77&country=ro&limit=5&access_token=${token}`;
 
   try {
     const response = await fetch(url);
@@ -157,9 +157,9 @@ export async function searchLocations(query: string) {
   }
 
   const encodedQuery = encodeURIComponent(query.trim());
-  // Proximity set to Cluj-Napoca area (24.96°E, 46.97°N)
+  // Proximity set to Cluj-Napoca center (23.59, 46.77)
   // Also filter to Romania (RO country code)
-  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedQuery}.json?proximity=24.96,46.97&country=ro&limit=8&access_token=${token}`;
+  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedQuery}.json?proximity=23.59,46.77&country=ro&limit=8&access_token=${token}`;
 
   try {
     const response = await fetch(url);
@@ -168,8 +168,27 @@ export async function searchLocations(query: string) {
     }
 
     const data = await response.json();
+    let features = data.features || [];
 
-    return (data.features || []).map((feature: any) => ({
+    // Prepend priority locations if they match the query
+    const lowerQuery = query.toLowerCase();
+    if (lowerQuery.includes('aeroport') || lowerQuery.includes('airport')) {
+      const airportCluj = {
+        id: 'cluj-airport-priority',
+        place_name: 'Aeroportul Internațional Avram Iancu Cluj (CLJ), Strada Traian Vuia 149, Cluj-Napoca, Romania',
+        center: [23.68, 46.78],
+        relevance: 1,
+        place_type: ['airport']
+      };
+      
+      // Only add if it's not already in the list (to avoid duplicates)
+      const exists = features.some((f: any) => f.place_name.includes('Avram Iancu') || f.place_name.includes('CLJ'));
+      if (!exists) {
+        features = [airportCluj, ...features];
+      }
+    }
+
+    return (features).map((feature: any) => ({
       id: feature.id,
       place_name: feature.place_name,
       lon: feature.center[0],

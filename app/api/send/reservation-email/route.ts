@@ -9,7 +9,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
     try {
-        const { to, subject, message, emailType, reservationData } = await request.json();
+        const { to, subject, message, emailType, reservationData, locale = 'ro' } = await request.json();
+        const isRo = locale === 'ro';
 
         // Validate required fields
         if (!to || !subject || !message) {
@@ -42,6 +43,7 @@ export async function POST(request: Request) {
                         border-radius: 8px;
                         padding: 30px;
                         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                        border-top: 6px solid ${emailType === 'cancellation' ? '#ef4444' : '#ec4899'};
                     }
                     .header {
                         text-align: center;
@@ -57,19 +59,29 @@ export async function POST(request: Request) {
                     }
                     .email-type {
                         display: inline-block;
-                        padding: 6px 12px;
+                        padding: 6px 14px;
                         border-radius: 20px;
-                        font-size: 12px;
-                        font-weight: 600;
+                        font-size: 11px;
+                        font-weight: 700;
                         text-transform: uppercase;
-                        letter-spacing: 0.5px;
+                        letter-spacing: 0.05em;
                     }
                     .confirmation { background-color: #d1fae5; color: #065f46; }
                     .modification { background-color: #fef3c7; color: #92400e; }
                     .cancellation { background-color: #fee2e2; color: #991b1b; }
                     .reminder { background-color: #dbeafe; color: #1e40af; }
+                    
+                    .status-header {
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-bottom: 15px;
+                        color: ${emailType === 'cancellation' ? '#991b1b' : '#1f2937'};
+                    }
+
                     .content {
                         margin: 20px 0;
+                        font-size: 16px;
+                        color: #4b5563;
                         white-space: pre-line;
                     }
                     .reservation-details {
@@ -77,90 +89,112 @@ export async function POST(request: Request) {
                         border: 1px solid #e2e8f0;
                         border-radius: 6px;
                         padding: 20px;
-                        margin: 20px 0;
+                        margin: 25px 0;
                     }
                     .detail-row {
                         display: flex;
                         justify-content: space-between;
-                        margin-bottom: 8px;
-                        padding: 4px 0;
+                        margin-bottom: 10px;
+                        padding: 5px 0;
+                        border-bottom: 1px solid #f1f5f9;
+                    }
+                    .detail-row:last-child {
+                        border-bottom: none;
                     }
                     .detail-label {
                         font-weight: 600;
-                        color: #4b5563;
+                        color: #64748b;
+                        font-size: 13px;
                     }
                     .detail-value {
-                        color: #1f2937;
+                        color: #1e293b;
+                        font-weight: 500;
+                        font-size: 14px;
                     }
                     .footer {
                         margin-top: 30px;
-                        padding-top: 20px;
+                        padding-top: 25px;
                         border-top: 1px solid #e5e7eb;
                         text-align: center;
-                        color: #6b7280;
-                        font-size: 14px;
+                        color: #94a3b8;
+                        font-size: 13px;
                     }
                     .contact-info {
                         margin-top: 15px;
-                        font-size: 13px;
                     }
                 </style>
             </head>
             <body>
                 <div class="email-container">
                     <div class="header">
-                        <!-- Zetta Cars logo - use absolute URL so email clients can fetch it -->
-                        <div style="text-align:center; margin-bottom:8px;">
-                            <img src="https://zettacarrental.com/logo.png" alt="Zetta Cars Logo" style="width:120px; height:auto; display:block; margin:0 auto 8px;" />
+                        <div style="text-align:center; margin-bottom:12px;">
+                            <img src="https://zettacarrental.com/logo.png" alt="Zetta Cars Logo" style="width:140px; height:auto; display:block; margin:0 auto 10px;" />
                         </div>
-                        <span class="email-type ${emailType}">${emailType} Email</span>
+                        <span class="email-type ${emailType}">
+                            ${emailType === 'confirmation' 
+                                ? (isRo ? 'REZERVARE CONFIRMATĂ' : 'RESERVATION CONFIRMED')
+                                : emailType === 'cancellation' 
+                                ? (isRo ? 'REZERVARE ANULATĂ' : 'RESERVATION CANCELLED')
+                                : emailType.toUpperCase()}
+                        </span>
                     </div>
                     
+                    <div class="status-header">
+                        ${emailType === 'confirmation' 
+                            ? (isRo ? 'Vești bune!' : 'Good news!') 
+                            : emailType === 'cancellation' 
+                            ? (isRo ? 'Actualizare Rezervare' : 'Reservation Update') 
+                            : (isRo ? 'Salutare!' : 'Hello!')}
+                    </div>
+
                     <div class="content">
                         ${message.replace(/\n/g, '<br>')}
                     </div>
                     
                     ${reservationData ? `
                     <div class="reservation-details">
-                        <h3 style="margin-top: 0; color: #1f2937;">Reservation Summary</h3>
+                        <h3 style="margin-top: 0; margin-bottom: 15px; color: #1e293b; font-size: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+                            ${isRo ? 'Detalii Rezervare' : 'Reservation Details'}
+                        </h3>
                         <div class="detail-row">
-                            <span class="detail-label">Reservation ID:</span>
+                            <span class="detail-label">${isRo ? 'ID Rezervare:' : 'Reservation ID:'}</span>
                             <span class="detail-value">#${reservationData.id}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Vehicle:</span>
+                            <span class="detail-label">${isRo ? 'Autovehicul:' : 'Vehicle:'}</span>
                             <span class="detail-value">${reservationData.vehicle}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Dates:</span>
+                            <span class="detail-label">${isRo ? 'Perioada:' : 'Period:'}</span>
                             <span class="detail-value">${reservationData.dates}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Pickup:</span>
+                            <span class="detail-label">${isRo ? 'Preluare:' : 'Pickup:'}</span>
                             <span class="detail-value">${reservationData.pickup}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Return:</span>
+                            <span class="detail-label">${isRo ? 'Returnare:' : 'Return:'}</span>
                             <span class="detail-value">${reservationData.return}</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Total Price:</span>
-                            <span class="detail-value">€${reservationData.totalPrice}</span>
+                        <div class="detail-row" style="margin-top: 10px; padding-top: 10px; border-top: 2px solid #e2e8f0;">
+                            <span class="detail-label" style="color: #1e293b; font-size: 15px;">${isRo ? 'Preț Total:' : 'Total Price:'}</span>
+                            <span class="detail-value" style="color: #ec4899; font-size: 18px; font-weight: bold;">€${reservationData.totalPrice}</span>
                         </div>
                     </div>
                     ` : ''}
                     
                     <div class="footer">
-                        <p>Thank you for choosing Zetta Cars!</p>
+                        <p>${isRo ? 'Vă mulțumim că ați ales Zetta Cars!' : 'Thank you for choosing Zetta Cars!'}</p>
                         <div class="contact-info">
-                            <p>Questions? Contact us at contact@zettacarrental.com or visit our website</p>
-                            <p>Zetta Cars - Your trusted car rental partner</p>
+                            <p>${isRo ? 'Aveți întrebări? Ne puteți contacta la contact@zettacarrental.com' : 'Questions? You can contact us at contact@zettacarrental.com'}</p>
+                            <p>${isRo ? 'Zetta Cars - Partenerul tău de încredere' : 'Zetta Cars - Your trusted partner'}</p>
                         </div>
                     </div>
                 </div>
             </body>
             </html>
         `;
+
 
         const { data, error } = await resend.emails.send({
             from: 'contact@zettacarrental.com',

@@ -19,7 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Calendar, Send, User, CreditCard, AlertCircle, Info } from "lucide-react";
+import { ArrowLeft, Calendar, Send, User, CreditCard, AlertCircle, Info, X } from "lucide-react";
 import { LocationPicker } from "@/components/location-picker";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { searchStorage } from "@/lib/searchStorage";
@@ -138,6 +138,15 @@ function ReservationPageContent() {
   const [childSeat1to4Count, setChildSeat1to4Count] = React.useState(0);
   const [childSeat5to12Count, setChildSeat5to12Count] = React.useState(0);
   const [extraKilometersCount, setExtraKilometersCount] = React.useState(0);
+  const [voucherCode, setVoucherCode] = React.useState("");
+  const [appliedVoucher, setAppliedVoucher] = React.useState<{
+    id: Id<"vouchers">;
+    code: string;
+    discountAmount: number;
+    type: "percentage" | "fixed";
+    value: number;
+  } | null>(null);
+  const [isApplyingVoucher, setIsApplyingVoucher] = React.useState(false);
 
   // Form state
   const [isHydrated, setIsHydrated] = React.useState(false);
@@ -279,7 +288,9 @@ function ReservationPageContent() {
           snowChainsPrice: 0,
           childSeat1to4Price: 0,
           childSeat5to12Price: 0,
+          extraKilometersPrice: 0,
           totalAdditionalFeatures: 0,
+          discountAmount: 0,
           seasonalMultiplier,
           seasonalAdjustment: 0,
           basePriceBeforeSeason: null,
@@ -300,11 +311,24 @@ function ReservationPageContent() {
       const childSeat1to4Price = childSeat1to4Count * days * 3;
       const childSeat5to12Price = childSeat5to12Count * days * 3;
       const extraKilometersPrice = calculateExtraKilometersPrice(extraKilometersCount * 50);
+      const subtotalBeforeVoucher = basePrice + totalLocationFees + protectionCost + (snowChainsPrice + childSeat1to4Price + childSeat5to12Price + extraKilometersPrice);
+
+      let discountAmount = 0;
+      if (appliedVoucher) {
+        if (appliedVoucher.type === "percentage") {
+          discountAmount = (subtotalBeforeVoucher * appliedVoucher.value) / 100;
+        } else {
+          discountAmount = appliedVoucher.value;
+        }
+        discountAmount = Math.min(discountAmount, subtotalBeforeVoucher);
+        discountAmount = Math.round(discountAmount * 100) / 100;
+      }
+
       const totalAdditionalFeatures = snowChainsPrice + childSeat1to4Price + childSeat5to12Price + extraKilometersPrice;
 
       return {
         basePrice,
-        totalPrice: basePrice + totalLocationFees + protectionCost + totalAdditionalFeatures,
+        totalPrice: Math.max(0, subtotalBeforeVoucher - discountAmount),
         days,
         deliveryFee,
         returnFee,
@@ -318,6 +342,7 @@ function ReservationPageContent() {
         childSeat5to12Price,
         extraKilometersPrice,
         totalAdditionalFeatures,
+        discountAmount,
         seasonalMultiplier,
         seasonalAdjustment,
         basePriceBeforeSeason,
@@ -339,6 +364,7 @@ function ReservationPageContent() {
       childSeat5to12Price: 0,
       extraKilometersPrice: 0,
       totalAdditionalFeatures: 0,
+      discountAmount: 0,
       seasonalMultiplier: 1.0,
       seasonalAdjustment: 0,
       basePriceBeforeSeason: null,
@@ -346,20 +372,66 @@ function ReservationPageContent() {
   };
 
   const {
+    childSeat5to12Price,
+    extraKilometersPrice,
+    totalAdditionalFeatures,
+    discountAmount,
+    days,
     basePrice,
     totalPrice,
-    days,
     deliveryFee,
     returnFee,
     totalLocationFees,
     warrantyAmount,
     scdwPrice,
+    protectionCost,
+    deductibleAmount,
     snowChainsPrice,
-    childSeat1to4Price,
-    childSeat5to12Price,
-    extraKilometersPrice,
-    totalAdditionalFeatures
+    childSeat1to4Price
   } = calculateTotalPrice();
+
+  // Validate voucher
+  const checkVoucher = useMutation(api.vouchers.checkVoucher);
+
+  const handleApplyVoucher = async () => {
+     if (!voucherCode.trim()) return;
+     
+     // Calculate subtotal for validation
+     const { basePrice, totalLocationFees, protectionCost, totalAdditionalFeatures } = calculateTotalPrice();
+     const subtotal = (basePrice || 0) + totalLocationFees + (protectionCost || 0) + totalAdditionalFeatures;
+
+     setIsApplyingVoucher(true);
+     try {
+       const result = await checkVoucher({
+         code: voucherCode.trim().toUpperCase(),
+         serviceType: "rents",
+         orderPrice: subtotal
+       });
+
+       if (result.success && result.voucherId) {
+         setAppliedVoucher({
+           id: result.voucherId,
+           code: voucherCode.trim().toUpperCase(),
+           discountAmount: result.discountAmount!,
+           type: result.type!,
+           value: result.value!
+         });
+         toast.success("Voucher applied successfully!");
+       } else {
+         toast.error(result.message || "Invalid voucher");
+       }
+     } catch (err: any) {
+       toast.error(err.message || "Error applying voucher");
+     } finally {
+       setIsApplyingVoucher(false);
+     }
+  };
+
+  const removeVoucher = () => {
+    setAppliedVoucher(null);
+    setVoucherCode("");
+    toast.success("Voucher removed");
+  };
 
   // Calculate form completion progress
   const calculateFormProgress = (): number => {
@@ -557,6 +629,9 @@ function ReservationPageContent() {
         protectionCost: currentProtectionCost > 0 ? currentProtectionCost : undefined,
         seasonId: currentSeason?.seasonId,
         seasonalMultiplier: seasonalMultiplier,
+        voucherId: appliedVoucher?.id || undefined,
+        voucherCode: appliedVoucher?.code || undefined,
+        discountAmount: discountAmount > 0 ? discountAmount : undefined,
       });
       const reservationId = (created as any)?.reservationId ?? created;
       const reservationNumber = (created as any)?.reservationNumber;
@@ -607,6 +682,9 @@ function ReservationPageContent() {
             isSCDWSelected: isSCDWSelected,
             deductibleAmount: currentDeductibleAmount,
             protectionCost: currentProtectionCost > 0 ? currentProtectionCost : undefined,
+            voucherId: appliedVoucher?.id,
+            voucherCode: appliedVoucher?.code,
+            discountAmount: discountAmount > 0 ? discountAmount : undefined,
           }),
         });
 
@@ -1069,12 +1147,12 @@ function ReservationPageContent() {
                 <CardContent>
                   <div className="space-y-4">
                     {!user && (
-                      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-800 mb-3">
+                      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 rounded-lg">
+                        <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
                           {t('personalInfo.signInPrompt')}
                         </p>
                         <SignInButton mode="modal">
-                          <Button variant="outline" size="sm" className="w-full">
+                          <Button variant="outline" size="sm" className="w-full dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-100 dark:hover:bg-blue-800/60">
                             {t('personalInfo.signInButton')}
                           </Button>
                         </SignInButton>
@@ -1418,6 +1496,43 @@ function ReservationPageContent() {
                   </div>
                 </div>
 
+                {/* Voucher Section */}
+                <div className="border-t pt-4 space-y-3">
+                   <h4 className="font-semibold text-sm text-foreground/85 uppercase tracking-wide">
+                     {t('reservationSummary.voucherTitle') || 'Voucher'}
+                   </h4>
+                   {appliedVoucher ? (
+                     <div className="flex items-center justify-between p-3 bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 rounded-lg">
+                       <div>
+                         <span className="font-bold text-pink-700 dark:text-pink-400">{appliedVoucher.code}</span>
+                         <span className="ml-2 text-sm text-pink-600 dark:text-pink-500">
+                           (-{appliedVoucher.type === 'percentage' ? `${appliedVoucher.value}%` : `${appliedVoucher.value} EUR`})
+                         </span>
+                       </div>
+                       <Button variant="ghost" size="sm" onClick={removeVoucher} className="h-8 w-8 p-0 text-pink-700 hover:text-red-600">
+                         <X className="h-4 w-4" />
+                       </Button>
+                     </div>
+                   ) : (
+                     <div className="flex gap-2">
+                       <Input 
+                         placeholder={t('reservationSummary.enterVoucherCode') || 'Enter voucher code'} 
+                         value={voucherCode}
+                         onChange={(e) => setVoucherCode(e.target.value)}
+                         className="flex-1"
+                       />
+                       <Button 
+                         type="button" 
+                         variant="outline" 
+                         onClick={handleApplyVoucher}
+                         disabled={isApplyingVoucher || !voucherCode.trim()}
+                       >
+                         {isApplyingVoucher ? "..." : t('reservationSummary.applyVoucher') || 'Apply'}
+                       </Button>
+                     </div>
+                   )}
+                </div>
+
                 {/* Pricing Summary */}
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
@@ -1481,6 +1596,13 @@ function ReservationPageContent() {
                     <div className="flex justify-between text-sm">
                       <span>{t('additionalFeatures.extraKilometers')}:</span>
                       <span>{extraKilometersPrice || 0} EUR</span>
+                    </div>
+                  )}
+
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-sm text-pink-600 font-medium">
+                      <span>{t('reservationSummary.discount')}:</span>
+                      <span>-{discountAmount} EUR</span>
                     </div>
                   )}
 

@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ro_RO",
     alternateLocale: ["en_US"],
-    url: "https://rngo.ro",
+    url: "https://www.zettacarrental.com",
     siteName: "Zetta Cars Cluj-Napoca",
     title: "Zetta Cars Cluj-Napoca | Masini de Inchiriat",
     description:
@@ -95,12 +95,6 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
-      <head>
-  {/* explicit favicon links to ensure the browser shows a tab image in dev and production */}
-  <link rel="icon" href="/logo.png" />
-  <link rel="shortcut icon" href="/logo.png" />
-  <link rel="apple-touch-icon" href="/logoFull.jpg" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

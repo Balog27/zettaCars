@@ -11,6 +11,7 @@ export async function POST(request: Request) {
       transferDetails,
       pricing,
       locale = 'en',
+      emailType = 'request', // 'request', 'accepted', 'rejected'
     } = body;
 
     if (!personalInfo?.email || !personalInfo?.name) {
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
 
     // Format date
     const transferDate = new Date(transferDetails.transferDate);
-    const formattedDate = transferDate.toLocaleDateString(isRo ? 'ro-RO' : 'de-DE', {
+    const formattedDate = transferDate.toLocaleDateString(isRo ? 'ro-RO' : 'en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -49,10 +50,12 @@ export async function POST(request: Request) {
       ? formatPrice(pricing?.price)
       : `${formatPrice(pricing?.min)} - ${formatPrice(pricing?.max)}`;
 
-    // Translations
+    // Translations for Admin
     const adminT = {
-      subject: `New Transfer Request from ${personalInfo.name}`,
-      title: isRo ? 'Cerere de Transfer Nouă' : 'New Transfer Request',
+      subject: emailType === 'request' 
+        ? `New Transfer Request from ${personalInfo.name}`
+        : `Transfer status updated to ${emailType} for ${personalInfo.name}`,
+      title: isRo ? 'Cerere de Transfer' : 'Transfer Request',
       customerInfo: isRo ? 'Informații Client' : 'Customer Information',
       name: isRo ? 'Nume' : 'Name',
       email: isRo ? 'Email' : 'Email',
@@ -69,15 +72,26 @@ export async function POST(request: Request) {
       distance: isRo ? 'Distanță' : 'Distance',
       pricing: isRo ? 'Estimare Preț' : 'Price Estimate',
       basePrice: isRo ? 'Preț de Bază' : 'Base Price',
+      discount: isRo ? 'Reducere' : 'Discount',
+      voucher: isRo ? 'Voucher' : 'Voucher',
+      total: isRo ? 'Total Final' : 'Final Total',
+      childSeats: isRo ? 'Scaune Copii' : 'Child Seats',
       action: isRo ? 'Acțiune necesară: Revizuiți cererea și contactați clientul pentru confirmare.' : 'Action Required: Review the request and contact the customer for confirmation.',
     };
 
+    // Translations for User
     const userT = {
-      subject: isRo ? 'Cerere de Transfer Primită' : 'Transfer Request Received',
+      subject: emailType === 'accepted' 
+        ? (isRo ? 'Transferul tău a fost CONFIRMAT' : 'Your transfer has been CONFIRMED')
+        : emailType === 'rejected'
+        ? (isRo ? 'Transferul tău a fost ANULAT' : 'Your transfer has been CANCELLED')
+        : (isRo ? 'Cerere de Transfer Primită' : 'Transfer Request Received'),
       greeting: isRo ? `Bună ${personalInfo.name},` : `Hello ${personalInfo.name},`,
-      confirmationMessage: isRo
-        ? 'Am primit cererea ta de transfer. Detaliile cererii sunt prezentate mai jos.'
-        : 'We have received your transfer request. Your request details are shown below.',
+      statusMessage: emailType === 'accepted'
+        ? (isRo ? 'Suntem bucuroși să te informăm că cererea ta de transfer a fost ACCEPTATĂ. Șoferul nostru te va aștepta la locul stabilit.' : 'We are pleased to inform you that your transfer request has been ACCEPTED. Our driver will be waiting for you at the established location.')
+        : emailType === 'rejected'
+        ? (isRo ? 'Ne pare rău, dar cererea ta de transfer a fost RESPINSĂ / ANULATĂ. Te rugăm să ne contactezi pentru detalii sau pentru a reprograma.' : 'We are sorry, but your transfer request has been REJECTED / CANCELLED. Please contact us for details or to reschedule.')
+        : (isRo ? 'Am primit cererea ta de transfer. Detaliile cererii sunt prezentate mai jos.' : 'We have received your transfer request. Your request details are shown below.'),
       transferDetails: isRo ? 'Detalii Transfer' : 'Transfer Details',
       pickupLocation: isRo ? 'Locație Ridicare' : 'Pickup Location',
       dropoffLocation: isRo ? 'Locație Destinație' : 'Dropoff Location',
@@ -90,6 +104,10 @@ export async function POST(request: Request) {
       message: isRo ? 'Mesaj' : 'Message',
       pricing: isRo ? 'Estimare Preț' : 'Price Estimate',
       basePrice: isRo ? 'Preț de Bază' : 'Base Price',
+      discount: isRo ? 'Reducere' : 'Discount',
+      voucher: isRo ? 'Voucher' : 'Voucher',
+      total: isRo ? 'Total Final' : 'Final Total',
+      childSeats: isRo ? 'Scaune Copii' : 'Child Seats',
       nextSteps: isRo
         ? 'Vom revizui cererea ta și te vom contacta cât mai curând posibil în maximum 6 ore pentru a confirma disponibilitatea și a finaliza prețul.'
         : 'We will review your request and contact you as soon as possible within 6 hours to confirm availability and finalize the price.',
@@ -99,7 +117,10 @@ export async function POST(request: Request) {
 
     const adminHtml = `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h1 style="color: #1a365d; border-bottom: 2px solid #ec4899; padding-bottom: 10px;">${adminT.title}</h1>
+        <h1 style="color: #1a365d; border-bottom: 2px solid ${emailType === 'rejected' ? '#ef4444' : '#ec4899'}; padding-bottom: 10px;">${adminT.title}</h1>
+        <p style="font-weight: bold; color: ${emailType === 'accepted' ? '#166534' : emailType === 'rejected' ? '#991b1b' : '#333'}">
+          Status: ${emailType.toUpperCase()}
+        </p>
         
         <h2 style="color: #374151; font-size: 18px; margin-top: 20px;">${adminT.customerInfo}</h2>
         <table style="width: 100%; border-collapse: collapse;">
@@ -149,15 +170,14 @@ export async function POST(request: Request) {
           </tr>` : ''}
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${adminT.distance}:</td>
-            <td style="padding: 8px;">${transferDetails.distance} km</td>
+            <td style="padding: 8px;">${Number(transferDetails.distance).toFixed(2)} km</td>
           </tr>` : ''}
-          ${personalInfo.flightNumber ? `<tr>
-            <td style="padding: 8px; color: #666;">${adminT.flightNumber}:</td>
-            <td style="padding: 8px;">${personalInfo.flightNumber}</td>
-          </tr>` : ''}
-          ${personalInfo.message ? `<tr style="background-color: #f9fafb;">
-            <td style="padding: 8px; color: #666;">${adminT.message}:</td>
-            <td style="padding: 8px;">${personalInfo.message}</td>
+          ${(transferDetails.childSeats1to4 || transferDetails.childSeats5to12) ? `<tr>
+            <td style="padding: 8px; color: #666;">${adminT.childSeats}:</td>
+            <td style="padding: 8px;">${[
+              transferDetails.childSeats1to4 ? `${transferDetails.childSeats1to4}x (1-4y)` : '',
+              transferDetails.childSeats5to12 ? `${transferDetails.childSeats5to12}x (5-12y)` : ''
+            ].filter(Boolean).join(', ')}</td>
           </tr>` : ''}
         </table>
 
@@ -167,11 +187,19 @@ export async function POST(request: Request) {
             <td style="padding: 8px; color: #666;">${adminT.basePrice}:</td>
             <td style="padding: 8px; font-weight: bold; font-size: 16px;">${priceDisplay}</td>
           </tr>
+          ${pricing?.voucherCode ? `
+          <tr style="background-color: #f0fdf4;">
+            <td style="padding: 8px; color: #166534;">${adminT.voucher} (${pricing.voucherCode}):</td>
+            <td style="padding: 8px; font-weight: bold; color: #166534;">-${formatPrice(pricing.discountAmount)}</td>
+          </tr>
+          ` : ''}
         </table>
 
+        ${emailType === 'request' ? `
         <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-top: 20px;">
           <p style="color: #1e40af; margin: 0;">${adminT.action}</p>
         </div>
+        ` : ''}
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
         <p style="color: #999; font-size: 12px;">© 2025 Zetta Cars. All rights reserved.</p>
@@ -180,10 +208,12 @@ export async function POST(request: Request) {
 
     const userHtml = `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h1 style="color: #1a365d; border-bottom: 2px solid #ec4899; padding-bottom: 10px;">${userT.subject}</h1>
+        <h1 style="color: #1a365d; border-bottom: 2px solid ${emailType === 'rejected' ? '#ef4444' : '#ec4899'}; padding-bottom: 10px;">${userT.subject}</h1>
         
         <p style="font-size: 16px; margin-top: 20px;">${userT.greeting}</p>
-        <p>${userT.confirmationMessage}</p>
+        <div style="font-size: 15px; background-color: ${emailType === 'accepted' ? '#f0fdf4' : emailType === 'rejected' ? '#fef2f2' : '#f8fafc'}; padding: 15px; border-radius: 8px; border-left: 4px solid ${emailType === 'accepted' ? '#22c55e' : emailType === 'rejected' ? '#ef4444' : '#3b82f6'};">
+          ${userT.statusMessage}
+        </div>
 
         <h2 style="color: #374151; font-size: 18px; margin-top: 20px;">${userT.transferDetails}</h2>
         <table style="width: 100%; border-collapse: collapse;">
@@ -209,7 +239,14 @@ export async function POST(request: Request) {
           </tr>` : ''}
           ${transferDetails.distance ? `<tr style="background-color: #f9fafb;">
             <td style="padding: 8px; color: #666;">${userT.distance}:</td>
-            <td style="padding: 8px;">${transferDetails.distance} km</td>
+            <td style="padding: 8px;">${Number(transferDetails.distance).toFixed(2)} km</td>
+          </tr>` : ''}
+          ${(transferDetails.childSeats1to4 || transferDetails.childSeats5to12) ? `<tr>
+            <td style="padding: 8px; color: #666;">${userT.childSeats}:</td>
+            <td style="padding: 8px;">${[
+              transferDetails.childSeats1to4 ? `${transferDetails.childSeats1to4}x (1-4y)` : '',
+              transferDetails.childSeats5to12 ? `${transferDetails.childSeats5to12}x (5-12y)` : ''
+            ].filter(Boolean).join(', ')}</td>
           </tr>` : ''}
           ${personalInfo.flightNumber ? `<tr>
             <td style="padding: 8px; color: #666;">${userT.flightNumber}:</td>
@@ -227,6 +264,12 @@ export async function POST(request: Request) {
             <td style="padding: 8px; color: #666;">${userT.basePrice}:</td>
             <td style="padding: 8px; font-weight: bold; font-size: 16px;">${priceDisplay}</td>
           </tr>
+          ${pricing?.voucherCode ? `
+          <tr style="background-color: #f0fdf4;">
+            <td style="padding: 8px; color: #166534;">${userT.voucher} (${pricing.voucherCode}):</td>
+            <td style="padding: 8px; font-weight: bold; color: #166534;">-${formatPrice(pricing.discountAmount)}</td>
+          </tr>
+          ` : ''}
         </table>
 
         <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-top: 20px;">

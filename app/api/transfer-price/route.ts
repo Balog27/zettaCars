@@ -10,7 +10,7 @@ type Loc = {
   lng?: number;
 };
 
-const CLUJ_KEYWORDS = ["cluj", "cluj-napoca", "napoca"];
+const CLUJ_KEYWORDS = ["cluj-napoca", "napoca", "clj airport", "aeroport cluj", "cluj airport"];
 
 // Cluj-Napoca city center coordinates
 const CLUJ_CENTER_LAT = 46.7712;

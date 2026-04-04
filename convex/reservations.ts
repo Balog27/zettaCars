@@ -48,6 +48,9 @@ export const createReservation = mutation({
       flightNumber: v.optional(v.string()),
     }),
     promoCode: v.optional(v.string()),
+    voucherId: v.optional(v.id("vouchers")),
+    voucherCode: v.optional(v.string()),
+    discountAmount: v.optional(v.number()),
     additionalCharges: v.optional(v.array(additionalChargeValidator)),
     isSCDWSelected: v.boolean(),
     deductibleAmount: v.number(),
@@ -101,6 +104,9 @@ export const createReservation = mutation({
       totalPrice: args.totalPrice,
       customerInfo: args.customerInfo,
       promoCode: args.promoCode,
+      voucherId: args.voucherId,
+      voucherCode: args.voucherCode,
+      discountAmount: args.discountAmount,
       additionalCharges: args.additionalCharges,
       isSCDWSelected: args.isSCDWSelected,
       deductibleAmount: args.deductibleAmount,
@@ -110,6 +116,16 @@ export const createReservation = mutation({
     };
 
     const reservationId = await ctx.db.insert("reservations", newReservationData);
+
+    // Update voucher usage count if applicable
+    if (args.voucherId) {
+      const voucher = await ctx.db.get(args.voucherId);
+      if (voucher) {
+        await ctx.db.patch(args.voucherId, {
+          usageCount: (voucher.usageCount || 0) + 1,
+        });
+      }
+    }
 
     // TODO (Post-payment/confirmation flow):
     // 1. Update reservation status to "confirmed" (e.g., via a Stripe webhook handler).
@@ -284,6 +300,9 @@ export const updateReservationDetails = mutation({
     })),
     status: v.optional(reservationStatusValidator),
     promoCode: v.optional(v.string()),
+    voucherId: v.optional(v.id("vouchers")),
+    voucherCode: v.optional(v.string()),
+    discountAmount: v.optional(v.number()),
     additionalCharges: v.optional(v.array(additionalChargeValidator)),
     isSCDWSelected: v.optional(v.boolean()),
     deductibleAmount: v.optional(v.number()),
@@ -322,6 +341,9 @@ export const updateReservationDetails = mutation({
     if (updatesIn.customerInfo !== undefined) updatesToApply.customerInfo = updatesIn.customerInfo;
     if (updatesIn.status !== undefined) updatesToApply.status = updatesIn.status; // status is already validated by args
     if (updatesIn.promoCode !== undefined) updatesToApply.promoCode = updatesIn.promoCode;
+    if (updatesIn.voucherId !== undefined) updatesToApply.voucherId = updatesIn.voucherId;
+    if (updatesIn.voucherCode !== undefined) updatesToApply.voucherCode = updatesIn.voucherCode;
+    if (updatesIn.discountAmount !== undefined) updatesToApply.discountAmount = updatesIn.discountAmount;
     if (updatesIn.additionalCharges !== undefined) updatesToApply.additionalCharges = updatesIn.additionalCharges;
     if (updatesIn.isSCDWSelected !== undefined) updatesToApply.isSCDWSelected = updatesIn.isSCDWSelected;
     if (updatesIn.deductibleAmount !== undefined) updatesToApply.deductibleAmount = updatesIn.deductibleAmount;

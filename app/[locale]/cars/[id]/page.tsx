@@ -128,7 +128,7 @@ export default function CarDetailPage() {
     return {
       "@context": "https://schema.org",
       "@type": "Vehicle",
-      "@id": `https://rngo.com/cars/${vehicle._id}`,
+      "@id": `https://zettacarrental.com/cars/${vehicle._id}`,
       "name": vehicleName,
   "description": `${vehicleName} disponibil pentru închiriere în Cluj-Napoca. Masini de inchiriat cu Zetta Cars - servicii profesionale de închiriere auto.`,
       "brand": {
@@ -146,8 +146,8 @@ export default function CarDetailPage() {
         "fuelType": vehicle.fuelType || "Petrol",
         "engineDisplacement": vehicle.engineCapacity ? `${vehicle.engineCapacity}L` : "1.6L"
       },
-      "image": vehicle.images?.map(img => `https://rngo.com${img}`) || ["https://rngo.com/logo.png"],
-      "url": `https://rngo.com/cars/${vehicle._id}`,
+      "image": vehicle.images?.map(img => `https://zettacarrental.com${img}`) || ["https://zettacarrental.com/logo.png"],
+      "url": `https://zettacarrental.com/cars/${vehicle._id}`,
       "offers": {
         "@type": "Offer",
         "priceCurrency": "EUR",
@@ -163,7 +163,7 @@ export default function CarDetailPage() {
           "seller": {
           "@type": "Organization",
           "name": "Zetta Cars",
-          "url": "https://rngo.com",
+          "url": "https://zettacarrental.com",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Cluj \"Avram Iancu\" International Airport, Strada Traian Vuia 149-151",
@@ -178,7 +178,7 @@ export default function CarDetailPage() {
         "@type": "RentAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": `https://rngo.com/reservation?vehicleId=${vehicle._id}`,
+          "urlTemplate": `https://zettacarrental.com/reservation?vehicleId=${vehicle._id}`,
           "actionPlatform": [
             "https://schema.org/DesktopWebPlatform",
             "https://schema.org/MobileWebPlatform"
@@ -197,7 +197,7 @@ export default function CarDetailPage() {
         <meta name="description" content={`Închiriază ${vehicleName} în Cluj-Napoca cu Zetta Cars. ${vehicle.seats} locuri, ${vehicle.fuelType || 'Petrol'}, ${vehicle.transmission || 'Manual'}. Rezervare online rapidă pentru masini de inchiriat Cluj.`} />
         <meta name="keywords" content={`${vehicleName}, masini de inchiriat cluj-napoca, ${vehicle.make} închiriere, car rental ${vehicle.model}, rent ${vehicle.make} cluj`} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`https://rngo.com/cars/${vehicle._id}`} />
+        <link rel="canonical" href={`https://zettacarrental.com/cars/${vehicle._id}`} />
         
         {vehicleSchema && (
           <script

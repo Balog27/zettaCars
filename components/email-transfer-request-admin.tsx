@@ -130,7 +130,7 @@ const TransferRequestAdminEmail: React.FC<TransferRequestAdminEmailProps> = ({ d
                 <DetailRow label={t.persons} value={transferDetails.persons} />
               )}
               {transferDetails.distance && (
-                <DetailRow label={t.distance} value={`${transferDetails.distance} km`} />
+                <DetailRow label={t.distance} value={`${Number(transferDetails.distance).toFixed(2)} km`} />
               )}
               {personalInfo.flightNumber && (
                 <DetailRow label={t.flightNumber} value={personalInfo.flightNumber} />

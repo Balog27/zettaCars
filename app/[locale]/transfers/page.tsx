@@ -3,14 +3,10 @@
 import { Footer } from "@/components/ui/footer";
 import { Header } from "@/components/ui/header";
 import { Logo } from '@/components/ui/logo';
-import dynamic from 'next/dynamic';
-const PriceCalculator = dynamic(() => import('@/components/transfer/price-calculator'), { ssr: false });
-const SpecialOrdersForm = dynamic(() => import('@/components/transfer/special-orders-form'), { 
-  ssr: false,
-  loading: () => <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
-});
+import { TransferWizard } from '@/components/transfer/transfer-wizard';
+import SpecialOrdersForm from '@/components/transfer/special-orders-form';
 import { useTranslations } from 'next-intl';
-import Head from 'next/head';
+
 
 export default function TransfersPage() {
   const t = useTranslations('transfersPage');
@@ -25,8 +21,8 @@ export default function TransfersPage() {
     "provider": {
       "@type": "Organization",
       "name": "Zetta Cars",
-      "url": "https://rngo.com",
-      "logo": "https://rngo.com/logo.png",
+      "url": "https://zettacarrental.com",
+      "logo": "https://zettacarrental.com/logo.png",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+40750250121",
@@ -58,7 +54,7 @@ export default function TransfersPage() {
     ],
     "availableChannel": {
       "@type": "ServiceChannel",
-      "serviceUrl": "https://rngo.com/transfers",
+      "serviceUrl": "https://zettacarrental.com/transfers",
       "serviceSmsNumber": "+40750250121",
       "servicePhone": "+40750250121"
     },
@@ -92,80 +88,62 @@ export default function TransfersPage() {
         }
       ]
     },
-    "url": "https://rngo.com/transfers"
+    "url": "https://zettacarrental.com/transfers"
   });
 
   const transferSchema = generateTransferServiceSchema();
 
   return (
-    <>
-      <Head>
-        <title>Transfer Services Cluj-Napoca | Zetta Cars</title>
-        <meta name="description" content="Servicii transfer Cluj-Napoca cu Zetta Cars. Transfer aeroport Cluj, transport privat, curse personalizate." />
-        <meta name="keywords" content="transfer cluj-napoca, transfer aeroport cluj, transport privat cluj, servicii transfer romania" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://rngo.com/transfers" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(transferSchema)
-          }}
-        />
-      </Head>
-
-      <div className="flex flex-col min-h-screen">
-        <Header logo={<Logo alt="Zetta Cars Logo" />} />
+    <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(transferSchema)
+        }}
+      />
+      <Header logo={<Logo alt="Zetta Cars Logo" />} />
 
         <main className="flex-grow">
           {/* Hero with background image */}
-          <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+          <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 z-0">
               <div
                 className="w-full h-full bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url('/luxuaryTransfers.png')`, backgroundPosition: 'center' }}
               />
-              <div className="absolute inset-0 bg-black/50" />
+              <div className="absolute inset-0 bg-black/60" />
             </div>
 
-            <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+            <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
                 {t('title')}
               </h1>
-              <p className="text-lg sm:text-xl text-white/90 mb-6">
+              <p className="text-lg sm:text-xl text-white/90 mb-6 font-medium">
                 {t('subtitle')}
               </p>
             </div>
           </section>
 
-          {/* Price calculator below hero */}
-          <section className="py-12 bg-background">
+          {/* Transfer Wizard */}
+          <section className="py-12 bg-[#faf9f6] dark:bg-background min-h-[50vh]">
             <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto -mt-8">
-                <PriceCalculator />
+              <div className="max-w-4xl mx-auto mt-4 sm:mt-8 relative z-20">
+                <div className="bg-card dark:bg-card-darker rounded-2xl shadow-2xl p-6 sm:p-10 border border-gray-100 dark:border-zinc-800">
+                  <TransferWizard />
+                </div>
               </div>
             </div>
           </section>
 
           {/* Special Orders Section */}
-          <section className="py-12 bg-background dark:bg-background">
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto">
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-center mb-2">
-                    {t('specialOrders.sectionTitle') ?? 'Special Transfer Orders'}
-                  </h2>
-                  <p className="text-center text-muted-foreground">
-                    {t('specialOrders.sectionDescription') ?? 'Have a unique transfer need? Contact us for custom requests and special arrangements.'}
-                  </p>
-                </div>
-                <SpecialOrdersForm />
-              </div>
+          <section className="pb-24 bg-[#faf9f6] dark:bg-background">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <SpecialOrdersForm />
             </div>
           </section>
         </main>
 
-        <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
-      </div>
-    </>
+      <Footer logo={<Logo alt="Zetta Cars Logo" />} brandName="" />
+    </div>
   );
 }

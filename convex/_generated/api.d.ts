@@ -21,6 +21,7 @@ import type * as transfers from "../transfers.js";
 import type * as users from "../users.js";
 import type * as vehicleClasses from "../vehicleClasses.js";
 import type * as vehicles from "../vehicles.js";
+import type * as vouchers from "../vouchers.js";
 
 import type {
   ApiFromModules,
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   users: typeof users;
   vehicleClasses: typeof vehicleClasses;
   vehicles: typeof vehicles;
+  vouchers: typeof vouchers;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 
