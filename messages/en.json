@@ -496,6 +496,8 @@
     "loading": "Loading...",
     "error": "Error",
     "noResults": "No results found",
+    "featuredCars": "Featured Cars",
+    "latestCars": "Latest Additions",
     "loadingFeaturedCars": "Loading featured cars...",
     "couldNotLoadFeaturedCars": "Could not load featured cars.",
     "noFeaturedCarsAvailable": "No featured cars available at the moment.",
