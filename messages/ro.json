@@ -870,8 +870,8 @@
     "additionalFeatures": {
       "title": "Caracteristici Suplimentare",
       "childSeats": "Scaune copii",
-      "age1to4": "1-4 ani",
-      "age5to12": "5-12 ani"
+      "age1to4": "Scaun copii pentru 1-4 ani",
+      "age5to12": "Scaun copii pentru 5-12 ani"
     },
     "booking": {
       "transferDate": "Data Transferului",
@@ -944,7 +944,8 @@
       "discount": "Reducere",
       "pricingNote": {
         "title": "Notă privind Prețul",
-        "message": "Pentru transferurile pe bază de distanță, prețul afișat este o estimare. Prețul final va fi confirmat după ce analizez și accept comanda ta. Te vom contacta pe email cu suma exactă."
+        "message": "Pentru transferurile pe bază de distanță, prețul afișat este o estimare. Prețul final va fi confirmat după ce analizez și accept comanda ta. Te vom contacta pe email cu suma exactă.",
+        "recalculated": "Include noile distanțe și tarife"
       },
       "totalEstimative": "Total Estimativ",
       "apply": "Aplică",
@@ -973,7 +974,23 @@
       },
       "success": {
         "sent": "Cererea a fost trimisă cu succes!"
-      }
+      },
+      "oneWay": "Un sens",
+      "roundTrip": "Dus-întors",
+      "config": {
+        "title": "Configurează transferul",
+        "vehicleCategory": "Categorie vehicul",
+        "passengerRange1to3": "1–3 pasageri",
+        "passengerRange4to8": "4–8 pasageri",
+        "requiresVan": "Necesită VAN",
+        "waitingAtDestination": "Staționare la destinație"
+      },
+      "recalculatePrompt": "Recalculează prețul din josul paginii pentru a vedea costul total.",
+      "waitingTimeAtDestination": "Staționare la destinație",
+      "transportCost": "Cost transport",
+      "ratePerKm": "Tarif/km",
+      "pickupAddress": "PORNIRE",
+      "dropoffAddress": "DESTINAȚIE"
     },
     "specialOrders": {
       "title": "Cereri Speciale",
@@ -1175,6 +1192,11 @@
     "successToast": "Mulțumim pentru review! Va apărea în curând pe pagina principală.",
     "errorToast": "Trimiterea review-ului a eșuat. Te rugăm încearcă din nou.",
     "validationFillFields": "Completează toate câmpurile obligatorii",
+    "authPrompt": {
+      "title": "Vrei să lași un review?",
+      "subtitle": "Te rugăm să te autentifici pentru a împărtăși experiența ta cu noi.",
+      "button": "Autentificare"
+    },
     "additionalInfo": "Review-ul tău îi va ajuta pe ceilalți clienți să ia decizii informate și ne va ajuta să îmbunătățim serviciile."
   }
 }

@@ -73,11 +73,11 @@ export default function AdminLayout({
     )
   }
 
-  // If no user is signed in
-  if (!user) {
+  // If no user or not an admin, don't render anything while redirecting
+  if (!user || !dbUser || dbUser.role !== "admin") {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-lg">Redirecting...</div>
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="text-lg font-medium animate-pulse">Redirecting...</div>
       </div>
     )
   }

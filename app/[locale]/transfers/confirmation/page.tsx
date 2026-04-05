@@ -112,7 +112,7 @@ function TransferConfirmationPageContent() {
                 <div className="space-y-6 mb-8 border-t border-b py-6">
                   <div>
                     <h3 className="text-sm font-medium text-muted-foreground mb-3">
-                      {t("confirmation.transferDetails") ?? "Detalii Transfer"}
+                      {t("confirmation.transferDetails") ?? "Transfer Details"}
                     </h3>
                     <div className="space-y-4 mb-4">
                       {confirmationData.transferDetails?.segments?.map((s: any, i: number) => (
@@ -123,42 +123,48 @@ function TransferConfirmationPageContent() {
                              <ArrowRight className="w-3 h-3 mt-1 shrink-0 text-slate-400" />
                              <div className="text-slate-900 dark:text-slate-100 font-medium">{s.to}</div>
                           </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+                             {t("summary.freeMax2Seats") ?? "Free (max 2 seats)"}
+                          </div>
                         </div>
                       ))}
                     </div>
                     <dl className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-sm border-t pt-4">
                       <div>
-                        <dt className="font-medium">{t("summary.date") ?? "Data & Ora:"}</dt>
+                        <dt className="font-medium">{t("summary.date") ?? "Date & Time:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
-                          {new Date(confirmationData.transferDetails?.transferDate).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })} la{" "}
+                          {new Date(confirmationData.transferDetails?.transferDate).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })} at{" "}
                           {confirmationData.transferDetails?.pickupTime}
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium">{t("summary.category") ?? "Categorie:"}</dt>
+                        <dt className="font-medium">{t("summary.category") ?? "Category:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">
                           {confirmationData.transferDetails?.category}
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium">{t("summary.totalDistance") ?? "Distanță totală:"}</dt>
+                        <dt className="font-medium">{t("summary.totalDistance") ?? "Total Distance:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
                           {Number(confirmationData.transferDetails?.distance).toFixed(2)} {t("summary.km") ?? "km"}
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium">{t("summary.numberOfPersons") ?? "Nr. persoane:"}</dt>
+                        <dt className="font-medium">{t("summary.numberOfPersons") ?? "Persons:"}</dt>
                         <dd className="mt-1 text-slate-600 dark:text-slate-300">
                           {confirmationData.transferDetails?.persons}
                         </dd>
                       </div>
                       {(confirmationData.transferDetails?.childSeats1to4 > 0 || confirmationData.transferDetails?.childSeats5to12 > 0) && (
                         <div>
-                          <dt className="font-medium">{t("summary.childSeats") ?? "Scaune copii:"}</dt>
+                          <dt className="font-medium">{t("summary.childSeats") ?? "Child Seats:"}</dt>
+                          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                             {t("summary.free") ?? "Free"}
+                          </div>
                           <dd className="mt-1 text-slate-600 dark:text-slate-300">
                             {[
-                              confirmationData.transferDetails.childSeats1to4 > 0 ? `${confirmationData.transferDetails.childSeats1to4}x (${t("additionalFeatures.age1to4") ?? "1-4 ani"})` : null,
-                              confirmationData.transferDetails.childSeats5to12 > 0 ? `${confirmationData.transferDetails.childSeats5to12}x (${t("additionalFeatures.age5to12") ?? "5-12 ani"})` : null
+                              confirmationData.transferDetails.childSeats1to4 > 0 ? `${confirmationData.transferDetails.childSeats1to4}x (${t("additionalFeatures.age1to4") ?? "1-4 years"})` : null,
+                              confirmationData.transferDetails.childSeats5to12 > 0 ? `${confirmationData.transferDetails.childSeats5to12}x (${t("additionalFeatures.age5to12") ?? "5-12 years"})` : null
                             ].filter(Boolean).join(", ")}
                           </dd>
                         </div>

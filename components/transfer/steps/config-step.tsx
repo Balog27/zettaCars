@@ -11,6 +11,7 @@ import { DateTimePicker } from '@/components/date-time-picker';
 import { TransferFormData } from '../transfer-wizard';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useTranslations } from 'next-intl';
 
 type ConfigStepProps = {
   data: TransferFormData;
@@ -21,6 +22,7 @@ type ConfigStepProps = {
 export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
   const [loading, setLoading] = useState<Record<number, boolean>>({});
   const transferPricing = useQuery(api.transfers.getTransferPricing);
+  const t = useTranslations("transfersPage");
 
   const addSegment = () => {
     const lastSegment = data.segments[data.segments.length - 1];
@@ -102,18 +104,18 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
     );
   }, [totalDistance, data.category, data.rideType, totalWaitingHours, transferPricing, data.segments]);
 
-  const canContinue = data.segments.every(s => s.from && s.to && s.distanceKm > 0) && data.date;
+  const canContinue = data.segments.every(s => s.from && s.to && s.distanceKm > 0) && data.date && data.passengers > 0;
 
   return (
     <div className="bg-transparent">
       <div className="pt-0 pb-6 text-center sm:text-left">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Configurează transferul</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("summary.config.title") ?? "Configurează transferul"}</h2>
       </div>
       <div className="space-y-8">
 
         {/* Vehicle Category Selection with Photos */}
         <div>
-          <Label className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 block">Categorie vehicul</Label>
+          <Label className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 block">{t("summary.config.vehicleCategory") ?? "Categorie vehicul"}</Label>
           <div className="grid grid-cols-2 gap-4">
             <div className="relative">
               <button
@@ -138,15 +140,15 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                     ? 'text-pink-500'
                     : 'text-gray-700 dark:text-gray-300'
                 }`}>
-                  Standard
-                  <span className="block text-xs font-normal opacity-80 mt-0.5">1–3 pasageri</span>
+                  {t("booking.standard") ?? "Standard"}
+                  <span className="block text-xs font-normal opacity-80 mt-0.5">{t("summary.config.passengerRange1to3") ?? "1–3 pasageri"}</span>
                 </div>
               </button>
               {data.passengers >= 4 && (
                 <div className="absolute -top-2 -right-2 z-10">
                   <div className="bg-zinc-800 text-white text-[10px] px-2 py-1 rounded-full shadow-lg flex items-center gap-1 border border-zinc-700">
                     <Info className="w-3 h-3 text-pink-400" />
-                    Necesită VAN
+                    {t("summary.config.requiresVan") ?? "Necesită VAN"}
                   </div>
                 </div>
               )}
@@ -173,8 +175,8 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                   ? 'text-pink-500'
                   : 'text-gray-700 dark:text-gray-300'
               }`}>
-                VAN
-                <span className="block text-xs font-normal opacity-80 mt-0.5">4–8 pasageri</span>
+                {t("booking.van") ?? "VAN"}
+                <span className="block text-xs font-normal opacity-80 mt-0.5">{t("summary.config.passengerRange4to8") ?? "4–8 pasageri"}</span>
               </div>
             </button>
           </div>
@@ -191,7 +193,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                 : 'bg-gray-100 dark:bg-zinc-950/60 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900/80 shadow-inner'
             }`}
            >
-             Un sens
+             {t("summary.oneWay") ?? "Un sens"}
            </button>
            <button 
             onClick={() => onUpdate({ rideType: 'round-trip' })}
@@ -200,9 +202,9 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               data.rideType === 'round-trip'
                 ? 'bg-pink-500 text-white shadow-md shadow-pink-500/30'
                 : 'bg-gray-100 dark:bg-zinc-950/60 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900/80 shadow-inner'
-            }`}
+             }`}
            >
-             Dus-întors
+             {t("summary.roundTrip") ?? "Dus-întors"}
            </button>
         </div>
 
@@ -218,7 +220,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-pink-500 uppercase tracking-wider flex items-center gap-1.5">
                   <Route className="w-3.5 h-3.5" />
-                  Segment {index + 1}
+                  {t("summary.segment") ?? "Segment"} {index + 1}
                 </span>
                 {data.segments.length > 1 && (
                   <button onClick={() => removeSegment(index)} className="text-red-400 hover:text-red-600 transition-colors p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
@@ -231,14 +233,14 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                 <LocationAutocomplete
                   value={segment.from}
                   onChange={(val) => updateSegment(index, 'from', val)}
-                  label="PORNIRE"
-                  placeholder="Introduceți adresa de pornire"
+                  label={t("summary.pickupAddress") ?? "PORNIRE"}
+                  placeholder={t("summary.pickupPlaceholder") ?? "Introduceți adresa de pornire"}
                 />
                 <LocationAutocomplete
                   value={segment.to}
                   onChange={(val) => updateSegment(index, 'to', val)}
-                  label="DESTINAȚIE"
-                  placeholder="Introduceți adresa de destinație"
+                  label={t("summary.dropoffAddress") ?? "DESTINAȚIE"}
+                  placeholder={t("summary.dropoffPlaceholder") ?? "Introduceți adresa de destinație"}
                 />
                 
                 <div className="flex items-center justify-between pt-2">
@@ -246,12 +248,12 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                     {loading[index] ? (
                       <span className="text-sm text-pink-400 animate-pulse flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5" />
-                        Se calculează distanța...
+                        {t("summary.recalculating") ?? "Se calculează distanța..."}
                       </span>
                     ) : segment.distanceKm > 0 ? (
                       <div className="flex items-baseline gap-2">
                          <span className="px-3 py-1 bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 rounded-full text-sm font-bold">
-                           {Number(segment.distanceKm).toFixed(2)} km
+                           {Number(segment.distanceKm).toFixed(2)} {t("summary.km") ?? "km"}
                          </span>
                          <span className="text-sm text-gray-500">{segment.durationText}</span>
                       </div>
@@ -264,7 +266,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
                     - For round-trip: ALL segments (driver waits at destination before returning) */}
                 {(data.rideType === 'round-trip' || index < data.segments.length - 1) && (
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-zinc-800/50">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Staționare la destinație</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t("summary.config.waitingAtDestination") ?? "Staționare la destinație"}</span>
                     <div className="flex items-center gap-3">
                       <button 
                         onClick={() => updateSegment(index, 'waitingTime', Math.max(0, segment.waitingTime - 0.5))}
@@ -286,13 +288,6 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
             </div>
           ))}
 
-          {/* Note about pricing calculation */}
-          <div className="flex items-start gap-2.5 px-4 py-3 bg-pink-50/70 dark:bg-pink-900/10 border border-pink-100 dark:border-pink-800/30 rounded-xl">
-            <Info className="w-4 h-4 text-pink-500 mt-0.5 shrink-0" />
-            <p className="text-xs text-pink-700 dark:text-pink-300 leading-relaxed">
-              Prețul este calculat pe baza <strong>distanței totale</strong> a tuturor segmentelor, nu per segment individual.
-            </p>
-          </div>
 
           <Button 
             variant="outline" 
@@ -300,7 +295,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
             suppressHydrationWarning
             className="w-full py-6 border-dashed border-2 rounded-2xl text-gray-400 hover:text-pink-500 hover:border-pink-400 hover:bg-pink-50/50 dark:hover:bg-pink-900/10 transition-all font-semibold"
           >
-            <Plus className="w-4 h-4 mr-2" /> Adaugă destinație
+            <Plus className="w-4 h-4 mr-2" /> {t("summary.addDestination") ?? "Adaugă destinație"}
           </Button>
         </div>
 
@@ -308,7 +303,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-gray-100 dark:border-zinc-800">
           <DateTimePicker
             id="transfer-pickup-datetime"
-            label="DATA ȘI ORA CURSEI"
+            label={t("booking.transferDate") ?? "DATA ȘI ORA CURSEI"}
             dateState={data.date}
             setDateState={(d) => onUpdate({ date: d })}
             timeState={data.time}
@@ -317,24 +312,53 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           />
           
           <div className="space-y-2">
-            <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">NUMĂR PASAGERI (1–8)</Label>
-            <div className="flex items-center p-2 bg-white dark:bg-zinc-950/60 border border-gray-100 dark:border-zinc-800 rounded-xl shadow-inner">
-              <Users className="w-4 h-4 text-pink-400 mx-2" />
-              <input 
-                type="number" 
-                min={1} 
-                max={8} 
-                value={data.passengers}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value) || 1;
-                  const updates: Partial<TransferFormData> = { passengers: val };
-                  if (val >= 4 && data.category === 'standard') {
+            <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t("summary.numberOfPersons") ?? "NUMĂR PASAGERI (1–8)"}</Label>
+            <div className="flex items-center p-1 bg-white dark:bg-zinc-950/60 border border-gray-100 dark:border-zinc-800 rounded-xl shadow-inner">
+              <button 
+                onClick={() => {
+                  const newVal = Math.max(1, (data.passengers || 1) - 1);
+                  onUpdate({ passengers: newVal });
+                }}
+                className="p-2.5 rounded-lg border border-pink-100 dark:border-pink-900/40 hover:bg-pink-50 dark:hover:bg-pink-900/20 text-pink-500 transition-colors"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+              
+              <div className="flex-1 flex items-center justify-center gap-2">
+                <Users className="w-4 h-4 text-pink-400" />
+                <input 
+                  type="text" 
+                  inputMode="numeric"
+                  suppressHydrationWarning
+                  value={data.passengers === 0 ? "" : data.passengers}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, "");
+                    const numVal = val === "" ? 0 : parseInt(val);
+                    if (numVal <= 8) {
+                      const updates: Partial<TransferFormData> = { passengers: numVal };
+                      if (numVal >= 4 && data.category === 'standard') {
+                        updates.category = 'van';
+                      }
+                      onUpdate(updates);
+                    }
+                  }}
+                  className="w-12 bg-transparent border-none focus:ring-0 text-center text-sm font-bold p-0"
+                />
+              </div>
+
+              <button 
+                onClick={() => {
+                  const newVal = Math.min(8, (data.passengers || 0) + 1);
+                  const updates: Partial<TransferFormData> = { passengers: newVal };
+                  if (newVal >= 4 && data.category === 'standard') {
                     updates.category = 'van';
                   }
                   onUpdate(updates);
                 }}
-                className="w-full bg-transparent border-none focus:ring-0 text-sm font-semibold"
-              />
+                className="p-2.5 rounded-lg border border-pink-100 dark:border-pink-900/40 hover:bg-pink-50 dark:hover:bg-pink-900/20 text-pink-500 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -342,23 +366,23 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
         {/* Pricing Summary Box */}
         <div className="p-6 bg-gradient-to-br from-pink-50/50 to-white dark:from-zinc-950/80 dark:to-zinc-900/40 rounded-3xl border border-pink-100 dark:border-zinc-800 shadow-xl shadow-gray-200/50 dark:shadow-none space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Distanță totală</span>
-            <span className="font-bold text-gray-900 dark:text-white">{Number(totalDistance).toFixed(2)} km</span>
+            <span className="text-gray-500 dark:text-gray-400">{t("summary.totalDistance") ?? "Distanță totală"}</span>
+            <span className="font-bold text-gray-900 dark:text-white">{Number(totalDistance).toFixed(2)} {t("summary.km") ?? "km"}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Tarif/km ({data.category === 'standard' ? 'Standard' : 'VAN'})</span>
+            <span className="text-gray-500 dark:text-gray-400">{t("summary.ratePerKm") ?? "Tarif/km"} ({data.category === 'standard' ? (t("booking.standard") ?? 'Standard') : (t("booking.van") ?? 'VAN')})</span>
             <span className="font-bold text-gray-900 dark:text-white">{pricing.ratePerKm.toFixed(2)} €</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Cost transport</span>
+            <span className="text-gray-500 dark:text-gray-400">{t("summary.transportCost") ?? "Cost transport"}</span>
             <span className="font-bold text-gray-900 dark:text-white">{pricing.transportCost.toFixed(2)} €</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Staționări</span>
+            <span className="text-gray-500 dark:text-gray-400">{t("summary.waitingTime") ?? "Staționări"}</span>
             <span className="font-bold text-gray-900 dark:text-white">{pricing.waitingCost.toFixed(2)} €</span>
           </div>
           <div className="pt-4 border-t border-pink-200 dark:border-zinc-800 flex justify-between items-end">
-            <span className="text-lg font-bold text-gray-900 dark:text-white">Total estimat</span>
+            <span className="text-lg font-bold text-gray-900 dark:text-white">{t("summary.totalEstimative") ?? "Total estimat"}</span>
             <div className="text-right">
               <span className="text-3xl font-black text-pink-500">{Math.round(pricing.total)}</span>
               <span className="text-xl font-bold text-pink-500 ml-1">€</span>
@@ -372,7 +396,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           suppressHydrationWarning
           className="w-full py-8 text-lg font-bold !bg-pink-500 hover:!bg-pink-600 !text-white rounded-2xl transition-all shadow-xl shadow-pink-500/20 hover:shadow-pink-500/30 group"
         >
-          Continuă cu datele personale
+          {t("summary.proceed") ?? "Continuă cu datele personale"}
           <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
         </Button>
       </div>
