@@ -534,13 +534,8 @@
     "error": "Eroare",
     "noResults": "Nu s-au găsit rezultate",
     "featuredCars": "Mașini Recomandate",
-<<<<<<< HEAD
-    "latestCars": "Ultimele Mașini",
-    "noCarsAvailable": "Nu sunt mașini disponibile",
-=======
     "latestCars": "Ultimele Adăugate",
->>>>>>> development
->>>>>>> 09385d5 (Refined transfer payment UI and localized featured vehicles hook)
+    "noCarsAvailable": "Nu sunt mașini disponibile",
     "loadingFeaturedCars": "Se încarcă mașinile recomandate...",
     "couldNotLoadFeaturedCars": "Nu s-au putut încărca mașinile recomandate.",
     "noFeaturedCarsAvailable": "Nu sunt disponibile mașini recomandate momentan.",

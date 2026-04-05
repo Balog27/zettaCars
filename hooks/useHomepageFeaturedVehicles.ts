@@ -1,7 +1,11 @@
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Vehicle } from "@/types/vehicle";
+<<<<<<< HEAD
 import { useTranslations } from 'next-intl';
+=======
+import { useTranslations } from "next-intl";
+>>>>>>> a81a3cd (Fix: Resolve merge conflicts in en.json and hooks, remove redundant empty blog directory, and deploy convex production)
 
 export interface UseHomepageFeaturedVehiclesReturn {
   vehiclesToDisplay: Vehicle[];

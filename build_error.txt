@@ -1,0 +1,282 @@
+﻿
+> zettacars@0.1.0 build
+> next build
+
+   Γû▓ Next.js 15.5.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+node.exe : Failed to 
+compile.
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo       
+       : NotSpecified:   
+  (Failed to compile.:   
+ String) [], RemoteEx    
+ception
+    + FullyQualifiedErro 
+   rId : NativeCommandE  
+  rror
+ 
+
+./hooks/useHomepageFeatur
+edVehicles.ts
+Error:   [31mx[0m 
+Merge conflict marker 
+encountered.
+   ,-[[36;1;4mC:\Users\d
+avid\Personal work\2025\Z
+ettaCars\zettaCars\hooks\
+useHomepageFeaturedVehicl
+es.ts[0m:4:1]
+ [2m1[0m | import { 
+useQuery } from 
+"convex/react";
+ [2m2[0m | import { 
+api } from "../convex/_ge
+nerated/api";
+ [2m3[0m | import { 
+Vehicle } from 
+"@/types/vehicle";
+ [2m4[0m | <<<<<<< HEAD
+   : [35;1m^^^^^^^[0m
+ [2m5[0m | import { 
+useTranslations } from 
+'next-intl';
+ [2m6[0m | =======
+ [2m6[0m | import { 
+useTranslations } from 
+"next-intl";
+   `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+   ,-[[36;1;4mC:\Users\d
+avid\Personal work\2025\Z
+ettaCars\zettaCars\hooks\
+useHomepageFeaturedVehicl
+es.ts[0m:6:1]
+ [2m3[0m | import { 
+Vehicle } from 
+"@/types/vehicle";
+ [2m4[0m | <<<<<<< HEAD
+ [2m5[0m | import { 
+useTranslations } from 
+'next-intl';
+ [2m6[0m | =======
+   : [35;1m^^^^^^^[0m
+ [2m7[0m | import { 
+useTranslations } from 
+"next-intl";
+ [2m8[0m | >>>>>>> 
+development
+ [2m8[0m | 
+   `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:8:1]
+ [2m 5[0m | import { 
+useTranslations } from 
+'next-intl';
+ [2m 6[0m | =======
+ [2m 7[0m | import { 
+useTranslations } from 
+"next-intl";
+ [2m 8[0m | >>>>>>> 
+development
+    : [35;1m^^^^^^^[0m
+ [2m 9[0m | 
+ [2m10[0m | export 
+interface UseHomepageFeat
+uredVehiclesReturn {
+ [2m10[0m |   
+vehiclesToDisplay: 
+Vehicle[];
+    `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:19:1]
+ [2m16[0m | 
+ [2m17[0m | export 
+function useHomepageFeatu
+redVehicles(): UseHomepag
+eFeaturedVehiclesReturn {
+ [2m18[0m |   const t 
+= useTranslations('common
+');
+ [2m19[0m | <<<<<<< 
+HEAD
+    : [35;1m^^^^^^^[0m
+ [2m20[0m | 
+ [2m21[0m | =======
+ [2m21[0m | >>>>>>> 
+development
+    `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:21:1]
+ [2m18[0m |   const t 
+= useTranslations('common
+');
+ [2m19[0m | <<<<<<< 
+HEAD
+ [2m20[0m | 
+ [2m21[0m | =======
+    : [35;1m^^^^^^^[0m
+ [2m22[0m | >>>>>>> 
+development
+ [2m23[0m |   // Try 
+to get featured cars 
+from backend first
+ [2m23[0m |   const 
+featuredVehicles = useQue
+ry(api.featuredCars.getFe
+aturedVehicles);
+    `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:22:1]
+ [2m19[0m | <<<<<<< 
+HEAD
+ [2m20[0m | 
+ [2m21[0m | =======
+ [2m22[0m | >>>>>>> 
+development
+    : [35;1m^^^^^^^[0m
+ [2m23[0m |   // Try 
+to get featured cars 
+from backend first
+ [2m24[0m |   const 
+featuredVehicles = useQue
+ry(api.featuredCars.getFe
+aturedVehicles);
+ [2m24[0m |   
+    `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:51:1]
+ [2m48[0m |       } 
+else if 
+((fallbackVehiclesQuery 
+as any).page) {
+ [2m49[0m |         
+vehiclesToDisplay = 
+(fallbackVehiclesQuery 
+as any).page as 
+Vehicle[];
+ [2m50[0m |       }
+ [2m51[0m | <<<<<<< 
+HEAD
+    : [35;1m^^^^^^^[0m
+ [2m52[0m |       
+currentTitle = 
+vehiclesToDisplay.length 
+> 0 ? t('latestCars') : 
+t('noCarsAvailable');
+ [2m53[0m |     } else 
+{
+ [2m53[0m |       
+vehiclesToDisplay = [];
+    `----
+  [31mx[0m Merge 
+conflict marker 
+encountered.
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:56:1]
+ [2m53[0m |     } else 
+{
+ [2m54[0m |       
+vehiclesToDisplay = [];
+ [2m55[0m |       
+currentTitle = 
+t('noCarsAvailable');
+ [2m56[0m | =======
+    : [35;1m^^^^^^^[0m
+ [2m57[0m |       
+currentTitle = 
+vehiclesToDisplay.length 
+> 0 ? t('latestCars') : t
+('noFeaturedCarsAvailable
+');
+ [2m58[0m |     } else 
+{
+ [2m58[0m |       
+vehiclesToDisplay = [];
+    `----
+  [31mx[0m Expression 
+expected
+    ,-[[36;1;4mC:\Users\
+david\Personal work\2025\
+ZettaCars\zettaCars\hooks
+\useHomepageFeaturedVehic
+les.ts[0m:58:1]
+ [2m55[0m |       
+currentTitle = 
+t('noCarsAvailable');
+ [2m56[0m | =======
+ [2m57[0m |       
+currentTitle = 
+vehiclesToDisplay.length 
+> 0 ? t('latestCars') : t
+('noFeaturedCarsAvailable
+');
+ [2m58[0m |     } else 
+{
+    : [35;1m      
+^^^^[0m
+ [2m59[0m |       
+vehiclesToDisplay = [];
+ [2m60[0m |       
+currentTitle = t('noFeatu
+redCarsAvailable');
+ [2m60[0m | >>>>>>> 
+development
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for 
+requested module:
+./hooks/useHomepageFeatur
+edVehicles.ts
+./app/[locale]/page.tsx
+
+
+> Build failed because 
+of webpack errors

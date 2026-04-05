@@ -1,0 +1,4 @@
+﻿C:\Users\david\Personal work\2025\ZettaCars\zettaCars\deploy_output.txt
+C:\Users\david\Personal work\2025\ZettaCars\zettaCars\empty_files.txt
+C:\Users\david\Personal work\2025\ZettaCars\zettaCars\app\[locale]\blog\[slug]\page.tsx
+C:\Users\david\Personal work\2025\ZettaCars\zettaCars\components_ai\1.txt
