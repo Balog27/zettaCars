@@ -497,11 +497,7 @@
     "error": "Error",
     "noResults": "No results found",
     "featuredCars": "Featured Cars",
-<<<<<<< HEAD
     "latestCars": "Our Latest Cars",
-=======
-    "latestCars": "Latest Additions",
->>>>>>> a81a3cd (Fix: Resolve merge conflicts in en.json and hooks, remove redundant empty blog directory, and deploy convex production)
     "noCarsAvailable": "No Cars Available",
     "loadingFeaturedCars": "Loading featured cars...",
     "couldNotLoadFeaturedCars": "Could not load featured cars.",

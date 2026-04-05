@@ -1,11 +1,7 @@
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Vehicle } from "@/types/vehicle";
-<<<<<<< HEAD
-import { useTranslations } from 'next-intl';
-=======
 import { useTranslations } from "next-intl";
->>>>>>> a81a3cd (Fix: Resolve merge conflicts in en.json and hooks, remove redundant empty blog directory, and deploy convex production)
 
 export interface UseHomepageFeaturedVehiclesReturn {
   vehiclesToDisplay: Vehicle[];
@@ -19,16 +15,16 @@ export function useHomepageFeaturedVehicles(): UseHomepageFeaturedVehiclesReturn
 
   // Try to get featured cars from backend first
   const featuredVehicles = useQuery(api.featuredCars.getFeaturedVehicles);
-  
+
   // Fallback to random vehicles if no featured cars are set
   const fallbackVehiclesQuery = useQuery(
-    api.vehicles.getAll, 
+    api.vehicles.getAll,
     featuredVehicles?.length === 0 ? { paginationOpts: { numItems: 3, cursor: null } } : "skip"
   );
 
   const isLoading = featuredVehicles === undefined || (featuredVehicles?.length === 0 && fallbackVehiclesQuery === undefined);
   const error = featuredVehicles === null || (featuredVehicles?.length === 0 && fallbackVehiclesQuery === null);
-  
+
   // Determine vehicles to display
   let vehiclesToDisplay: Vehicle[] = [];
   let currentTitle = t('loading');
