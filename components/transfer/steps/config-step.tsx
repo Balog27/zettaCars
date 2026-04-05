@@ -104,7 +104,7 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
     );
   }, [totalDistance, data.category, data.rideType, totalWaitingHours, transferPricing, data.segments]);
 
-  const canContinue = data.segments.every(s => s.from && s.to && s.distanceKm > 0) && data.date;
+  const canContinue = data.segments.every(s => s.from && s.to && s.distanceKm > 0) && data.date && data.passengers > 0;
 
   return (
     <div className="bg-transparent">
@@ -313,24 +313,52 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
           
           <div className="space-y-2">
             <Label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t("summary.numberOfPersons") ?? "NUMĂR PASAGERI (1–8)"}</Label>
-            <div className="flex items-center p-2 bg-white dark:bg-zinc-950/60 border border-gray-100 dark:border-zinc-800 rounded-xl shadow-inner">
-              <Users className="w-4 h-4 text-pink-400 mx-2" />
-              <input 
-                type="number" 
-                min={1} 
-                max={8} 
-                suppressHydrationWarning
-                value={data.passengers}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value) || 1;
-                  const updates: Partial<TransferFormData> = { passengers: val };
-                  if (val >= 4 && data.category === 'standard') {
+            <div className="flex items-center p-1 bg-white dark:bg-zinc-950/60 border border-gray-100 dark:border-zinc-800 rounded-xl shadow-inner">
+              <button 
+                onClick={() => {
+                  const newVal = Math.max(1, (data.passengers || 1) - 1);
+                  onUpdate({ passengers: newVal });
+                }}
+                className="p-2.5 rounded-lg border border-pink-100 dark:border-pink-900/40 hover:bg-pink-50 dark:hover:bg-pink-900/20 text-pink-500 transition-colors"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+              
+              <div className="flex-1 flex items-center justify-center gap-2">
+                <Users className="w-4 h-4 text-pink-400" />
+                <input 
+                  type="text" 
+                  inputMode="numeric"
+                  suppressHydrationWarning
+                  value={data.passengers === 0 ? "" : data.passengers}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, "");
+                    const numVal = val === "" ? 0 : parseInt(val);
+                    if (numVal <= 8) {
+                      const updates: Partial<TransferFormData> = { passengers: numVal };
+                      if (numVal >= 4 && data.category === 'standard') {
+                        updates.category = 'van';
+                      }
+                      onUpdate(updates);
+                    }
+                  }}
+                  className="w-12 bg-transparent border-none focus:ring-0 text-center text-sm font-bold p-0"
+                />
+              </div>
+
+              <button 
+                onClick={() => {
+                  const newVal = Math.min(8, (data.passengers || 0) + 1);
+                  const updates: Partial<TransferFormData> = { passengers: newVal };
+                  if (newVal >= 4 && data.category === 'standard') {
                     updates.category = 'van';
                   }
                   onUpdate(updates);
                 }}
-                className="w-full bg-transparent border-none focus:ring-0 text-sm font-semibold"
-              />
+                className="p-2.5 rounded-lg border border-pink-100 dark:border-pink-900/40 hover:bg-pink-50 dark:hover:bg-pink-900/20 text-pink-500 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

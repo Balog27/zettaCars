@@ -870,8 +870,8 @@
     "additionalFeatures": {
       "title": "Caracteristici Suplimentare",
       "childSeats": "Scaune copii",
-      "age1to4": "1-4 ani",
-      "age5to12": "5-12 ani"
+      "age1to4": "scaune copii pentru 1-4 ani",
+      "age5to12": "scaune copii pentru 5-12 ani"
     },
     "booking": {
       "transferDate": "Data Transferului",

@@ -832,8 +832,8 @@
     "additionalFeatures": {
       "title": "Additional Features",
       "childSeats": "Child Seats",
-      "age1to4": "1-4 years",
-      "age5to12": "5-12 years"
+      "age1to4": "child seats for 1-4 years",
+      "age5to12": "child seats for 5-12 years"
     },
     "booking": {
       "transferDate": "Transfer Date",

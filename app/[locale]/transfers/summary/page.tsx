@@ -258,7 +258,7 @@ function TransferSummaryPageContent() {
 
   if (!payload) {
     return (
-      <div className="container mx-auto py-16">
+      <div className="container mx-auto px-4 py-16">
         Invalid or missing booking data.
       </div>
     );
@@ -269,7 +269,7 @@ function TransferSummaryPageContent() {
       <div className="relative flex flex-col min-h-screen">
         <Header logo={<Logo alt="Zetta Cars Logo" />} />
         <main className="flex-grow bg-background py-12">
-          <div className="container mx-auto">
+          <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">Loading transfer details…</div>
           </div>
         </main>
@@ -316,7 +316,7 @@ function TransferSummaryPageContent() {
     >
       <Header logo={<Logo alt="Zetta Cars Logo" />} />
       <main className="flex-grow bg-background py-12">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold">
               {t("summary.title") ?? "Reservation Summary"}
@@ -598,7 +598,7 @@ function TransferSummaryPageContent() {
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <div className="text-sm font-medium">
-                            {t("additionalFeatures.age1to4") ?? "Child Seat (1-4 years)"}
+                            {t("additionalFeatures.age1to4") ?? "child seats for 1-4 years"}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
                              {t("summary.freeMax2Seats") ?? "Free (max 2 seats)"}
@@ -639,7 +639,7 @@ function TransferSummaryPageContent() {
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <div className="text-sm font-medium">
-                            {t("additionalFeatures.age5to12") ?? "Child Seat (5-12 years)"}
+                            {t("additionalFeatures.age5to12") ?? "child seats for 5-12 years"}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
                              {t("summary.freeMax2Seats") ?? "Free (max 2 seats)"}
@@ -874,7 +874,7 @@ export default function TransferSummaryPage() {
       <div className="relative flex flex-col min-h-screen">
         <Header logo={<Logo alt="Zetta Cars Logo" />} />
         <main className="flex-grow bg-background py-12">
-          <div className="container mx-auto">
+          <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto py-12 text-center text-slate-600">Loading transfer details…</div>
           </div>
         </main>

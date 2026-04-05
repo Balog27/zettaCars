@@ -82,8 +82,8 @@ export const deleteVoucher = mutation({
 export const getAllVouchers = query({
   args: {},
   handler: async (ctx) => {
-    const user = await getCurrentUserOrThrow(ctx);
-    if (user.role !== "admin") {
+    const user = await getCurrentUser(ctx);
+    if (!user || user.role !== "admin") {
       return [];
     }
     return await ctx.db.query("vouchers").order("desc").collect();
