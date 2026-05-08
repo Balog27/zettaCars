@@ -4,7 +4,8 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Minus, Plus, Trash2, Users, ArrowRight, MapPin, Route, Info } from 'lucide-react';
+import { Minus, Plus, Trash2, Users, ArrowRight, MapPin, Route, Info, Globe } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 import { LocationAutocomplete } from '../location-autocomplete';
 import { VehicleCategory, RideType, calculateTransferPrice } from '@/lib/transfer-pricing';
 import { DateTimePicker } from '@/components/date-time-picker';
@@ -208,6 +209,48 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
            </button>
         </div>
 
+        {/* International Transfer Toggle */}
+        <div className="flex items-center justify-between p-5 bg-white dark:bg-zinc-950/40 border border-gray-100 dark:border-zinc-800/80 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-pink-50 dark:bg-pink-900/20 rounded-xl text-pink-500">
+              <Globe className="w-5 h-5" />
+            </div>
+            <div>
+              <Label htmlFor="international-toggle" className="text-sm font-bold block mb-0.5">
+                {t("summary.config.isInternational") ?? "Transfer în afara României"}
+              </Label>
+              <span className="text-[11px] text-gray-400 dark:text-gray-500">
+                {t("summary.config.isInternationalDescription") ?? "Pentru rute externe (ex: Budapesta, Belgrad)"}
+              </span>
+            </div>
+          </div>
+          <Switch
+            id="international-toggle"
+            checked={data.isInternational}
+            onCheckedChange={(checked) => onUpdate({ isInternational: checked })}
+          />
+        </div>
+
+        {/* Popular International Destinations */}
+        {data.isInternational && (
+          <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+            <Label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">
+              {t("summary.config.popularDestinations") ?? "DESTINAȚII INTERNAȚIONALE POPULARE"}
+            </Label>
+            <div className="flex flex-wrap gap-2">
+              {["Budapest, Hungary", "Belgrade, Serbia", "Vienna, Austria", "Debrecen, Hungary"].map((dest) => (
+                <button
+                  key={dest}
+                  onClick={() => updateSegment(data.segments.length - 1, 'to', dest)}
+                  className="px-4 py-2 text-xs font-semibold bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-full hover:border-pink-500 hover:text-pink-500 dark:hover:border-pink-500 transition-all shadow-sm"
+                >
+                  {dest.split(',')[0]}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Segments */}
         <div className="space-y-5">
           {data.segments.map((segment, index) => (
@@ -232,12 +275,14 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
               <div className="grid grid-cols-1 gap-4 p-5 bg-white dark:bg-zinc-950/40 border border-gray-100 dark:border-zinc-800/80 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                 <LocationAutocomplete
                   value={segment.from}
+                  isInternational={data.isInternational}
                   onChange={(val) => updateSegment(index, 'from', val)}
                   label={t("summary.pickupAddress") ?? "PORNIRE"}
                   placeholder={t("summary.pickupPlaceholder") ?? "Introduceți adresa de pornire"}
                 />
                 <LocationAutocomplete
                   value={segment.to}
+                  isInternational={data.isInternational}
                   onChange={(val) => updateSegment(index, 'to', val)}
                   label={t("summary.dropoffAddress") ?? "DESTINAȚIE"}
                   placeholder={t("summary.dropoffPlaceholder") ?? "Introduceți adresa de destinație"}
@@ -365,14 +410,18 @@ export function ConfigStep({ data, onUpdate, onNext }: ConfigStepProps) {
 
         {/* Pricing Summary Box */}
         <div className="p-6 bg-gradient-to-br from-pink-50/50 to-white dark:from-zinc-950/80 dark:to-zinc-900/40 rounded-3xl border border-pink-100 dark:border-zinc-800 shadow-xl shadow-gray-200/50 dark:shadow-none space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">{t("summary.totalDistance") ?? "Distanță totală"}</span>
-            <span className="font-bold text-gray-900 dark:text-white">{Number(totalDistance).toFixed(2)} {t("summary.km") ?? "km"}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">{t("summary.ratePerKm") ?? "Tarif/km"} ({data.category === 'standard' ? (t("booking.standard") ?? 'Standard') : (t("booking.van") ?? 'VAN')})</span>
-            <span className="font-bold text-gray-900 dark:text-white">{pricing.ratePerKm.toFixed(2)} €</span>
-          </div>
+          {!pricing.isFixedPrice && (
+            <>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500 dark:text-gray-400">{t("summary.totalDistance") ?? "Distanță totală"}</span>
+                <span className="font-bold text-gray-900 dark:text-white">{Number(totalDistance).toFixed(2)} {t("summary.km") ?? "km"}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500 dark:text-gray-400">{t("summary.ratePerKm") ?? "Tarif/km"} ({data.category === 'standard' ? (t("booking.standard") ?? 'Standard') : (t("booking.van") ?? 'VAN')})</span>
+                <span className="font-bold text-gray-900 dark:text-white">{pricing.ratePerKm.toFixed(2)} €</span>
+              </div>
+            </>
+          )}
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400">{t("summary.transportCost") ?? "Cost transport"}</span>
             <span className="font-bold text-gray-900 dark:text-white">{pricing.transportCost.toFixed(2)} €</span>

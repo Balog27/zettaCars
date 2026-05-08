@@ -19,6 +19,7 @@ interface LocationAutocompleteProps {
   placeholder?: string;
   label?: string;
   className?: string;
+  isInternational?: boolean;
 }
 
 export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
@@ -27,6 +28,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   placeholder = 'Enter location...',
   label,
   className = '',
+  isInternational = false,
 }) => {
   const [suggestions, setSuggestions] = useState<Location[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +65,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
       const response = await fetch('/api/location-search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query, isInternational }),
       });
 
       if (!response.ok) {

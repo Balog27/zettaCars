@@ -9,6 +9,7 @@ import { Id } from '@/convex/_generated/dataModel';
 export type TransferFormData = {
   rideType: RideType;
   category: VehicleCategory;
+  isInternational: boolean;
   segments: {
     from: string;
     to: string;
@@ -43,6 +44,7 @@ export function TransferWizard() {
   const [formData, setFormData] = useState<TransferFormData>({
     rideType: 'one-way',
     category: 'standard',
+    isInternational: false,
     segments: [{ from: '', to: '', distanceKm: 0, waitingTime: 0 }],
     time: '12:00',
     passengers: 1,

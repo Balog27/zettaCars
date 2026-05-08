@@ -5,12 +5,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const query = body?.query;
+    const isInternational = body?.isInternational || false;
 
     if (!query || query.trim().length < 2) {
       return NextResponse.json({ results: [] });
     }
 
-    const results = await searchLocations(query);
+    const results = await searchLocations(query, isInternational);
     return NextResponse.json({ results });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

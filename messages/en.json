@@ -689,7 +689,8 @@
     "allTransmissions": "All Transmissions",
     "type": "Type",
     "selectType": "Select Type",
-    "allTypes": "All Types"
+    "allTypes": "All Types",
+    "filterMessage": "Find your perfect ride by filtering our premium fleet."
   },
   "features": {
     "wideVehicleSelection": {
@@ -943,7 +944,10 @@
         "passengerRange1to3": "1–3 passengers",
         "passengerRange4to8": "4–8 passengers",
         "requiresVan": "Requires VAN",
-        "waitingAtDestination": "Waiting at destination"
+        "waitingAtDestination": "Waiting at destination",
+        "isInternational": "International Transfer",
+        "isInternationalDescription": "Enable for transfers outside Romania (e.g. Budapest, Belgrade)",
+        "popularDestinations": "Popular International Destinations"
       },
       "recalculatePrompt": "Recalculate the price at the bottom of the page to see the total cost.",
       "waitingTimeAtDestination": "Waiting at destination",

@@ -212,7 +212,7 @@ function TransferSummaryPageContent() {
         fixedPrices: transferPricing.fixedPrices as any
       }
     );
-    return { isSingle: true, price: pricing.total, min: 0, max: 0 };
+    return { isSingle: true, price: pricing.total, min: 0, max: 0, isFixedPrice: pricing.isFixedPrice };
   }, [totalDistance, categoryState, rideTypeState, totalWaitingHours, transferPricing, segmentsState]);
 
   // Handle voucher
@@ -391,10 +391,12 @@ function TransferSummaryPageContent() {
                     <dt className="font-medium">{t('summary.category') ?? 'Categorie:'}</dt>
                     <dd className="mt-1 text-slate-600 dark:text-slate-300 capitalize">{categoryState}</dd>
                   </div>
-                  <div>
-                    <dt className="font-medium">{t("summary.totalDistance") ?? "Distanță totală:"}</dt>
-                    <dd className="mt-1 text-slate-600 dark:text-slate-300">{Number(totalDistance).toFixed(2)} {t("summary.km") ?? "km"}</dd>
-                  </div>
+                  {!priceData.isFixedPrice && (
+                    <div>
+                      <dt className="font-medium">{t("summary.totalDistance") ?? "Distanță totală:"}</dt>
+                      <dd className="mt-1 text-slate-600 dark:text-slate-300">{Number(totalDistance).toFixed(2)} {t("summary.km") ?? "km"}</dd>
+                    </div>
+                  )}
                 </dl>
 
                 <div className="mt-4 border-t pt-4">

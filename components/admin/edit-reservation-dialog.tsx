@@ -271,7 +271,8 @@ export function EditReservationDialog({
     // Calculate SCDW cost if selected, otherwise use manual protection cost
     let finalProtectionCost = protectionCost;
     if (isSCDWSelected) {
-      finalProtectionCost = calculateSCDW(priceDetails.days, seasonalPricePerDay);
+      const pricePerDayForSCDW = getPriceForDurationWithSeason(selectedVehicle, 1, effectiveMultiplier);
+      finalProtectionCost = calculateSCDW(priceDetails.days, pricePerDayForSCDW);
     }
     
     const additionalChargesTotal = additionalCharges.reduce((total, charge) => {
@@ -316,8 +317,8 @@ export function EditReservationDialog({
 
         if (priceDetails.days) {
           const effectiveMultiplier = reservation?.seasonalMultiplier || currentSeasonalMultiplier;
-          const seasonalPricePerDay = getPriceForDurationWithSeason(selectedVehicle, priceDetails.days, effectiveMultiplier);
-          const scdwCost = calculateSCDW(priceDetails.days, seasonalPricePerDay);
+          const pricePerDayForSCDW = getPriceForDurationWithSeason(selectedVehicle, 1, effectiveMultiplier);
+          const scdwCost = calculateSCDW(priceDetails.days, pricePerDayForSCDW);
           
           form.setValue("protectionCost", scdwCost.toFixed(2));
           form.setValue("deductibleAmount", "0");

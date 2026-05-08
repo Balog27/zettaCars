@@ -70,8 +70,8 @@ export function useReservationPricing({
   const returnFee = getLocationPrice(restitutionLocation);
   const totalLocationFees = deliveryFee + returnFee;
   
-  // Add SCDW if selected
-  const scdwPrice = additionalFeatures.scdwSelected ? calculateSCDW(days, pricePerDay) : 0;
+  // Add SCDW if selected - always use the 1-day rate (base price)
+  const scdwPrice = additionalFeatures.scdwSelected ? calculateSCDW(days, getBasePricePerDay(vehicle)) : 0;
   
   // Add additional features
   const snowChainsPrice = additionalFeatures.snowChainsSelected ? days * 3 : 0;

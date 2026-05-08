@@ -299,8 +299,11 @@ function ReservationPageContent() {
 
       // Calculate protection costs (warranty or SCDW) using seasonal-adjusted price
       const warrantyAmount = calculateWarranty(vehicle);
+      
+      // SCDW should always use the 1-day rate (the highest rate) as base, regardless of actual rental duration
       const currentPricePerDay = getPriceForDurationWithSeason(vehicle, days, seasonalMultiplier);
-      const scdwPrice = calculateSCDW(days, currentPricePerDay);
+      const pricePerDayForSCDW = getPriceForDurationWithSeason(vehicle, 1, seasonalMultiplier);
+      const scdwPrice = calculateSCDW(days, pricePerDayForSCDW);
 
       // Calculate protection cost and deductible based on selection
       const protectionCost = isSCDWSelected ? scdwPrice : 0;
@@ -599,7 +602,10 @@ function ReservationPageContent() {
       const currentWarrantyAmount = calculateWarranty(vehicle);
       const currentDays = days || 0;
       const currentPricePerDay = currentDays > 0 ? getPriceForDurationWithSeason(vehicle, currentDays, seasonalMultiplier) : getBasePricePerDay(vehicle);
-      const currentScdwPrice = currentDays > 0 ? calculateSCDW(currentDays, currentPricePerDay) : 0;
+      
+      // SCDW should always use the 1-day rate
+      const pricePerDayForSCDW = currentDays > 0 ? getPriceForDurationWithSeason(vehicle, 1, seasonalMultiplier) : getBasePricePerDay(vehicle);
+      const currentScdwPrice = currentDays > 0 ? calculateSCDW(currentDays, pricePerDayForSCDW) : 0;
       const currentProtectionCost = isSCDWSelected ? currentScdwPrice : 0;
       const currentDeductibleAmount = isSCDWSelected ? 0 : currentWarrantyAmount;
 

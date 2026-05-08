@@ -153,8 +153,14 @@ export async function POST(req: Request) {
         const perKmPrice = pricing.pricePerKm?.[category];
         const minPerKm = perKmPrice?.min ?? 0;
         const maxPerKm = perKmPrice?.max ?? 0;
+        const fixedPrice = pricing.fixedPrices?.[category] ?? 0;
+
         priceMin = Math.round(distanceKm * minPerKm * 100) / 100;
         priceMax = Math.round(distanceKm * maxPerKm * 100) / 100;
+
+        // Ensure price is not lower than the standard fixed price
+        if (priceMin < fixedPrice) priceMin = fixedPrice;
+        if (priceMax < fixedPrice) priceMax = fixedPrice;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('[/api/transfer-price] Mapbox error:', error);

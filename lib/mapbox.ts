@@ -21,7 +21,7 @@ export async function geocodeAddress(address: string) {
   }
 
   const encodedAddress = encodeURIComponent(address.trim());
-  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedAddress}.json?proximity=23.59,46.77&country=ro&limit=5&access_token=${token}`;
+  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedAddress}.json?proximity=23.59,46.77&limit=5&access_token=${token}`;
 
   try {
     const response = await fetch(url);
@@ -146,7 +146,7 @@ export async function getDistance(
  * Autocomplete search for locations
  * Used for location input suggestions
  */
-export async function searchLocations(query: string) {
+export async function searchLocations(query: string, isInternational: boolean = false) {
   if (!query || query.trim().length < 2) {
     return [];
   }
@@ -158,8 +158,9 @@ export async function searchLocations(query: string) {
 
   const encodedQuery = encodeURIComponent(query.trim());
   // Proximity set to Cluj-Napoca center (23.59, 46.77)
-  // Also filter to Romania (RO country code)
-  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedQuery}.json?proximity=23.59,46.77&country=ro&limit=8&access_token=${token}`;
+  // Also filter to Romania (RO country code) if not international
+  const countryParam = isInternational ? "" : "&country=ro";
+  const url = `${MAPBOX_API_BASE}/geocoding/v5/mapbox.places/${encodedQuery}.json?proximity=23.59,46.77${countryParam}&limit=8&access_token=${token}`;
 
   try {
     const response = await fetch(url);

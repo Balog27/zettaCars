@@ -727,7 +727,7 @@
     "type": "Tip",
     "selectType": "Selectează Tipul",
     "allTypes": "Toate Tipurile",
-    "refineSearch": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
+    "filterMessage": "Folosește filtrele de mai sus pentru a obține rezultate mai relevante."
   },
   "features": {
     "wideVehicleSelection": {
@@ -984,7 +984,10 @@
         "passengerRange1to3": "1–3 pasageri",
         "passengerRange4to8": "4–8 pasageri",
         "requiresVan": "Necesită VAN",
-        "waitingAtDestination": "Staționare la destinație"
+        "waitingAtDestination": "Staționare la destinație",
+        "isInternational": "Transfer în afara României",
+        "isInternationalDescription": "Activează pentru transferuri internaționale (ex: Budapesta, Belgrad)",
+        "popularDestinations": "Destinații Internaționale Populare"
       },
       "recalculatePrompt": "Recalculează prețul din josul paginii pentru a vedea costul total.",
       "waitingTimeAtDestination": "Staționare la destinație",

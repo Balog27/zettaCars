@@ -43,11 +43,19 @@ export function calculateTransferPrice(
 ) {
   let transportCost: number;
   let ratePerKm = getRatePerKm(totalDistanceKm, category);
+  let isFixedPrice = false;
 
   if (options?.isCluj && options.fixedPrices) {
     transportCost = options.fixedPrices[category] || 0;
+    isFixedPrice = true;
   } else {
     transportCost = totalDistanceKm * ratePerKm;
+    
+    // If the calculated price is lower than the fixed price for this category, use the fixed price instead
+    if (options?.fixedPrices && options.fixedPrices[category] && transportCost < options.fixedPrices[category]) {
+      transportCost = options.fixedPrices[category];
+      isFixedPrice = true;
+    }
   }
 
   const oneWayCost = transportCost;
@@ -71,9 +79,10 @@ export function calculateTransferPrice(
   }
 
   return {
-    ratePerKm: options?.isCluj ? 0 : ratePerKm,
+    ratePerKm: (options?.isCluj || isFixedPrice) ? 0 : ratePerKm,
     transportCost: finalTransportCost,
     waitingCost,
     total: Math.round((finalTransportCost + waitingCost) * 100) / 100,
+    isFixedPrice,
   };
 }
